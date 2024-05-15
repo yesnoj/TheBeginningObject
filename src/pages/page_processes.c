@@ -1,27 +1,14 @@
-#include "xtensa/hal.h"
-#include "misc/lv_area.h"
-#include "misc/lv_event.h"
-#include "misc/lv_types.h"
-#include "core/lv_obj_style_gen.h"
-#include "misc/lv_color.h"
-#include "core/lv_obj.h"
-#include "misc/lv_palette.h"
 /**
- * @file page_processes.h
+ * @file page_processes.c
  *
  */
 
 
-
-#ifndef PAGE_PROCESSES_H
-#define PAGE_PROCESSES_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 //ESSENTIAL INCLUDE
+#include <lvgl.h>
+#include "../../include/definitions.h"
+
+extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
@@ -30,7 +17,7 @@ static lv_obj_t * iconFilterLabel;
 static lv_obj_t * iconNewProcessLabel;
 static lv_obj_t * processesList;
 
-static void event_processes_style_delete(lv_event_t * e)
+void event_processes_style_delete(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
 
@@ -40,7 +27,7 @@ static void event_processes_style_delete(lv_event_t * e)
     }
 }
 
-static void event_tabProcesses(lv_event_t * e)
+void event_tabProcesses(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
@@ -72,7 +59,7 @@ static void event_tabProcesses(lv_event_t * e)
 }
  
 
-static void initProcesses(void){
+void initProcesses(void){
   /*********************
   *    PAGE HEADER
   *********************/
@@ -164,10 +151,3 @@ void processes(void)
 }
 
 
-
-
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif /*PAGE_PROCESSES_H*/

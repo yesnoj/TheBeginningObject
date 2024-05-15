@@ -1,24 +1,19 @@
-#include "core/lv_obj_style_gen.h"
 /**
- * @file page_home.h
+ * @file page_home.c
  *
  */
 
-
-#ifndef PAGE_HOME_H
-#define PAGE_HOME_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //ESSENTIAL INCLUDE
+#include <lvgl.h>
+#include "../../resources/splash.c"
+#include "../../include/definitions.h"
+
+extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
-#include "../resources/splash.c"
 
 
-static void event_btn_start(lv_event_t * e)
+void event_btn_start(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);
 
@@ -28,7 +23,7 @@ static void event_btn_start(lv_event_t * e)
 } 
 
 
-void homePage()
+void homePage(void)
 {
     lv_obj_del(lv_screen_active());
     screen_home = lv_obj_create(NULL);
@@ -51,9 +46,3 @@ void homePage()
     lv_obj_set_style_border_opa(btn_start, LV_OPA_TRANSP, 0);
     lv_obj_remove_flag(btn_start, LV_OBJ_FLAG_SCROLLABLE);     
 }
-
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif /*PAGE_HOME_H*/

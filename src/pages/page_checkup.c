@@ -1,24 +1,14 @@
-#include "lv_api_map_v8.h"
-#include "misc/lv_palette.h"
-#include <sys/_stdint.h>
-
 /**
- * @file page_checkup.h
+ * @file page_checkup.c
  *
  */
 
-#include "core/lv_obj_style.h"
-#include "misc/lv_area.h"
-
-#ifndef PAGE_CHECKUP_H
-#define PAGE_CHECKUP_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 //ESSENTIAL INCLUDES
+#include <lvgl.h>
+#include "../../include/definitions.h"
 
+extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
@@ -115,7 +105,6 @@ static uint8_t  stepCheckFilmStatus = 0;
 static lv_obj_t * stepArc;
 static lv_obj_t * processArc;
 
-void checkup();
 
 void event_checkup(lv_event_t * e){
   lv_event_code_t code = lv_event_get_code(e);
@@ -783,12 +772,3 @@ void checkup(void)
 }
 
 
-
-
-
-
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif /*PAGE_CHECKUP_H*/

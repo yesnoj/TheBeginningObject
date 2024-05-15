@@ -6,27 +6,17 @@
 #include <driver/i2c.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
-#include <SPI.h>
-#include <SD.h>
+//#include <SPI.h>
+//#include <SD.h>
+
+
+#include "include/definitions.h"
+#include "include/accessory.c"
 
 //USEFUL TO RUN LVGL EXAMPLES IF NEEDED
 #include <demos/lv_demos.h>
 #include <examples/lv_examples.h>
 
-#include "definitions.h"
-#include "pages.h"
-
-//OLD GUI APPROACH
-//#include "display_manager.h"
-//#include "pages/page_home.h"
-//#include "pages/page_program.h"
-
-
-
-/*To use the built-in examples and demos of LVGL uncomment the includes below respectively.
- *You also need to copy `lvgl/examples` to `lvgl/src/examples`. Similarly for the demos `lvgl/demos` to `lvgl/src/demos`.
- *Note that the `lv_examples` library is for LVGL v7 and you shouldn't install it for this version (since LVGL v8)
- *as the examples and demos are now part of the main LVGL library. */
 
 
 lv_display_t *lvDisplay;
@@ -264,19 +254,16 @@ void setup()
     //testVariEdEventuali();
     actualMillis = millis();
 
-    sd_init();
+    //sd_init();
     homePage();
     //lv_example_dropdown_1();
 }
 
 void loop()
 {
-/*
-  if (isEnteringInPage)
-     displayManager();
-*/
-  LVGL_TaskManager();
-  //updateValues(); //Causa problemi quando si torna indietro nella pagina precedente
+    delay(1);
+    lv_tick_inc(1);
+    lv_task_handler(); /* let the GUI do its work */
 }
 
 

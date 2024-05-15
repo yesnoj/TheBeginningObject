@@ -1,34 +1,15 @@
-#include "core/lv_obj_style.h"
-#include "lv_api_map_v8.h"
-#include "font/lv_font.h"
-#include "misc/lv_area.h"
-#include "widgets/msgbox/lv_msgbox.h"
-#include <cstddef>
-#include "core/lv_obj_tree.h"
-#include "core/lv_obj.h"
-#include "misc/lv_event.h"
-#include "misc/lv_types.h"
-#include "misc/lv_style.h"
-#include <sys/_stdint.h>
-
 /**
- * @file accessory.h
+ * @file accessory.c
  *
  */
 
 
-#ifndef ACCESSORY_H
-#define ACCESSORY_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*********************
  *      INCLUDES
  *********************/
- 
-#include <lvgl.h>
+#include <string.h>
+#include "lvgl.h"
+#include "definitions.h"
 
 /**********************
  *      MACROS
@@ -36,9 +17,9 @@ extern "C" {
 
 #define LESS_THAN_10 1
 #define GREATER_THAN_9 2
-#define GREATER_THAN_99 3 
+#define GREATER_THAN_99 3
 
-static void event_cb(lv_event_t * e)
+void event_cb(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
@@ -54,7 +35,7 @@ static void event_cb(lv_event_t * e)
 
 
 
-static lv_obj_t * create_radiobutton(lv_obj_t * mBoxParent, const char * txt, const int32_t x, const int32_t y, const int32_t size, const lv_font_t * font, const lv_color_t borderColor, const lv_color_t bgColor)
+lv_obj_t * create_radiobutton(lv_obj_t * mBoxParent, const char * txt, const int32_t x, const int32_t y, const int32_t size, const lv_font_t * font, const lv_color_t borderColor, const lv_color_t bgColor)
 {
 	lv_obj_t * obj = (lv_obj_t *)lv_checkbox_create(mBoxParent);
   lv_obj_add_flag(obj, LV_OBJ_FLAG_EVENT_BUBBLE);
@@ -199,7 +180,7 @@ void create_keyboard(lv_obj_t * keyB)
                                                     };
 
     /*Create a keyboard and add the new map as USER_1 mode*/
-bbb
+
     lv_keyboard_set_map(keyB, LV_KEYBOARD_MODE_USER_1, kb_map, kb_ctrl);
     lv_keyboard_set_mode(keyB, LV_KEYBOARD_MODE_USER_1);
     
@@ -324,17 +305,14 @@ lv_obj_t * create_switch(lv_obj_t * parent, const char * icon, const char * txt,
 
 
 
-void LVGL_TaskManager(){
-    delay(1);
-    lv_tick_inc(1);
-    lv_task_handler(); /* let the GUI do its work */
-}
+
 
 
 void sd_init()
 {
-    SD_SPI.begin(SD_SCLK, SD_MISO, SD_MOSI);
-    if (!SD.begin(SD_CS, SD_SPI, 40000000))
+  /*
+    SD_SPI.begin(SD_CS, SD_MISO, SD_MOSI, SD_CS);
+    if (!SD.begin(SD_CS, SD_SPI))
     {
         LV_LOG_USER("SD Card Failed");
         while (1)
@@ -345,7 +323,9 @@ void sd_init()
         LV_LOG_USER("Card Mount Successed");
     }
     LV_LOG_USER("SD init over.");
+    */
 }
+
 
 void createQuestionMark(lv_obj_t * parent,lv_obj_t * element,lv_event_cb_t e, const int32_t x, const int32_t y){
     questionMark = lv_label_create(parent);
@@ -388,7 +368,7 @@ uint32_t calc_buf_len( uint32_t maxVal, uint8_t extra_len ) {
     }
 }
 
-char *createRollerValues( uint32_t maxVal, char* extra_str ) {
+char *createRollerValues( uint32_t maxVal, const char* extra_str ) {
     uint32_t buf_len = calc_buf_len( maxVal, strlen(extra_str));
     uint32_t buf_ptr = 0;
     char *buf = (char *)malloc( buf_len );
@@ -421,9 +401,3 @@ void myLongEvent(lv_event_t * e, uint32_t howLongInMs)
         }
     }
 }
-
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif /*ACCESSORY_H*/

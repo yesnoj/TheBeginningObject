@@ -1,25 +1,14 @@
-#include "font/lv_font.h"
-#include <sys/_stdint.h>
-#include "misc/lv_palette.h"
-#include "core/lv_obj_pos.h"
-#include "misc/lv_color.h"
-#include "misc/lv_types.h"
 /**
- * @file element_messagePopup.h
+ * @file element_messagePopup.c
  *
  */
-#include "widgets/menu/lv_menu.h"
-#include "core/lv_obj_style.h"
-#include "misc/lv_area.h"
 
-#ifndef ELEMENT_MESSAGEPOPUP_H
-#define ELEMENT_MESSAGEPOPUP_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 //ESSENTIAL INCLUDES
+#include <lvgl.h>
+#include "../../include/definitions.h"
+
+extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
@@ -38,57 +27,63 @@ lv_obj_t * mBoxPopupButton2;
 
 lv_obj_t * parameterReceived;
 
-static void event_messagePopup(lv_event_t * e)
+void event_messagePopup(lv_event_t *e)
 {
-  lv_event_code_t code = lv_event_get_code(e);
-  lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
-  lv_obj_t * objCont = (lv_obj_t *)lv_obj_get_parent(obj);
-  lv_obj_t * mboxCont = (lv_obj_t *)lv_obj_get_parent(objCont);
-  lv_obj_t * mboxParent = (lv_obj_t *)lv_obj_get_parent(mboxCont);
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t *obj = (lv_obj_t *)lv_event_get_target(e);
+    lv_obj_t *objCont = (lv_obj_t *)lv_obj_get_parent(obj);
+    lv_obj_t *mboxCont = (lv_obj_t *)lv_obj_get_parent(objCont);
+    lv_obj_t *mboxParent = (lv_obj_t *)lv_obj_get_parent(mboxCont);
 
-  lv_obj_t * btn = (lv_obj_t *)lv_event_get_current_target(e);
-  lv_obj_t * mbox = (lv_obj_t *)lv_obj_get_parent(lv_obj_get_parent(btn));
-  
+    lv_obj_t *btn = (lv_obj_t *)lv_event_get_current_target(e);
+    lv_obj_t *mbox = (lv_obj_t *)lv_obj_get_parent(lv_obj_get_parent(btn));
 
-  if(code == LV_EVENT_CLICKED){
-    if(obj == mBoxPopupButtonClose){
-        LV_LOG_USER("Pressed mBoxPopupButtonClose");
-        lv_style_reset(&style_mBoxPopupTitleLine);
-        lv_msgbox_close(mboxCont);
-        lv_obj_delete(mboxCont);
-    }
-    if(obj == mBoxPopupButton1){
-        LV_LOG_USER("Pressed mBoxPopupButton1");
-        if(parameterReceived == processElement || parameterReceived == stepElement){
-            LV_LOG_USER("Delete process from long press!");
+    if (code == LV_EVENT_CLICKED)
+    {
+        if (obj == mBoxPopupButtonClose)
+        {
+            LV_LOG_USER("Pressed mBoxPopupButtonClose");
             lv_style_reset(&style_mBoxPopupTitleLine);
             lv_msgbox_close(mboxCont);
             lv_obj_delete(mboxCont);
-            mBoxPopupParent = NULL;
         }
-        if(parameterReceived == processDetailParent){
-            LV_LOG_USER("Delete process from inside!");
-            lv_style_reset(&style_mBoxPopupTitleLine);
-            lv_msgbox_close(mboxCont);
-            lv_obj_delete(mboxCont);
-            mBoxPopupParent = NULL;
-            
-            lv_msgbox_close(processDetailParent);
-            lv_obj_delete(processDetailParent);
-            processDetailParent = NULL;
+        if (obj == mBoxPopupButton1)
+        {
+            LV_LOG_USER("Pressed mBoxPopupButton1");
+            if (parameterReceived == processElement || parameterReceived == stepElement)
+            {
+                LV_LOG_USER("Delete process from long press!");
+                lv_style_reset(&style_mBoxPopupTitleLine);
+                lv_msgbox_close(mboxCont);
+                lv_obj_delete(mboxCont);
+                mBoxPopupParent = NULL;
+            }
+            if (parameterReceived == processDetailParent)
+            {
+                LV_LOG_USER("Delete process from inside!");
+                lv_style_reset(&style_mBoxPopupTitleLine);
+                lv_msgbox_close(mboxCont);
+                lv_obj_delete(mboxCont);
+                mBoxPopupParent = NULL;
+
+                lv_msgbox_close(processDetailParent);
+                lv_obj_delete(processDetailParent);
+                processDetailParent = NULL;
+            }
+        }
+        if (obj == mBoxPopupButton1)
+        {
+            LV_LOG_USER("Pressed mBoxPopupButton1");
+            if (parameterReceived == processElement || parameterReceived == processDetailParent || parameterReceived == stepElement)
+            {
+                LV_LOG_USER("Cancel delete element!");
+                lv_style_reset(&style_mBoxPopupTitleLine);
+                lv_msgbox_close(mboxCont);
+                lv_obj_delete(mboxCont);
+                mBoxPopupParent = NULL;
+            }
         }
     }
-    if(obj == mBoxPopupButton1){
-        LV_LOG_USER("Pressed mBoxPopupButton1");
-        if(parameterReceived == processElement || parameterReceived == processDetailParent || parameterReceived == stepElement){
-            LV_LOG_USER("Cancel delete element!");
-            lv_style_reset(&style_mBoxPopupTitleLine);
-            lv_msgbox_close(mboxCont);
-            lv_obj_delete(mboxCont);
-            mBoxPopupParent = NULL;
-        }
-    }
-  }
 
 }       
 
@@ -183,8 +178,3 @@ void messagePopupCreate(const char * popupTitleText,const char * popupText,const
   }
 }
 
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif /*ELEMENT_MESSAGEPOPUP_H*/

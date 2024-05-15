@@ -607,7 +607,7 @@ const uint8_t template_map[] = {
 };
 
 
-const lv_image_dsc_t template_img = {
+static lv_image_dsc_t template_img = {
   {
     LV_IMAGE_HEADER_MAGIC,          /*Magic number. Must be LV_IMAGE_HEADER_MAGIC*/
     LV_COLOR_FORMAT_RGB565A8,       /*Color format: See `lv_color_format_t`*/

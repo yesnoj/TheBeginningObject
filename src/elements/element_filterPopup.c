@@ -1,27 +1,20 @@
-#include "font/lv_font.h"
-#include "misc/lv_types.h"
-#include "misc/lv_event.h"
-#include "core/lv_obj.h"
-#include "misc/lv_palette.h"
 /**
- * @file element_filter.h
+ * @file element_filter.c
  *
  */
 
 
-#ifndef ELEMENT_FILTER_H
-#define ELEMENT_FILTER_H
+//ESSENTIAL INCLUDES
+#include <lvgl.h>
+#include "../../include/definitions.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
-//ESSENTIAL INCLUDE
+extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
 
-static uint32_t active_index_2 = 0;
+uint32_t active_index_2 = 0;
 lv_obj_t * mBoxContainer;
 lv_obj_t * mBoxTitle;
 lv_obj_t * mBoxNameContainer;
@@ -99,7 +92,7 @@ void event_filterMBox(lv_event_t * e){
 
 
 
-void filterPopupCreate (){
+void filterPopupCreate (void){
   /*********************
    *    PAGE ELEMENTS
    *********************/
@@ -249,12 +242,3 @@ void filterPopupCreate (){
   //create_keyboard(keyboardFilter, mBoxFilterPopupParent);
 }
 
-
-
-
-
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif /*ELEMENT_FILTER_H*/

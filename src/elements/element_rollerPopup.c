@@ -1,26 +1,14 @@
-#include "font/lv_font.h"
-#include <sys/_stdint.h>
-#include "misc/lv_palette.h"
-#include "core/lv_obj_pos.h"
-#include "misc/lv_color.h"
-#include "misc/lv_types.h"
 /**
- * @file element_rollerPopup.h
+ * @file element_rollerPopup.c
  *
  */
-#include "widgets/menu/lv_menu.h"
-#include "core/lv_obj_style.h"
-#include "misc/lv_area.h"
 
-
-#ifndef ELEMENT_ROLLERPOPUP_H
-#define ELEMENT_ROLLERPOPUP_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 //ESSENTIAL INCLUDES
+#include <lvgl.h>
+#include "../../include/definitions.h"
+
+extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
@@ -31,7 +19,7 @@ lv_obj_t * mBoxRollerButtonLabel;
 lv_obj_t * mBoxRollerRollerContainer;
 
 
-static void event_Roller(lv_event_t * e)
+void event_Roller(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
@@ -188,8 +176,3 @@ void rollerPopupCreate(const char * tempOptions,const char * popupTitle, lv_obj_
          lv_obj_align(mBoxRollerButtonLabel, LV_ALIGN_CENTER, 0, 0);
 }
 
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif /*ELEMENT_ROLLERPOPUP_H*/

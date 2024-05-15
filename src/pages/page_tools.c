@@ -1,30 +1,22 @@
-#include "misc/lv_event.h"
-#include "font/lv_font.h"
-#include "misc/lv_area.h"
-#include "misc/lv_types.h"
-#include "core/lv_obj.h"
-#include "misc/lv_palette.h"
 /**
- * @file page_tools.h
+ * @file page_tools.c
  *
  */
 
 
-#ifndef PAGE_TOOLS_H
-#define PAGE_TOOLS_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //ESSENTIAL INCLUDE
+#include <lvgl.h>
+#include "../../include/definitions.h"
+
+extern struct gui_components gui;
+
 
 //ACCESSORY INCLUDES
+
 static lv_obj_t * toolsCleaningContainer;
 static lv_obj_t * toolsDrainingContainer;
 static lv_obj_t * toolsImportContainer;
 static lv_obj_t * toolsExportContainer;
-
 
 
 static lv_obj_t * toolsCleaningLabel;
@@ -68,7 +60,7 @@ static lv_obj_t * toolSoftwareSerialValue;
 static lv_obj_t * toolCreditButton;
 static lv_obj_t * toolCreditButtonLabel;
 
-static void event_toolsElement(lv_event_t * e){
+void event_toolsElement(lv_event_t * e){
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
   lv_obj_t * objCont = (lv_obj_t *)lv_obj_get_parent(obj);
@@ -115,7 +107,7 @@ static void event_toolsElement(lv_event_t * e){
 }
 
 
-static void initTools(void){
+void initTools(void){
 /*********************
  *    PAGE HEADER
  *********************/
@@ -430,10 +422,3 @@ void tools(void)
   lv_style_set_line_color(&style_sectionTitleLine, lv_palette_main(LV_PALETTE_BLUE));
 }
 
-
-
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif /*PAGE_TOOLS_H*/

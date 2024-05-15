@@ -1,24 +1,14 @@
-#include <sys/_stdint.h>
-#include "misc/lv_palette.h"
-#include "core/lv_obj_pos.h"
-#include "misc/lv_color.h"
-#include "misc/lv_types.h"
 /**
- * @file element_process.h
+ * @file element_process.c
  *
  */
-#include "widgets/menu/lv_menu.h"
-#include "core/lv_obj_style.h"
-#include "misc/lv_area.h"
 
-#ifndef ELEMENT_PROCESS_H
-#define ELEMENT_PROCESS_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 //ESSENTIAL INCLUDES
+#include <lvgl.h>
+#include "../../include/definitions.h"
+
+extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
@@ -33,7 +23,7 @@ static lv_obj_t * processTypeIcon;
 
 
 
-static void event_processElement(lv_event_t * e){
+void event_processElement(lv_event_t * e){
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
   lv_obj_t * cont = (lv_obj_t *)lv_event_get_current_target(e);
@@ -146,11 +136,3 @@ void processElementCreate(lv_obj_t * processesReferenceList){
   processCounter += 1;
 }
 
-
-
-
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif /*ELEMENT_PROCESS_H*/

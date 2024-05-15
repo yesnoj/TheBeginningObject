@@ -1,27 +1,17 @@
-#include "font/lv_font.h"
-#include "misc/lv_style.h"
-#include "xtensa/hal.h"
-#include "misc/lv_area.h"
-#include "misc/lv_event.h"
-#include "misc/lv_types.h"
-#include "core/lv_obj_style_gen.h"
-#include "misc/lv_color.h"
-#include "core/lv_obj.h"
-#include "misc/lv_palette.h"
-
-
 /**
- * @file page_stepDetail.h
+ * @file page_stepDetail.c
  *
  */
 
-#ifndef PAGE_STEPDETAIL_H
-#define PAGE_STEPDETAIL_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+//ESSENTIAL INCLUDE
+#include <lvgl.h>
+#include "../../include/definitions.h"
 
+extern struct gui_components gui;
+
+
+//ACCESSORY INCLUDES
 
 /* STEP DETAIL VARIABLES*/
 static lv_obj_t * stepDetailNameContainer;
@@ -59,7 +49,7 @@ static lv_obj_t * stepsContainer;
 
 
 
-static void event_stepDetail(lv_event_t * e)
+void event_stepDetail(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
@@ -153,7 +143,7 @@ static void event_stepDetail(lv_event_t * e)
 *    STEP DETAIL
 *********************/
 
-static void stepDetail(lv_obj_t * referenceStep)
+void stepDetail(lv_obj_t * referenceStep)
 {   
 /*********************
   *    PAGE ELEMENTS
@@ -388,10 +378,3 @@ if(keyboardStep == NULL){
     }
 }
 
-
-
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif /*PAGE_STEPDETAIL_H*/

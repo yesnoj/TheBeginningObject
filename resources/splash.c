@@ -658,10 +658,10 @@ const lv_image_dsc_t splash_img = {
     
     480,                            //image width
     320,                            //image height
-    480 * lv_color_format_get_size(LV_COLOR_FORMAT_RGB565A8),//*Number of bytes in a row, so witdh * 2, or count how many comma are in the first row of the array definition*/
+    480 * 2,//*Number of bytes in a row, so witdh * 2, or count how many comma are in the first row of the array definition*/
     0
   },
-    320 * 480 * lv_color_format_get_size(LV_COLOR_FORMAT_RGB565A8), /**< Size of the image in bytes*/
+    320 * 480 * 2, /**< Size of the image in bytes*/
     splash_map,                   /**< Pointer to the data of the image*/
     0                               /**< A reserved field to make it has same size as lv_draw_buf_t*/
 };

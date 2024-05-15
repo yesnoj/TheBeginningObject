@@ -1,22 +1,15 @@
-#include "misc/lv_color.h"
-#include "core/lv_obj_style_gen.h"
-#include "misc/lv_types.h"
 /**
- * @file page_menu.h
+ * @file page_menu.c
  *
  */
-#include "widgets/menu/lv_menu.h"
-#include "core/lv_obj_style.h"
-#include "misc/lv_area.h"
 
-#ifndef PAGE_MENU_H
-#define PAGE_MENU_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 //ESSENTIAL INCLUDES
+#include <lvgl.h>
+#include "../../include/definitions.h"
+
+
+extern struct gui_components gui;
 
 
 //ACCESSORY INCLUDES
@@ -25,8 +18,8 @@ extern "C" {
 #define TAB_SETTINGS  2
 #define TAB_TOOLS     3
 
-static u_int8_t oldSelection = 0;
-static u_int8_t newSelection = 0;
+static uint8_t oldSelection = 0;
+static uint8_t newSelection = 0;
 
 static lv_obj_t * processesTab;
 static lv_obj_t * settingsTab;
@@ -35,18 +28,16 @@ static lv_obj_t * toolsTab;
 static lv_obj_t * iconLabel;
 static lv_obj_t * label;
 
-static void back_event_handler(lv_event_t * e);
-static void switch_handler(lv_event_t * e);
 lv_obj_t * root_page;
 
-static void event_tab_switch(lv_event_t * e)
+void event_tab_switch(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);
 
   if(code == LV_EVENT_CLICKED) {
     if(newTabSelected == NULL && oldTabSelected == NULL){
       newTabSelected = oldTabSelected = (lv_obj_t *)lv_event_get_target(e);
-      newSelection = oldSelection = (u_int8_t)lv_obj_get_index(newTabSelected);
+      newSelection = oldSelection = (uint8_t)lv_obj_get_index(newTabSelected);
       lv_obj_set_style_bg_color(newTabSelected, lv_color_hex(GREEN_DARK), 0);
 
       LV_LOG_USER("FIRST TIME");
@@ -55,7 +46,7 @@ static void event_tab_switch(lv_event_t * e)
         oldTabSelected = newTabSelected;
         oldSelection = newSelection;
         newTabSelected = (lv_obj_t *)lv_event_get_target(e);
-        newSelection = (u_int8_t)lv_obj_get_index(newTabSelected);
+        newSelection = (uint8_t)lv_obj_get_index(newTabSelected);
         LV_LOG_USER("NEXT TIME");
     }
     
@@ -101,7 +92,7 @@ static void event_tab_switch(lv_event_t * e)
 }    
 
 
-void menu(){
+void menu(void){
     lv_obj_del(lv_screen_active());
     screen_mainMenu = lv_obj_create(NULL);
     lv_scr_load(screen_mainMenu);
@@ -179,48 +170,5 @@ void menu(){
 }
 
 
-static void back_event_handler(lv_event_t * e)
-{
-    lv_obj_t * obj = (lv_obj_t*)lv_event_get_target(e);
-    lv_obj_t * menu = (lv_obj_t*)lv_event_get_user_data(e);
-
-    if(lv_menu_back_button_is_root(menu, obj)) {
-        lv_obj_t * mbox1 = lv_msgbox_create(NULL);
-        lv_msgbox_add_title(mbox1, "Hello");
-        lv_msgbox_add_text(mbox1, "Root back btn click.");
-        lv_msgbox_add_close_button(mbox1);
-    }
-}
-
-static void switch_handler(lv_event_t * e)
-{
-    lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t * menu = (lv_obj_t*)lv_event_get_user_data(e);
-    lv_obj_t * obj = (lv_obj_t*)lv_event_get_target(e);
-    if(code == LV_EVENT_VALUE_CHANGED) {
-        if(lv_obj_has_state(obj, LV_STATE_CHECKED)) {
-            lv_menu_set_page(menu, NULL);
-            lv_menu_set_sidebar_page(menu, root_page);
-            lv_obj_send_event(lv_obj_get_child(lv_obj_get_child(lv_menu_get_cur_sidebar_page(menu), 0), 0), LV_EVENT_CLICKED,
-                              NULL);
-        }
-        else {
-            lv_menu_set_sidebar_page(menu, NULL);
-            lv_menu_clear_history(menu); /* Clear history because we will be showing the root page later */
-            lv_menu_set_page(menu, root_page);
-        }
-    }
-}
 
 
-
-
-
-
-
-
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif /*PAGE_MENU_H*/

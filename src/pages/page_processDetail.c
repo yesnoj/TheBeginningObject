@@ -1,25 +1,16 @@
-#include "xtensa/hal.h"
-#include "misc/lv_area.h"
-#include "misc/lv_event.h"
-#include "misc/lv_types.h"
-#include "core/lv_obj_style_gen.h"
-#include "misc/lv_color.h"
-#include "core/lv_obj.h"
-#include "misc/lv_palette.h"
 /**
- * @file page_processDetail.h
+ * @file page_processDetail.c
  *
  */
 
 
+//ESSENTIAL INCLUDE
+#include <lvgl.h>
+#include "../../include/definitions.h"
 
-#ifndef PAGE_PROCESSDETAIL_H
-#define PAGE_PROCESSDETAIL_H
+extern struct gui_components gui;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+//ACCESSORY INCLUDES
 
 
 /* PROCESS DETAIL VARIABLES*/
@@ -70,7 +61,7 @@ static lv_obj_t * processesContainer;
   *    PROCESS EVENT
 ******************************/
 
-static void event_processDetail(lv_event_t * e)
+void event_processDetail(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
@@ -199,7 +190,7 @@ static void event_processDetail(lv_event_t * e)
   }
 }
  
-static void event_processDetail_style_delete(lv_event_t * e)
+void event_processDetail_style_delete(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
 
@@ -215,7 +206,7 @@ static void event_processDetail_style_delete(lv_event_t * e)
   *    PROCESS DETAIL
 *********************/
 
-static void processDetail(lv_obj_t * referenceProcess)
+void processDetail(lv_obj_t * referenceProcess)
 {   
 /*********************
   *    PAGE HEADER
@@ -497,10 +488,3 @@ static void processDetail(lv_obj_t * referenceProcess)
 
 }
 
-
-
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif /*PAGE_PROCESSDETAIL_H*/

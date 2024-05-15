@@ -1,21 +1,15 @@
-#include "misc/lv_event.h"
-#include "misc/lv_area.h"
-#include "core/lv_obj.h"
-#include "misc/lv_palette.h"
 /**
- * @file page_settings.h
+ * @file page_settings.c
  *
  */
 
 
-#ifndef PAGE_SETTINGS_H
-#define PAGE_SETTINGS_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //ESSENTIAL INCLUDE
+#include <lvgl.h>
+#include "../../include/definitions.h"
+
+extern struct gui_components gui;
+
 
 //ACCESSORY INCLUDES
 
@@ -62,7 +56,7 @@ static lv_obj_t * tempUnitFahrenheitRadioButton;
 
 static uint32_t active_index = 0;
 
-static void event_settings_style_delete(lv_event_t * e)
+void event_settings_style_delete(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
 
@@ -190,7 +184,7 @@ void event_settings_handler(lv_event_t * e)
 //lv_obj_set_scroll_dir(mBoxPopupTextContainer, LV_DIR_VER);
 
 
-static void initSettings(void){
+void initSettings(void){
 /*********************
  *    PAGE HEADER
  *********************/
@@ -473,11 +467,3 @@ void settings(void)
 
 }
 
-
-
-
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif /*PAGE_SETTINGS_H*/
