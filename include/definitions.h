@@ -139,7 +139,7 @@ struct sFilterPopup {
 	lv_obj_t			*mBoxApplyFilterButton;
 
 	/* Params objects */
-	uint32_t active_index_2;
+	uint32_t active_index;
 };
 
 
@@ -176,7 +176,8 @@ struct sMessagePopup {
 struct sHome {
     /* LVGL objects */
 	lv_obj_t *screen_home;
-
+  lv_obj_t *startButton;
+  lv_obj_t *splashImage;
 	/* Params objects */
 };
 
