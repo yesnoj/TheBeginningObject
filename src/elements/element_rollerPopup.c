@@ -12,6 +12,19 @@ extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
+/*
+    if(act_cb == gui.page.settings.tempSensorTuneButton){
+      if(code == LV_EVENT_SHORT_CLICKED) {
+          LV_LOG_USER("TUNE short click");
+          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusOptions,tuneTempPopupTitle_text,gui.page.settings.tempSensorTuneButton);
+        }
+      if(code == LV_EVENT_LONG_PRESSED_REPEAT) {
+          LV_LOG_USER("TUNE Long click");
+        }
+    }
+*/
+
+
 
 void event_Roller(lv_event_t * e)
 {
@@ -26,15 +39,16 @@ void event_Roller(lv_event_t * e)
         if(obj == gui.element.rollerPopup.mBoxRollerButton)
         {
             if(data == gui.page.settings.tempSensorTuneButton){
-              LV_LOG_USER("SET BUTTON from tempSensorTuneButton value %d:",rolleTempSelected);
+              LV_LOG_USER("SET BUTTON from tempSensorTuneButton value %d:",rollerSelected);
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);
               lv_obj_delete(godFatherCont);
+              gui.page.settings.calibratedTemp = rollerSelected;     
             }
             if(data == gui.page.processDetail.processTempTextArea){
-              LV_LOG_USER("SET BUTTON from processTempTextArea value %d:",rolleTempSelected);
-              itoa(rolleTempSelected, tempBuffer, 10);
+              LV_LOG_USER("SET BUTTON from processTempTextArea value %d:",rollerSelected);
+              itoa(rollerSelected, tempBuffer, 10);
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(gui.page.processDetail.processTempTextArea,tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
@@ -43,7 +57,7 @@ void event_Roller(lv_event_t * e)
               lv_obj_delete(godFatherCont);
             }
             if(data == gui.page.processDetail.processToleranceTextArea){
-              LV_LOG_USER("SET BUTTON from processToleranceTextArea value %d:",rolleTempSelected);
+              LV_LOG_USER("SET BUTTON from processToleranceTextArea value %d:",rollerSelected);
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(gui.page.processDetail.processToleranceTextArea, tempBuffer);
@@ -52,7 +66,7 @@ void event_Roller(lv_event_t * e)
               lv_obj_delete(godFatherCont);
             }
             if(data == gui.page.stepDetail.stepDetailMinTextArea){
-              LV_LOG_USER("SET BUTTON from stepDetailMinTextArea value %d:",rolleTempSelected);
+              LV_LOG_USER("SET BUTTON from stepDetailMinTextArea value %d:",rollerSelected);
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(gui.page.stepDetail.stepDetailMinTextArea, tempBuffer);
@@ -61,7 +75,7 @@ void event_Roller(lv_event_t * e)
               lv_obj_delete(godFatherCont);
             }
             if(data == gui.page.stepDetail.stepDetailSecTextArea){
-              LV_LOG_USER("SET BUTTON from stepDetailSecTextArea value %d:",rolleTempSelected);
+              LV_LOG_USER("SET BUTTON from stepDetailSecTextArea value %d:",rollerSelected);
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(gui.page.stepDetail.stepDetailSecTextArea, tempBuffer);
@@ -70,7 +84,7 @@ void event_Roller(lv_event_t * e)
               lv_obj_delete(godFatherCont);
             }
             if(data == gui.page.checkup.checkupTankSizeTextArea){
-              LV_LOG_USER("SET BUTTON from checkupTankSizeTextArea value %d:",rolleTempSelected);
+              LV_LOG_USER("SET BUTTON from checkupTankSizeTextArea value %d:",rollerSelected);
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(gui.page.checkup.checkupTankSizeTextArea, tempBuffer);
@@ -84,8 +98,8 @@ void event_Roller(lv_event_t * e)
     if(code == LV_EVENT_VALUE_CHANGED){
       if(obj == gui.element.rollerPopup.roller){
           //if we want to want the index of the selected element
-          rolleTempSelected = lv_roller_get_selected(obj) + 1;
-          LV_LOG_USER("ROLLER value: %d", rolleTempSelected);
+          rollerSelected = lv_roller_get_selected(obj) + 1;
+          LV_LOG_USER("ROLLER value: %d", rollerSelected);
 
           
           lv_roller_get_selected_str(obj, tempBuffer, sizeof(tempBuffer));
@@ -102,6 +116,8 @@ void rollerPopupCreate(const char * tempOptions,const char * popupTitle, lv_obj_
   *    PAGE HEADER
   *********************/
    LV_LOG_USER("Roller popup create");  
+   gui.element.rollerPopup.whoCallMe = whoCallMe;
+
    gui.element.rollerPopup.mBoxRollerParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
    lv_obj_class_init_obj(gui.element.rollerPopup.mBoxRollerParent);
    lv_obj_remove_flag(gui.element.rollerPopup.mBoxRollerParent, LV_OBJ_FLAG_IGNORE_LAYOUT);

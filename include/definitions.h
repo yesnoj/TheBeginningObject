@@ -281,7 +281,17 @@ struct sSettings {
 
 	uint32_t 	        	active_index;
 
-	/* Params objects */
+
+  /* Params objects */
+  uint8_t 	        	tempUnit; //0= C° 1= °F
+  uint8_t 	        	waterInlet;
+  float 	        	  calibratedTemp;
+  uint8_t 	        	filmRotationSpeedSetpoint;
+	uint8_t 	        	rotationIntervalSetpoint;
+  uint8_t 	        	randomSetpoint;
+  uint8_t 	        	isPersistentAlarm;
+  uint8_t 	        	isProcessAutostart;
+  uint8_t 	        	drainFillOverlapSetpoint;
 };
 
 
@@ -882,7 +892,7 @@ lv_obj_t * stepDetailNamelTextArea;
 static char *currentStep[3][11] = {"Filling", "Draining", "Processing"};
 
 char rollerElementSelected [10];
-uint8_t rolleTempSelected;
+uint32_t rollerSelected;
 lv_obj_t * questionMark;
 lv_obj_t * roller;
 lv_style_t style_roller;

@@ -77,7 +77,7 @@ void messagePopupCreate(const char * popupTitleText,const char * popupText,const
   /*********************
   *    PAGE HEADER
   *********************/
-   gui.element.messagePopup.whoCallMe = gui.element.messagePopup.whoCallMe;
+   gui.element.messagePopup.whoCallMe = whoCallMe;
 
    LV_LOG_USER("Message popup create");  
    gui.element.messagePopup.mBoxPopupParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
