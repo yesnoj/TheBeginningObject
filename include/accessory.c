@@ -378,6 +378,7 @@ char *createRollerValues( uint32_t maxVal, const char* extra_str ) {
     for( uint32_t i = 1; i <= maxVal; i++ ) {
         buf_ptr += lv_snprintf( &buf[buf_ptr], (buf_len - buf_ptr), "%s%d\n", extra_str, i );
     }
+    //LV_LOG_USER("Created :%s",buf);
     return buf;
 }
 
@@ -419,5 +420,8 @@ void init_globals( void ) {
   gui.page.tools.titleLinePoints[1].x = 200;
   gui.page.stepDetail.titleLinePoints[1].x = 200;
 
-
+  gui.element.rollerPopup.tempCelsiusOptions = createRollerValues(40,"");
+  gui.element.rollerPopup.minutesOptions = createRollerValues(240,"");
+  gui.element.rollerPopup.secondsOptions = createRollerValues(60,""); 
+  gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(5,"0.");
 }

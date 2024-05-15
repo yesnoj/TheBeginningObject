@@ -13,48 +13,6 @@ extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
-static lv_obj_t * settingsLabel;
-static lv_obj_t * tempUnitLabel;
-static lv_obj_t * waterInletLabel;
-static lv_obj_t * tempSensorTuneButtonLabel;
-static lv_obj_t * tempSensorTuningLabel;
-static lv_obj_t * filmRotationSpeedLabel;
-static lv_obj_t * filmRotationInverseIntervalLabel;
-static lv_obj_t * filmRotationRandomLabel;
-static lv_obj_t * persistentAlarmLabel;
-static lv_obj_t * autostartLabel;
-static lv_obj_t * drainFillTimeLabel;
-
-static lv_obj_t * drainFillTimeValueLabel;
-static lv_obj_t * filmRotationInverseIntervalValueLabel;
-static lv_obj_t * filmRotationRandomValueLabel;
-static lv_obj_t * filmRotationSpeedValueLabel;
-
-static lv_obj_t * settingsContainer;
-static lv_obj_t * tempUnitContainer;
-static lv_obj_t * waterInletContainer;
-static lv_obj_t * tempTuningContainer;
-static lv_obj_t * filmRotationSpeedContainer;
-static lv_obj_t * filmRotationInverseIntervallContainer;
-static lv_obj_t * randomContainer;
-static lv_obj_t * persistentAlarmContainer;
-static lv_obj_t * autostartContainer;
-static lv_obj_t * drainFillTimeContainer;
-
-static lv_obj_t * autostartSwitch;
-static lv_obj_t * persistentAlarmSwitch;
-static lv_obj_t * waterInletSwitch;
-
-static lv_obj_t * filmRotationSpeedSlider;
-static lv_obj_t * filmRotationInversionIntervalSlider;
-static lv_obj_t * filmRandomlSlider;
-static lv_obj_t * drainFillTimeSlider;
-
-
-static lv_obj_t * tempUnitCelsiusRadioButton;
-static lv_obj_t * tempUnitFahrenheitRadioButton;
-
-static uint32_t active_index = 0;
 
 void event_settings_style_delete(lv_event_t * e)
 {
@@ -62,7 +20,7 @@ void event_settings_style_delete(lv_event_t * e)
 
     if(code == LV_EVENT_DELETE) {
         //list of all styles to be reset, so clean the memory.
-        lv_style_reset(&style_sectionTitleLine);
+        lv_style_reset(&gui.page.settings.style_sectionTitleLine);
 
     }
 }
@@ -74,25 +32,25 @@ void event_settingPopupMBox(lv_event_t * e){
   lv_obj_t * mboxCont = (lv_obj_t *)lv_obj_get_parent(objCont);
   lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
   
-  if(data == tempSensorTuningLabel){
+  if(data == gui.page.settings.tempSensorTuningLabel){
     messagePopupCreate(messagePopupDetailTitle_text,tempAlertMBox_text,NULL,NULL,NULL);
   }
-  if(data == filmRotationSpeedLabel){
+  if(data == gui.page.settings.filmRotationSpeedLabel){
     messagePopupCreate(messagePopupDetailTitle_text,filmRotationSpeedAlertMBox_text,NULL,NULL,NULL);
   }
-  if(data == filmRotationInverseIntervalLabel){
+  if(data == gui.page.settings.filmRotationInverseIntervalLabel){
     messagePopupCreate(messagePopupDetailTitle_text,rotationInverseIntervalAlertMBox_text,NULL,NULL,NULL);
   }
-  if(data == filmRotationRandomLabel){
+  if(data == gui.page.settings.filmRotationRandomLabel){
     messagePopupCreate(messagePopupDetailTitle_text,filmRotationRandomAlertMBox_text,NULL,NULL,NULL);
   }
-  if(data == persistentAlarmLabel){
+  if(data == gui.page.settings.persistentAlarmLabel){
     messagePopupCreate(messagePopupDetailTitle_text,soundAlertMBox_text,NULL,NULL,NULL);
   }
-  if(data == autostartLabel){
+  if(data == gui.page.settings.autostartLabel){
     messagePopupCreate(messagePopupDetailTitle_text,autostartAlertMBox_text,NULL,NULL,NULL);
   }
-  if(data == drainFillTimeLabel){
+  if(data == gui.page.settings.drainFillTimeLabel){
     messagePopupCreate(messagePopupDetailTitle_text,drainFillTimeAlertMBox_text,NULL,NULL,NULL);
   }
 }
@@ -108,71 +66,71 @@ void event_settings_handler(lv_event_t * e)
 
     /*Do nothing if the container was clicked*/
 
-    if(act_cb == cont && cont != waterInletSwitch && cont != tempSensorTuneButton && cont != filmRotationSpeedSlider && cont != filmRotationInversionIntervalSlider && cont != filmRandomlSlider && cont != persistentAlarmSwitch && cont != autostartSwitch && cont != drainFillTimeSlider) 
+    if(act_cb == cont && cont != gui.page.settings.waterInletSwitch && cont != gui.page.settings.tempSensorTuneButton && cont != gui.page.settings.filmRotationSpeedSlider && cont != gui.page.settings.filmRotationInversionIntervalSlider && cont != gui.page.settings.filmRandomlSlider && cont != gui.page.settings.persistentAlarmSwitch && cont != gui.page.settings.autostartSwitch && cont != gui.page.settings.drainFillTimeSlider) 
     //if(act_cb == cont) 
       return;
 
-    if(act_cb == tempUnitCelsiusRadioButton || act_cb == tempUnitFahrenheitRadioButton){
+    if(act_cb == gui.page.settings.tempUnitCelsiusRadioButton || act_cb == gui.page.settings.tempUnitFahrenheitRadioButton){
        if(code == LV_EVENT_CLICKED) {
             lv_obj_remove_state(old_cb, LV_STATE_CHECKED);
             lv_obj_add_state(act_cb, LV_STATE_CHECKED); 
 
             *active_id = lv_obj_get_index(act_cb);
 
-            LV_LOG_USER("Selected °C or °F: %d", (int)active_index);
+            LV_LOG_USER("Selected °C or °F: %d", (int)gui.page.settings.active_index);
        }
     }
 
-    if(act_cb == waterInletSwitch){
+    if(act_cb == gui.page.settings.waterInletSwitch){
       if(code == LV_EVENT_VALUE_CHANGED) {
           LV_LOG_USER("State Inlet: %s", lv_obj_has_state(act_cb, LV_STATE_CHECKED) ? "On" : "Off");
         }
     }
 
-    if(act_cb == tempSensorTuneButton){
+    if(act_cb == gui.page.settings.tempSensorTuneButton){
       if(code == LV_EVENT_SHORT_CLICKED) {
           LV_LOG_USER("TUNE short click");
-          rollerPopupCreate(tempCelsiusOptions,tuneTempPopupTitle_text,tempSensorTuneButton);
+          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusOptions,tuneTempPopupTitle_text,gui.page.settings.tempSensorTuneButton);
         }
       if(code == LV_EVENT_LONG_PRESSED_REPEAT) {
           LV_LOG_USER("TUNE Long click");
         }
     }
 
-    if(act_cb == filmRotationSpeedSlider){
+    if(act_cb == gui.page.settings.filmRotationSpeedSlider){
       if(code == LV_EVENT_VALUE_CHANGED) {
           lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%d%%", lv_slider_get_value(act_cb));
           LV_LOG_USER("Film Speed Rotation : %d",lv_slider_get_value(act_cb));
         }
     }
 
-    if(act_cb == filmRotationInversionIntervalSlider){
+    if(act_cb == gui.page.settings.filmRotationInversionIntervalSlider){
       if(code == LV_EVENT_VALUE_CHANGED) {
           lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%dsec%", lv_slider_get_value(act_cb));
           LV_LOG_USER("Film Rotation Inversion Interval : %d",lv_slider_get_value(act_cb));
         }
     }
 
-    if(act_cb == filmRandomlSlider){
+    if(act_cb == gui.page.settings.filmRandomlSlider){
       if(code == LV_EVENT_VALUE_CHANGED) {
         lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%~%d%%", lv_slider_get_value(act_cb));
         LV_LOG_USER("Film Randomness : %d",lv_slider_get_value(act_cb));
         }
     }
 
-    if(act_cb == persistentAlarmSwitch){
+    if(act_cb == gui.page.settings.persistentAlarmSwitch){
       if(code == LV_EVENT_VALUE_CHANGED) {
           LV_LOG_USER("Persistent Alarm: %s", lv_obj_has_state(act_cb, LV_STATE_CHECKED) ? "On" : "Off");
         }
     }
 
-    if(act_cb == autostartSwitch){
+    if(act_cb == gui.page.settings.autostartSwitch){
       if(code == LV_EVENT_VALUE_CHANGED) {
           LV_LOG_USER("Autostart : %s", lv_obj_has_state(act_cb, LV_STATE_CHECKED) ? "On" : "Off");
         }
     }
     
-    if(act_cb == drainFillTimeSlider){
+    if(act_cb == gui.page.settings.drainFillTimeSlider){
       if(code == LV_EVENT_VALUE_CHANGED) {
           lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%d%%", lv_slider_get_value(act_cb));
           LV_LOG_USER("Drain/fill time overlap percent : %d",lv_slider_get_value(act_cb));
@@ -189,281 +147,281 @@ void initSettings(void){
  *    PAGE HEADER
  *********************/
   LV_LOG_USER("Settings Creation");
-  settingsSection = lv_obj_create(lv_screen_active());
-  lv_obj_set_pos(settingsSection, 140, 7);                            
-  lv_obj_set_size(settingsSection, 335, 303); 
-  lv_obj_remove_flag(settingsSection, LV_OBJ_FLAG_SCROLLABLE);    
-  lv_obj_set_style_border_color(settingsSection, lv_color_hex(ORANGE_DARK), 0);
+  gui.page.settings.settingsSection = lv_obj_create(lv_screen_active());
+  lv_obj_set_pos(gui.page.settings.settingsSection, 140, 7);                            
+  lv_obj_set_size(gui.page.settings.settingsSection, 335, 303); 
+  lv_obj_remove_flag(gui.page.settings.settingsSection, LV_OBJ_FLAG_SCROLLABLE);    
+  lv_obj_set_style_border_color(gui.page.settings.settingsSection, lv_color_hex(ORANGE_DARK), 0);
 
 
 	lv_coord_t pad = 2;
-	lv_obj_set_style_pad_left(settingsSection, pad, LV_PART_INDICATOR);
-	lv_obj_set_style_pad_right(settingsSection, pad, LV_PART_INDICATOR);
-	lv_obj_set_style_pad_top(settingsSection, pad, LV_PART_INDICATOR);
-	lv_obj_set_style_pad_bottom(settingsSection, pad, LV_PART_INDICATOR);
+	lv_obj_set_style_pad_left(gui.page.settings.settingsSection, pad, LV_PART_INDICATOR);
+	lv_obj_set_style_pad_right(gui.page.settings.settingsSection, pad, LV_PART_INDICATOR);
+	lv_obj_set_style_pad_top(gui.page.settings.settingsSection, pad, LV_PART_INDICATOR);
+	lv_obj_set_style_pad_bottom(gui.page.settings.settingsSection, pad, LV_PART_INDICATOR);
 
 
  
-  settingsLabel = lv_label_create(settingsSection);         
-  lv_label_set_text(settingsLabel, Settings_text); 
-  lv_obj_set_style_text_font(settingsLabel, &lv_font_montserrat_28, 0);              
-  lv_obj_align(settingsLabel, LV_ALIGN_TOP_LEFT, -7, -5);
+  gui.page.settings.settingsLabel = lv_label_create(gui.page.settings.settingsSection);         
+  lv_label_set_text(gui.page.settings.settingsLabel, Settings_text); 
+  lv_obj_set_style_text_font(gui.page.settings.settingsLabel, &lv_font_montserrat_28, 0);              
+  lv_obj_align(gui.page.settings.settingsLabel, LV_ALIGN_TOP_LEFT, -7, -5);
 
   /*Create style*/
-  lv_style_init(&style_sectionTitleLine);
-  lv_style_set_line_width(&style_sectionTitleLine, 2);
-  lv_style_set_line_color(&style_sectionTitleLine, lv_palette_main(LV_PALETTE_ORANGE));
-  lv_style_set_line_rounded(&style_sectionTitleLine, true);
+  lv_style_init(&gui.page.settings.style_sectionTitleLine);
+  lv_style_set_line_width(&gui.page.settings.style_sectionTitleLine, 2);
+  lv_style_set_line_color(&gui.page.settings.style_sectionTitleLine, lv_palette_main(LV_PALETTE_ORANGE));
+  lv_style_set_line_rounded(&gui.page.settings.style_sectionTitleLine, true);
 
   /*Create a line and apply the new style*/
-  sectionTitleLine = lv_line_create(settingsSection);
-  lv_line_set_points(sectionTitleLine, sectionTitleLine_points, 2);
-  lv_obj_add_style(sectionTitleLine, &style_sectionTitleLine, 0);
-  lv_obj_align(sectionTitleLine, LV_ALIGN_CENTER, 0, - 103);
+  gui.page.settings.sectionTitleLine = lv_line_create(gui.page.settings.settingsSection);
+  lv_line_set_points(gui.page.settings.sectionTitleLine, gui.page.settings.titleLinePoints, 2);
+  lv_obj_add_style(gui.page.settings.sectionTitleLine, &gui.page.settings.style_sectionTitleLine, 0);
+  lv_obj_align(gui.page.settings.sectionTitleLine, LV_ALIGN_CENTER, 0, - 103);
 
-  lv_obj_update_layout(settingsSection);
+  lv_obj_update_layout(gui.page.settings.settingsSection);
 
   /*********************
  *    PAGE ELEMENTS
  *********************/
 
-  settingsContainer = lv_obj_create(settingsSection);
-  lv_obj_set_pos(settingsContainer, -22, 31);                           
-  lv_obj_set_size(settingsContainer, 335, 254);  
-  //lv_obj_set_style_border_color(settingsContainer, lv_color_hex(GREEN_DARK), 0);
-  lv_obj_set_style_border_opa(settingsContainer, LV_OPA_TRANSP, 0);
-  lv_obj_set_scroll_dir(settingsContainer, LV_DIR_VER);
+  gui.page.settings.settingsContainer = lv_obj_create(gui.page.settings.settingsSection);
+  lv_obj_set_pos(gui.page.settings.settingsContainer, -22, 31);                           
+  lv_obj_set_size(gui.page.settings.settingsContainer, 335, 254);  
+  //lv_obj_set_style_border_color(gui.page.settings.settingsContainer, lv_color_hex(GREEN_DARK), 0);
+  lv_obj_set_style_border_opa(gui.page.settings.settingsContainer, LV_OPA_TRANSP, 0);
+  lv_obj_set_scroll_dir(gui.page.settings.settingsContainer, LV_DIR_VER);
 
-  tempUnitContainer = lv_obj_create(settingsContainer);
-  lv_obj_align(tempUnitContainer, LV_ALIGN_TOP_LEFT, -15, -17);                         
-  lv_obj_set_size(tempUnitContainer, 330, 60); 
-  lv_obj_remove_flag(tempUnitContainer, LV_OBJ_FLAG_SCROLLABLE);    
-  //lv_obj_set_style_border_color(tempUnitContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
-  lv_obj_set_style_border_opa(tempUnitContainer, LV_OPA_TRANSP, 0);
-  lv_obj_add_event_cb(tempUnitContainer, event_settings_handler, LV_EVENT_CLICKED, &active_index);
+  gui.page.settings.tempUnitContainer = lv_obj_create(gui.page.settings.settingsContainer);
+  lv_obj_align(gui.page.settings.tempUnitContainer, LV_ALIGN_TOP_LEFT, -15, -17);                         
+  lv_obj_set_size(gui.page.settings.tempUnitContainer, 330, 60); 
+  lv_obj_remove_flag(gui.page.settings.tempUnitContainer, LV_OBJ_FLAG_SCROLLABLE);    
+  //lv_obj_set_style_border_color(gui.page.settings.tempUnitContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
+  lv_obj_set_style_border_opa(gui.page.settings.tempUnitContainer, LV_OPA_TRANSP, 0);
+  lv_obj_add_event_cb(gui.page.settings.tempUnitContainer, event_settings_handler, LV_EVENT_CLICKED, &gui.page.settings.active_index);
 
-        tempUnitCelsiusRadioButton = create_radiobutton(tempUnitContainer, celsius_text, -55, 0, 27, &lv_font_montserrat_18, lv_color_hex(ORANGE_DARK), lv_color_hex(ORANGE));
-        tempUnitFahrenheitRadioButton = create_radiobutton(tempUnitContainer, fahrenheit_text, 5, 0, 27, &lv_font_montserrat_18, lv_color_hex(ORANGE_DARK), lv_color_hex(ORANGE));
+        gui.page.settings.tempUnitCelsiusRadioButton = create_radiobutton(gui.page.settings.tempUnitContainer, celsius_text, -55, 0, 27, &lv_font_montserrat_18, lv_color_hex(ORANGE_DARK), lv_color_hex(ORANGE));
+        gui.page.settings.tempUnitFahrenheitRadioButton = create_radiobutton(gui.page.settings.tempUnitContainer, fahrenheit_text, 5, 0, 27, &lv_font_montserrat_18, lv_color_hex(ORANGE_DARK), lv_color_hex(ORANGE));
 
         //Make the first checkbox checked
-        lv_obj_add_state(lv_obj_get_child(tempUnitContainer, 0), LV_STATE_CHECKED);
+        lv_obj_add_state(lv_obj_get_child(gui.page.settings.tempUnitContainer, 0), LV_STATE_CHECKED);
            
-        tempUnitLabel = lv_label_create(tempUnitContainer);         
-        lv_label_set_text(tempUnitLabel, tempUnit_text); 
-        lv_obj_set_style_text_font(tempUnitLabel, &lv_font_montserrat_20, 0);              
-        lv_obj_align(tempUnitLabel, LV_ALIGN_LEFT_MID, -5, 0);
+        gui.page.settings.tempUnitLabel = lv_label_create(gui.page.settings.tempUnitContainer);         
+        lv_label_set_text(gui.page.settings.tempUnitLabel, tempUnit_text); 
+        lv_obj_set_style_text_font(gui.page.settings.tempUnitLabel, &lv_font_montserrat_20, 0);              
+        lv_obj_align(gui.page.settings.tempUnitLabel, LV_ALIGN_LEFT_MID, -5, 0);
 
 
-  waterInletContainer = lv_obj_create(settingsContainer);
-  lv_obj_align(waterInletContainer, LV_ALIGN_TOP_LEFT, -15, 45);                         
-  lv_obj_set_size(waterInletContainer, 330, 60); 
-  lv_obj_remove_flag(waterInletContainer, LV_OBJ_FLAG_SCROLLABLE);    
-  //lv_obj_set_style_border_color(waterInletContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
-  lv_obj_set_style_border_opa(waterInletContainer, LV_OPA_TRANSP, 0);
+  gui.page.settings.waterInletContainer = lv_obj_create(gui.page.settings.settingsContainer);
+  lv_obj_align(gui.page.settings.waterInletContainer, LV_ALIGN_TOP_LEFT, -15, 45);                         
+  lv_obj_set_size(gui.page.settings.waterInletContainer, 330, 60); 
+  lv_obj_remove_flag(gui.page.settings.waterInletContainer, LV_OBJ_FLAG_SCROLLABLE);    
+  //lv_obj_set_style_border_color(gui.page.settings.waterInletContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
+  lv_obj_set_style_border_opa(gui.page.settings.waterInletContainer, LV_OPA_TRANSP, 0);
 
-        waterInletLabel = lv_label_create(waterInletContainer);         
-        lv_label_set_text(waterInletLabel, waterInlet_text); 
-        lv_obj_set_style_text_font(waterInletLabel, &lv_font_montserrat_20, 0);              
-        lv_obj_align(waterInletLabel, LV_ALIGN_LEFT_MID, -5, 0);
+        gui.page.settings.waterInletLabel = lv_label_create(gui.page.settings.waterInletContainer);         
+        lv_label_set_text(gui.page.settings.waterInletLabel, waterInlet_text); 
+        lv_obj_set_style_text_font(gui.page.settings.waterInletLabel, &lv_font_montserrat_20, 0);              
+        lv_obj_align(gui.page.settings.waterInletLabel, LV_ALIGN_LEFT_MID, -5, 0);
 
-        waterInletSwitch = lv_switch_create(waterInletContainer);
-        lv_obj_add_event_cb(waterInletSwitch, event_settings_handler, LV_EVENT_VALUE_CHANGED, waterInletSwitch);
-        lv_obj_align(waterInletSwitch, LV_ALIGN_RIGHT_MID, 0, 0);
-        lv_obj_set_style_bg_color(waterInletSwitch,  lv_palette_darken(LV_PALETTE_GREY, 3), LV_STATE_DEFAULT);
-        lv_obj_set_style_bg_color(waterInletSwitch,  lv_color_hex(ORANGE), LV_PART_KNOB | LV_STATE_DEFAULT);
-        lv_obj_set_style_bg_color(waterInletSwitch,  lv_color_hex(ORANGE_DARK), LV_PART_INDICATOR | LV_STATE_CHECKED);
+        gui.page.settings.waterInletSwitch = lv_switch_create(gui.page.settings.waterInletContainer);
+        lv_obj_add_event_cb(gui.page.settings.waterInletSwitch, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.waterInletSwitch);
+        lv_obj_align(gui.page.settings.waterInletSwitch, LV_ALIGN_RIGHT_MID, 0, 0);
+        lv_obj_set_style_bg_color(gui.page.settings.waterInletSwitch,  lv_palette_darken(LV_PALETTE_GREY, 3), LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_color(gui.page.settings.waterInletSwitch,  lv_color_hex(ORANGE), LV_PART_KNOB | LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_color(gui.page.settings.waterInletSwitch,  lv_color_hex(ORANGE_DARK), LV_PART_INDICATOR | LV_STATE_CHECKED);
 
 
 
-  tempTuningContainer = lv_obj_create(settingsContainer);
-  lv_obj_align(tempTuningContainer, LV_ALIGN_TOP_LEFT, -15, 107);                         
-  lv_obj_set_size(tempTuningContainer, 330, 60); 
-  lv_obj_remove_flag(tempTuningContainer, LV_OBJ_FLAG_SCROLLABLE);    
-  //lv_obj_set_style_border_color(tempTuningContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
-  lv_obj_set_style_border_opa(tempTuningContainer, LV_OPA_TRANSP, 0);
+  gui.page.settings.tempTuningContainer = lv_obj_create(gui.page.settings.settingsContainer);
+  lv_obj_align(gui.page.settings.tempTuningContainer, LV_ALIGN_TOP_LEFT, -15, 107);                         
+  lv_obj_set_size(gui.page.settings.tempTuningContainer, 330, 60); 
+  lv_obj_remove_flag(gui.page.settings.tempTuningContainer, LV_OBJ_FLAG_SCROLLABLE);    
+  //lv_obj_set_style_border_color(gui.page.settings.tempTuningContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
+  lv_obj_set_style_border_opa(gui.page.settings.tempTuningContainer, LV_OPA_TRANSP, 0);
 
-        tempSensorTuningLabel = lv_label_create(tempTuningContainer);         
-        lv_label_set_text(tempSensorTuningLabel, tempSensorTuning_text); 
-        lv_obj_set_style_text_font(tempSensorTuningLabel, &lv_font_montserrat_20, 0);              
-        lv_obj_align(tempSensorTuningLabel, LV_ALIGN_LEFT_MID, -5, 0);
+        gui.page.settings.tempSensorTuningLabel = lv_label_create(gui.page.settings.tempTuningContainer);         
+        lv_label_set_text(gui.page.settings.tempSensorTuningLabel, tempSensorTuning_text); 
+        lv_obj_set_style_text_font(gui.page.settings.tempSensorTuningLabel, &lv_font_montserrat_20, 0);              
+        lv_obj_align(gui.page.settings.tempSensorTuningLabel, LV_ALIGN_LEFT_MID, -5, 0);
 
-        createQuestionMark(tempTuningContainer,tempSensorTuningLabel,event_settingPopupMBox, 2, -3);
+        createQuestionMark(gui.page.settings.tempTuningContainer,gui.page.settings.tempSensorTuningLabel,event_settingPopupMBox, 2, -3);
 
-        tempSensorTuneButton = lv_button_create(tempTuningContainer);
-        lv_obj_set_size(tempSensorTuneButton, BUTTON_TUNE_WIDTH, BUTTON_TUNE_HEIGHT);
-        lv_obj_align(tempSensorTuneButton, LV_ALIGN_RIGHT_MID, 5 , 0);
-        lv_obj_add_event_cb(tempSensorTuneButton, event_settings_handler, LV_EVENT_ALL, tempSensorTuneButton);
-        lv_obj_set_style_bg_color(tempSensorTuneButton, lv_color_hex(ORANGE), LV_PART_MAIN);
+        gui.page.settings.tempSensorTuneButton = lv_button_create(gui.page.settings.tempTuningContainer);
+        lv_obj_set_size(gui.page.settings.tempSensorTuneButton, BUTTON_TUNE_WIDTH, BUTTON_TUNE_HEIGHT);
+        lv_obj_align(gui.page.settings.tempSensorTuneButton, LV_ALIGN_RIGHT_MID, 5 , 0);
+        lv_obj_add_event_cb(gui.page.settings.tempSensorTuneButton, event_settings_handler, LV_EVENT_ALL, gui.page.settings.tempSensorTuneButton);
+        lv_obj_set_style_bg_color(gui.page.settings.tempSensorTuneButton, lv_color_hex(ORANGE), LV_PART_MAIN);
 
-        tempSensorTuneButtonLabel = lv_label_create(tempSensorTuneButton);
-        lv_label_set_text(tempSensorTuneButtonLabel, tuneButton_text);
-        lv_obj_set_style_text_font(tempSensorTuneButtonLabel, &lv_font_montserrat_18, 0);
-        lv_obj_align(tempSensorTuneButtonLabel, LV_ALIGN_CENTER, 0, 0);
+        gui.page.settings.tempSensorTuneButtonLabel = lv_label_create(gui.page.settings.tempSensorTuneButton);
+        lv_label_set_text(gui.page.settings.tempSensorTuneButtonLabel, tuneButton_text);
+        lv_obj_set_style_text_font(gui.page.settings.tempSensorTuneButtonLabel, &lv_font_montserrat_18, 0);
+        lv_obj_align(gui.page.settings.tempSensorTuneButtonLabel, LV_ALIGN_CENTER, 0, 0);
 
-  filmRotationSpeedContainer = lv_obj_create(settingsContainer);
-  lv_obj_align(filmRotationSpeedContainer, LV_ALIGN_TOP_LEFT, -15, 179);                         
-  lv_obj_set_size(filmRotationSpeedContainer, 330, 70); 
-  lv_obj_remove_flag(filmRotationSpeedContainer, LV_OBJ_FLAG_SCROLLABLE);    
-  //lv_obj_set_style_border_color(filmRotationSpeedContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
-  lv_obj_set_style_border_opa(filmRotationSpeedContainer, LV_OPA_TRANSP, 0);
+  gui.page.settings.filmRotationSpeedContainer = lv_obj_create(gui.page.settings.settingsContainer);
+  lv_obj_align(gui.page.settings.filmRotationSpeedContainer, LV_ALIGN_TOP_LEFT, -15, 179);                         
+  lv_obj_set_size(gui.page.settings.filmRotationSpeedContainer, 330, 70); 
+  lv_obj_remove_flag(gui.page.settings.filmRotationSpeedContainer, LV_OBJ_FLAG_SCROLLABLE);    
+  //lv_obj_set_style_border_color(gui.page.settings.filmRotationSpeedContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
+  lv_obj_set_style_border_opa(gui.page.settings.filmRotationSpeedContainer, LV_OPA_TRANSP, 0);
    
-        filmRotationSpeedLabel = lv_label_create(filmRotationSpeedContainer);         
-        lv_label_set_text(filmRotationSpeedLabel, rotationSpeed_text); 
-        lv_obj_set_style_text_font(filmRotationSpeedLabel, &lv_font_montserrat_20, 0);              
-        lv_obj_align(filmRotationSpeedLabel, LV_ALIGN_TOP_LEFT, -5, -10);
+        gui.page.settings.filmRotationSpeedLabel = lv_label_create(gui.page.settings.filmRotationSpeedContainer);         
+        lv_label_set_text(gui.page.settings.filmRotationSpeedLabel, rotationSpeed_text); 
+        lv_obj_set_style_text_font(gui.page.settings.filmRotationSpeedLabel, &lv_font_montserrat_20, 0);              
+        lv_obj_align(gui.page.settings.filmRotationSpeedLabel, LV_ALIGN_TOP_LEFT, -5, -10);
 
-        createQuestionMark(filmRotationSpeedContainer,filmRotationSpeedLabel,event_settingPopupMBox, 2, -3);
+        createQuestionMark(gui.page.settings.filmRotationSpeedContainer,gui.page.settings.filmRotationSpeedLabel,event_settingPopupMBox, 2, -3);
    
-        filmRotationSpeedSlider = lv_slider_create(filmRotationSpeedContainer);
-        lv_obj_align(filmRotationSpeedSlider, LV_ALIGN_TOP_LEFT, 0, 23);
-        lv_obj_set_style_anim_duration(filmRotationSpeedSlider, 2000, 0);
-        lv_obj_set_style_bg_color(filmRotationSpeedSlider,lv_color_hex(ORANGE) , LV_PART_KNOB);
-        lv_obj_set_style_bg_color(filmRotationSpeedSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
-        lv_obj_set_style_bg_color(filmRotationSpeedSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
+        gui.page.settings.filmRotationSpeedSlider = lv_slider_create(gui.page.settings.filmRotationSpeedContainer);
+        lv_obj_align(gui.page.settings.filmRotationSpeedSlider, LV_ALIGN_TOP_LEFT, 0, 23);
+        lv_obj_set_style_anim_duration(gui.page.settings.filmRotationSpeedSlider, 2000, 0);
+        lv_obj_set_style_bg_color(gui.page.settings.filmRotationSpeedSlider,lv_color_hex(ORANGE) , LV_PART_KNOB);
+        lv_obj_set_style_bg_color(gui.page.settings.filmRotationSpeedSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
+        lv_obj_set_style_bg_color(gui.page.settings.filmRotationSpeedSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
         
-        filmRotationSpeedValueLabel = lv_label_create(filmRotationSpeedContainer);
-        lv_obj_set_style_text_font(filmRotationSpeedValueLabel, &lv_font_montserrat_22, 0);              
-        lv_label_set_text(filmRotationSpeedValueLabel, "0%");
-        lv_obj_align(filmRotationSpeedValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(filmRotationSpeedSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, filmRotationSpeedValueLabel);
+        gui.page.settings.filmRotationSpeedValueLabel = lv_label_create(gui.page.settings.filmRotationSpeedContainer);
+        lv_obj_set_style_text_font(gui.page.settings.filmRotationSpeedValueLabel, &lv_font_montserrat_22, 0);              
+        lv_label_set_text(gui.page.settings.filmRotationSpeedValueLabel, "0%");
+        lv_obj_align(gui.page.settings.filmRotationSpeedValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.filmRotationSpeedValueLabel);
 
 
 
-  filmRotationInverseIntervallContainer = lv_obj_create(settingsContainer);
-  lv_obj_align(filmRotationInverseIntervallContainer, LV_ALIGN_TOP_LEFT, -15, 241);                         
-  lv_obj_set_size(filmRotationInverseIntervallContainer, 330, 70); 
-  lv_obj_remove_flag(filmRotationInverseIntervallContainer, LV_OBJ_FLAG_SCROLLABLE);    
-  //lv_obj_set_style_border_color(filmRotationInverseIntervallContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
-  lv_obj_set_style_border_opa(filmRotationInverseIntervallContainer, LV_OPA_TRANSP, 0);
+  gui.page.settings.filmRotationInverseIntervallContainer = lv_obj_create(gui.page.settings.settingsContainer);
+  lv_obj_align(gui.page.settings.filmRotationInverseIntervallContainer, LV_ALIGN_TOP_LEFT, -15, 241);                         
+  lv_obj_set_size(gui.page.settings.filmRotationInverseIntervallContainer, 330, 70); 
+  lv_obj_remove_flag(gui.page.settings.filmRotationInverseIntervallContainer, LV_OBJ_FLAG_SCROLLABLE);    
+  //lv_obj_set_style_border_color(gui.page.settings.filmRotationInverseIntervallContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
+  lv_obj_set_style_border_opa(gui.page.settings.filmRotationInverseIntervallContainer, LV_OPA_TRANSP, 0);
    
-        filmRotationInverseIntervalLabel = lv_label_create(filmRotationInverseIntervallContainer);         
-        lv_label_set_text(filmRotationInverseIntervalLabel, rotationInversionInterval_text); 
-        lv_obj_set_style_text_font(filmRotationInverseIntervalLabel, &lv_font_montserrat_20, 0);              
-        lv_obj_align(filmRotationInverseIntervalLabel, LV_ALIGN_TOP_LEFT, -5, -10);
+        gui.page.settings.filmRotationInverseIntervalLabel = lv_label_create(gui.page.settings.filmRotationInverseIntervallContainer);         
+        lv_label_set_text(gui.page.settings.filmRotationInverseIntervalLabel, rotationInversionInterval_text); 
+        lv_obj_set_style_text_font(gui.page.settings.filmRotationInverseIntervalLabel, &lv_font_montserrat_20, 0);              
+        lv_obj_align(gui.page.settings.filmRotationInverseIntervalLabel, LV_ALIGN_TOP_LEFT, -5, -10);
 
-        createQuestionMark(filmRotationInverseIntervallContainer,filmRotationInverseIntervalLabel,event_settingPopupMBox, 2, -3);
+        createQuestionMark(gui.page.settings.filmRotationInverseIntervallContainer,gui.page.settings.filmRotationInverseIntervalLabel,event_settingPopupMBox, 2, -3);
    
-        filmRotationInversionIntervalSlider = lv_slider_create(filmRotationInverseIntervallContainer);
-        lv_obj_align(filmRotationInversionIntervalSlider, LV_ALIGN_TOP_LEFT, 0, 23);
-        lv_obj_set_style_anim_duration(filmRotationInversionIntervalSlider, 2000, 0);
-        lv_obj_set_style_bg_color(filmRotationInversionIntervalSlider,lv_color_hex(ORANGE) , LV_PART_KNOB);
-        lv_obj_set_style_bg_color(filmRotationInversionIntervalSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
-        lv_obj_set_style_bg_color(filmRotationInversionIntervalSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
+        gui.page.settings.filmRotationInversionIntervalSlider = lv_slider_create(gui.page.settings.filmRotationInverseIntervallContainer);
+        lv_obj_align(gui.page.settings.filmRotationInversionIntervalSlider, LV_ALIGN_TOP_LEFT, 0, 23);
+        lv_obj_set_style_anim_duration(gui.page.settings.filmRotationInversionIntervalSlider, 2000, 0);
+        lv_obj_set_style_bg_color(gui.page.settings.filmRotationInversionIntervalSlider,lv_color_hex(ORANGE) , LV_PART_KNOB);
+        lv_obj_set_style_bg_color(gui.page.settings.filmRotationInversionIntervalSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
+        lv_obj_set_style_bg_color(gui.page.settings.filmRotationInversionIntervalSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
         
-        filmRotationInverseIntervalValueLabel = lv_label_create(filmRotationInverseIntervallContainer);
-        lv_obj_set_style_text_font(filmRotationInverseIntervalValueLabel, &lv_font_montserrat_22, 0);              
-        lv_label_set_text(filmRotationInverseIntervalValueLabel, "0sec");
-        lv_obj_align(filmRotationInverseIntervalValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(filmRotationInversionIntervalSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, filmRotationInverseIntervalValueLabel);
+        gui.page.settings.filmRotationInverseIntervalValueLabel = lv_label_create(gui.page.settings.filmRotationInverseIntervallContainer);
+        lv_obj_set_style_text_font(gui.page.settings.filmRotationInverseIntervalValueLabel, &lv_font_montserrat_22, 0);              
+        lv_label_set_text(gui.page.settings.filmRotationInverseIntervalValueLabel, "0sec");
+        lv_obj_align(gui.page.settings.filmRotationInverseIntervalValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationInversionIntervalSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.filmRotationInverseIntervalValueLabel);
 
   
-  randomContainer = lv_obj_create(settingsContainer);
-  lv_obj_align(randomContainer, LV_ALIGN_TOP_LEFT, -15, 303);                         
-  lv_obj_set_size(randomContainer, 330, 70); 
-  lv_obj_remove_flag(randomContainer, LV_OBJ_FLAG_SCROLLABLE);    
-  //lv_obj_set_style_border_color(randomContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
-  lv_obj_set_style_border_opa(randomContainer, LV_OPA_TRANSP, 0);
+  gui.page.settings.randomContainer = lv_obj_create(gui.page.settings.settingsContainer);
+  lv_obj_align(gui.page.settings.randomContainer, LV_ALIGN_TOP_LEFT, -15, 303);                         
+  lv_obj_set_size(gui.page.settings.randomContainer, 330, 70); 
+  lv_obj_remove_flag(gui.page.settings.randomContainer, LV_OBJ_FLAG_SCROLLABLE);    
+  //lv_obj_set_style_border_color(gui.page.settings.randomContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
+  lv_obj_set_style_border_opa(gui.page.settings.randomContainer, LV_OPA_TRANSP, 0);
    
-        filmRotationRandomLabel = lv_label_create(randomContainer);         
-        lv_label_set_text(filmRotationRandomLabel, rotationRandom_text); 
-        lv_obj_set_style_text_font(filmRotationRandomLabel, &lv_font_montserrat_20, 0);              
-        lv_obj_align(filmRotationRandomLabel, LV_ALIGN_TOP_LEFT, -5, -10);
+        gui.page.settings.filmRotationRandomLabel = lv_label_create(gui.page.settings.randomContainer);         
+        lv_label_set_text(gui.page.settings.filmRotationRandomLabel, rotationRandom_text); 
+        lv_obj_set_style_text_font(gui.page.settings.filmRotationRandomLabel, &lv_font_montserrat_20, 0);              
+        lv_obj_align(gui.page.settings.filmRotationRandomLabel, LV_ALIGN_TOP_LEFT, -5, -10);
    
-        createQuestionMark(randomContainer,filmRotationRandomLabel,event_settingPopupMBox, 2, -3);
+        createQuestionMark(gui.page.settings.randomContainer,gui.page.settings.filmRotationRandomLabel,event_settingPopupMBox, 2, -3);
 
-        filmRandomlSlider = lv_slider_create(randomContainer);
-        lv_obj_align(filmRandomlSlider, LV_ALIGN_TOP_LEFT, 0, 23);
-        lv_obj_set_style_anim_duration(filmRandomlSlider, 2000, 0);
-        lv_obj_set_style_bg_color(filmRandomlSlider,lv_color_hex(ORANGE) , LV_PART_KNOB);
-        lv_obj_set_style_bg_color(filmRandomlSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
-        lv_obj_set_style_bg_color(filmRandomlSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
+        gui.page.settings.filmRandomlSlider = lv_slider_create(gui.page.settings.randomContainer);
+        lv_obj_align(gui.page.settings.filmRandomlSlider, LV_ALIGN_TOP_LEFT, 0, 23);
+        lv_obj_set_style_anim_duration(gui.page.settings.filmRandomlSlider, 2000, 0);
+        lv_obj_set_style_bg_color(gui.page.settings.filmRandomlSlider,lv_color_hex(ORANGE) , LV_PART_KNOB);
+        lv_obj_set_style_bg_color(gui.page.settings.filmRandomlSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
+        lv_obj_set_style_bg_color(gui.page.settings.filmRandomlSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
         
-        filmRotationRandomValueLabel = lv_label_create(randomContainer);
-        lv_obj_set_style_text_font(filmRotationRandomValueLabel, &lv_font_montserrat_22, 0);              
-        lv_label_set_text(filmRotationRandomValueLabel, "~0%");
-        lv_obj_align(filmRotationRandomValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(filmRandomlSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, filmRotationRandomValueLabel);
+        gui.page.settings.filmRotationRandomValueLabel = lv_label_create(gui.page.settings.randomContainer);
+        lv_obj_set_style_text_font(gui.page.settings.filmRotationRandomValueLabel, &lv_font_montserrat_22, 0);              
+        lv_label_set_text(gui.page.settings.filmRotationRandomValueLabel, "~0%");
+        lv_obj_align(gui.page.settings.filmRotationRandomValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
+        lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.filmRotationRandomValueLabel);
 
-  persistentAlarmContainer = lv_obj_create(settingsContainer);
-  lv_obj_align(persistentAlarmContainer, LV_ALIGN_TOP_LEFT, -15, 362);                         
-  lv_obj_set_size(persistentAlarmContainer, 330, 60); 
-  lv_obj_remove_flag(persistentAlarmContainer, LV_OBJ_FLAG_SCROLLABLE);    
-  //lv_obj_set_style_border_color(persistentAlarmContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
-  lv_obj_set_style_border_opa(persistentAlarmContainer, LV_OPA_TRANSP, 0);
+  gui.page.settings.persistentAlarmContainer = lv_obj_create(gui.page.settings.settingsContainer);
+  lv_obj_align(gui.page.settings.persistentAlarmContainer, LV_ALIGN_TOP_LEFT, -15, 362);                         
+  lv_obj_set_size(gui.page.settings.persistentAlarmContainer, 330, 60); 
+  lv_obj_remove_flag(gui.page.settings.persistentAlarmContainer, LV_OBJ_FLAG_SCROLLABLE);    
+  //lv_obj_set_style_border_color(gui.page.settings.persistentAlarmContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
+  lv_obj_set_style_border_opa(gui.page.settings.persistentAlarmContainer, LV_OPA_TRANSP, 0);
 
-        persistentAlarmLabel = lv_label_create(persistentAlarmContainer);         
-        lv_label_set_text(persistentAlarmLabel, persistentAlarm_text); 
-        lv_obj_set_style_text_font(persistentAlarmLabel, &lv_font_montserrat_20, 0);              
-        lv_obj_align(persistentAlarmLabel, LV_ALIGN_LEFT_MID, -5, 0);
+        gui.page.settings.persistentAlarmLabel = lv_label_create(gui.page.settings.persistentAlarmContainer);         
+        lv_label_set_text(gui.page.settings.persistentAlarmLabel, persistentAlarm_text); 
+        lv_obj_set_style_text_font(gui.page.settings.persistentAlarmLabel, &lv_font_montserrat_20, 0);              
+        lv_obj_align(gui.page.settings.persistentAlarmLabel, LV_ALIGN_LEFT_MID, -5, 0);
 
-        createQuestionMark(persistentAlarmContainer,persistentAlarmLabel,event_settingPopupMBox, 2, -3);
+        createQuestionMark(gui.page.settings.persistentAlarmContainer,gui.page.settings.persistentAlarmLabel,event_settingPopupMBox, 2, -3);
 
-        persistentAlarmSwitch = lv_switch_create(persistentAlarmContainer);
-        lv_obj_add_event_cb(persistentAlarmSwitch, event_settings_handler, LV_EVENT_VALUE_CHANGED, persistentAlarmSwitch);
-        lv_obj_align(persistentAlarmSwitch, LV_ALIGN_RIGHT_MID, 0, 0);
-        lv_obj_set_style_bg_color(persistentAlarmSwitch,  lv_palette_darken(LV_PALETTE_GREY, 3), LV_STATE_DEFAULT);
-        lv_obj_set_style_bg_color(persistentAlarmSwitch,  lv_color_hex(ORANGE), LV_PART_KNOB | LV_STATE_DEFAULT);
-        lv_obj_set_style_bg_color(persistentAlarmSwitch,  lv_color_hex(ORANGE_DARK), LV_PART_INDICATOR | LV_STATE_CHECKED);
-
-
-  autostartContainer = lv_obj_create(settingsContainer);
-  lv_obj_align(autostartContainer, LV_ALIGN_TOP_LEFT, -15, 427);                         
-  lv_obj_set_size(autostartContainer, 330, 60); 
-  lv_obj_remove_flag(autostartContainer, LV_OBJ_FLAG_SCROLLABLE);    
-  //lv_obj_set_style_border_color(autostartContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
-  lv_obj_set_style_border_opa(autostartContainer, LV_OPA_TRANSP, 0);
-
-        autostartLabel = lv_label_create(autostartContainer);         
-        lv_label_set_text(autostartLabel, autostart_text); 
-        lv_obj_set_style_text_font(autostartLabel, &lv_font_montserrat_20, 0);              
-        lv_obj_align(autostartLabel, LV_ALIGN_LEFT_MID, -5, 0);
-
-        createQuestionMark(autostartContainer,autostartLabel,event_settingPopupMBox, 2, -3);
-
-        autostartSwitch = lv_switch_create(autostartContainer);
-        lv_obj_add_event_cb(autostartSwitch, event_settings_handler, LV_EVENT_VALUE_CHANGED, autostartSwitch);
-        lv_obj_align(autostartSwitch, LV_ALIGN_RIGHT_MID, 0, 0);
-        lv_obj_set_style_bg_color(autostartSwitch,  lv_palette_darken(LV_PALETTE_GREY, 3), LV_STATE_DEFAULT);
-        lv_obj_set_style_bg_color(autostartSwitch,  lv_color_hex(ORANGE), LV_PART_KNOB | LV_STATE_DEFAULT);
-        lv_obj_set_style_bg_color(autostartSwitch,  lv_color_hex(ORANGE_DARK), LV_PART_INDICATOR | LV_STATE_CHECKED);
+        gui.page.settings.persistentAlarmSwitch = lv_switch_create(gui.page.settings.persistentAlarmContainer);
+        lv_obj_add_event_cb(gui.page.settings.persistentAlarmSwitch, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.persistentAlarmSwitch);
+        lv_obj_align(gui.page.settings.persistentAlarmSwitch, LV_ALIGN_RIGHT_MID, 0, 0);
+        lv_obj_set_style_bg_color(gui.page.settings.persistentAlarmSwitch,  lv_palette_darken(LV_PALETTE_GREY, 3), LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_color(gui.page.settings.persistentAlarmSwitch,  lv_color_hex(ORANGE), LV_PART_KNOB | LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_color(gui.page.settings.persistentAlarmSwitch,  lv_color_hex(ORANGE_DARK), LV_PART_INDICATOR | LV_STATE_CHECKED);
 
 
-  drainFillTimeContainer = lv_obj_create(settingsContainer);
-  lv_obj_align(drainFillTimeContainer, LV_ALIGN_TOP_LEFT, -15, 499);                         
-  lv_obj_set_size(drainFillTimeContainer, 330, 70); 
-  lv_obj_remove_flag(drainFillTimeContainer, LV_OBJ_FLAG_SCROLLABLE);    
-  //lv_obj_set_style_border_color(drainFillTimeContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
-  lv_obj_set_style_border_opa(drainFillTimeContainer, LV_OPA_TRANSP, 0);
+  gui.page.settings.autostartContainer = lv_obj_create(gui.page.settings.settingsContainer);
+  lv_obj_align(gui.page.settings.autostartContainer, LV_ALIGN_TOP_LEFT, -15, 427);                         
+  lv_obj_set_size(gui.page.settings.autostartContainer, 330, 60); 
+  lv_obj_remove_flag(gui.page.settings.autostartContainer, LV_OBJ_FLAG_SCROLLABLE);    
+  //lv_obj_set_style_border_color(gui.page.settings.autostartContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
+  lv_obj_set_style_border_opa(gui.page.settings.autostartContainer, LV_OPA_TRANSP, 0);
+
+        gui.page.settings.autostartLabel = lv_label_create(gui.page.settings.autostartContainer);         
+        lv_label_set_text(gui.page.settings.autostartLabel, autostart_text); 
+        lv_obj_set_style_text_font(gui.page.settings.autostartLabel, &lv_font_montserrat_20, 0);              
+        lv_obj_align(gui.page.settings.autostartLabel, LV_ALIGN_LEFT_MID, -5, 0);
+
+        createQuestionMark(gui.page.settings.autostartContainer,gui.page.settings.autostartLabel,event_settingPopupMBox, 2, -3);
+
+        gui.page.settings.autostartSwitch = lv_switch_create(gui.page.settings.autostartContainer);
+        lv_obj_add_event_cb(gui.page.settings.autostartSwitch, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.autostartSwitch);
+        lv_obj_align(gui.page.settings.autostartSwitch, LV_ALIGN_RIGHT_MID, 0, 0);
+        lv_obj_set_style_bg_color(gui.page.settings.autostartSwitch,  lv_palette_darken(LV_PALETTE_GREY, 3), LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_color(gui.page.settings.autostartSwitch,  lv_color_hex(ORANGE), LV_PART_KNOB | LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_color(gui.page.settings.autostartSwitch,  lv_color_hex(ORANGE_DARK), LV_PART_INDICATOR | LV_STATE_CHECKED);
+
+
+  gui.page.settings.drainFillTimeContainer = lv_obj_create(gui.page.settings.settingsContainer);
+  lv_obj_align(gui.page.settings.drainFillTimeContainer, LV_ALIGN_TOP_LEFT, -15, 499);                         
+  lv_obj_set_size(gui.page.settings.drainFillTimeContainer, 330, 70); 
+  lv_obj_remove_flag(gui.page.settings.drainFillTimeContainer, LV_OBJ_FLAG_SCROLLABLE);    
+  //lv_obj_set_style_border_color(gui.page.settings.drainFillTimeContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
+  lv_obj_set_style_border_opa(gui.page.settings.drainFillTimeContainer, LV_OPA_TRANSP, 0);
    
-        drainFillTimeLabel = lv_label_create(drainFillTimeContainer);         
-        lv_label_set_text(drainFillTimeLabel, drainFillTime_text); 
-        lv_obj_set_style_text_font(drainFillTimeLabel, &lv_font_montserrat_20, 0);              
-        lv_obj_align(drainFillTimeLabel, LV_ALIGN_TOP_LEFT, -5, -10);
+        gui.page.settings.drainFillTimeLabel = lv_label_create(gui.page.settings.drainFillTimeContainer);         
+        lv_label_set_text(gui.page.settings.drainFillTimeLabel, drainFillTime_text); 
+        lv_obj_set_style_text_font(gui.page.settings.drainFillTimeLabel, &lv_font_montserrat_20, 0);              
+        lv_obj_align(gui.page.settings.drainFillTimeLabel, LV_ALIGN_TOP_LEFT, -5, -10);
 
-        createQuestionMark(drainFillTimeContainer,drainFillTimeLabel,event_settingPopupMBox, 2, -3);
+        createQuestionMark(gui.page.settings.drainFillTimeContainer,gui.page.settings.drainFillTimeLabel,event_settingPopupMBox, 2, -3);
    
-        drainFillTimeSlider = lv_slider_create(drainFillTimeContainer);
-        lv_obj_align(drainFillTimeSlider, LV_ALIGN_TOP_LEFT, 0, 23);
-        lv_obj_set_style_anim_duration(drainFillTimeSlider, 2000, 0);
-        lv_obj_set_style_bg_color(drainFillTimeSlider,lv_color_hex(ORANGE) , LV_PART_KNOB);
-        lv_obj_set_style_bg_color(drainFillTimeSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
-        lv_obj_set_style_bg_color(drainFillTimeSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
+        gui.page.settings.drainFillTimeSlider = lv_slider_create(gui.page.settings.drainFillTimeContainer);
+        lv_obj_align(gui.page.settings.drainFillTimeSlider, LV_ALIGN_TOP_LEFT, 0, 23);
+        lv_obj_set_style_anim_duration(gui.page.settings.drainFillTimeSlider, 2000, 0);
+        lv_obj_set_style_bg_color(gui.page.settings.drainFillTimeSlider,lv_color_hex(ORANGE) , LV_PART_KNOB);
+        lv_obj_set_style_bg_color(gui.page.settings.drainFillTimeSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
+        lv_obj_set_style_bg_color(gui.page.settings.drainFillTimeSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
         
-        drainFillTimeValueLabel = lv_label_create(drainFillTimeContainer);
-        lv_obj_set_style_text_font(drainFillTimeValueLabel, &lv_font_montserrat_22, 0);              
-        lv_label_set_text(drainFillTimeValueLabel, "0%");
-        lv_obj_align(drainFillTimeValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(drainFillTimeSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, drainFillTimeValueLabel);
+        gui.page.settings.drainFillTimeValueLabel = lv_label_create(gui.page.settings.drainFillTimeContainer);
+        lv_obj_set_style_text_font(gui.page.settings.drainFillTimeValueLabel, &lv_font_montserrat_22, 0);              
+        lv_label_set_text(gui.page.settings.drainFillTimeValueLabel, "0%");
+        lv_obj_align(gui.page.settings.drainFillTimeValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
+        lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.drainFillTimeValueLabel);
 }
 
 void settings(void)
 {   
-  if(settingsSection == NULL){
+  if(gui.page.settings.settingsSection == NULL){
     initSettings();
   }
 
-  lv_obj_clear_flag(settingsSection, LV_OBJ_FLAG_HIDDEN);
-  lv_style_set_line_color(&style_sectionTitleLine, lv_palette_main(LV_PALETTE_ORANGE));
+  lv_obj_clear_flag(gui.page.settings.settingsSection, LV_OBJ_FLAG_HIDDEN);
+  lv_style_set_line_color(&gui.page.settings.style_sectionTitleLine, lv_palette_main(LV_PALETTE_ORANGE));
 
 }
 

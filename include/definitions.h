@@ -96,16 +96,22 @@ struct sRollerPopup {
 	lv_style_t			    style_mBoxRollerTitleLine;
 	lv_point_precise_t	titleLinePoints[2];
 
-	lv_obj_t			*roller;
-	lv_style_t	  style_roller;
+	lv_obj_t	         	*roller;
+	lv_style_t          style_roller;
 
 
-	lv_obj_t 			*mBoxRollerContainer;
-	lv_obj_t 			*mBoxRollerTitle;
-	lv_obj_t 			*mBoxRollerButton;
-	lv_obj_t 			*mBoxRollerButtonLabel;
-	lv_obj_t 			*mBoxRollerRollerContainer;
+	lv_obj_t 	         	*mBoxRollerContainer;
+	lv_obj_t 	         	*mBoxRollerTitle;
+	lv_obj_t 	         	*mBoxRollerButton;
+	lv_obj_t 	         	*mBoxRollerButtonLabel;
+	lv_obj_t 	         	*mBoxRollerRollerContainer;
 
+  lv_obj_t 	         	*whoCallMe;
+
+  char                *minutesOptions;
+  char                *secondsOptions;  
+  char                *tempCelsiusOptions;       
+  char                *tempCelsiusToleranceOptions;  
 	/* Params objects */
 };
 
@@ -118,28 +124,27 @@ struct sFilterPopup {
 	lv_point_precise_t	titleLinePoints[2];
 
     
-	lv_obj_t			*mBoxContainer;
-	lv_obj_t			*mBoxTitle;
-	lv_obj_t			*mBoxNameContainer;
-	lv_obj_t			*mBoxNameLabel;
-	lv_obj_t			*selectColorContainerRadioButton;
-	lv_obj_t			*mBoxColorLabel;
-	lv_obj_t			*mBoxBnWLabel;
-	lv_obj_t			*mBoxPreferredContainer;
-	lv_obj_t			*mBoxPreferredLabel;
-	lv_obj_t			*mBoxResetFilterLabel;
-	lv_obj_t			*mBoxApplyFilterLabel;
+	lv_obj_t	      		*mBoxContainer;
+	lv_obj_t	      		*mBoxTitle;
+	lv_obj_t	      		*mBoxNameContainer;
+	lv_obj_t	      		*mBoxNameLabel;
+	lv_obj_t	      		*selectColorContainerRadioButton;
+	lv_obj_t	      		*mBoxColorLabel;
+	lv_obj_t	      		*mBoxBnWLabel;
+	lv_obj_t	      		*mBoxPreferredContainer;
+	lv_obj_t	      		*mBoxPreferredLabel;
+	lv_obj_t	      		*mBoxResetFilterLabel;
+	lv_obj_t	      		*mBoxApplyFilterLabel;
 
-	
-	lv_obj_t			*mBoxNameTextArea;
-	lv_obj_t			*mBoxSelectColorRadioButton;
-	lv_obj_t			*mBoxSelectBnWRadioButton;
-	lv_obj_t			*mBoxOnlyPreferredSwitch;
-	lv_obj_t			*mBoxResetFilterButton;
-	lv_obj_t			*mBoxApplyFilterButton;
+
+	lv_obj_t	      		*mBoxNameTextArea;
+	lv_obj_t	      		*mBoxSelectColorRadioButton;
+	lv_obj_t	      		*mBoxSelectBnWRadioButton;
+	lv_obj_t	      		*mBoxOnlyPreferredSwitch;
+	lv_obj_t	      		*mBoxResetFilterButton;
+	lv_obj_t	      		*mBoxApplyFilterButton;
 
 	/* Params objects */
-	uint32_t active_index;
 };
 
 
@@ -150,22 +155,21 @@ struct sMessagePopup {
 	lv_style_t			    style_mBoxPopupTitleLine;
 	lv_point_precise_t	titleLinePoints[2];
 
-	lv_obj_t			*mBoxPopupContainer;
-	lv_obj_t			*mBoxPopupTextContainer;
+	lv_obj_t		      	*mBoxPopupContainer;
+	lv_obj_t		      	*mBoxPopupTextContainer;
 
-	
-	lv_obj_t			*mBoxPopupTitle;
-	lv_obj_t			*mBoxPopupText;
-	lv_obj_t			*mBoxPopupButtonLabel;
-	lv_obj_t			*mBoxPopupButton1Label;
-	lv_obj_t			*mBoxPopupButton2Label;
-	
-	lv_obj_t			*mBoxPopupButtonClose;
-	lv_obj_t			*mBoxPopupButton1;
-	lv_obj_t			*mBoxPopupButton2;  
-	
-	lv_obj_t			*parameterReceived;
 
+	lv_obj_t		      	*mBoxPopupTitle;
+	lv_obj_t		      	*mBoxPopupText;
+	lv_obj_t		      	*mBoxPopupButtonLabel;
+	lv_obj_t		      	*mBoxPopupButton1Label;
+	lv_obj_t		      	*mBoxPopupButton2Label;
+
+	lv_obj_t		      	*mBoxPopupButtonClose;
+	lv_obj_t		      	*mBoxPopupButton1;
+	lv_obj_t		      	*mBoxPopupButton2;  
+
+  lv_obj_t 	         	*whoCallMe;
 	/* Params objects */
 };
 
@@ -213,13 +217,13 @@ struct sProcesses {
 	lv_point_precise_t	titleLinePoints[2];
 
 
-  lv_obj_t			*processesLabel;
-  lv_obj_t			*iconFilterLabel;
-  lv_obj_t			*iconNewProcessLabel;
-  lv_obj_t			*processesList;
+  lv_obj_t	        	*processesLabel;
+  lv_obj_t	        	*iconFilterLabel;
+  lv_obj_t	        	*iconNewProcessLabel;
+  lv_obj_t	        	*processesList;
 
-  lv_obj_t			*processFilterButton;
-  lv_obj_t			*newProcessButton;
+  lv_obj_t	        	*processFilterButton;
+  lv_obj_t	        	*newProcessButton;
 
 	/* Params objects */
 	process_list_t      processes;
@@ -861,10 +865,6 @@ lv_obj_t * stepDetailNamelTextArea;
 /*********************
 * Popup elements
 *********************/
-char * minutesOptions;
-char * secondsOptions;  
-char * tempCelsiusOptions;       
-char * tempCelsiusToleranceOptions;  
 
 #define stopProcessPopupTitle_text 					"Stop process"
 #define warningPopupTitle_text 						"Warning!"
@@ -954,20 +954,10 @@ unsigned long actualMillis;
 uint16_t processCounter;
 uint16_t stepCounter;
 
-lv_obj_t * screen_home;
-lv_obj_t * screen_mainMenu;
 
-lv_obj_t * oldTabSelected;
-lv_obj_t * newTabSelected;
-
-lv_obj_t * processesSection;
-lv_obj_t * processFilterButton;
-lv_obj_t * newProcessButton;
 lv_obj_t * processElement;
 lv_obj_t * stepElement;
 
-lv_obj_t * settingsSection;
-lv_obj_t * toolsSection;
 
 static lv_point_precise_t sectionTitleLine_points[] = { {0, 0}, {310 , 0}};
 lv_style_t style_sectionTitleLine;
