@@ -412,14 +412,14 @@ void init_globals( void ) {
 	memset( &gui, 0, sizeof( gui ) );		
 
   // We only need to initialise the non-zero values
-  gui.element.filterPopup.titleLinePoints[1].x = 310;
-  gui.element.rollerPopup.titleLinePoints[1].x = 310;
-  gui.element.messagePopup.titleLinePoints[1].x = 310;
+  gui.element.filterPopup.titleLinePoints[1].x = 200;
+  gui.element.rollerPopup.titleLinePoints[1].x = 200;
+  gui.element.messagePopup.titleLinePoints[1].x = 200;
 
-  gui.page.processes.titleLinePoints[1].x = 200;
-  gui.page.settings.titleLinePoints[1].x = 200;
-  gui.page.tools.titleLinePoints[1].x = 200;
-  gui.page.stepDetail.titleLinePoints[1].x = 200;
+  gui.page.processes.titleLinePoints[1].x = 310;
+  gui.page.settings.titleLinePoints[1].x = 310;
+  gui.page.tools.titleLinePoints[1].x = 310;
+  gui.page.stepDetail.titleLinePoints[1].x = 310;
 
   gui.element.rollerPopup.tempCelsiusOptions = createRollerValues(40,"");
   gui.element.rollerPopup.minutesOptions = createRollerValues(240,"");

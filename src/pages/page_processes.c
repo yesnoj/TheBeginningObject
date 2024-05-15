@@ -116,10 +116,10 @@ void initProcesses(void){
 
   //CREATE STYLE AND LINE FOR THE TITLE
   /*Create style*/
-  lv_style_init(&gui.page.processes.titleLinePoints);
-  lv_style_set_line_width(&gui.page.processes.titleLinePoints, 2);
-  lv_style_set_line_color(&gui.page.processes.titleLinePoints, lv_palette_main(LV_PALETTE_GREEN));
-  lv_style_set_line_rounded(&gui.page.processes.titleLinePoints, true);
+  lv_style_init(&gui.page.processes.style_sectionTitleLine);
+  lv_style_set_line_width(&gui.page.processes.style_sectionTitleLine, 2);
+  lv_style_set_line_color(&gui.page.processes.style_sectionTitleLine, lv_palette_main(LV_PALETTE_GREEN));
+  lv_style_set_line_rounded(&gui.page.processes.style_sectionTitleLine, true);
 
   /*Create a line and apply the new style*/
   gui.page.processes.sectionTitleLine = lv_line_create(gui.page.processes.processesSection);
@@ -128,10 +128,6 @@ void initProcesses(void){
   lv_obj_align(gui.page.processes.sectionTitleLine, LV_ALIGN_CENTER, 0, - 103);
 
   //lv_obj_update_layout(gui.page.processes.processesSection);
-
-
-    
-
 }
 
 
@@ -142,7 +138,7 @@ void processes(void)
   }
 
   lv_obj_clear_flag(gui.page.processes.processesSection, LV_OBJ_FLAG_HIDDEN);
-  lv_style_set_line_color(&gui.page.processes.titleLinePoints, lv_palette_main(LV_PALETTE_GREEN));
+  lv_style_set_line_color(&gui.page.processes.style_sectionTitleLine, lv_palette_main(LV_PALETTE_GREEN));
 
 }
 
