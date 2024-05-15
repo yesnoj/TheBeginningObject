@@ -19,13 +19,6 @@ extern "C" {
 
 
 /*********************
-* Image logo
-*********************/
-LV_IMG_DECLARE(splash_img);
-
-
-
-/*********************
 * ELEMENTS STRUCTS
 *********************/
 typedef struct singleStep {
@@ -101,7 +94,7 @@ struct sRollerPopup {
 	lv_obj_t			      *mBoxRollerParent;
 	lv_obj_t			      *mBoxRollerTitleLine;
 	lv_style_t			    style_mBoxRollerTitleLine;
-	lv_point_precise_t	mBoxTitleLine_points[2];
+	lv_point_precise_t	titleLinePoints[2];
 
 	lv_obj_t			*roller;
 	lv_style_t	  style_roller;
@@ -122,7 +115,7 @@ struct sFilterPopup {
 	lv_obj_t			      *mBoxFilterPopupParent;
 	lv_obj_t			      *mBoxStepPopupTitleLine;
 	lv_style_t			    style_mBoxTitleLine;
-	lv_point_precise_t	mBoxTitleLine_points[2];
+	lv_point_precise_t	titleLinePoints[2];
 
     
 	lv_obj_t			*mBoxContainer;
@@ -155,7 +148,7 @@ struct sMessagePopup {
 	lv_obj_t			      *mBoxPopupParent;
 	lv_obj_t			      *mBoxPopupTitleLine;
 	lv_style_t			    style_mBoxPopupTitleLine;
-	lv_point_precise_t	mBoxTitleLine_points[2];
+	lv_point_precise_t	titleLinePoints[2];
 
 	lv_obj_t			*mBoxPopupContainer;
 	lv_obj_t			*mBoxPopupTextContainer;
@@ -216,7 +209,7 @@ struct sProcesses {
 	lv_obj_t			      *processesSection;
 	lv_obj_t			      *sectionTitleLine;
 	lv_style_t			    style_sectionTitleLine;
-	lv_point_precise_t	sectionTitleLine_points[2];
+	lv_point_precise_t	titleLinePoints[2];
 
 
   lv_obj_t			*processesLabel;
@@ -237,7 +230,7 @@ struct sSettings {
 	lv_obj_t			      *settingsSection;
 	lv_obj_t			      *sectionTitleLine;
 	lv_style_t			    style_sectionTitleLine;
-	lv_point_precise_t	sectionTitleLine_points[2];
+	lv_point_precise_t	titleLinePoints[2];
 	lv_coord_t 			    pad;
 
 	lv_obj_t 	        	*settingsLabel;
@@ -292,7 +285,7 @@ struct sTools {
 	lv_obj_t			      *toolsSection;
 	lv_obj_t			      *sectionTitleLine;
 	lv_style_t			    style_sectionTitleLine;
-	lv_point_precise_t	sectionTitleLine_points[2];
+	lv_point_precise_t	titleLinePoints[2];
 
 	lv_obj_t 	        	*toolsCleaningContainer;
 	lv_obj_t 	        	*toolsDrainingContainer;
@@ -351,7 +344,7 @@ struct sStepDetail {
 	lv_obj_t 			      *stepDetailParent;
 	lv_obj_t			      *mBoxStepPopupTitleLine;
 	lv_style_t			    style_mBoxStepPopupTitleLine;
-	lv_point_precise_t	mBoxTitleLine_points[2];
+	lv_point_precise_t	titleLinePoints[2];
 
 
 	lv_obj_t 	        	*stepDetailNameContainer;
@@ -1047,6 +1040,7 @@ void stepElementCreate(lv_obj_t *stepContainer);
 /*********************
 * PAGES Function Prototypes
 *********************/
+void init_globals( void );
 
 // @file page_checkup.c
 void event_checkup(lv_event_t *e);

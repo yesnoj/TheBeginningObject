@@ -12,6 +12,7 @@ extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
+LV_IMG_DECLARE(splash_img);
 
 void event_btn_start(lv_event_t * e)
 {

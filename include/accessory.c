@@ -19,6 +19,8 @@
 #define GREATER_THAN_9 2
 #define GREATER_THAN_99 3
 
+struct gui_components	gui;
+
 void event_cb(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);
@@ -400,4 +402,29 @@ void myLongEvent(lv_event_t * e, uint32_t howLongInMs)
             /*Do something*/
         }
     }
+}
+
+
+void init_globals( void ) {
+
+	memset( &gui, 0, sizeof( gui ) );		// Initialise the main GUI structure to zero
+
+  gui.element.filterPopup.titleLinePoints[1].x = 310;
+  gui.element.rollerPopup.titleLinePoints[1].x = 310;
+  gui.element.messagePopup.titleLinePoints[1].x = 310;
+
+  gui.page.processes.titleLinePoints[1].x = 200;
+  gui.page.settings.titleLinePoints[1].x = 200;
+  gui.page.tools.titleLinePoints[1].x = 200;
+  gui.page.stepDetail.titleLinePoints[1].x = 200;
+/*
+	gui.page.filter.titleLinePoints[1].x =  200;		// We only need to initialise the non-zero values
+	gui.page.processes.titleLinePoints[1].x =  310;
+	gui.page.settings.titleLinePoints[1].x =  310;
+	gui.page.tools.titleLinePoints[1].x =  310;
+
+	gui.control.currentState  = Display_State_0_Start;
+	gui.control.previousState = Display_State_0_Start;
+	gui.control.isEnteringInPage = 1;
+  */
 }
