@@ -154,7 +154,7 @@ void initTools(void){
   lv_style_set_line_rounded(&gui.page.tools.style_sectionTitleLine, true);
 
   gui.page.tools.sectionTitleLine = lv_line_create(gui.page.tools.toolsSection);
-  lv_line_set_points(gui.page.tools.sectionTitleLine, sectionTitleLine_points, 2);
+  lv_line_set_points(gui.page.tools.sectionTitleLine, gui.page.tools.titleLinePoints, 2);
   lv_obj_add_style(gui.page.tools.sectionTitleLine, &gui.page.tools.style_sectionTitleLine, 0);
   lv_obj_align(gui.page.tools.sectionTitleLine, LV_ALIGN_TOP_MID, 0, 170);
 
@@ -220,7 +220,7 @@ void initTools(void){
   lv_style_set_line_rounded(&gui.page.tools.style_sectionTitleLine, true);
 
   gui.page.tools.sectionTitleLine = lv_line_create(gui.page.tools.toolsSection);
-  lv_line_set_points(gui.page.tools.sectionTitleLine, sectionTitleLine_points, 2);
+  lv_line_set_points(gui.page.tools.sectionTitleLine, gui.page.tools.titleLinePoints, 2);
   lv_obj_add_style(gui.page.tools.sectionTitleLine, &gui.page.tools.style_sectionTitleLine, 0);
   lv_obj_align(gui.page.tools.sectionTitleLine, LV_ALIGN_TOP_MID, 0, 310);
 
@@ -313,7 +313,7 @@ void initTools(void){
   lv_style_set_line_rounded(&gui.page.tools.style_sectionTitleLine, true);
 
   gui.page.tools.sectionTitleLine = lv_line_create(gui.page.tools.toolsSection);
-  lv_line_set_points(gui.page.tools.sectionTitleLine, sectionTitleLine_points, 2);
+  lv_line_set_points(gui.page.tools.sectionTitleLine, gui.page.tools.titleLinePoints, 2);
   lv_obj_add_style(gui.page.tools.sectionTitleLine, &gui.page.tools.style_sectionTitleLine, 0);
   lv_obj_align(gui.page.tools.sectionTitleLine, LV_ALIGN_TOP_MID, 0, 510);
 

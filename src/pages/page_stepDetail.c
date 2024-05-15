@@ -25,6 +25,7 @@ void event_stepDetail(lv_event_t * e)
   lv_obj_t * mboxCont = (lv_obj_t *)lv_obj_get_parent(objCont);
   lv_obj_t * mboxParent = (lv_obj_t *)lv_obj_get_parent(mboxCont);
   lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
+ 
 
  if(code == LV_EVENT_CLICKED){
     if(obj == gui.page.stepDetail.stepSaveButton){
@@ -41,11 +42,11 @@ void event_stepDetail(lv_event_t * e)
  }
 
  if(code == LV_EVENT_FOCUSED){
-  if(obj == gui.page.stepDetail.stepDetailMinTextArea){
+  if(data == gui.page.stepDetail.stepDetailMinTextArea){
     LV_LOG_USER("Set minutes");
     rollerPopupCreate(gui.element.rollerPopup.minutesOptions, setMinutesPopupTitle_text,gui.page.stepDetail.stepDetailMinTextArea);
   }
-  if(obj == gui.page.stepDetail.stepDetailSecTextArea){
+  if(data == gui.page.stepDetail.stepDetailSecTextArea){
     LV_LOG_USER("Set seconds");
     rollerPopupCreate(gui.element.rollerPopup.secondsOptions, setMinutesPopupTitle_text,gui.page.stepDetail.stepDetailSecTextArea);
   }
@@ -317,7 +318,7 @@ void stepDetail(lv_obj_t * referenceStep)
       gui.page.stepDetail.stepSaveButton = lv_button_create(gui.page.stepDetail.stepDetailContainer);
       lv_obj_set_size(gui.page.stepDetail.stepSaveButton, BUTTON_PROCESS_WIDTH, BUTTON_PROCESS_HEIGHT);
       lv_obj_align(gui.page.stepDetail.stepSaveButton, LV_ALIGN_BOTTOM_LEFT, 10 , 10);
-      lv_obj_add_event_cb(gui.page.stepDetail.stepSaveButton, event_stepDetail, LV_EVENT_CLICKED, mBoxResetFilterButton);
+      lv_obj_add_event_cb(gui.page.stepDetail.stepSaveButton, event_stepDetail, LV_EVENT_CLICKED, gui.element.filterPopup.mBoxResetFilterButton);
       lv_obj_add_event_cb(gui.page.stepDetail.stepSaveButton, event_stepDetail, LV_EVENT_DELETE, NULL);
       lv_obj_set_style_bg_color(gui.page.stepDetail.stepSaveButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
 

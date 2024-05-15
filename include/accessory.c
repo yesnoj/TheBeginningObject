@@ -21,6 +21,7 @@
 
 struct gui_components	gui;
 
+
 void event_cb(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);
@@ -61,7 +62,7 @@ lv_obj_t * create_radiobutton(lv_obj_t * mBoxParent, const char * txt, const int
 	return obj;
 }
 
-void createMessageBox(char *title, char *text, char *button1Text, char *button2Text)
+void createMessageBox(lv_obj_t * messageBox,char *title, char *text, char *button1Text, char *button2Text)
 {
     
     messageBox = lv_msgbox_create(NULL);
@@ -104,50 +105,50 @@ void kb_event_cb(lv_event_t* e)
   lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
    
 
-    if(obj == mBoxNameTextArea){
+    if(obj == gui.element.filterPopup.mBoxNameTextArea){
       if(code == LV_EVENT_FOCUSED || code == LV_EVENT_CLICKED) {
-          LV_LOG_USER("LV_EVENT_FOCUSED on mBoxNameTextArea");
+          LV_LOG_USER("LV_EVENT_FOCUSED on gui.element.filterPopup.mBoxNameTextArea");
           lv_obj_set_user_data(obj,data);
           lv_obj_add_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
           lv_obj_remove_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
         }
 
         if(code == LV_EVENT_DEFOCUSED) {
-          LV_LOG_USER("LV_EVENT_DEFOCUSED on mBoxNameTextArea");
+          LV_LOG_USER("LV_EVENT_DEFOCUSED on gui.element.filterPopup.mBoxNameTextArea");
           lv_obj_remove_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
           lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
         }
     }
     if (code == LV_EVENT_CANCEL) {
-            if(obj == mBoxFilterPopupParent){
-                LV_LOG_USER("Press cancel from mBoxFilterPopupParent");
+            if(obj == gui.element.filterPopup.mBoxFilterPopupParent){
+                LV_LOG_USER("Press cancel from gui.element.filterPopup.mBoxFilterPopupParent");
                 lv_textarea_set_text(keyboard_textArea, "");
                 lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-                lv_obj_remove_flag(mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
+                lv_obj_remove_flag(gui.element.filterPopup.mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
               }
-              if(obj == stepDetailParent){
-                LV_LOG_USER("Press cancel from stepDetailParent");
+              if(obj == gui.page.stepDetail.stepDetailParent){
+                LV_LOG_USER("Press cancel from gui.page.stepDetail.stepDetailParent");
                 lv_textarea_set_text(keyboard_textArea, "");
                 lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-                lv_obj_remove_flag(stepDetailParent, LV_OBJ_FLAG_HIDDEN);
+                lv_obj_remove_flag(gui.page.stepDetail.stepDetailParent, LV_OBJ_FLAG_HIDDEN);
          }
      }
     if (code == LV_EVENT_READY) {
-            if(obj == mBoxNameTextArea){
-              LV_LOG_USER("Press ok from mBoxFilterPopupParent");
-              lv_obj_clear_state(mBoxNameTextArea, LV_STATE_FOCUSED);
-              lv_textarea_set_text(mBoxNameTextArea, lv_textarea_get_text(keyboard_textArea));
+            if(obj == gui.element.filterPopup.mBoxNameTextArea){
+              LV_LOG_USER("Press ok from gui.element.filterPopup.mBoxFilterPopupParent");
+              lv_obj_clear_state(gui.element.filterPopup.mBoxNameTextArea, LV_STATE_FOCUSED);
+              lv_textarea_set_text(gui.element.filterPopup.mBoxNameTextArea, lv_textarea_get_text(keyboard_textArea));
               lv_textarea_set_text(keyboard_textArea, "");
               lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-              lv_obj_remove_flag(mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
+              lv_obj_remove_flag(gui.element.filterPopup.mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
               LV_LOG_USER(lv_textarea_get_text(keyboard_textArea));
             }
-            if(obj == stepDetailParent){
-              LV_LOG_USER("Press ok from stepDetailParent");
+            if(obj == gui.page.stepDetail.stepDetailParent){
+              LV_LOG_USER("Press ok from gui.page.stepDetail.stepDetailParent");
               lv_textarea_set_text(stepDetailNamelTextArea, lv_textarea_get_text(keyboard_textArea));
               lv_textarea_set_text(keyboard_textArea, "");
               lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-              lv_obj_remove_flag(stepDetailParent, LV_OBJ_FLAG_HIDDEN);
+              lv_obj_remove_flag(gui.page.stepDetail.stepDetailParent, LV_OBJ_FLAG_HIDDEN);
               LV_LOG_USER(lv_textarea_get_text(keyboard_textArea));
             }
       }

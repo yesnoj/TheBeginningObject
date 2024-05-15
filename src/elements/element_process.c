@@ -42,7 +42,7 @@ void event_processElement(lv_event_t * e){
         //processDetail(gui.element.process.processElement); //won't work, cause definition in pages.h. Here we want to call processDetail, but this is not defined, because in page.h is defined after element_process.h
       }
       if(code == LV_EVENT_LONG_PRESSED_REPEAT){
-        if(mBoxPopupParent == NULL){
+        if(gui.element.messagePopup.mBoxPopupParent == NULL){
           LV_LOG_USER("Process Element Long Press for popup delete");
           messagePopupCreate(deletePopupTitle_text,deletePopupBody_text, deleteButton_text, stepDetailCancel_text, gui.element.process.processElement);
         }

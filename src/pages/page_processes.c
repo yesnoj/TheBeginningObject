@@ -31,15 +31,15 @@ void event_tabProcesses(lv_event_t * e)
   if(obj == gui.page.processes.processFilterButton){
     if(code == LV_EVENT_CLICKED) {
         LV_LOG_USER("New Filter Creation popup");
-        if(mBoxFilterPopupParent == NULL){
+        if(gui.element.filterPopup.mBoxFilterPopupParent == NULL){
           filterPopupCreate();
         }
         else{
-          lv_textarea_set_text(mBoxNameTextArea, "");
-          lv_obj_remove_state(mBoxOnlyPreferredSwitch, LV_STATE_CHECKED);
-          lv_obj_remove_state(mBoxSelectColorRadioButton, LV_STATE_CHECKED);
-          lv_obj_remove_state(mBoxSelectBnWRadioButton, LV_STATE_CHECKED);
-          lv_obj_remove_flag(mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
+          lv_textarea_set_text(gui.element.filterPopup.mBoxNameTextArea, "");
+          lv_obj_remove_state(gui.element.filterPopup.mBoxOnlyPreferredSwitch, LV_STATE_CHECKED);
+          lv_obj_remove_state(gui.element.filterPopup.mBoxSelectColorRadioButton, LV_STATE_CHECKED);
+          lv_obj_remove_state(gui.element.filterPopup.mBoxSelectBnWRadioButton, LV_STATE_CHECKED);
+          lv_obj_remove_flag(gui.element.filterPopup.mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
           }
     }
   }
@@ -47,7 +47,7 @@ void event_tabProcesses(lv_event_t * e)
   if(obj == gui.page.processes.newProcessButton){
     if(code == LV_EVENT_CLICKED) {
       processDetail(gui.page.processes.processesList);
-      stepCounter = 0;
+      gui.element.step.stepCounter = 0;
       LV_LOG_USER("New Process Creation popup");
     }
   }
@@ -123,7 +123,7 @@ void initProcesses(void){
 
   /*Create a line and apply the new style*/
   gui.page.processes.sectionTitleLine = lv_line_create(gui.page.processes.processesSection);
-  lv_line_set_points(gui.page.processes.sectionTitleLine, sectionTitleLine_points, 2);
+  lv_line_set_points(gui.page.processes.sectionTitleLine, gui.page.processes.titleLinePoints, 2);
   lv_obj_add_style(gui.page.processes.sectionTitleLine, &gui.page.processes.style_sectionTitleLine, 0);
   lv_obj_align(gui.page.processes.sectionTitleLine, LV_ALIGN_CENTER, 0, - 103);
 

@@ -103,7 +103,7 @@ void messagePopupCreate(const char * popupTitleText,const char * popupText,const
 
    /*Create a line and apply the new style*/
    gui.element.messagePopup.mBoxPopupTitleLine = lv_line_create(gui.element.messagePopup.mBoxPopupContainer);
-   lv_line_set_points(gui.element.messagePopup.mBoxPopupTitleLine, mBoxTitleLine_points, 2);
+   lv_line_set_points(gui.element.messagePopup.mBoxPopupTitleLine, gui.element.messagePopup.titleLinePoints, 2);
    lv_obj_add_style(gui.element.messagePopup.mBoxPopupTitleLine, &gui.element.messagePopup.style_mBoxPopupTitleLine, 0);
    lv_obj_align(gui.element.messagePopup.mBoxPopupTitleLine, LV_ALIGN_TOP_MID, 0, 23);
 
@@ -131,7 +131,7 @@ void messagePopupCreate(const char * popupTitleText,const char * popupText,const
       gui.element.messagePopup.mBoxPopupButtonClose = lv_button_create(gui.element.messagePopup.mBoxPopupContainer);
       lv_obj_set_size(gui.element.messagePopup.mBoxPopupButtonClose, BUTTON_POPUP_CLOSE_WIDTH, BUTTON_POPUP_CLOSE_HEIGHT);
       lv_obj_align(gui.element.messagePopup.mBoxPopupButtonClose, LV_ALIGN_TOP_RIGHT, 7 , -10);
-      lv_obj_add_event_cb(gui.element.messagePopup.mBoxPopupButtonClose, event_messagePopup, LV_EVENT_CLICKED, mBoxApplyFilterButton);
+      lv_obj_add_event_cb(gui.element.messagePopup.mBoxPopupButtonClose, event_messagePopup, LV_EVENT_CLICKED, gui.element.filterPopup.mBoxApplyFilterButton);
 
             gui.element.messagePopup.mBoxPopupButtonLabel = lv_label_create(gui.element.messagePopup.mBoxPopupButtonClose);         
             lv_label_set_text(gui.element.messagePopup.mBoxPopupButtonLabel, closePopup_icon); 

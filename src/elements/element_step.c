@@ -25,7 +25,7 @@ void event_stepElement(lv_event_t * e){
         //stepDetail(gui.element.step.stepElement); //won't work, cause definition in pages.h. Here we want to call stepDetail, but this is not defined, because in page.h is defined after element_step.h
       }
       if(code == LV_EVENT_LONG_PRESSED_REPEAT) {    
-        if(mBoxPopupParent == NULL){
+        if(gui.element.messagePopup.mBoxPopupParent == NULL){
         LV_LOG_USER("Long press element");
         messagePopupCreate(deletePopupTitle_text,deletePopupBody_text, deleteButton_text, stepDetailCancel_text, gui.element.step.stepElement);
       }

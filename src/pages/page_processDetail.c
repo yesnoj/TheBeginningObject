@@ -29,7 +29,7 @@ void event_processDetail(lv_event_t * e)
 
   if(code == LV_EVENT_CLICKED) {
     if(data == gui.page.processDetail.processDetailCloseButton){
-        stepCounter = 0;
+        gui.element.step.stepCounter = 0;
         lv_msgbox_close(mboxCont);
         lv_obj_delete(mboxCont);
         LV_LOG_USER("Close Process Detail");
@@ -92,12 +92,12 @@ void event_processDetail(lv_event_t * e)
         LV_LOG_USER("Pressed gui.page.processDetail.processSaveLabel");
     }
     if(data == gui.page.processDetail.processDeleteButton){
-        stepCounter = 0;
+        gui.element.step.stepCounter = 0;
         messagePopupCreate(deletePopupTitle_text,deletePopupBody_text, deleteButton_text, stepDetailCancel_text, gui.page.processDetail.processDetailParent);
         LV_LOG_USER("Pressed gui.page.processDetail.processDeleteButton");
     }
     if(data == gui.page.processDetail.processRunButton){
-        stepCounter = 0;
+        gui.element.step.stepCounter = 0;
         lv_msgbox_close(mboxCont);
         lv_obj_delete(mboxCont);
         LV_LOG_USER("Pressed gui.page.processDetail.processRunButton");

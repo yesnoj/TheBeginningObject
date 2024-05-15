@@ -961,53 +961,19 @@ unsigned long actualMillis;
 
 
 // NEW OLD GUI APPROACH, NEED TO BE REMOVED...
-uint16_t processCounter;
-uint16_t stepCounter;
 
 
 lv_obj_t * processElement;
 lv_obj_t * stepElement;
+lv_obj_t * processDetailParent;
 
-
-static lv_point_precise_t sectionTitleLine_points[] = { {0, 0}, {310 , 0}};
-lv_style_t style_sectionTitleLine;
-lv_style_t style_section2TitleLine;
-lv_obj_t * sectionTitleLine;
-
-lv_obj_t * messageBox;
-static lv_point_precise_t mBoxTitleLine_points[] = { {0, 0}, {200 , 0}};
-lv_style_t style_mBoxTitleLine;
-lv_obj_t * mBoxTitleLine;
-lv_obj_t * mBoxFilterPopupParent;
-lv_obj_t * mBoxNameTextArea;
-lv_obj_t * mBoxSelectColorRadioButton;
-lv_obj_t * mBoxSelectBnWRadioButton;
-lv_obj_t * mBoxOnlyPreferredSwitch;
-lv_obj_t * mBoxApplyFilterButton;
-lv_obj_t * mBoxResetFilterButton;
-
-lv_style_t style_mBoxPopupTitleLine;
-lv_obj_t * mBoxPopupTitleLine;
-lv_obj_t * mBoxPopupParent;
-
-lv_style_t style_mBoxRollerTitleLine;
-lv_obj_t * mBoxRollerTitleLine;
-lv_obj_t * mBoxRollerParent;
-
-lv_style_t style_mBoxStepPopupTitleLine;
-lv_obj_t * mBoxStepPopupTitleLine;
 
 lv_obj_t * keyBoardParent;
 lv_obj_t * keyboardFilter;
 lv_obj_t * keyboardStep;
 lv_obj_t * keyboardProcess;
-
 lv_obj_t * keyboard;
-
 lv_obj_t * keyboard_textArea;
-
-lv_obj_t * processDetailParent;
-lv_obj_t * stepDetailParent;
 
 
 
