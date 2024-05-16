@@ -72,14 +72,19 @@ typedef struct singleStep {
 }singleStep;
 
 
-typedef struct			step_list step_list_t;	// Linked list of process steps
-struct step_list {
-	step_list_t			*next;
-	step_list_t			*prev;
-	singleStep			step;
-	uint16_t			  count;
+typedef struct stepList stepList;	// Linked list of process steps
+
+struct stepList {
+	stepList			  *next; /* Pointer to next element in list */
+	stepList			  *prev; /* Pointer to previous element in list */
+	singleStep			step;  /* Assume that step is defined elsewhere */
 };
 
+typedef struct stepElements {
+	stepList		*start;	/* Start of list */
+	stepList		*end;		/* End of List */
+	uint16_t		count;	/* number of list entries currently */
+} stepElements;
 
 typedef struct singleProcess {
 	/* LVGL objects */
@@ -95,7 +100,7 @@ typedef struct singleProcess {
 
 
 	/* Params objects */
-	step_list_t		      steps;					/* Process steps list */
+	stepList		        stepList;					/* Process steps list */
   char				        *processNameString;
 	uint32_t			      temp;
 	uint8_t				      tempTolerance;
@@ -109,13 +114,20 @@ typedef struct singleProcess {
 	uint32_t            processCounter;
 }singleProcess;
 
-typedef struct			process_list process_list_t;	// Linked list of processes
-struct process_list {
-	process_list_t		*next;
-	process_list_t		*prev;
-	singleProcess		  process;
-	uint16_t			    count;
+typedef struct processList processList;	// Linked list of processes
+
+struct processList {
+	processList		*next;   /* Pointer to next element in list */
+	processList		*prev;   /* Pointer to previous element in list */
+	singleProcess	process; /* Assume that process is defined elsewhere */
 };
+
+typedef struct processElements {
+
+	processList		*start;	/* Start of list */
+	processList		*end;		/* End of List */
+	uint16_t			count;	/* number of list entries currently */
+} processElements;
 
 
 struct sRollerPopup {
@@ -255,7 +267,7 @@ struct sProcesses {
   lv_obj_t	        	*newProcessButton;
 
 	/* Params objects */
-	process_list_t      processes;
+	processList         processList;
 };
 
 
