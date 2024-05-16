@@ -16,6 +16,32 @@ extern "C" {
 
 
 //#include <SPI.h>
+/*********************
+* ACCESSORY STRUCTS
+*********************/
+
+typedef enum filmTypes {
+	blackAndWhiteFilm,
+	        colorFilm
+} filmType;
+
+typedef enum tempUnits {
+	      celsiusTemp,
+	   fahrenheitTemp
+} tempUnit;
+
+typedef enum chemicalTypes {
+	      chemistry,
+            rinse,
+       multirinse
+} chemicalType;
+
+typedef enum chemicalSources {
+	      C1,
+        C2,
+        C3,
+        WB
+} chemicalSource;
 
 
 /*********************
@@ -23,26 +49,28 @@ extern "C" {
 *********************/
 typedef struct singleStep {
 	/* LVGL objects */
-	lv_obj_t			*stepElement;
-	lv_obj_t			*stepElementSummary;
+	lv_obj_t			 *stepElement;
+	lv_obj_t			 *stepElementSummary;
 
-	lv_style_t 		stepStyle;
+	lv_style_t 		 stepStyle;
 
-	lv_obj_t			*stepName;
-	lv_obj_t			*stepTime;
-	lv_obj_t			*stepTimeIcon;
-	lv_obj_t			*stepTypeIcon;
+	lv_obj_t			 *stepName;
+	lv_obj_t			 *stepTime;
+	lv_obj_t			 *stepTimeIcon;
+	lv_obj_t			 *stepTypeIcon;
 
 	/* Params objects */
-	char				  *nameText;
-	uint32_t			timeMins;
-	uint8_t				type;
-	uint8_t				source;
-	uint8_t				discardAfterProc;
+  char				   *stepNameString;
+	uint32_t			 timeMins;
+  uint32_t			 timeSecs;
+	chemicalType	 type;
+	chemicalSource source;
+	uint8_t				 discardAfterProc;
 
 	//Uhmmmmmm probably not needed
-	uint32_t stepCounter;
+	uint32_t       stepCounter;
 }singleStep;
+
 
 typedef struct			step_list step_list_t;	// Linked list of process steps
 struct step_list {
@@ -67,17 +95,18 @@ typedef struct singleProcess {
 
 
 	/* Params objects */
-	step_list_t		steps;					/* Process steps list */
-	uint32_t			temp;
-	uint8_t				tempTolerance;
-	uint8_t	    	isTempControlled;
-	uint8_t				isPreferred;
-	uint8_t				isSaved;
-	uint8_t 			isColorOrBnW;
-	uint32_t			totalTime;
+	step_list_t		      steps;					/* Process steps list */
+  char				        *processNameString;
+	uint32_t			      temp;
+	uint8_t				      tempTolerance;
+	uint8_t	    	      isTempControlled;
+	uint8_t				      isPreferred;
+	uint8_t				      isSaved;
+	filmType            filmType;
+	uint32_t			      totalTime;
 
 	//Uhmmmmmm probably not needed
-	uint32_t processCounter;
+	uint32_t            processCounter;
 }singleProcess;
 
 typedef struct			process_list process_list_t;	// Linked list of processes
@@ -283,7 +312,7 @@ struct sSettings {
 
 
   /* Params objects */
-  uint8_t 	        	tempUnit; //0= C° 1= °F
+  tempUnit 	        	tempUnit; //0= C° 1= °F
   uint8_t 	        	waterInlet;
   float 	        	  calibratedTemp;
   uint8_t 	        	filmRotationSpeedSetpoint;
