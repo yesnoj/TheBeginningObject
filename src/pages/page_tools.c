@@ -62,7 +62,7 @@ void event_toolsElement(lv_event_t * e){
 }
 
 
-void initTools(void){
+static void initTools(void){
 /*********************
  *    PAGE HEADER
  *********************/

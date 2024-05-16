@@ -55,7 +55,7 @@ void event_tabProcesses(lv_event_t * e)
 }
  
 
-void initProcesses(void){
+static void initProcesses(void){
   /*********************
   *    PAGE HEADER
   *********************/

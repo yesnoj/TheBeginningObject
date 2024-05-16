@@ -149,7 +149,7 @@ void event_settings_handler(lv_event_t * e)
 //lv_obj_set_scroll_dir(mBoxPopupTextContainer, LV_DIR_VER);
 
 
-void initSettings(void){
+static void initSettings(void){
 /*********************
  *    PAGE HEADER
  *********************/

@@ -72,19 +72,17 @@ typedef struct singleStep {
 }singleStep;
 
 
-typedef struct stepList stepList;	// Linked list of process steps
+typedef struct stepNode {
+	struct stepNode	*next;  /* Pointer to next element in list */
+	struct stepNode	*prev;  /* Pointer to previous element in list */
+	singleStep	     step;  /* Assume that step is defined elsewhere */
+} stepNode;
 
-struct stepList {
-	stepList			  *next; /* Pointer to next element in list */
-	stepList			  *prev; /* Pointer to previous element in list */
-	singleStep			step;  /* Assume that step is defined elsewhere */
-};
-
-typedef struct stepElements {
-	stepList		*start;	/* Start of list */
-	stepList		*end;		/* End of List */
-	uint16_t		count;	/* number of list entries currently */
-} stepElements;
+typedef struct stepList {
+	stepNode		*start;	/* Start of list */
+	stepNode		*end;		/* End of List */
+	uint16_t		size;	  /* number of list entries currently */
+} stepList;
 
 typedef struct singleProcess {
 	/* LVGL objects */
@@ -114,20 +112,18 @@ typedef struct singleProcess {
 	uint32_t            processCounter;
 }singleProcess;
 
-typedef struct processList processList;	// Linked list of processes
 
-struct processList {
-	processList		*next;   /* Pointer to next element in list */
-	processList		*prev;   /* Pointer to previous element in list */
-	singleProcess	process; /* Assume that process is defined elsewhere */
-};
+typedef struct processNode {
+	struct processNode *next;   /* Pointer to next element in list */
+	struct processNode *prev;   /* Pointer to previous element in list */
+	singleProcess	     process; /* Assume that process is defined elsewhere */
+} processNode;
 
-typedef struct processElements {
-
-	processList		*start;	/* Start of list */
-	processList		*end;		/* End of List */
-	uint16_t			count;	/* number of list entries currently */
-} processElements;
+typedef struct processList { // Linked list of processes
+	processNode		*start;	/* Start of list */
+	processNode		*end;		/* End of List */
+	uint16_t			size;	/* number of list entries currently */
+} processList;
 
 
 struct sRollerPopup {
@@ -1074,7 +1070,6 @@ void processDetail(lv_obj_t *referenceProcess);
 // @file page_processes.c
 void event_processes_style_delete(lv_event_t *e);
 void event_tabProcesses(lv_event_t *e);
-void initProcesses(void);
 void processes(void);
 
 
@@ -1082,7 +1077,6 @@ void processes(void);
 void event_settings_style_delete(lv_event_t *e);
 void event_settingPopupMBox(lv_event_t *e);
 void event_settings_handler(lv_event_t *e);
-void initSettings(void);
 void settings(void);
 
 
@@ -1092,7 +1086,6 @@ void stepDetail(lv_obj_t *referenceStep);
 
 // @file page_tools.c
 void event_toolsElement(lv_event_t *e);
-void initTools(void);
 void tools(void);
 
 
