@@ -20,23 +20,23 @@ extern "C" {
 * ACCESSORY STRUCTS
 *********************/
 
-typedef enum filmTypes {
-	blackAndWhiteFilm,
-	        colorFilm
+typedef enum filmType {
+	BLACK_AND_WHITE_FILM,
+	          COLOR_FILM
 } filmType;
 
-typedef enum tempUnits {
-	      celsiusTemp,
-	   fahrenheitTemp
+typedef enum tempUnit {
+	      CELSIUS_TEMP,
+	   FAHRENHEIT_TEMP
 } tempUnit;
 
-typedef enum chemicalTypes {
-	      chemistry,
-            rinse,
-       multirinse
+typedef enum chemicalType {
+	      CHEMISTRY,
+            RINSE,
+      MULTI_RINSE
 } chemicalType;
 
-typedef enum chemicalSources {
+typedef enum chemicalSource {
 	      C1,
         C2,
         C3,
