@@ -46,7 +46,7 @@ void stepElementCreate(lv_obj_t * stepContainer){
   
 
   gui.element.step.stepElement = lv_obj_create(stepContainer);
-  lv_obj_set_pos(gui.element.step.stepElement, -13, -13 + ((gui.element.step.stepCounter * 70)));                           
+  //lv_obj_set_pos(gui.element.step.stepElement, -13, -13 + ((gui.element.step.stepCounter * 70)));                           
   lv_obj_set_size(gui.element.step.stepElement, 240, 70);
   lv_obj_remove_flag(gui.element.step.stepElement, LV_OBJ_FLAG_SCROLLABLE); 
   lv_obj_set_style_border_opa(gui.element.step.stepElement, LV_OPA_TRANSP, 0);
@@ -97,6 +97,6 @@ void stepElementCreate(lv_obj_t * stepContainer){
         lv_obj_align(gui.element.step.stepTypeIcon, LV_ALIGN_RIGHT_MID, 9, 0);
 
 
-  gui.element.step.stepCounter += 1;
+  //gui.element.step.stepCounter += 1;
 }
 

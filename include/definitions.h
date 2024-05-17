@@ -72,9 +72,6 @@ typedef struct singleStep {
 	chemicalType	 type;
 	chemicalSource source;
 	uint8_t				 discardAfterProc;
-
-	//Uhmmmmmm probably not needed
-	uint32_t       stepCounter;
 }singleStep;
 
 
@@ -113,9 +110,6 @@ typedef struct singleProcess {
 	uint8_t				      isSaved;
 	filmType            filmType;
 	uint32_t			      totalTime;
-
-	//Uhmmmmmm probably not needed
-	uint32_t            processCounter;
 }singleProcess;
 
 
