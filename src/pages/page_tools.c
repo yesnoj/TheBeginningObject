@@ -26,22 +26,22 @@ void event_toolsElement(lv_event_t * e){
  
   if(obj == gui.page.tools.toolsCleaningIcon){
       if(code == LV_EVENT_CLICKED) {    
-           LV_LOG_USER("toolsCleaningButton");
+           LV_LOG_USER("PRESSED gui.page.tools.toolsCleaningButton");
       }
   }
   if(obj == gui.page.tools.toolsDrainingIcon){
       if(code == LV_EVENT_CLICKED) {    
-           LV_LOG_USER("gui.page.tools.toolsDrainingIcon");
+           LV_LOG_USER("PRESSED gui.page.tools.toolsDrainingIcon");
       }
   }
   if(obj == gui.page.tools.toolsImportIcon){
       if(code == LV_EVENT_CLICKED) {    
-           LV_LOG_USER("gui.page.tools.toolsImportIcon");
+           LV_LOG_USER("PRESSED gui.page.tools.toolsImportIcon");
       }
   }
   if(obj == gui.page.tools.toolsExportIcon){
       if(code == LV_EVENT_CLICKED) {    
-           LV_LOG_USER("gui.page.tools.toolsExportIcon");
+           LV_LOG_USER("PRESSED gui.page.tools.toolsExportIcon");
       }
   }
   if(data == gui.page.tools.toolsImportLabel){
@@ -56,7 +56,8 @@ void event_toolsElement(lv_event_t * e){
   }
   if(data == gui.page.tools.toolCreditButton){
     if(code == LV_EVENT_CLICKED) {  
-    messagePopupCreate(softwareCredits_text,softwareCreditsValue_text, NULL, NULL, NULL);
+        LV_LOG_USER("PRESSED gui.page.tools.toolCreditButton");
+        messagePopupCreate(softwareCredits_text,softwareCreditsValue_text, NULL, NULL, NULL);
     }
   }
 }

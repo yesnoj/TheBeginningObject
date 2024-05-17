@@ -37,7 +37,7 @@ void event_processDetail(lv_event_t * e)
     if(data == gui.page.processDetail.processColorLabel){
         lv_obj_set_style_text_color(gui.page.processDetail.processColorLabel, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
         lv_obj_set_style_text_color(gui.page.processDetail.processBnWLabel, lv_color_hex(WHITE), LV_PART_MAIN);
-        gui.page.processDetail.isColor = 1;
+        gui.page.processDetail.filmType = COLOR_FILM;
         gui.page.processDetail.somethingChanged = 1;
 
         if(gui.page.processDetail.stepsCreated > 0){
@@ -50,7 +50,7 @@ void event_processDetail(lv_event_t * e)
     if(data == gui.page.processDetail.processBnWLabel){
         lv_obj_set_style_text_color(gui.page.processDetail.processBnWLabel, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
         lv_obj_set_style_text_color(gui.page.processDetail.processColorLabel, lv_color_hex(WHITE), LV_PART_MAIN);
-        gui.page.processDetail.isColor = 0;
+        gui.page.processDetail.filmType = BLACK_AND_WHITE_FILM;
         gui.page.processDetail.somethingChanged = 1;
         if(gui.page.processDetail.stepsCreated > 0){
           lv_obj_clear_state(gui.page.processDetail.processSaveLabel, LV_STATE_DISABLED);
@@ -168,7 +168,7 @@ void processDetail(lv_obj_t * referenceProcess)
   *    PAGE HEADER
 *********************/
   LV_LOG_USER("Process detail creation");
-  gui.page.processDetail.isColor = 0;
+  gui.page.processDetail.filmType = FILM_TYPE_NA;
   gui.page.processDetail.isSaved = 0;
   gui.page.processDetail.somethingChanged = 0;
   gui.page.processDetail.stepsCreated = 0;

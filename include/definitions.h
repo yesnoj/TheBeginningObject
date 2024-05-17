@@ -21,26 +21,30 @@ extern "C" {
 *********************/
 
 typedef enum filmType {
-	BLACK_AND_WHITE_FILM,
-	          COLOR_FILM
+    BLACK_AND_WHITE_FILM,
+    COLOR_FILM,
+    FILM_TYPE_NA
 } filmType;
 
 typedef enum tempUnit {
-	      CELSIUS_TEMP,
-	   FAHRENHEIT_TEMP
+    CELSIUS_TEMP,
+    FAHRENHEIT_TEMP,
+    TEMP_UNIT_NA
 } tempUnit;
 
 typedef enum chemicalType {
-	      CHEMISTRY,
-            RINSE,
-      MULTI_RINSE
+    CHEMISTRY,
+    RINSE,
+    MULTI_RINSE,
+    CHEMICAL_TYPE_NA
 } chemicalType;
 
 typedef enum chemicalSource {
-	      C1,
-        C2,
-        C3,
-        WB
+	  C1,
+    C2,
+    C3,
+    WB,
+    CHEMICAL_SOURCE_NA
 } chemicalSource;
 
 
@@ -480,7 +484,7 @@ struct sProcessDetail {
 	lv_obj_t			*processTempTextArea;
 	lv_obj_t			*processToleranceTextArea;
 
-	uint8_t 			isColor;
+	filmType      filmType;
 	uint8_t 			isSaved;
 	uint8_t 			somethingChanged;
 	uint8_t 			stepsCreated;
