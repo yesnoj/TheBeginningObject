@@ -426,3 +426,46 @@ void init_globals( void ) {
   gui.element.rollerPopup.secondsOptions = createRollerValues(60,""); 
   gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(5,"0.");
 }
+
+
+
+bool deleteProcessElement( processNode	*processToDelete ) {
+
+	processNode 	*adjust_y_ptr = NULL;
+	lv_coord_t		container_y_prev, container_y_new ;
+
+
+	if( processToDelete ) {
+		adjust_y_ptr = processToDelete->next;
+		container_y_prev = processToDelete->process.container_y;
+		if( processToDelete == gui.page.processes.processElementsList.start ) {
+			if( processToDelete->next ) {
+				gui.page.processes.processElementsList.start = processToDelete->next;
+			} else gui.page.processes.processElementsList.start = gui.page.processes.processElementsList.end = NULL;
+
+		} else if( processToDelete == gui.page.processes.processElementsList.end ) {
+
+			if( processToDelete->prev ) {		// Check the end is not the beginning!
+				processToDelete->prev->next = NULL;
+				gui.page.processes.processElementsList.end = processToDelete->prev;
+			}
+
+		} else if( processToDelete->prev ) {
+			processToDelete->prev->next = processToDelete->next;	// Re-join the linked list if not at beginning
+			processToDelete->next->prev = processToDelete->prev;
+		}
+
+		while( adjust_y_ptr ) {
+			if( adjust_y_ptr->next ) container_y_new = adjust_y_ptr->process.container_y;
+			adjust_y_ptr->process.container_y = container_y_prev;
+			lv_obj_set_y(adjust_y_ptr->process.processElement, adjust_y_ptr->process.container_y);
+			if( adjust_y_ptr->next ) container_y_prev = container_y_new;
+			adjust_y_ptr = adjust_y_ptr->next;
+		}
+		lv_obj_delete_async( processToDelete->process.processElement );			// Delete all LVGL objects associated with entry
+		free( processToDelete );												// Free the list entry itself
+		gui.page.processes.processElementsList.size--;
+		return true;
+	}
+	return false;
+}

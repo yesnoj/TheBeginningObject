@@ -84,7 +84,8 @@ void event_processDetail(lv_event_t * e)
 
           lv_obj_set_style_text_color(gui.page.processDetail.processSaveLabel, lv_color_hex(GREY), LV_PART_MAIN);
           lv_obj_add_state(gui.page.processDetail.processSaveLabel, LV_STATE_DISABLED);
-          processElementCreate(gui.page.processDetail.processesContainer);
+          //processElementCreate(gui.page.processDetail.processesContainer);
+          processElementCreate("Pippo", 33, BLACK_AND_WHITE_FILM);
         }
         else{
           gui.page.processDetail.isSaved = 0;

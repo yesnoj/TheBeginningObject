@@ -20,6 +20,7 @@ extern "C" {
 * ACCESSORY STRUCTS
 *********************/
 
+
 typedef enum filmType {
     BLACK_AND_WHITE_FILM,
     COLOR_FILM,
@@ -62,7 +63,8 @@ typedef struct singleStep {
 	lv_obj_t			 *stepTime;
 	lv_obj_t			 *stepTimeIcon;
 	lv_obj_t			 *stepTypeIcon;
-
+	lv_coord_t		 container_y;
+  
 	/* Params objects */
   char				   *stepNameString;
 	uint32_t			 timeMins;
@@ -99,10 +101,10 @@ typedef struct singleProcess {
 	lv_obj_t			*processTemp;
 	lv_obj_t			*processTempIcon;
 	lv_obj_t			*processTypeIcon;
-
+	lv_coord_t		container_y;
 
 	/* Params objects */
-	stepList		        stepList;					/* Process steps list */
+	stepList		        stepElementsList;					/* Process steps list */
   char				        *processNameString;
 	uint32_t			      temp;
 	uint8_t				      tempTolerance;
@@ -267,7 +269,7 @@ struct sProcesses {
   lv_obj_t	        	*newProcessButton;
 
 	/* Params objects */
-	processList         processList;
+	processList         processElementsList;
 };
 
 
@@ -637,6 +639,8 @@ struct gui_components {
 * GLOBAL DEFINES
 *********************/
 #define MAX_PROC_NAME_LEN		  20
+#define MAX_PROC_ELEMENTS		  100
+#define MAX_STEP_ELEMENTS		  20
 
 /*********************
 * Button sizes
@@ -1016,8 +1020,8 @@ lv_obj_t * keyboardProcess;
 lv_obj_t * keyboard;
 lv_obj_t * keyboard_textArea;
 
-
-
+processNode	* tempProcessNode;
+stepNode	  * tempStepNode;
 /*********************
 * ELEMENTS Function Prototypes
 *********************/
@@ -1033,7 +1037,9 @@ void event_messagePopup(lv_event_t *e);
 
 // @file element_process.c
 void event_processElement(lv_event_t *e);
-void processElementCreate(lv_obj_t *processesReferenceList);
+bool processElementCreate( char *name, uint32_t temp, filmType type );
+//void processElementCreate(lv_obj_t *processesReferenceList);
+
 
 // @file element_rollerPopup.c
 void event_Roller(lv_event_t *e);
@@ -1110,6 +1116,7 @@ void sd_init();
 
 char *createRollerValues( uint32_t maxVal, const char* extra_str );
 
+bool deleteProcessElement( processNode	*processToDelete );
 
 #ifdef __cplusplus
 } /*extern "C"*/

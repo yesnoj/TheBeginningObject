@@ -36,14 +36,32 @@ void event_messagePopup(lv_event_t *e)
         if (obj == gui.element.messagePopup.mBoxPopupButton1)
         {
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton1");
-            if (gui.element.messagePopup.whoCallMe == processElement || gui.element.messagePopup.whoCallMe == stepElement)
+            if (gui.element.messagePopup.whoCallMe == tempProcessNode)
             {
-                LV_LOG_USER("Delete process from long press!");
+                LV_LOG_USER("Delete process from long Process press!");
+
+                if( !deleteProcessElement( gui.element.messagePopup.whoCallMe ) ) {
+                  LV_LOG_USER("Delete process element instance at address 0x%p Failed!", gui.element.messagePopup.whoCallMe);
+                } else {
+                  LV_LOG_USER("Delete process element instance at address 0x%p", gui.element.messagePopup.whoCallMe);
+                }
+
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
                 lv_obj_delete(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
             }
+
+            if (gui.element.messagePopup.whoCallMe == tempStepNode)
+            {
+                LV_LOG_USER("Delete process from long Step press!");
+                //TBD
+                lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
+                lv_msgbox_close(mboxCont);
+                lv_obj_delete(mboxCont);
+                gui.element.messagePopup.mBoxPopupParent = NULL;
+            }
+
             if (gui.element.messagePopup.whoCallMe == processDetailParent)
             {
                 LV_LOG_USER("Delete process from inside!");

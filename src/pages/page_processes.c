@@ -44,12 +44,33 @@ void event_tabProcesses(lv_event_t * e)
     }
   }
 
+  #if 0
   if(obj == gui.page.processes.newProcessButton){
     if(code == LV_EVENT_CLICKED) {
       processDetail(gui.page.processes.processesList);
       gui.element.step.stepCounter = 0;
       LV_LOG_USER("New Process Creation popup");
     }
+  }
+  #endif
+
+  if(obj == gui.page.processes.newProcessButton){
+		if(code == LV_EVENT_CLICKED) {
+			// for testing
+			static char 				name[80];	// Test Code
+			static uint16_t			test_index = 1; // Test Code
+			static filmType 	  type = BLACK_AND_WHITE_FILM; // Test Code
+			static uint32_t			temp = 38;	// Test Code
+			lv_snprintf( name, sizeof(name), "A Test Process creation index %02d", test_index ); // Test code
+			if( !processElementCreate( name, temp, type) ){	// Needs to be called with user populated values eventually
+				LV_LOG_USER("Process element not created!");
+			} else {
+				LV_LOG_USER("Process element created");
+				type = !type; // flip type every time for testing
+				temp ++;	// for test increase temp each time
+				test_index ++;	// for test increase index for name generation
+			}
+		}
   }
 
 }
