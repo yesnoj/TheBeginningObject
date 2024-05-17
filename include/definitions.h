@@ -633,7 +633,7 @@ struct gui_components {
 * GLOBAL DEFINES
 *********************/
 #define MAX_PROC_NAME_LEN		  20
-#define MAX_PROC_ELEMENTS		  100
+#define MAX_PROC_ELEMENTS		  30
 #define MAX_STEP_ELEMENTS		  20
 
 /*********************

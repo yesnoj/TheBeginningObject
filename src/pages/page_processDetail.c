@@ -84,8 +84,21 @@ void event_processDetail(lv_event_t * e)
 
           lv_obj_set_style_text_color(gui.page.processDetail.processSaveLabel, lv_color_hex(GREY), LV_PART_MAIN);
           lv_obj_add_state(gui.page.processDetail.processSaveLabel, LV_STATE_DISABLED);
-          //processElementCreate(gui.page.processDetail.processesContainer);
-          processElementCreate("Pippo", 33, BLACK_AND_WHITE_FILM);
+
+                // for testing
+                static char 				name[80];	// Test Code
+                static uint16_t			test_index = 1; // Test Code
+                static filmType 	  type = BLACK_AND_WHITE_FILM; // Test Code
+                static uint32_t			temp = 38;	// Test Code
+                lv_snprintf( name, sizeof(name), "A Test Process creation index %02d", test_index ); // Test code
+                if( !processElementCreate( name, temp, type) ){	// Needs to be called with user populated values eventually
+                  LV_LOG_USER("Process element not created!");
+                } else {
+                  LV_LOG_USER("Process element created");
+                  type = !type; // flip type every time for testing
+                  temp ++;	// for test increase temp each time
+                  test_index ++;	// for test increase index for name generation
+                }
         }
         else{
           gui.page.processDetail.isSaved = 0;
