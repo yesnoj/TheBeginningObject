@@ -36,6 +36,7 @@ void event_Roller(lv_event_t * e)
   lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
 
     if(code == LV_EVENT_CLICKED){
+      
         if(obj == gui.element.rollerPopup.mBoxRollerButton)
         {
             if(data == gui.page.settings.tempSensorTuneButton){
@@ -44,55 +45,62 @@ void event_Roller(lv_event_t * e)
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);
               lv_obj_delete(godFatherCont);
-              gui.page.settings.calibratedTemp = rollerSelected;     
+              gui.page.settings.calibratedTemp = rollerSelected;  
+              return;   
             }
-            if(data == gui.page.processDetail.processTempTextArea){
+            if(data == tempProcessNode->process.processDetails->processTempTextArea){
               LV_LOG_USER("SET BUTTON from processTempTextArea value %d:",rollerSelected);
               itoa(rollerSelected, tempBuffer, 10);
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
-              lv_textarea_set_text(gui.page.processDetail.processTempTextArea,tempBuffer);
+              lv_textarea_set_text(tempProcessNode->process.processDetails->processTempTextArea,tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               
               lv_msgbox_close(godFatherCont);
               lv_obj_delete(godFatherCont);
+              return; 
             }
-            if(data == gui.page.processDetail.processToleranceTextArea){
+            if(data == tempProcessNode->process.processDetails->processToleranceTextArea){
               LV_LOG_USER("SET BUTTON from processToleranceTextArea value %d:",rollerSelected);
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
-              lv_textarea_set_text(gui.page.processDetail.processToleranceTextArea, tempBuffer);
+              lv_textarea_set_text(tempProcessNode->process.processDetails->processToleranceTextArea, tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);
               lv_obj_delete(godFatherCont);
+              return; 
             }
-            if(data == gui.page.stepDetail.stepDetailMinTextArea){
+            if(data == tempStepNode->step.stepDetails->stepDetailMinTextArea){
               LV_LOG_USER("SET BUTTON from stepDetailMinTextArea value %d:",rollerSelected);
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
-              lv_textarea_set_text(gui.page.stepDetail.stepDetailMinTextArea, tempBuffer);
+              lv_textarea_set_text(tempStepNode->step.stepDetails->stepDetailMinTextArea, tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);
               lv_obj_delete(godFatherCont);
+              return; 
             }
-            if(data == gui.page.stepDetail.stepDetailSecTextArea){
+            if(data == tempStepNode->step.stepDetails->stepDetailSecTextArea){
               LV_LOG_USER("SET BUTTON from stepDetailSecTextArea value %d:",rollerSelected);
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
-              lv_textarea_set_text(gui.page.stepDetail.stepDetailSecTextArea, tempBuffer);
+              lv_textarea_set_text(tempStepNode->step.stepDetails->stepDetailSecTextArea, tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);
               lv_obj_delete(godFatherCont);
+              return; 
             }
-            if(data == gui.page.checkup.checkupTankSizeTextArea){
+            if(data == tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
               LV_LOG_USER("SET BUTTON from checkupTankSizeTextArea value %d:",rollerSelected);
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
-              lv_textarea_set_text(gui.page.checkup.checkupTankSizeTextArea, tempBuffer);
+              lv_textarea_set_text(tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea, tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);
               lv_obj_delete(godFatherCont);
+              return; 
             }
         }
+        
     }
 
     if(code == LV_EVENT_VALUE_CHANGED){
@@ -111,7 +119,7 @@ void event_Roller(lv_event_t * e)
 }       
 
 
-void rollerPopupCreate(const char * tempOptions,const char * popupTitle, lv_obj_t *whoCallMe){
+void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *whoCallMe){
   /*********************
   *    PAGE HEADER
   *********************/

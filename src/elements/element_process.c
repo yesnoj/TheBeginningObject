@@ -13,10 +13,11 @@ extern struct gui_components gui;
 //ACCESSORY INCLUDES
 
 
+
 /******************************
 *  LINKED LIST IMPLEMENTATION
 ******************************/
-static processNode *addProcessElement( void ) {
+processNode *addProcessElement( void ) {
 
 	processNode	*processToAdd;
 
@@ -40,6 +41,49 @@ static processNode *addProcessElement( void ) {
 	gui.page.processes.processElementsList.end->next = NULL;
 	gui.page.processes.processElementsList.size++;
 	return processToAdd;
+}
+
+
+
+bool deleteProcessElement( processNode	*processToDelete ) {
+
+	processNode 	*adjust_y_ptr = NULL;
+	lv_coord_t		container_y_prev, container_y_new ;
+
+
+	if( processToDelete ) {
+		adjust_y_ptr = processToDelete->next;
+		container_y_prev = processToDelete->process.container_y;
+		if( processToDelete == gui.page.processes.processElementsList.start ) {
+			if( processToDelete->next ) {
+				gui.page.processes.processElementsList.start = processToDelete->next;
+			} else gui.page.processes.processElementsList.start = gui.page.processes.processElementsList.end = NULL;
+
+		} else if( processToDelete == gui.page.processes.processElementsList.end ) {
+
+			if( processToDelete->prev ) {		// Check the end is not the beginning!
+				processToDelete->prev->next = NULL;
+				gui.page.processes.processElementsList.end = processToDelete->prev;
+			}
+
+		} else if( processToDelete->prev ) {
+			processToDelete->prev->next = processToDelete->next;	// Re-join the linked list if not at beginning
+			processToDelete->next->prev = processToDelete->prev;
+		}
+
+		while( adjust_y_ptr ) {
+			if( adjust_y_ptr->next ) container_y_new = adjust_y_ptr->process.container_y;
+			adjust_y_ptr->process.container_y = container_y_prev;
+			lv_obj_set_y(adjust_y_ptr->process.processElement, adjust_y_ptr->process.container_y);
+			if( adjust_y_ptr->next ) container_y_prev = container_y_new;
+			adjust_y_ptr = adjust_y_ptr->next;
+		}
+		lv_obj_delete_async( processToDelete->process.processElement );			// Delete all LVGL objects associated with entry
+		free( processToDelete );												// Free the list entry itself
+		gui.page.processes.processElementsList.size--;
+		return true;
+	}
+	return false;
 }
 
 static processNode *getProcElementEntryByObject( lv_obj_t *obj ) {
@@ -91,21 +135,21 @@ void event_processElement(lv_event_t * e){
 
   if(obj == currentNode->process.preferredIcon){
       if(code == LV_EVENT_CLICKED) {   
-        LV_LOG_USER("Process is preferred : %d",currentNode->process.isPreferred);
+        LV_LOG_USER("Process is preferred : %d",currentNode->process.processDetails->isPreferred);
           if(  lv_color_eq( lv_obj_get_style_text_color(currentNode->process.preferredIcon, LV_PART_MAIN ), lv_color_hex(RED) ) ) {
             lv_obj_set_style_text_color(currentNode->process.preferredIcon, lv_color_hex(WHITE), LV_PART_MAIN);
-            currentNode->process.isPreferred = 0;
+            currentNode->process.processDetails->isPreferred = 0;
           } else {
             lv_obj_set_style_text_color(currentNode->process.preferredIcon, lv_color_hex(RED), LV_PART_MAIN);
-            currentNode->process.isPreferred = 1;
+            currentNode->process.processDetails->isPreferred = 1;
           }
       }
   }
-  
+
   if(obj == currentNode->process.processElementSummary){
       if(code == LV_EVENT_SHORT_CLICKED) {    
         LV_LOG_USER("Process Element Details");
-        //processDetail(gui.element.process.processElement); //won't work, cause definition in pages.h. Here we want to call processDetail, but this is not defined, because in page.h is defined after element_process.h
+        processDetail(currentNode); //won't work, cause definition in pages.h. Here we want to call processDetail, but this is not defined, because in page.h is defined after element_process.h
       }
       if(code == LV_EVENT_LONG_PRESSED_REPEAT){
         if(gui.element.messagePopup.mBoxPopupParent == NULL){
@@ -116,14 +160,15 @@ void event_processElement(lv_event_t * e){
       }
   }
    if(code == LV_EVENT_DELETE) {
-        lv_style_reset(&currentNode->process.style);
+        lv_style_reset(&currentNode->process.processStyle);
     }
 }
 
 
-bool processElementCreate( char *name, uint32_t temp, filmType type ) {
+bool processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType type ) {
 
-	processNode *newProcess = addProcessElement();			/* Create new process list element storage */
+	//newProcess = addProcessElement();			/* Create new process list element storage */
+
 
 	if( newProcess == NULL ) {
 		LV_LOG_USER("Process element creation failed, maximum entries reached" );
@@ -132,19 +177,19 @@ bool processElementCreate( char *name, uint32_t temp, filmType type ) {
 
 	LV_LOG_USER("Process element created with address 0x%p", newProcess);
 
-	if( gui.element.process.style.values_and_props == NULL ) {		/* Only initialise the style once! */
-		lv_style_init(&gui.element.process.style);
+	if(newProcess->process.processStyle.values_and_props == NULL ) {		/* Only initialise the style once! */
+		lv_style_init(&newProcess->process.processStyle);
 
-		lv_style_set_bg_opa(&gui.element.process.style, LV_OPA_60);
-		lv_style_set_bg_color(&gui.element.process.style, lv_color_hex(WHITE));
-		lv_style_set_border_color(&gui.element.process.style, lv_color_hex(GREEN_DARK));
-		lv_style_set_border_width(&gui.element.process.style, 4);
-		lv_style_set_border_opa(&gui.element.process.style, LV_OPA_50);
-		lv_style_set_border_side(&gui.element.process.style, LV_BORDER_SIDE_BOTTOM | LV_BORDER_SIDE_RIGHT);
+		lv_style_set_bg_opa(&newProcess->process.processStyle, LV_OPA_60);
+		lv_style_set_bg_color(&newProcess->process.processStyle, lv_color_hex(WHITE));
+		lv_style_set_border_color(&newProcess->process.processStyle, lv_color_hex(GREEN_DARK));
+		lv_style_set_border_width(&newProcess->process.processStyle, 4);
+		lv_style_set_border_opa(&newProcess->process.processStyle, LV_OPA_50);
+		lv_style_set_border_side(&newProcess->process.processStyle, LV_BORDER_SIDE_BOTTOM | LV_BORDER_SIDE_RIGHT);
 		LV_LOG_USER("First call to processElementCreate style now initialised");
 	}
 
-	newProcess->process.processElement = lv_obj_create(gui.page.processes.processesList);
+	newProcess->process.processElement = lv_obj_create(gui.page.processes.processesListContainer);
 	newProcess->process.container_y = -10 + ((gui.page.processes.processElementsList.size-1) * 70);
 	lv_obj_set_pos(newProcess->process.processElement, -10, newProcess->process.container_y);
 	lv_obj_set_size(newProcess->process.processElement, 315, 70);
@@ -162,7 +207,7 @@ bool processElementCreate( char *name, uint32_t temp, filmType type ) {
         lv_obj_add_event_cb(newProcess->process.processElementSummary, event_processElement, LV_EVENT_SHORT_CLICKED, newProcess->process.processElementSummary);
         lv_obj_add_event_cb(newProcess->process.processElementSummary, event_processElement, LV_EVENT_LONG_PRESSED_REPEAT, newProcess->process.processElementSummary);
 
-        lv_obj_add_style(newProcess->process.processElementSummary, &gui.element.process.style, 0);
+        lv_obj_add_style(newProcess->process.processElementSummary, &newProcess->process.processStyle, 0);
 
         newProcess->process.processName = lv_label_create(newProcess->process.processElementSummary);
         lv_label_set_text(newProcess->process.processName, name );
@@ -180,13 +225,13 @@ bool processElementCreate( char *name, uint32_t temp, filmType type ) {
 
         newProcess->process.processTemp = lv_label_create(newProcess->process.processElementSummary);
         lv_label_set_text_fmt(newProcess->process.processTemp, "%d °C", temp );
-        newProcess->process.temp = temp;
+        newProcess->process.processDetails->temp = temp;
         lv_obj_set_style_text_font(newProcess->process.processTemp, &lv_font_montserrat_18, 0);
         lv_obj_align(newProcess->process.processTemp, LV_ALIGN_LEFT_MID, 7, 17);
 
         newProcess->process.processTypeIcon = lv_label_create(newProcess->process.processElementSummary);
         lv_label_set_text(newProcess->process.processTypeIcon, type == BLACK_AND_WHITE_FILM ? blackwhite_icon : colorpalette_icon);
-        newProcess->process.filmType = type;
+        newProcess->process.processDetails->filmType = type;
         lv_obj_set_style_text_font(newProcess->process.processTypeIcon, &FilMachineFontIcons_20, 0);
         lv_obj_align(newProcess->process.processTypeIcon, LV_ALIGN_RIGHT_MID, 7, 0);
         

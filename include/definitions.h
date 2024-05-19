@@ -15,6 +15,7 @@ extern "C" {
 #include <lvgl.h>
 
 
+
 //#include <SPI.h>
 /*********************
 * ACCESSORY STRUCTS
@@ -52,78 +53,278 @@ typedef enum chemicalSource {
 /*********************
 * ELEMENTS STRUCTS
 *********************/
-typedef struct singleStep {
-	/* LVGL objects */
-	lv_obj_t			 *stepElement;
-	lv_obj_t			 *stepElementSummary;
+typedef struct processNode processNode;  // Forward declaration
+//typedef struct sProcessDetail sProcessDetail;  // Forward declaration
+//typedef struct sCheckup sCheckup;  // Forward declaration
 
-	lv_style_t 		 stepStyle;
 
-	lv_obj_t			 *stepName;
-	lv_obj_t			 *stepTime;
-	lv_obj_t			 *stepTimeIcon;
-	lv_obj_t			 *stepTypeIcon;
-	lv_coord_t		 container_y;
-  
+typedef struct sStepDetail {
+    /* LVGL objects */
+	lv_obj_t 			      *stepDetailParent;
+	lv_obj_t			      *mBoxStepPopupTitleLine;
+	lv_style_t			    style_mBoxStepPopupTitleLine;
+	lv_point_precise_t	titleLinePoints[2];
+
+
+	lv_obj_t 	        	*stepDetailNameContainer;
+	lv_obj_t 	        	*stepDetailContainer;
+	lv_obj_t 	        	*stepDurationContainer;
+	lv_obj_t 	        	*stepTypeContainer;
+	lv_obj_t 	        	*stepSourceContainer;
+	lv_obj_t 	        	*stepDiscardAfterContainer;
+
+	lv_obj_t 	        	*stepDetailLabel;
+	lv_obj_t 	        	*stepDetailNamelLabel;
+	lv_obj_t 	        	*stepDurationLabel;
+	lv_obj_t 	        	*stepDurationMinLabel;
+	lv_obj_t 	        	*stepSaveLabel;
+	lv_obj_t 	        	*stepCancelLabel;
+	lv_obj_t 	        	*stepTypeLabel;
+	lv_obj_t 	        	*stepSourceLabel;
+	lv_obj_t 	        	*stepTypeHelpIcon;
+	lv_obj_t 	        	*stepSourceTempLabel;
+	lv_obj_t 	        	*stepDiscardAfterLabel;
+	lv_obj_t 	        	*stepSourceTempHelpIcon;
+	lv_obj_t 	        	*stepSourceTempValue;
+
+	lv_obj_t 	        	*stepDiscardAfterSwitch;
+
+	lv_obj_t 	        	*stepSaveButton;
+	lv_obj_t 	        	*stepCancelButton;
+
+	lv_obj_t 	        	*stepSourceDropDownList;
+	lv_obj_t 	        	*stepTypeDropDownList;
+	lv_style_t        	*dropDownListStyle;
+
+	lv_obj_t	        	*stepDetailSecTextArea;
+	lv_obj_t	        	*stepDetailMinTextArea;
+	lv_obj_t	        	*stepDetailNamelTextArea;
+
 	/* Params objects */
-  char				   *stepNameString;
-	uint32_t			 timeMins;
-  uint32_t			 timeSecs;
-	chemicalType	 type;
-	chemicalSource source;
-	uint8_t				 discardAfterProc;
-}singleStep;
 
+	processNode       *referenceProcess;  // Use a pointer instead of an instance
+    char              *stepNameString;
+    uint32_t           timeMins;
+    uint32_t           timeSecs;
+    chemicalType       type;
+    chemicalSource     source;
+    uint8_t            discardAfterProc;
+} sStepDetail;
+
+
+typedef struct singleStep { //GRAPHIC ELEMENT IN THE STEPS LIST
+    /* LVGL objects */
+    lv_obj_t           *stepElement;
+    lv_obj_t           *stepElementSummary;
+    lv_style_t          stepStyle;
+    lv_obj_t           *stepName;
+    lv_obj_t           *stepTime;
+    lv_obj_t           *stepTimeIcon;
+    lv_obj_t           *stepTypeIcon;
+    lv_coord_t          container_y;
+
+    /* Params objects */
+    sStepDetail 	  *stepDetails;
+} singleStep;
 
 typedef struct stepNode {
-	struct stepNode	*next;  /* Pointer to next element in list */
-	struct stepNode	*prev;  /* Pointer to previous element in list */
-	singleStep	     step;  /* Assume that step is defined elsewhere */
+    struct stepNode   *next;   /* Pointer to next element in list */
+    struct stepNode   *prev;   /* Pointer to previous element in list */
+    singleStep         step;   /* Step data */
 } stepNode;
 
 typedef struct stepList {
-	stepNode		*start;	/* Start of list */
-	stepNode		*end;		/* End of List */
-	uint16_t		size;	  /* number of list entries currently */
+    stepNode          *start;  /* Start of list */
+    stepNode          *end;    /* End of list */
+    uint16_t           size;   /* Number of list entries currently */
 } stepList;
 
-typedef struct singleProcess {
-	/* LVGL objects */
-	lv_obj_t			*processElement;
-	lv_style_t 		style;
-	lv_obj_t			*preferredIcon;
-	lv_obj_t			*processElementSummary;
 
-	lv_obj_t			*processName;
-	lv_obj_t			*processTemp;
-	lv_obj_t			*processTempIcon;
-	lv_obj_t			*processTypeIcon;
-	lv_coord_t		container_y;
+typedef struct sCheckup{
+    /* LVGL objects */
+	lv_obj_t			*checkupParent;
+
+	lv_obj_t			*checkupContainer;
+	lv_obj_t			*checkupNextStepsContainer;
+	lv_obj_t			*checkupProcessNameContainer;
+	lv_obj_t			*checkupStepContainer;
+	lv_obj_t			*checkupWaterFillContainer;
+	lv_obj_t			*checkupReachTempContainer;
+	lv_obj_t			*checkupTankAndFilmContainer;
+	lv_obj_t			*checkupStepSourceContainer;
+	lv_obj_t			*checkupTempControlContainer;
+	lv_obj_t			*checkupWaterTempContainer;
+	lv_obj_t			*checkupNextStepContainer;
+	lv_obj_t			*checkupSelectTankChemistryContainer;
+	lv_obj_t			*checkupFillWaterContainer;
+	lv_obj_t			*checkupTargetTempsContainer;
+	lv_obj_t			*checkupTargetTempContainer;
+	lv_obj_t			*checkupTargetWaterTempContainer;
+	lv_obj_t			*checkupTargetChemistryTempContainer;
+	lv_obj_t			*checkupTankIsPresentContainer;
+	lv_obj_t			*checkupFilmRotatingContainer;
+	lv_obj_t			*checkupFilmInPositionContainer;
+	lv_obj_t			*checkupProcessingContainer;
+
+
+	lv_obj_t			*checkupTankSizeLabel;
+	lv_obj_t			*checkupChemistryVolumeLabel;
+	lv_obj_t			*checkupNextStepsLabel;
+	lv_obj_t			*checkupWaterFillLabel;
+	lv_obj_t			*checkupReachTempLabel;
+	lv_obj_t			*checkupTankAndFilmLabel;
+	lv_obj_t			*checkupMachineWillDoLabel;
+	lv_obj_t			*checkupStopStepsButtonLabel;
+	lv_obj_t			*checkupCloseButtonLabel;
+	lv_obj_t			*checkupStepSourceLabel;
+	lv_obj_t			*checkupTempControlLabel;
+	lv_obj_t			*checkupWaterTempLabel;
+	lv_obj_t			*checkupNextStepLabel;
+	lv_obj_t			*checkupStopAfterButtonLabel;
+	lv_obj_t			*checkupStopNowButtonLabel;
+	lv_obj_t			*checkupStartButtonLabel;
+	lv_obj_t			*checkupProcessReadyLabel;
+	lv_obj_t			*checkupSelectBeforeStartLabel;
+	lv_obj_t			*checkupFillWaterLabel;
+	lv_obj_t			*checkupSkipButtonLabel;
+	lv_obj_t			*checkupTargetTempLabel;
+	lv_obj_t			*checkupTargetWaterTempLabel;
+	lv_obj_t			*checkupTargetChemistryTempLabel;
+	lv_obj_t			*checkupTankIsPresentLabel;
+	lv_obj_t			*checkupFilmRotatingLabel;
+
+	lv_obj_t			*checkupTargetTempValue;
+	lv_obj_t			*checkupTargetWaterTempValue;
+	lv_obj_t			*checkupTargetChemistryTempValue;
+	lv_obj_t			*checkupStepSourceValue;
+	lv_obj_t			*checkupTempControlValue;
+	lv_obj_t			*checkupWaterTempValue;
+	lv_obj_t			*checkupNextStepValue;
+	lv_obj_t			*checkupProcessNameValue;
+	lv_obj_t			*checkupTankIsPresentValue;
+	lv_obj_t			*checkupFilmRotatingValue;
+	lv_obj_t			*checkupStepTimeLeftValue;
+	lv_obj_t			*checkupProcessTimeLeftValue;
+	lv_obj_t			*checkupStepNameValue;
+	lv_obj_t			*checkupStepKindValue;
+
+	lv_obj_t			*checkupWaterFillStatusIcon;
+	lv_obj_t			*checkupReachTempStatusIcon;
+	lv_obj_t			*checkupTankAndFilmStatusIcon;
+
+	lv_obj_t			*lowVolumeChemRadioButton;
+	lv_obj_t			*highVolumeChemRadioButton;
+
+
+	lv_obj_t			*checkupSkipButton;
+	lv_obj_t			*checkupStartButton;
+	lv_obj_t			*checkupStopAfterButton;
+	lv_obj_t			*checkupStopNowButton;
+	lv_obj_t			*checkupStopStepsButton;
+	lv_obj_t			*checkupCloseButton;
+
+	uint8_t 			isProcessing; // 0 or 1
+	uint8_t 			processStep;//0 or 1 or 2 or 3 or 4
+	uint32_t			activeVolume_index;
+
+	uint8_t 			stepFillWaterStatus;
+	uint8_t 			stepReachTempStatus;
+	uint8_t 			stepCheckFilmStatus;
+
+	lv_obj_t			*stepArc;
+	lv_obj_t			*processArc;
+
+	lv_obj_t			*checkupTankSizeTextArea;
 
 	/* Params objects */
-	stepList		        stepElementsList;					/* Process steps list */
-  char				        *processNameString;
-	uint32_t			      temp;
-	uint8_t				      tempTolerance;
-	uint8_t	    	      isTempControlled;
-	uint8_t				      isPreferred;
-	uint8_t				      isSaved;
-	filmType            filmType;
-	uint32_t			      totalTime;
-}singleProcess;
+}sCheckup;
+
+typedef struct sProcessDetail {
+    /* LVGL objects */
+	lv_obj_t			*processesContainer;
+	lv_obj_t			*processDetailParent;
+	lv_style_t		    textAreaStyle;
+
+	lv_obj_t			*processDetailContainer;
+	lv_obj_t			*processDetailNameContainer;
+	lv_obj_t			*processStepsContainer;
+	lv_obj_t			*processInfoContainer;
+	lv_obj_t			*processTempControlContainer;
+	lv_obj_t			*processTempContainer;
+	lv_obj_t			*processToleranceContainer;
+	lv_obj_t			*processColorOrBnWContainer;
+	lv_obj_t			*processTotalTimeContainer;
+
+	lv_obj_t			*processDetailName;
+	lv_obj_t			*processDetailStepsLabel;
+	lv_obj_t			*processDetailInfoLabel;
+	lv_obj_t			*processDetailCloseButtonLabel;
+	lv_obj_t			*processTempControlLabel;
+	lv_obj_t			*processTempLabel;
+	lv_obj_t			*processTempControlSwitch;
+	lv_obj_t			*processTempUnitLabel;
+	lv_obj_t			*processToleranceLabel;
+	lv_obj_t			*processColorLabel;
+	lv_obj_t			*processBnWLabel;
+	lv_obj_t			*processPreferredLabel;
+	lv_obj_t			*processDeleteLabel;
+	lv_obj_t			*processRunLabel;
+	lv_obj_t			*processSaveLabel;
+	lv_obj_t			*processNewStepLabel;
+	lv_obj_t			*processTotalTimeLabel;
+	lv_obj_t			*processTotalTimeValue;
+
+	lv_obj_t			*processDetailCloseButton;
+	lv_obj_t			*processRunButton;
+	lv_obj_t			*processDeleteButton;
+	lv_obj_t			*processNewStepButton;
+
+	lv_obj_t			*processTempTextArea;
+	lv_obj_t			*processToleranceTextArea;
+
+	/* Params objects */
+    stepList           stepElementsList;  /* Process steps list */
+	sCheckup		   *checkup;
+    char               *processNameString;
+    uint32_t           temp;
+    uint8_t            tempTolerance;
+    uint8_t            isTempControlled;
+    uint8_t            isPreferred;
+    uint8_t            isSaved;
+    uint8_t            somethingChanged;
+    filmType           filmType;
+    uint32_t           totalTime;
+}sProcessDetail;
 
 
-typedef struct processNode {
-	struct processNode *next;   /* Pointer to next element in list */
-	struct processNode *prev;   /* Pointer to previous element in list */
-	singleProcess	     process; /* Assume that process is defined elsewhere */
-} processNode;
+//GRAPHIC ELEMENT IN THE PROCESS LIST
+typedef struct singleProcess { 
+    /* LVGL objects */
+    lv_obj_t          *processElement;
+    lv_style_t        processStyle;
+    lv_obj_t          *preferredIcon;
+    lv_obj_t          *processElementSummary;
+    lv_obj_t          *processName;
+    lv_obj_t          *processTemp;
+    lv_obj_t          *processTempIcon;
+    lv_obj_t          *processTypeIcon;
+    lv_coord_t         container_y;
+
+    sProcessDetail     *processDetails;  /* Process details, that includes all steps */
+} singleProcess;
+
+struct processNode {
+    struct processNode *next;   /* Pointer to next element in list */
+    struct processNode *prev;   /* Pointer to previous element in list */
+    singleProcess       process; /* Process data */
+};
 
 typedef struct processList { // Linked list of processes
-	processNode		*start;	/* Start of list */
-	processNode		*end;		/* End of List */
-	uint16_t			size;	/* number of list entries currently */
+    processNode       *start;  /* Start of list */
+    processNode       *end;    /* End of list */
+    uint16_t           size;   /* Number of list entries currently */
 } processList;
+
 
 
 struct sRollerPopup {
@@ -206,7 +407,7 @@ struct sMessagePopup {
 	lv_obj_t		      	*mBoxPopupButton1;
 	lv_obj_t		      	*mBoxPopupButton2;  
 
-  lv_obj_t 	         	*whoCallMe;
+  void    	         	*whoCallMe;
 	/* Params objects */
 };
 
@@ -243,27 +444,25 @@ struct sMenu {
 };
 
 
-/*********************
-* TABS AVAILABLE
-*********************/
+//THIS IS THE PROCESSES "PAGE" IN THE "PROCESS LIST" TAB
 struct sProcesses {
-    /* LVGL objects */
-	lv_obj_t			      *processesSection;
-	lv_obj_t			      *sectionTitleLine;
-	lv_style_t			    style_sectionTitleLine;
-	lv_point_precise_t	titleLinePoints[2];
+  /* LVGL objects */
+  lv_obj_t			    *processesSection;
+  lv_obj_t			    *sectionTitleLine;
+  lv_style_t			style_sectionTitleLine;
+  lv_point_precise_t	titleLinePoints[2];
 
 
   lv_obj_t	        	*processesLabel;
   lv_obj_t	        	*iconFilterLabel;
   lv_obj_t	        	*iconNewProcessLabel;
-  lv_obj_t	        	*processesList;
+  lv_obj_t	        	*processesListContainer;
 
   lv_obj_t	        	*processFilterButton;
   lv_obj_t	        	*newProcessButton;
 
-	/* Params objects */
-	processList         processElementsList;
+  /* Params objects */
+  processList           processElementsList;
 };
 
 
@@ -390,203 +589,7 @@ struct sTools {
 };
 
 
-struct sStepDetail {
-    /* LVGL objects */
-	lv_obj_t 			      *stepsContainer;
-	lv_obj_t 			      *stepDetailParent;
-	lv_obj_t			      *mBoxStepPopupTitleLine;
-	lv_style_t			    style_mBoxStepPopupTitleLine;
-	lv_point_precise_t	titleLinePoints[2];
 
-
-	lv_obj_t 	        	*stepDetailNameContainer;
-	lv_obj_t 	        	*stepDetailContainer;
-	lv_obj_t 	        	*stepDurationContainer;
-	lv_obj_t 	        	*stepTypeContainer;
-	lv_obj_t 	        	*stepSourceContainer;
-	lv_obj_t 	        	*stepDiscardAfterContainer;
-
-	lv_obj_t 	        	*stepDetailLabel;
-	lv_obj_t 	        	*stepDetailNamelLabel;
-	lv_obj_t 	        	*stepDurationLabel;
-	lv_obj_t 	        	*stepDurationMinLabel;
-	lv_obj_t 	        	*stepSaveLabel;
-	lv_obj_t 	        	*stepCancelLabel;
-	lv_obj_t 	        	*stepTypeLabel;
-	lv_obj_t 	        	*stepSourceLabel;
-	lv_obj_t 	        	*stepTypeHelpIcon;
-	lv_obj_t 	        	*stepSourceTempLabel;
-	lv_obj_t 	        	*stepDiscsardAfterLabel;
-	lv_obj_t 	        	*stepSourceTempHelpIcon;
-	lv_obj_t 	        	*stepSourceTempValue;
-
-	lv_obj_t 	        	*stepDiscsardAfterSwitch;
-
-	lv_obj_t 	        	*stepSaveButton;
-	lv_obj_t 	        	*stepCancelButton;
-
-	lv_obj_t 	        	*stepSourceDropDownList;
-	lv_obj_t 	        	*stepTypeDropDownList;
-	lv_style_t        	*dropDownListStyle;
-
-	lv_obj_t	        	*stepDetailSecTextArea;
-	lv_obj_t	        	*stepDetailMinTextArea;
-	lv_obj_t	        	*stepDetailNamelTextArea;
-
-	/* Params objects */
-};
-
-
-struct sProcessDetail {
-    /* LVGL objects */
-	lv_obj_t			*processesContainer;
-	lv_obj_t			*processDetailParent;
-	lv_style_t		textAreaStyle;
-
-	lv_obj_t			*processDetailContainer;
-	lv_obj_t			*processDetailNameContainer;
-	lv_obj_t			*processStepsContainer;
-	lv_obj_t			*processInfoContainer;
-	lv_obj_t			*processTempControlContainer;
-	lv_obj_t			*processTempContainer;
-	lv_obj_t			*processToleranceContainer;
-	lv_obj_t			*processColorOrBnWContainer;
-	lv_obj_t			*processTotalTimeContainer;
-
-	lv_obj_t			*processDetailName;
-	lv_obj_t			*processDetailStepsLabel;
-	lv_obj_t			*processDetailInfoLabel;
-	lv_obj_t			*processDetailCloseButtonLabel;
-	lv_obj_t			*processTempControlLabel;
-	lv_obj_t			*processTempLabel;
-	lv_obj_t			*processTempControlSwitch;
-	lv_obj_t			*processTempUnitLabel;
-	lv_obj_t			*processToleranceLabel;
-	lv_obj_t			*processColorLabel;
-	lv_obj_t			*processBnWLabel;
-	lv_obj_t			*processPreferredLabel;
-	lv_obj_t			*processDeleteLabel;
-	lv_obj_t			*processRunLabel;
-	lv_obj_t			*processSaveLabel;
-	lv_obj_t			*processNewStepLabel;
-	lv_obj_t			*processTotalTimeLabel;
-	lv_obj_t			*processTotalTimeValue;
-
-	lv_obj_t			*processDetailCloseButton;
-	lv_obj_t			*processRunButton;
-	lv_obj_t			*processDeleteButton;
-	lv_obj_t			*processNewStepButton;
-
-	lv_obj_t			*processTempTextArea;
-	lv_obj_t			*processToleranceTextArea;
-
-	filmType      filmType;
-	uint8_t 			isSaved;
-	uint8_t 			somethingChanged;
-	uint8_t 			stepsCreated;
-
-	/* Params objects */
-};
-
-
-struct sCheckup {
-    /* LVGL objects */
-	lv_obj_t			*checkupParent;
-
-	lv_obj_t			*checkupContainer;
-	lv_obj_t			*checkupNextStepsContainer;
-	lv_obj_t			*checkupProcessNameContainer;
-	lv_obj_t			*checkupStepContainer;
-	lv_obj_t			*checkupWaterFillContainer;
-	lv_obj_t			*checkupReachTempContainer;
-	lv_obj_t			*checkupTankAndFilmContainer;
-	lv_obj_t			*checkupStepSourceContainer;
-	lv_obj_t			*checkupTempControlContainer;
-	lv_obj_t			*checkupWaterTempContainer;
-	lv_obj_t			*checkupNextStepContainer;
-	lv_obj_t			*checkupSelectTankChemistryContainer;
-	lv_obj_t			*checkupFillWaterContainer;
-	lv_obj_t			*checkupTargetTempsContainer;
-	lv_obj_t			*checkupTargetTempContainer;
-	lv_obj_t			*checkupTargetWaterTempContainer;
-	lv_obj_t			*checkupTargetChemistryTempContainer;
-	lv_obj_t			*checkupTankIsPresentContainer;
-	lv_obj_t			*checkupFilmRotatingContainer;
-	lv_obj_t			*checkupFilmInPositionContainer;
-	lv_obj_t			*checkupProcessingContainer;
-
-
-	lv_obj_t			*checkupTankSizeLabel;
-	lv_obj_t			*checkupChemistryVolumeLabel;
-	lv_obj_t			*checkupNextStepsLabel;
-	lv_obj_t			*checkupWaterFillLabel;
-	lv_obj_t			*checkupReachTempLabel;
-	lv_obj_t			*checkupTankAndFilmLabel;
-	lv_obj_t			*checkupMachineWillDoLabel;
-	lv_obj_t			*checkupStopStepsButtonLabel;
-	lv_obj_t			*checkupCloseButtonLabel;
-	lv_obj_t			*checkupStepSourceLabel;
-	lv_obj_t			*checkupTempControlLabel;
-	lv_obj_t			*checkupWaterTempLabel;
-	lv_obj_t			*checkupNextStepLabel;
-	lv_obj_t			*checkupStopAfterButtonLabel;
-	lv_obj_t			*checkupStopNowButtonLabel;
-	lv_obj_t			*checkupStartButtonLabel;
-	lv_obj_t			*checkupProcessReadyLabel;
-	lv_obj_t			*checkupSelectBeforeStartLabel;
-	lv_obj_t			*checkupFillWaterLabel;
-	lv_obj_t			*checkupSkipButtonLabel;
-	lv_obj_t			*checkupTargetTempLabel;
-	lv_obj_t			*checkupTargetWaterTempLabel;
-	lv_obj_t			*checkupTargetChemistryTempLabel;
-	lv_obj_t			*checkupTankIsPresentLabel;
-	lv_obj_t			*checkupFilmRotatingLabel;
-
-	lv_obj_t			*checkupTargetTempValue;
-	lv_obj_t			*checkupTargetWaterTempValue;
-	lv_obj_t			*checkupTargetChemistryTempValue;
-	lv_obj_t			*checkupStepSourceValue;
-	lv_obj_t			*checkupTempControlValue;
-	lv_obj_t			*checkupWaterTempValue;
-	lv_obj_t			*checkupNextStepValue;
-	lv_obj_t			*checkupProcessNameValue;
-	lv_obj_t			*checkupTankIsPresentValue;
-	lv_obj_t			*checkupFilmRotatingValue;
-	lv_obj_t			*checkupStepTimeLeftValue;
-	lv_obj_t			*checkupProcessTimeLeftValue;
-	lv_obj_t			*checkupStepNameValue;
-	lv_obj_t			*checkupStepKindValue;
-
-	lv_obj_t			*checkupWaterFillStatusIcon;
-	lv_obj_t			*checkupReachTempStatusIcon;
-	lv_obj_t			*checkupTankAndFilmStatusIcon;
-
-	lv_obj_t			*lowVolumeChemRadioButton;
-	lv_obj_t			*highVolumeChemRadioButton;
-
-
-	lv_obj_t			*checkupSkipButton;
-	lv_obj_t			*checkupStartButton;
-	lv_obj_t			*checkupStopAfterButton;
-	lv_obj_t			*checkupStopNowButton;
-	lv_obj_t			*checkupStopStepsButton;
-	lv_obj_t			*checkupCloseButton;
-
-	uint8_t 			isProcessing; // 0 or 1
-	uint8_t 			processStep;//0 or 1 or 2 or 3 or 4
-	uint32_t			activeVolume_index;
-
-	uint8_t 			stepFillWaterStatus;
-	uint8_t 			stepReachTempStatus;
-	uint8_t 			stepCheckFilmStatus;
-
-	lv_obj_t			*stepArc;
-	lv_obj_t			*processArc;
-
-	lv_obj_t			*checkupTankSizeTextArea;
-
-	/* Params objects */
-};
 
 
 
@@ -594,10 +597,8 @@ struct sCheckup {
 * ELEMENTS STRUCT
 *********************/
 struct sElements {
-	struct singleStep    		step;
 	struct sFilterPopup			filterPopup;
 	struct sMessagePopup 		messagePopup;
-	struct singleProcess		process;
 	struct sRollerPopup			rollerPopup;
 };
 
@@ -606,9 +607,6 @@ struct sElements {
 * PAGES STRUCT
 *********************/
 struct sPages {
-	struct sCheckup				checkup;
-	struct sProcessDetail processDetail;
-	struct sStepDetail 		stepDetail;
 	struct sHome				  home;
 	struct sMenu				  menu;
 	struct sProcesses			processes;
@@ -632,6 +630,8 @@ struct gui_components {
 /*********************
 * GLOBAL DEFINES
 *********************/
+
+
 #define MAX_PROC_NAME_LEN		  20
 #define MAX_PROC_ELEMENTS		  30
 #define MAX_STEP_ELEMENTS		  20
@@ -1016,6 +1016,7 @@ lv_obj_t * keyboard_textArea;
 
 processNode	* tempProcessNode;
 stepNode	  * tempStepNode;
+
 /*********************
 * ELEMENTS Function Prototypes
 *********************/
@@ -1031,18 +1032,16 @@ void event_messagePopup(lv_event_t *e);
 
 // @file element_process.c
 void event_processElement(lv_event_t *e);
-bool processElementCreate( char *name, uint32_t temp, filmType type );
-//void processElementCreate(lv_obj_t *processesReferenceList);
+bool processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType type );
 
 
 // @file element_rollerPopup.c
 void event_Roller(lv_event_t *e);
-void rollerPopupCreate(const char *tempOptions, const char *popupTitle, lv_obj_t *whoCallMe);
+void rollerPopupCreate(const char *tempOptions, const char *popupTitle, void *whoCallMe);
 
 // @file element_step.c
 void event_stepElement(lv_event_t *e);
-void stepElementCreate(lv_obj_t *stepContainer);
-
+bool stepElementCreate(stepNode * newStep, processNode * processReference, char *name, uint32_t timeMins, uint32_t timeSecs, chemicalType type);
 
 
 /*********************
@@ -1052,7 +1051,7 @@ void init_globals( void );
 
 // @file page_checkup.c
 void event_checkup(lv_event_t *e);
-void checkup(void);
+void checkup(processNode *referenceProcess);
 
 
 // @file page_home.c
@@ -1086,7 +1085,7 @@ void settings(void);
 
 // @file page_stepDetail.c
 void event_stepDetail(lv_event_t *e);
-void stepDetail(lv_obj_t *referenceStep);
+void stepDetail(processNode * referenceNode);
 
 // @file page_tools.c
 void event_toolsElement(lv_event_t *e);
@@ -1109,8 +1108,6 @@ void create_keyboard(lv_obj_t * keyB);
 void sd_init();
 
 char *createRollerValues( uint32_t maxVal, const char* extra_str );
-
-bool deleteProcessElement( processNode	*processToDelete );
 
 #ifdef __cplusplus
 } /*extern "C"*/

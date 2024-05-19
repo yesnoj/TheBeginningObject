@@ -27,7 +27,7 @@ void event_btn_start(lv_event_t * e)
 void homePage(void)
 {
     init_globals();
-
+  
     lv_obj_del(lv_screen_active());
     gui.page.home.screen_home = lv_obj_create(NULL);
 

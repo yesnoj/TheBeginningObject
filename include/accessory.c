@@ -126,12 +126,14 @@ void kb_event_cb(lv_event_t* e)
                 lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
                 lv_obj_remove_flag(gui.element.filterPopup.mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
               }
-              if(obj == gui.page.stepDetail.stepDetailParent){
-                LV_LOG_USER("Press cancel from gui.page.stepDetail.stepDetailParent");
+
+      /*        if(obj == gui.element.step.stepDetails->stepDetailParent){
+                LV_LOG_USER("Press cancel from gui.element.step.stepDetails->stepDetailParent");
                 lv_textarea_set_text(keyboard_textArea, "");
                 lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-                lv_obj_remove_flag(gui.page.stepDetail.stepDetailParent, LV_OBJ_FLAG_HIDDEN);
+                lv_obj_remove_flag(gui.element.step.stepDetails->stepDetailParent, LV_OBJ_FLAG_HIDDEN);
          }
+         */
      }
     if (code == LV_EVENT_READY) {
             if(obj == gui.element.filterPopup.mBoxNameTextArea){
@@ -143,14 +145,16 @@ void kb_event_cb(lv_event_t* e)
               lv_obj_remove_flag(gui.element.filterPopup.mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
               LV_LOG_USER(lv_textarea_get_text(keyboard_textArea));
             }
-            if(obj == gui.page.stepDetail.stepDetailParent){
-              LV_LOG_USER("Press ok from gui.page.stepDetail.stepDetailParent");
+            /*
+            if(obj == gui.element.step.stepDetails->stepDetailParent){
+              LV_LOG_USER("Press ok from gui.element.step.stepDetails->stepDetailParent");
               lv_textarea_set_text(stepDetailNamelTextArea, lv_textarea_get_text(keyboard_textArea));
               lv_textarea_set_text(keyboard_textArea, "");
               lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-              lv_obj_remove_flag(gui.page.stepDetail.stepDetailParent, LV_OBJ_FLAG_HIDDEN);
+              lv_obj_remove_flag(gui.element.step.stepDetails->stepDetailParent, LV_OBJ_FLAG_HIDDEN);
               LV_LOG_USER(lv_textarea_get_text(keyboard_textArea));
             }
+            */
       }
       
  }
@@ -411,6 +415,14 @@ void init_globals( void ) {
   // Initialise the main GUI structure to zero
 	memset( &gui, 0, sizeof( gui ) );		
 
+
+  //gui.element.step.stepDetails = (sStepDetail *)malloc(sizeof(sStepDetail));
+
+  
+  //gui.page.processes.processElementsList.start->process.processDetails = (sProcessDetail *)malloc(sizeof(sProcessDetail));
+  
+  //gui.page.processes.processElementsList.start->process.processDetails
+
   // We only need to initialise the non-zero values
   gui.element.filterPopup.titleLinePoints[1].x = 200;
   gui.element.rollerPopup.titleLinePoints[1].x = 200;
@@ -419,53 +431,30 @@ void init_globals( void ) {
   gui.page.processes.titleLinePoints[1].x = 310;
   gui.page.settings.titleLinePoints[1].x = 310;
   gui.page.tools.titleLinePoints[1].x = 310;
-  gui.page.stepDetail.titleLinePoints[1].x = 310;
-
+  
   gui.element.rollerPopup.tempCelsiusOptions = createRollerValues(40,"");
   gui.element.rollerPopup.minutesOptions = createRollerValues(240,"");
   gui.element.rollerPopup.secondsOptions = createRollerValues(60,""); 
   gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(5,"0.");
+  
+  
+  /*
+  tempProcessNode->process.processDetails = (sProcessDetail *) malloc(sizeof(sProcessDetail));
+    if (tempProcessNode->process.processDetails == NULL) {
+        // Handle memory allocation failure
+        free(tempProcessNode);  // Clean up previously allocated memory
+        return;
+    }
+  memset( &tempProcessNode, 0, sizeof( tempProcessNode ) );
+
+  tempStepNode->step.stepDetails = (sStepDetail *) malloc(sizeof(sStepDetail));
+    if (tempStepNode->step.stepDetails == NULL) {
+        // Handle memory allocation failure
+        free(tempStepNode);  // Clean up previously allocated memory
+        return;
+    }
+  memset( &tempStepNode, 0, sizeof( tempStepNode ) );
+  */
 }
 
 
-
-bool deleteProcessElement( processNode	*processToDelete ) {
-
-	processNode 	*adjust_y_ptr = NULL;
-	lv_coord_t		container_y_prev, container_y_new ;
-
-
-	if( processToDelete ) {
-		adjust_y_ptr = processToDelete->next;
-		container_y_prev = processToDelete->process.container_y;
-		if( processToDelete == gui.page.processes.processElementsList.start ) {
-			if( processToDelete->next ) {
-				gui.page.processes.processElementsList.start = processToDelete->next;
-			} else gui.page.processes.processElementsList.start = gui.page.processes.processElementsList.end = NULL;
-
-		} else if( processToDelete == gui.page.processes.processElementsList.end ) {
-
-			if( processToDelete->prev ) {		// Check the end is not the beginning!
-				processToDelete->prev->next = NULL;
-				gui.page.processes.processElementsList.end = processToDelete->prev;
-			}
-
-		} else if( processToDelete->prev ) {
-			processToDelete->prev->next = processToDelete->next;	// Re-join the linked list if not at beginning
-			processToDelete->next->prev = processToDelete->prev;
-		}
-
-		while( adjust_y_ptr ) {
-			if( adjust_y_ptr->next ) container_y_new = adjust_y_ptr->process.container_y;
-			adjust_y_ptr->process.container_y = container_y_prev;
-			lv_obj_set_y(adjust_y_ptr->process.processElement, adjust_y_ptr->process.container_y);
-			if( adjust_y_ptr->next ) container_y_prev = container_y_new;
-			adjust_y_ptr = adjust_y_ptr->next;
-		}
-		lv_obj_delete_async( processToDelete->process.processElement );			// Delete all LVGL objects associated with entry
-		free( processToDelete );												// Free the list entry itself
-		gui.page.processes.processElementsList.size--;
-		return true;
-	}
-	return false;
-}

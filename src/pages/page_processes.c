@@ -47,7 +47,7 @@ void event_tabProcesses(lv_event_t * e)
   
   if(obj == gui.page.processes.newProcessButton){
     if(code == LV_EVENT_CLICKED) {
-      processDetail(gui.page.processes.processesList);
+      processDetail(gui.page.processes.processesListContainer);
       LV_LOG_USER("New Process Creation popup");
     }
   }
@@ -106,12 +106,12 @@ static void initProcesses(void){
       lv_obj_align(gui.page.processes.iconFilterLabel, LV_ALIGN_CENTER, 0, 0);
 
 
-  gui.page.processes.processesList = lv_obj_create(gui.page.processes.processesSection);
-  lv_obj_set_pos(gui.page.processes.processesList, -18, 31);                           
-  lv_obj_set_size(gui.page.processes.processesList, 335, 254);  
-  lv_obj_set_style_border_opa(gui.page.processes.processesList, LV_OPA_TRANSP, 0);
-  lv_obj_set_scroll_dir(gui.page.processes.processesList, LV_DIR_VER);
-  //lv_obj_set_style_border_color(gui.page.processes.processesList, lv_color_hex(GREY), 0);
+  gui.page.processes.processesListContainer = lv_obj_create(gui.page.processes.processesSection);
+  lv_obj_set_pos(gui.page.processes.processesListContainer, -18, 31);                           
+  lv_obj_set_size(gui.page.processes.processesListContainer, 335, 254);  
+  lv_obj_set_style_border_opa(gui.page.processes.processesListContainer, LV_OPA_TRANSP, 0);
+  lv_obj_set_scroll_dir(gui.page.processes.processesListContainer, LV_DIR_VER);
+  //lv_obj_set_style_border_color(gui.page.processes.processesListContainer, lv_color_hex(GREY), 0);
 
   //CREATE STYLE AND LINE FOR THE TITLE
   /*Create style*/
