@@ -17,12 +17,15 @@ extern struct gui_components gui;
 /******************************
 *  LINKED LIST IMPLEMENTATION
 ******************************/
-processNode *addProcessElement( void ) {
+  processNode *addProcessElement( void ) {
 
 	processNode	*processToAdd;
 
 	if( gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS ) return NULL;		// Put some limit on things!
+ 
+  processToAdd = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
 
+  /*
 	processToAdd = (processNode*)malloc( sizeof( processNode ));
 	if( processToAdd == NULL ) {
 		LV_LOG_USER("Out of heap memory!");
@@ -30,6 +33,16 @@ processNode *addProcessElement( void ) {
 	}
 	memset( processToAdd, 0, sizeof( processNode ) );
 
+
+  processToAdd->process.processDetails = (sProcessDetail *)malloc(sizeof(sProcessDetail));
+  if (processToAdd->process.processDetails == NULL) {
+      // Handle memory allocation failure
+      free(processToAdd->process.processDetails);  // Clean up previously allocated memory
+      return;
+  }
+  memset(processToAdd->process.processDetails, 0, sizeof(sProcessDetail));
+ */
+ 
 	if( gui.page.processes.processElementsList.start == NULL) {					/* Deals with the first entry */
 		gui.page.processes.processElementsList.start = processToAdd;
 		processToAdd->prev = NULL;
@@ -40,6 +53,8 @@ processNode *addProcessElement( void ) {
 	gui.page.processes.processElementsList.end = processToAdd;
 	gui.page.processes.processElementsList.end->next = NULL;
 	gui.page.processes.processElementsList.size++;
+
+  LV_LOG_USER("processElementsList.size: %d", gui.page.processes.processElementsList.size);
 	return processToAdd;
 }
 

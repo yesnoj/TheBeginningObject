@@ -410,6 +410,42 @@ void myLongEvent(lv_event_t * e, uint32_t howLongInMs)
     }
 }
 
+void* allocateAndInitializeNode(NodeType type) {
+    void *node = NULL;
+    
+    // Initialize and allocate according the node type
+    switch (type) {
+        case STEP_NODE:
+            node = malloc(sizeof(stepNode));
+            if (node != NULL) {
+                memset(node, 0, sizeof(stepNode));
+                stepNode* step = (stepNode*)node;
+                step->step.stepDetails = (sStepDetail *) malloc(sizeof(sStepDetail));
+                if (step->step.stepDetails == NULL) {
+                    // Handle memory allocation failure
+                    free(step);  // Clean up previously allocated memory
+                }
+                memset(step->step.stepDetails, 0, sizeof(stepNode));
+             }
+        break;
+        
+        case PROCESS_NODE:
+            node = malloc(sizeof(processNode));
+            if (node != NULL) {
+                memset(node, 0, sizeof(processNode));
+                processNode* process = (processNode*)node;
+                process->process.processDetails = (sProcessDetail *)malloc(sizeof(sProcessDetail));
+                if (process->process.processDetails == NULL) {
+                  // Handle memory allocation failure
+                  free(process->process.processDetails);  // Clean up previously allocated memory
+                }
+                memset(process->process.processDetails, 0, sizeof(sProcessDetail));
+            }
+        break;
+    }
+    return node;
+}
+
 
 void init_globals( void ) {
   // Initialise the main GUI structure to zero
@@ -438,23 +474,7 @@ void init_globals( void ) {
   gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(5,"0.");
   
   
-  /*
-  tempProcessNode->process.processDetails = (sProcessDetail *) malloc(sizeof(sProcessDetail));
-    if (tempProcessNode->process.processDetails == NULL) {
-        // Handle memory allocation failure
-        free(tempProcessNode);  // Clean up previously allocated memory
-        return;
-    }
-  memset( &tempProcessNode, 0, sizeof( tempProcessNode ) );
 
-  tempStepNode->step.stepDetails = (sStepDetail *) malloc(sizeof(sStepDetail));
-    if (tempStepNode->step.stepDetails == NULL) {
-        // Handle memory allocation failure
-        free(tempStepNode);  // Clean up previously allocated memory
-        return;
-    }
-  memset( &tempStepNode, 0, sizeof( tempStepNode ) );
-  */
 }
 
 

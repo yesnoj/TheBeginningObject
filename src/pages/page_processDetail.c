@@ -184,15 +184,10 @@ void processDetail(lv_obj_t * processContainer)
 *********************/
   LV_LOG_USER("Process detail creation");
 
-  newProcess = tempProcessNode = addProcessElement();  
-  
+  newProcess = addProcessElement();  
 
-  newProcess->process.processDetails = (sProcessDetail *)malloc(sizeof(sProcessDetail));
-    if (newProcess->process.processDetails == NULL) {
-        // Handle memory allocation failure
-        free(newProcess);  // Clean up previously allocated memory
-        return;
-    }
+  
+  tempProcessNode = newProcess;
 
   newProcess->process.processDetails->filmType = COLOR_FILM;
   newProcess->process.processDetails->isSaved = 0;

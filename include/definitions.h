@@ -21,6 +21,11 @@ extern "C" {
 * ACCESSORY STRUCTS
 *********************/
 
+typedef enum {
+    STEP_NODE,
+    PROCESS_NODE
+} NodeType;
+
 
 typedef enum filmType {
     BLACK_AND_WHITE_FILM,
@@ -1097,6 +1102,8 @@ lv_obj_t * create_radiobutton(lv_obj_t * mBoxParent, const char * txt, const int
 lv_obj_t * create_text(lv_obj_t * parent, const char * icon, const char * txt);
 lv_obj_t * create_slider(lv_obj_t * parent, const char * icon, const char * txt, int32_t min, int32_t max,int32_t val);
 lv_obj_t * create_switch(lv_obj_t * parent, const char * icon, const char * txt, bool chk);
+
+void* allocateAndInitializeNode(NodeType type);
 
 void event_cb(lv_event_t * e);
 void event_checkbox_handler(lv_event_t * e);

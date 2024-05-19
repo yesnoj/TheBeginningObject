@@ -61,7 +61,6 @@ void event_stepDetail(lv_event_t * e)
  }
 
  if(code == LV_EVENT_FOCUSED){
-  tempStepNode = newStep;
   if(data == newStep->step.stepDetails->stepDetailMinTextArea){
     LV_LOG_USER("Set minutes");
     rollerPopupCreate(gui.element.rollerPopup.minutesOptions, setMinutesPopupTitle_text,newStep);
@@ -136,16 +135,18 @@ void stepDetail(processNode * referenceNode)
 /*********************
   *    PAGE ELEMENTS
 *********************/
-    newStep = tempStepNode = addStepElement(referenceNode);
+      newStep = addStepElement(referenceNode);
+      
+      /*
+      newStep->step.stepDetails = (sStepDetail*)malloc(sizeof( sStepDetail));
+        if(newStep->step.stepDetails == NULL) {
+          LV_LOG_USER("Out of heap memory!");
+          return newStep->step.stepDetails;
+        }
+      memset(newStep->step.stepDetails, 0, sizeof(sStepDetail));
+      */
 
-
-    newStep->step.stepDetails = (sStepDetail *) malloc(sizeof(sStepDetail));
-    if (newStep->step.stepDetails == NULL) {
-        // Handle memory allocation failure
-        free(newStep);  // Clean up previously allocated memory
-        return;
-    }
-
+      tempStepNode = newStep;
       LV_LOG_USER("Step detail creation");
 
       newStep->step.stepDetails->stepDetailParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());

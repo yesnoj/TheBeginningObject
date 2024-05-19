@@ -37,6 +37,27 @@ void event_Roller(lv_event_t * e)
 
     if(code == LV_EVENT_CLICKED){
       
+      tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+      /*
+      tempProcessNode->process.processDetails = (sProcessDetail *) malloc(sizeof(sProcessDetail));
+        if (tempProcessNode->process.processDetails == NULL) {
+            // Handle memory allocation failure
+            free(tempProcessNode);  // Clean up previously allocated memory
+            return;
+        }
+      memset(tempProcessNode, 0, sizeof(tempProcessNode));
+      */
+      tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);
+      /*
+      tempStepNode->step.stepDetails = (sStepDetail *) malloc(sizeof(sStepDetail));
+        if (tempStepNode->step.stepDetails == NULL) {
+            // Handle memory allocation failure
+            free(tempStepNode);  // Clean up previously allocated memory
+            return;
+        }
+      memset(tempStepNode, 0, sizeof(tempStepNode));
+      */
+
         if(obj == gui.element.rollerPopup.mBoxRollerButton)
         {
             if(data == gui.page.settings.tempSensorTuneButton){

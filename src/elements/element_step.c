@@ -23,12 +23,15 @@ stepNode *addStepElement(processNode * processReference) {
   
 	if(processReference->process.processDetails->stepElementsList.size == MAX_STEP_ELEMENTS) return NULL;		// Put some limit on things!
 
+  stepToAdd = (stepNode*) allocateAndInitializeNode(STEP_NODE);
+ /*
 	stepToAdd = (stepNode*)malloc( sizeof( stepNode ));
 	if( stepToAdd == NULL ) {
 		LV_LOG_USER("Out of heap memory!");
 		return stepToAdd;
 	}
 	memset( stepToAdd, 0, sizeof( stepNode ) );
+  */
 
 	if(processReference->process.processDetails->stepElementsList.start == NULL) {					/* Deals with the first entry */
 		processReference->process.processDetails->stepElementsList.start = stepToAdd;
@@ -40,7 +43,8 @@ stepNode *addStepElement(processNode * processReference) {
 	processReference->process.processDetails->stepElementsList.end = stepToAdd;
 	processReference->process.processDetails->stepElementsList.end->next = NULL;
 	processReference->process.processDetails->stepElementsList.size++;
-
+  
+  LV_LOG_USER("stepElementsList.size: %d", processReference->process.processDetails->stepElementsList.size);
 	return stepToAdd;
 }
 
@@ -179,13 +183,11 @@ bool stepElementCreate(stepNode * newStep,processNode * processReference, char *
 		LV_LOG_USER("First call to processElementCreate style now initialised");
 	}
 
- 
 
   newStep->step.stepElement = lv_obj_create(processReference->process.processDetails->processStepsContainer);
   
-
   newStep->step.container_y = -13 + ((processReference->process.processDetails->stepElementsList.size-1) * 70);
-  //lv_obj_set_pos(newStep->step.stepElement, -13, -13 + ((processReference->process.processDetails->stepElementsList.size-1) * 70));                           
+  lv_obj_set_pos(newStep->step.stepElement, -13, newStep->step.container_y);        
   lv_obj_set_size(newStep->step.stepElement, 240, 70);
   lv_obj_remove_flag(newStep->step.stepElement, LV_OBJ_FLAG_SCROLLABLE); 
   lv_obj_set_style_border_opa(newStep->step.stepElement, LV_OPA_TRANSP, 0);
