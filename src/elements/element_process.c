@@ -101,7 +101,7 @@ bool deleteProcessElement( processNode	*processToDelete ) {
 	return false;
 }
 
-static processNode *getProcElementEntryByObject( lv_obj_t *obj ) {
+processNode *getProcElementEntryByObject( lv_obj_t *obj ) {
 
 	processNode	*currentNode  = gui.page.processes.processElementsList.start;
 
@@ -164,7 +164,7 @@ void event_processElement(lv_event_t * e){
   if(obj == currentNode->process.processElementSummary){
       if(code == LV_EVENT_SHORT_CLICKED) {    
         LV_LOG_USER("Process Element Details");
-        processDetail(currentNode); //won't work, cause definition in pages.h. Here we want to call processDetail, but this is not defined, because in page.h is defined after element_process.h
+        processDetail(currentNode); 
       }
       if(code == LV_EVENT_LONG_PRESSED_REPEAT){
         if(gui.element.messagePopup.mBoxPopupParent == NULL){

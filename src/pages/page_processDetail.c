@@ -182,9 +182,16 @@ void processDetail(lv_obj_t * processContainer)
 /*********************
   *    PAGE HEADER
 *********************/
-  LV_LOG_USER("Process detail creation");
 
-  newProcess = addProcessElement();  
+
+  if(getProcElementEntryByObject((lv_obj_t *)lv_obj_get_parent((lv_obj_t *)lv_obj_get_parent((lv_obj_t *)lv_obj_get_parent(processContainer)))) == NULL){
+      newProcess = addProcessElement();  
+      LV_LOG_USER("Process detail creation");
+  }
+  else
+      {  
+        LV_LOG_USER("Process already created, opening detail");
+      }
 
   
   tempProcessNode = newProcess;

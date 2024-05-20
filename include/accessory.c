@@ -447,6 +447,45 @@ void* allocateAndInitializeNode(NodeType type) {
 }
 
 
+void* isNodeInList(void* list, void* node, NodeType type) {
+    if (list == NULL || node == NULL) {
+        return NULL;
+    }
+
+    switch (type) {
+        case STEP_NODE: {
+            stepList* sList = (stepList*)list;
+            stepNode* current = sList->start;
+
+            while (current != NULL) {
+                if (current == (stepNode*)node) {
+                    return (void*)current;  // Nodo trovato
+                }
+                current = current->next;
+            }
+            break;
+        }
+
+        case PROCESS_NODE: {
+            processList* pList = (processList*)list;
+            processNode* current = pList->start;
+
+            while (current != NULL) {
+                if (current == (processNode*)node) {
+                    return (void*)current;  // Nodo trovato
+                }
+                current = current->next;
+            }
+            break;
+        }
+    }
+
+    // Nodo non trovato
+    return NULL;
+}
+
+
+
 void init_globals( void ) {
   // Initialise the main GUI structure to zero
 	memset( &gui, 0, sizeof( gui ) );		

@@ -1038,7 +1038,7 @@ void event_messagePopup(lv_event_t *e);
 // @file element_process.c
 void event_processElement(lv_event_t *e);
 bool processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType type );
-
+processNode *getProcElementEntryByObject( lv_obj_t *obj );
 
 // @file element_rollerPopup.c
 void event_Roller(lv_event_t *e);
@@ -1103,6 +1103,7 @@ lv_obj_t * create_text(lv_obj_t * parent, const char * icon, const char * txt);
 lv_obj_t * create_slider(lv_obj_t * parent, const char * icon, const char * txt, int32_t min, int32_t max,int32_t val);
 lv_obj_t * create_switch(lv_obj_t * parent, const char * icon, const char * txt, bool chk);
 
+void* isNodeInList(void* list, void* node, NodeType type);
 void* allocateAndInitializeNode(NodeType type);
 
 void event_cb(lv_event_t * e);
