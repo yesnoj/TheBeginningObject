@@ -423,9 +423,9 @@ void* allocateAndInitializeNode(NodeType type) {
                 step->step.stepDetails = (sStepDetail *) malloc(sizeof(sStepDetail));
                 if (step->step.stepDetails == NULL) {
                     // Handle memory allocation failure
-                    free(step);  // Clean up previously allocated memory
+                    free(step->step.stepDetails);  // Clean up previously allocated memory
                 }
-                memset(step->step.stepDetails, 0, sizeof(stepNode));
+                memset(step->step.stepDetails, 0, sizeof(sStepDetail));
              }
         break;
         
@@ -440,6 +440,15 @@ void* allocateAndInitializeNode(NodeType type) {
                   free(process->process.processDetails);  // Clean up previously allocated memory
                 }
                 memset(process->process.processDetails, 0, sizeof(sProcessDetail));
+
+
+
+                process->process.processDetails->checkup = (sCheckup *)malloc(sizeof(sCheckup));
+                if (process->process.processDetails == NULL) {
+                  // Handle memory allocation failure
+                  free(process->process.processDetails->checkup);  // Clean up previously allocated memory
+                }
+                memset(process->process.processDetails->checkup, 0, sizeof(sCheckup));
             }
         break;
     }

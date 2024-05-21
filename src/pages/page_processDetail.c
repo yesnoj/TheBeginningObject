@@ -152,11 +152,11 @@ void event_processDetail(lv_event_t * e)
       tempProcessNode = newProcess;
       if(data == newProcess->process.processDetails->processTempTextArea){
           LV_LOG_USER("Set Temperature");
-          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusOptions,tuneTempPopupTitle_text,newProcess);
+          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusOptions,tuneTempPopupTitle_text,newProcess->process.processDetails->processTempTextArea);
       }
       if(data == newProcess->process.processDetails->processToleranceTextArea){
           LV_LOG_USER("Set Tolerance");
-          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusToleranceOptions,tuneTempPopupTitle_text,newProcess);
+          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusToleranceOptions,tuneTempPopupTitle_text,newProcess->process.processDetails->processToleranceTextArea);
       }
   }
 }
@@ -183,7 +183,7 @@ void processDetail(lv_obj_t * processContainer)
   *    PAGE HEADER
 *********************/
 
-
+/*
   if(getProcElementEntryByObject((lv_obj_t *)lv_obj_get_parent((lv_obj_t *)lv_obj_get_parent((lv_obj_t *)lv_obj_get_parent(processContainer)))) == NULL){
       newProcess = addProcessElement();  
       LV_LOG_USER("Process detail creation");
@@ -192,8 +192,10 @@ void processDetail(lv_obj_t * processContainer)
       {  
         LV_LOG_USER("Process already created, opening detail");
       }
+*/
 
-  
+  newProcess = addProcessElement();
+  tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
   tempProcessNode = newProcess;
 
   newProcess->process.processDetails->filmType = COLOR_FILM;

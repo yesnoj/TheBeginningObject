@@ -1,3 +1,4 @@
+#include "misc/lv_types.h"
 /**
  * @file definitions.h
  *
@@ -1042,7 +1043,7 @@ processNode *getProcElementEntryByObject( lv_obj_t *obj );
 
 // @file element_rollerPopup.c
 void event_Roller(lv_event_t *e);
-void rollerPopupCreate(const char *tempOptions, const char *popupTitle, void *whoCallMe);
+void rollerPopupCreate(const char *tempOptions, const char *popupTitle, lv_obj_t *whoCallMe);
 
 // @file element_step.c
 void event_stepElement(lv_event_t *e);

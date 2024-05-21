@@ -1,3 +1,4 @@
+#include <sys/_stdint.h>
 /**
  * @file page_checkup.c
  *
@@ -10,6 +11,13 @@
 
 extern struct gui_components gui;
 
+uint8_t isProcessingStatus0created = 0;
+uint8_t isProcessingStatus1created = 0;
+uint8_t isStepStatus0created = 0;
+uint8_t isStepStatus1created = 0;
+uint8_t isStepStatus2created = 0;
+uint8_t isStepStatus3created = 0;
+uint8_t isStepStatus4created = 0;
 //ACCESSORY INCLUDES
 
 processNode *referenceProcess;
@@ -92,6 +100,7 @@ void event_checkup(lv_event_t * e){
         LV_LOG_USER("User pressed referenceProcess->process.processDetails->checkup->checkupCloseButtonLabel");
         lv_msgbox_close(mboxCont);
         lv_obj_delete(mboxCont);
+        exitCheckup();
     }
     if(obj == referenceProcess->process.processDetails->checkup->checkupStopAfterButton){
         LV_LOG_USER("User pressed referenceProcess->process.processDetails->checkup->checkupStopAfterButton");
@@ -110,66 +119,93 @@ void event_checkup(lv_event_t * e){
   }
 }
 
+void exitCheckup(){
+    isProcessingStatus0created = 0;
+    isProcessingStatus1created = 0;
+    isStepStatus0created = 0;
+    isStepStatus1created = 0;
+    isStepStatus2created = 0;
+    isStepStatus3created = 0;
+    isStepStatus4created = 0;
 
-void checkup(processNode *processToCheckup)
+    lv_obj_delete(referenceProcess->process.processDetails->checkup);
+}
+
+void initCheckup(processNode *processToCheckup)
 {  
-
-      referenceProcess = (processNode*)malloc(sizeof(processNode));
+      referenceProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
 
       referenceProcess = processToCheckup;
 
       LV_LOG_USER("Final checks, current on processToCheckup->process.processDetails->checkup->processStep :%d",processToCheckup->process.processDetails->checkup->processStep);
 
 
-      processToCheckup->process.processDetails->checkup->checkupParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
-      lv_obj_class_init_obj(processToCheckup->process.processDetails->checkup->checkupParent);
-      lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupParent, LV_OBJ_FLAG_IGNORE_LAYOUT);
-      lv_obj_set_size(processToCheckup->process.processDetails->checkup->checkupParent, LV_PCT(100), LV_PCT(100));
+      referenceProcess->process.processDetails->checkup->checkupParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
+      lv_obj_class_init_obj(referenceProcess->process.processDetails->checkup->checkupParent);
+      lv_obj_remove_flag(referenceProcess->process.processDetails->checkup->checkupParent, LV_OBJ_FLAG_IGNORE_LAYOUT);
+      lv_obj_set_size(referenceProcess->process.processDetails->checkup->checkupParent, LV_PCT(100), LV_PCT(100));
 
-      processToCheckup->process.processDetails->checkup->checkupContainer = lv_obj_create(processToCheckup->process.processDetails->checkup->checkupParent);
-      lv_obj_align(processToCheckup->process.processDetails->checkup->checkupContainer, LV_ALIGN_CENTER, 0, 0);
-      lv_obj_set_size(processToCheckup->process.processDetails->checkup->checkupContainer, LV_PCT(100), LV_PCT(100)); 
-      lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupContainer, LV_OBJ_FLAG_SCROLLABLE); 
+      referenceProcess->process.processDetails->checkup->checkupContainer = lv_obj_create(referenceProcess->process.processDetails->checkup->checkupParent);
+      lv_obj_align(referenceProcess->process.processDetails->checkup->checkupContainer, LV_ALIGN_CENTER, 0, 0);
+      lv_obj_set_size(referenceProcess->process.processDetails->checkup->checkupContainer, LV_PCT(100), LV_PCT(100)); 
+      lv_obj_remove_flag(referenceProcess->process.processDetails->checkup->checkupContainer, LV_OBJ_FLAG_SCROLLABLE); 
 
-            processToCheckup->process.processDetails->checkup->checkupCloseButton = lv_button_create(processToCheckup->process.processDetails->checkup->checkupContainer);
-            lv_obj_set_size(processToCheckup->process.processDetails->checkup->checkupCloseButton, BUTTON_POPUP_CLOSE_WIDTH * 1.2, BUTTON_POPUP_CLOSE_HEIGHT * 1.2);
-            lv_obj_align(processToCheckup->process.processDetails->checkup->checkupCloseButton, LV_ALIGN_TOP_RIGHT, 7 , -10);
-            lv_obj_add_event_cb(processToCheckup->process.processDetails->checkup->checkupCloseButton, event_checkup, LV_EVENT_CLICKED, processToCheckup->process.processDetails->checkup->checkupCloseButton);
-            lv_obj_set_style_bg_color(processToCheckup->process.processDetails->checkup->checkupCloseButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
-            if(processToCheckup->process.processDetails->checkup->processStep > 0){
-              lv_obj_add_state(processToCheckup->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);            
+            referenceProcess->process.processDetails->checkup->checkupCloseButton = lv_button_create(referenceProcess->process.processDetails->checkup->checkupContainer);
+            lv_obj_set_size(referenceProcess->process.processDetails->checkup->checkupCloseButton, BUTTON_POPUP_CLOSE_WIDTH * 1.2, BUTTON_POPUP_CLOSE_HEIGHT * 1.2);
+            lv_obj_align(referenceProcess->process.processDetails->checkup->checkupCloseButton, LV_ALIGN_TOP_RIGHT, 7 , -10);
+            lv_obj_add_event_cb(referenceProcess->process.processDetails->checkup->checkupCloseButton, event_checkup, LV_EVENT_CLICKED, referenceProcess->process.processDetails->checkup->checkupCloseButton);
+            lv_obj_set_style_bg_color(referenceProcess->process.processDetails->checkup->checkupCloseButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+            if(referenceProcess->process.processDetails->checkup->processStep > 0){
+              lv_obj_add_state(referenceProcess->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);            
             }
 
-                  processToCheckup->process.processDetails->checkup->checkupCloseButtonLabel = lv_label_create(processToCheckup->process.processDetails->checkup->checkupCloseButton);         
-                  lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupCloseButtonLabel, closePopup_icon); 
-                  lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupCloseButtonLabel, &FilMachineFontIcons_30, 0);              
-                  lv_obj_align(processToCheckup->process.processDetails->checkup->checkupCloseButtonLabel, LV_ALIGN_CENTER, 0, 0);
+                  referenceProcess->process.processDetails->checkup->checkupCloseButtonLabel = lv_label_create(referenceProcess->process.processDetails->checkup->checkupCloseButton);         
+                  lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupCloseButtonLabel, closePopup_icon); 
+                  lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupCloseButtonLabel, &FilMachineFontIcons_30, 0);              
+                  lv_obj_align(referenceProcess->process.processDetails->checkup->checkupCloseButtonLabel, LV_ALIGN_CENTER, 0, 0);
 
 
-            processToCheckup->process.processDetails->checkup->checkupProcessNameContainer = lv_obj_create(processToCheckup->process.processDetails->checkup->checkupContainer);
-            lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupProcessNameContainer, LV_OBJ_FLAG_SCROLLABLE); 
-            lv_obj_align(processToCheckup->process.processDetails->checkup->checkupProcessNameContainer, LV_ALIGN_TOP_LEFT, -10, -15);
-            lv_obj_set_size(processToCheckup->process.processDetails->checkup->checkupProcessNameContainer, 350, 50); 
-            //lv_obj_set_style_border_color(processToCheckup->process.processDetails->checkup->checkupProcessNameContainer, lv_color_hex(GREEN_DARK), 0);
-            lv_obj_set_style_border_opa(processToCheckup->process.processDetails->checkup->checkupProcessNameContainer, LV_OPA_TRANSP, 0);
+            referenceProcess->process.processDetails->checkup->checkupProcessNameContainer = lv_obj_create(referenceProcess->process.processDetails->checkup->checkupContainer);
+            lv_obj_remove_flag(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer, LV_OBJ_FLAG_SCROLLABLE); 
+            lv_obj_align(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer, LV_ALIGN_TOP_LEFT, -10, -15);
+            lv_obj_set_size(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer, 350, 50); 
+            //lv_obj_set_style_border_color(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer, lv_color_hex(GREEN_DARK), 0);
+            lv_obj_set_style_border_opa(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer, LV_OPA_TRANSP, 0);
 
-                  processToCheckup->process.processDetails->checkup->checkupProcessNameValue = lv_label_create(processToCheckup->process.processDetails->checkup->checkupProcessNameContainer);         
-                  lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupProcessNameValue, "E6 six baths"); 
-                  lv_obj_set_width(processToCheckup->process.processDetails->checkup->checkupProcessNameValue, 300);
-                  lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupProcessNameValue, &lv_font_montserrat_30, 0);              
-                  lv_obj_align(processToCheckup->process.processDetails->checkup->checkupProcessNameValue, LV_ALIGN_TOP_LEFT, -10, -8);
+                  referenceProcess->process.processDetails->checkup->checkupProcessNameValue = lv_label_create(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer);         
+                  lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupProcessNameValue, "E6 six baths"); 
+                  lv_obj_set_width(referenceProcess->process.processDetails->checkup->checkupProcessNameValue, 300);
+                  lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupProcessNameValue, &lv_font_montserrat_30, 0);              
+                  lv_obj_align(referenceProcess->process.processDetails->checkup->checkupProcessNameValue, LV_ALIGN_TOP_LEFT, -10, -8);
                   lv_label_set_long_mode(processToCheckup->process.processDetails->checkup->checkupProcessNameValue, LV_LABEL_LONG_SCROLL_CIRCULAR);
 
-            
-        //LEFT SIDE OF SCREEN
-        if(processToCheckup->process.processDetails->checkup->isProcessing == 0){
+            //RIGHT GREEN CONTAINER
+            processToCheckup->process.processDetails->checkup->checkupStepContainer = lv_obj_create(processToCheckup->process.processDetails->checkup->checkupContainer);
+            lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupStepContainer, LV_OBJ_FLAG_SCROLLABLE); 
+            lv_obj_align(processToCheckup->process.processDetails->checkup->checkupStepContainer, LV_ALIGN_TOP_LEFT, 217, 35);
+            lv_obj_set_size(processToCheckup->process.processDetails->checkup->checkupStepContainer, 240, 265); 
+            lv_obj_set_style_border_color(processToCheckup->process.processDetails->checkup->checkupStepContainer, lv_palette_main(LV_PALETTE_GREEN), 0);
+            //lv_obj_set_style_border_opa(processToCheckup->process.processDetails->checkup->checkupStepContainer, LV_OPA_TRANSP, 0);
+
+            //LEFT WHITE CONTAINER
             processToCheckup->process.processDetails->checkup->checkupNextStepsContainer = lv_obj_create(processToCheckup->process.processDetails->checkup->checkupContainer);
             lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer, LV_OBJ_FLAG_SCROLLABLE); 
             lv_obj_align(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer, LV_ALIGN_TOP_LEFT, -10, 35);
             lv_obj_set_size(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer, 225, 265); 
             lv_obj_set_style_border_color(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer, lv_color_hex(WHITE), 0);
             //lv_obj_set_style_border_opa(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer, LV_OPA_TRANSP, 0);
+}
 
+void checkup(processNode *processToCheckup)
+{   
+  if(processToCheckup->process.processDetails->checkup->checkupParent == NULL){
+    LV_LOG_USER("initCheckup");
+    initCheckup(processToCheckup);
+  }
+
+
+        //LEFT SIDE OF SCREEN
+        if(processToCheckup->process.processDetails->checkup->isProcessing == 0 && isProcessingStatus0created == 0){
                   processToCheckup->process.processDetails->checkup->checkupNextStepsLabel = lv_label_create(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer);         
                   lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupNextStepsLabel, checkupNexStepsTitle_text); 
                   lv_obj_set_width(processToCheckup->process.processDetails->checkup->checkupNextStepsLabel, LV_SIZE_CONTENT);
@@ -260,18 +296,11 @@ void checkup(processNode *processToCheckup)
                           lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupStopStepsButtonLabel, checkupStop_text); 
                           lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupStopStepsButtonLabel, &lv_font_montserrat_22, 0);              
                           lv_obj_align(processToCheckup->process.processDetails->checkup->checkupStopStepsButtonLabel, LV_ALIGN_CENTER, 0, 0);
-
+            
+            isProcessingStatus0created = 1;
         }
-        else{
-
-            processToCheckup->process.processDetails->checkup->checkupNextStepsContainer = lv_obj_create(processToCheckup->process.processDetails->checkup->checkupContainer);
-            lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer, LV_OBJ_FLAG_SCROLLABLE); 
-            lv_obj_align(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer, LV_ALIGN_TOP_LEFT, -10, 35);
-            lv_obj_set_size(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer, 225, 265); 
-            lv_obj_set_style_border_color(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer, lv_color_hex(WHITE), 0);
-            //lv_obj_set_style_border_opa(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer, LV_OPA_TRANSP, 0);
-
-
+        if(processToCheckup->process.processDetails->checkup->isProcessing == 1 && isProcessingStatus1created == 0){
+                  lv_obj_clean(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer);
                   processToCheckup->process.processDetails->checkup->checkupNextStepsLabel = lv_label_create(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer);         
                   lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupNextStepsLabel, checkupProcessingTitle_text); 
                   lv_obj_set_width(processToCheckup->process.processDetails->checkup->checkupNextStepsLabel, LV_SIZE_CONTENT);
@@ -388,17 +417,12 @@ void checkup(processNode *processToCheckup)
                           lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupStopAfterButtonLabel, checkupStopAfter_text); 
                           lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupStopAfterButtonLabel, &lv_font_montserrat_16, 0);              
                           lv_obj_align(processToCheckup->process.processDetails->checkup->checkupStopAfterButtonLabel, LV_ALIGN_CENTER, 0, 0);
+        
+            isProcessingStatus1created = 1;
         }
 
             //RIGHT SIDE OF SCREEN
-            processToCheckup->process.processDetails->checkup->checkupStepContainer = lv_obj_create(processToCheckup->process.processDetails->checkup->checkupContainer);
-            lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupStepContainer, LV_OBJ_FLAG_SCROLLABLE); 
-            lv_obj_align(processToCheckup->process.processDetails->checkup->checkupStepContainer, LV_ALIGN_TOP_LEFT, 217, 35);
-            lv_obj_set_size(processToCheckup->process.processDetails->checkup->checkupStepContainer, 240, 265); 
-            lv_obj_set_style_border_color(processToCheckup->process.processDetails->checkup->checkupStepContainer, lv_palette_main(LV_PALETTE_GREEN), 0);
-            //lv_obj_set_style_border_opa(processToCheckup->process.processDetails->checkup->checkupStepContainer, LV_OPA_TRANSP, 0);
-
-                  if(processToCheckup->process.processDetails->checkup->processStep == 0){
+                  if(processToCheckup->process.processDetails->checkup->processStep == 0 && isStepStatus0created == 0){
                         processToCheckup->process.processDetails->checkup->checkupSelectTankChemistryContainer = lv_obj_create(processToCheckup->process.processDetails->checkup->checkupStepContainer);
                         lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupSelectTankChemistryContainer, LV_OBJ_FLAG_SCROLLABLE); 
                         lv_obj_align(processToCheckup->process.processDetails->checkup->checkupSelectTankChemistryContainer, LV_ALIGN_TOP_LEFT, -18, -18);
@@ -456,9 +480,12 @@ void checkup(processNode *processToCheckup)
                                 lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupStartButtonLabel, checkupStart_text); 
                                 lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupStartButtonLabel, &lv_font_montserrat_22, 0);              
                                 lv_obj_align(processToCheckup->process.processDetails->checkup->checkupStartButtonLabel, LV_ALIGN_CENTER, 0, 0);
+                  
+                      isStepStatus0created = 1;
                   }
 
-                  if(processToCheckup->process.processDetails->checkup->processStep == 1){
+                  if(processToCheckup->process.processDetails->checkup->processStep == 1 && isStepStatus1created == 0){
+                        lv_obj_clean(processToCheckup->process.processDetails->checkup->checkupStepContainer);
                         processToCheckup->process.processDetails->checkup->checkupFillWaterContainer = lv_obj_create(processToCheckup->process.processDetails->checkup->checkupStepContainer);
                         lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupFillWaterContainer, LV_OBJ_FLAG_SCROLLABLE); 
                         lv_obj_align(processToCheckup->process.processDetails->checkup->checkupFillWaterContainer, LV_ALIGN_TOP_LEFT, -18, -18);
@@ -488,10 +515,13 @@ void checkup(processNode *processToCheckup)
                                         lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupSkipButtonLabel, checkupSkip_text); 
                                         lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupSkipButtonLabel, &lv_font_montserrat_22, 0);              
                                         lv_obj_align(processToCheckup->process.processDetails->checkup->checkupSkipButtonLabel, LV_ALIGN_CENTER, 0, 0);
+                  
+                      isStepStatus1created = 1;
                   }
 
 
-                  if(processToCheckup->process.processDetails->checkup->processStep == 2){
+                  if(processToCheckup->process.processDetails->checkup->processStep == 2 && isStepStatus2created == 0){
+                        lv_obj_clean(processToCheckup->process.processDetails->checkup->checkupStepContainer);
                         processToCheckup->process.processDetails->checkup->checkupTargetTempsContainer = lv_obj_create(processToCheckup->process.processDetails->checkup->checkupStepContainer);
                         lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupTargetTempsContainer, LV_OBJ_FLAG_SCROLLABLE); 
                         lv_obj_align(processToCheckup->process.processDetails->checkup->checkupTargetTempsContainer, LV_ALIGN_TOP_LEFT, -18, -18);
@@ -567,9 +597,12 @@ void checkup(processNode *processToCheckup)
                                         lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupSkipButtonLabel, checkupSkip_text); 
                                         lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupSkipButtonLabel, &lv_font_montserrat_22, 0);              
                                         lv_obj_align(processToCheckup->process.processDetails->checkup->checkupSkipButtonLabel, LV_ALIGN_CENTER, 0, 0);
+                  
+                        isStepStatus2created = 1;
                   }
 
-                  if(processToCheckup->process.processDetails->checkup->processStep == 3){
+                  if(processToCheckup->process.processDetails->checkup->processStep == 3 && isStepStatus3created == 0){
+                        lv_obj_clean(processToCheckup->process.processDetails->checkup->checkupStepContainer);
                         processToCheckup->process.processDetails->checkup->checkupFilmRotatingContainer = lv_obj_create(processToCheckup->process.processDetails->checkup->checkupStepContainer);
                         lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupFilmRotatingContainer, LV_OBJ_FLAG_SCROLLABLE); 
                         lv_obj_align(processToCheckup->process.processDetails->checkup->checkupFilmRotatingContainer, LV_ALIGN_TOP_LEFT, -18, -18);
@@ -625,9 +658,12 @@ void checkup(processNode *processToCheckup)
                                 lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupStartButtonLabel, checkupStart_text); 
                                 lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupStartButtonLabel, &lv_font_montserrat_22, 0);              
                                 lv_obj_align(processToCheckup->process.processDetails->checkup->checkupStartButtonLabel, LV_ALIGN_CENTER, 0, 0);
+                  
+                      isStepStatus3created = 1;
                   }
 
-                  if(processToCheckup->process.processDetails->checkup->processStep == 4){
+                  if(processToCheckup->process.processDetails->checkup->processStep == 4 && isStepStatus4created == 0){
+                        lv_obj_clean(processToCheckup->process.processDetails->checkup->checkupStepContainer);
                         processToCheckup->process.processDetails->checkup->checkupProcessingContainer = lv_obj_create(processToCheckup->process.processDetails->checkup->checkupStepContainer);
                         lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupProcessingContainer, LV_OBJ_FLAG_SCROLLABLE); 
                         lv_obj_align(processToCheckup->process.processDetails->checkup->checkupProcessingContainer, LV_ALIGN_TOP_LEFT, -18, -18);
@@ -681,7 +717,10 @@ void checkup(processNode *processToCheckup)
                                 lv_obj_set_style_arc_color(processToCheckup->process.processDetails->checkup->stepArc, lv_color_hex(ORANGE_DARK), LV_PART_MAIN);
                                 lv_obj_move_foreground(referenceProcess->process.processDetails->checkup->stepArc);
 
+                 
+                      isStepStatus4created = 1;
                   }
 }
+
 
 
