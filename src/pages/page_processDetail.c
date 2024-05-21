@@ -95,10 +95,15 @@ void event_processDetail(lv_event_t * e)
                 if( !processElementCreate(newProcess, name, temp, type) ){	// Needs to be called with user populated values eventually
                   LV_LOG_USER("Process element not created!");
                 } else {
-                  LV_LOG_USER("Process element created");
                   type = !type; // flip type every time for testing
                   temp ++;	// for test increase temp each time
                   test_index ++;	// for test increase index for name generation
+
+                  if(addProcessElement(newProcess) != NULL){
+                      LV_LOG_USER("Process element %d created",gui.page.processes.processElementsList.size);                  }
+                  else{
+                      LV_LOG_USER("Process element creation failed, maximum entries reached" );
+                      }
                 }
         }
         else{
@@ -133,7 +138,7 @@ void event_processDetail(lv_event_t * e)
   }
 
   if(code == LV_EVENT_LONG_PRESSED_REPEAT){
-    
+    //TBD
   }
 
   if(code == LV_EVENT_VALUE_CHANGED) {
@@ -194,7 +199,8 @@ void processDetail(lv_obj_t * processContainer)
       }
 */
 
-  newProcess = addProcessElement();
+  //newProcess = addProcessElement();
+  newProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
   tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
   tempProcessNode = newProcess;
 

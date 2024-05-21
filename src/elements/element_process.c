@@ -17,31 +17,9 @@ extern struct gui_components gui;
 /******************************
 *  LINKED LIST IMPLEMENTATION
 ******************************/
-  processNode *addProcessElement( void ) {
-
-	processNode	*processToAdd;
+  processNode *addProcessElement(processNode	*processToAdd) {
 
 	if( gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS ) return NULL;		// Put some limit on things!
- 
-  processToAdd = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-
-  /*
-	processToAdd = (processNode*)malloc( sizeof( processNode ));
-	if( processToAdd == NULL ) {
-		LV_LOG_USER("Out of heap memory!");
-		return processToAdd;
-	}
-	memset( processToAdd, 0, sizeof( processNode ) );
-
-
-  processToAdd->process.processDetails = (sProcessDetail *)malloc(sizeof(sProcessDetail));
-  if (processToAdd->process.processDetails == NULL) {
-      // Handle memory allocation failure
-      free(processToAdd->process.processDetails);  // Clean up previously allocated memory
-      return;
-  }
-  memset(processToAdd->process.processDetails, 0, sizeof(sProcessDetail));
- */
  
 	if( gui.page.processes.processElementsList.start == NULL) {					/* Deals with the first entry */
 		gui.page.processes.processElementsList.start = processToAdd;
@@ -55,6 +33,7 @@ extern struct gui_components gui;
 	gui.page.processes.processElementsList.size++;
 
   LV_LOG_USER("processElementsList.size: %d", gui.page.processes.processElementsList.size);
+  
 	return processToAdd;
 }
 
@@ -181,17 +160,6 @@ void event_processElement(lv_event_t * e){
 
 
 bool processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType type ) {
-
-	//newProcess = addProcessElement();			/* Create new process list element storage */
-
-
-	if( newProcess == NULL ) {
-		LV_LOG_USER("Process element creation failed, maximum entries reached" );
-		return false;
-	}
-
-	LV_LOG_USER("Process element created with address 0x%p", newProcess);
-
 	if(newProcess->process.processStyle.values_and_props == NULL ) {		/* Only initialise the style once! */
 		lv_style_init(&newProcess->process.processStyle);
 
@@ -205,7 +173,7 @@ bool processElementCreate(processNode *newProcess, char *name, uint32_t temp, fi
 	}
 
 	newProcess->process.processElement = lv_obj_create(gui.page.processes.processesListContainer);
-	newProcess->process.container_y = -10 + ((gui.page.processes.processElementsList.size-1) * 70);
+	newProcess->process.container_y = -10 + ((gui.page.processes.processElementsList.size) * 70);
 	lv_obj_set_pos(newProcess->process.processElement, -10, newProcess->process.container_y);
 	lv_obj_set_size(newProcess->process.processElement, 315, 70);
 	lv_obj_remove_flag(newProcess->process.processElement, LV_OBJ_FLAG_SCROLLABLE);

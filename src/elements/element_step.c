@@ -17,23 +17,11 @@ processNode * processNodeReference;
 /******************************
 *  LINKED LIST IMPLEMENTATION
 ******************************/
-stepNode *addStepElement(processNode * processReference) {
-  
-  stepNode * stepToAdd;
+stepNode *addStepElement(stepNode * stepToAdd, processNode * processReference) {
   
 	if(processReference->process.processDetails->stepElementsList.size == MAX_STEP_ELEMENTS) return NULL;		// Put some limit on things!
-
-  stepToAdd = (stepNode*) allocateAndInitializeNode(STEP_NODE);
- /*
-	stepToAdd = (stepNode*)malloc( sizeof( stepNode ));
-	if( stepToAdd == NULL ) {
-		LV_LOG_USER("Out of heap memory!");
-		return stepToAdd;
-	}
-	memset( stepToAdd, 0, sizeof( stepNode ) );
-  */
-
-	if(processReference->process.processDetails->stepElementsList.start == NULL) {					/* Deals with the first entry */
+	
+  if(processReference->process.processDetails->stepElementsList.start == NULL) {					/* Deals with the first entry */
 		processReference->process.processDetails->stepElementsList.start = stepToAdd;
 		stepToAdd->prev = NULL;
 	} else {
@@ -91,7 +79,7 @@ bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference )
 	return false;
 }
 
-stepNode *getStepElementEntryByObject(lv_obj_t *obj,processNode * processReference) {
+stepNode *getStepElementEntryByObject(lv_obj_t *obj, processNode * processReference) {
   
 	stepNode	*currentNode  = processReference->process.processDetails->stepElementsList.start;
 
@@ -108,7 +96,7 @@ stepNode *getStepElementEntryByObject(lv_obj_t *obj,processNode * processReferen
 	return currentNode;
 }
 
-static bool deleteStepElementByObj( lv_obj_t *obj,processNode * processReference ) {
+static bool deleteStepElementByObj( lv_obj_t *obj, processNode * processReference ) {
 
 	stepList	*step_ptr  = getStepElementEntryByObject(obj,processReference);
 
@@ -153,21 +141,12 @@ bool stepElementCreate(stepNode * newStep,processNode * processReference, char *
   /*********************
   *    PAGE HEADER
   *********************/
-  
 
-  processNodeReference = processReference;
   LV_LOG_USER("Step Creation");
+
+  processNodeReference = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+  processNodeReference = processReference;
   
-	if(newStep == NULL) {
-		LV_LOG_USER("Step element creation failed, maximum entries reached" );
-		return false;
-	}
-
-  	if(processNodeReference == NULL) {
-		LV_LOG_USER("processNodeReference NULL" );
-		return false;
-	}
-
   LV_LOG_USER("Step element created with address 0x%p", newStep);
   LV_LOG_USER("Process element associated with address 0x%p", processReference);
 
@@ -186,7 +165,7 @@ bool stepElementCreate(stepNode * newStep,processNode * processReference, char *
 
   newStep->step.stepElement = lv_obj_create(processReference->process.processDetails->processStepsContainer);
   
-  newStep->step.container_y = -13 + ((processReference->process.processDetails->stepElementsList.size-1) * 70);
+  newStep->step.container_y = -13 + ((processReference->process.processDetails->stepElementsList.size) * 70);
   lv_obj_set_pos(newStep->step.stepElement, -13, newStep->step.container_y);        
   lv_obj_set_size(newStep->step.stepElement, 240, 70);
   lv_obj_remove_flag(newStep->step.stepElement, LV_OBJ_FLAG_SCROLLABLE); 

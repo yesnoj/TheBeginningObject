@@ -18,7 +18,6 @@ extern struct gui_components gui;
 
 stepNode *newStep;
 
-
 void event_stepDetail(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);
@@ -40,13 +39,19 @@ void event_stepDetail(lv_event_t * e)
           static uint32_t			timeSecs = 32;	// Test Code
           static chemicalType type = RINSE; // Test Code
           lv_snprintf( name, sizeof(name), "A Test Step creation index %02d", test_index ); // Test code
-          if( !stepElementCreate(newStep, data ,name, timeMins, timeSecs, type) ){	// Needs to be called with user populated values eventually
+          if( !stepElementCreate(newStep , data ,name, timeMins, timeSecs, type) ){	// Needs to be called with user populated values eventually
             LV_LOG_USER("Step element not created!");
           } else {
-            LV_LOG_USER("Step element created");
+            
             type = !type; // flip type every time for testing
             timeMins ++;	// for test increase temp each time
             test_index ++;	// for test increase index for name generation
+            if(addStepElement(newStep, data) != NULL){
+                LV_LOG_USER("Step element created");
+            }
+            else{
+                LV_LOG_USER("Step element creation failed, maximum entries reached" );
+            }
           }
 
       lv_msgbox_close(mboxCont);
@@ -138,9 +143,9 @@ void stepDetail(processNode * referenceNode)
   *    PAGE ELEMENTS
 *********************/
 
-      newStep = addStepElement(referenceNode);
-      
+      newStep = (stepNode*) allocateAndInitializeNode(STEP_NODE);
       tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);
+
       tempStepNode = newStep;
       LV_LOG_USER("Step detail creation");
 
