@@ -125,7 +125,6 @@ void event_processDetail(lv_event_t * e)
     }
     if(data == newProcess->process.processDetails->processNewStepButton){
         LV_LOG_USER("Pressed newProcess->process.processDetails->processNewStepButton");
-        newProcess->process.processDetails->stepElementsList.size +=1;
         newProcess->process.processDetails->somethingChanged = 1;
         lv_obj_clear_state(newProcess->process.processDetails->processSaveLabel, LV_STATE_DISABLED);
 
@@ -188,18 +187,6 @@ void processDetail(lv_obj_t * processContainer)
   *    PAGE HEADER
 *********************/
 
-/*
-  if(getProcElementEntryByObject((lv_obj_t *)lv_obj_get_parent((lv_obj_t *)lv_obj_get_parent((lv_obj_t *)lv_obj_get_parent(processContainer)))) == NULL){
-      newProcess = addProcessElement();  
-      LV_LOG_USER("Process detail creation");
-  }
-  else
-      {  
-        LV_LOG_USER("Process already created, opening detail");
-      }
-*/
-
-  //newProcess = addProcessElement();
   newProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
   tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
   tempProcessNode = newProcess;
