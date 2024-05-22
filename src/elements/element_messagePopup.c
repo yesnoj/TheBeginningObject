@@ -56,11 +56,13 @@ void event_messagePopup(lv_event_t *e)
             if (gui.element.messagePopup.whoCallMe == tempStepNode)
             {
                 LV_LOG_USER("Delete step from long Step press!");
+                
                 if( !deleteStepElement( gui.element.messagePopup.whoCallMe , tempProcessNode) ) {
                   LV_LOG_USER("Delete step element instance at address 0x%p Failed!", gui.element.messagePopup.whoCallMe);
                 } else {
                   LV_LOG_USER("Delete step element instance at address 0x%p", gui.element.messagePopup.whoCallMe);
                 }
+                
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
                 lv_obj_delete(mboxCont);
@@ -80,9 +82,9 @@ void event_messagePopup(lv_event_t *e)
                 processDetailParent = NULL;
             }
         }
-        if (obj == gui.element.messagePopup.mBoxPopupButton1)
+        if (obj == gui.element.messagePopup.mBoxPopupButton2)
         {
-            LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton1");
+            LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton2");
             if (gui.element.messagePopup.whoCallMe == processElement || gui.element.messagePopup.whoCallMe == processDetailParent || gui.element.messagePopup.whoCallMe == stepElement)
             {
                 LV_LOG_USER("Cancel delete element!");

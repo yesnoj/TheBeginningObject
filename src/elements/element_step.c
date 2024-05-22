@@ -117,7 +117,7 @@ void event_stepElement(lv_event_t * e){
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
   lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
-  stepNode	*currentNode = getStepElementEntryByObject(obj,processNodeReference);
+  stepNode	*currentNode = getStepElementEntryByObject(obj,data);
   
 
   //if(obj == currentNode->step.stepElementSummary){
