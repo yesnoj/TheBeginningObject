@@ -37,12 +37,8 @@ void event_Roller(lv_event_t * e)
   lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
 
     if(code == LV_EVENT_CLICKED){
-      
-
-
-
         if(obj == gui.element.rollerPopup.mBoxRollerButton)
-        {
+        {   
             if(data == gui.page.settings.tempSensorTuneButton){
               LV_LOG_USER("SET BUTTON from tempSensorTuneButton value %d:",rollerSelected);
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
@@ -103,12 +99,14 @@ void event_Roller(lv_event_t * e)
               lv_obj_delete(godFatherCont);
               return; 
             }
+          rollerSelected = NULL;
         }
         
     }
 
     if(code == LV_EVENT_VALUE_CHANGED){
       if(obj == gui.element.rollerPopup.roller){
+          lv_obj_clear_state(gui.element.rollerPopup.mBoxRollerButton, LV_STATE_DISABLED);
           //if we want to want the index of the selected element
           rollerSelected = lv_roller_get_selected(obj) + 1;
           LV_LOG_USER("ROLLER value: %d", rollerSelected);
@@ -191,6 +189,8 @@ void rollerPopupCreate(const char * tempOptions,const char * popupTitle, lv_obj_
    lv_obj_set_size(gui.element.rollerPopup.mBoxRollerButton, BUTTON_TUNE_WIDTH, BUTTON_TUNE_HEIGHT);
    lv_obj_align(gui.element.rollerPopup.mBoxRollerButton, LV_ALIGN_BOTTOM_MID, 0 , 0);
    lv_obj_add_event_cb(gui.element.rollerPopup.mBoxRollerButton, event_Roller, LV_EVENT_CLICKED, gui.element.rollerPopup.whoCallMe);
+   lv_obj_add_event_cb(gui.element.rollerPopup.mBoxRollerButton, event_Roller, LV_EVENT_VALUE_CHANGED, gui.element.rollerPopup.whoCallMe);
+   lv_obj_add_state(gui.element.rollerPopup.mBoxRollerButton, LV_STATE_DISABLED);
 
          gui.element.rollerPopup.mBoxRollerButtonLabel = lv_label_create(gui.element.rollerPopup.mBoxRollerButton);         
          lv_label_set_text(gui.element.rollerPopup.mBoxRollerButtonLabel, tuneRollerButton_text); 

@@ -137,6 +137,7 @@ void event_processDetail(lv_event_t * e)
         }
         else{
               lv_obj_add_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
+              lv_obj_add_state(newProcess->process.processDetails->processRunButton, LV_STATE_DISABLED);
               LV_LOG_USER("Updated SAVE button : DISABLED");   
         }
         if(newProcess->process.processDetails->somethingChanged == 1 && newProcess->process.processDetails->stepElementsList.size > 0){

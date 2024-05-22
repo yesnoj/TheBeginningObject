@@ -39,20 +39,21 @@ void event_stepDetail(lv_event_t * e)
           static uint32_t			timeSecs = 32;	// Test Code
           static chemicalType type = RINSE; // Test Code
           lv_snprintf( name, sizeof(name), "A Test Step creation index %02d", test_index ); // Test code
+
+
+            timeMins ++;	// for test increase temp each time
+            timeSecs ++;	// for test increase index for name generation
+
           if( !stepElementCreate(newStep , data ,name, timeMins, timeSecs, type) ){	// Needs to be called with user populated values eventually
             LV_LOG_USER("Step element not created!");
           } else {
-            
-            type = !type; // flip type every time for testing
-            timeMins ++;	// for test increase temp each time
-            test_index ++;	// for test increase index for name generation
-            if(addStepElement(newStep, data) != NULL){
-                LV_LOG_USER("Step element created");
+                if(addStepElement(newStep, data) != NULL){
+                    LV_LOG_USER("Step element created");
+                }
+                else{
+                    LV_LOG_USER("Step element creation failed, maximum entries reached" );
+                }
             }
-            else{
-                LV_LOG_USER("Step element creation failed, maximum entries reached" );
-            }
-          }
 
       lv_msgbox_close(mboxCont);
       lv_obj_delete(mboxCont);

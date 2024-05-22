@@ -1030,7 +1030,7 @@ void event_filterMBox(lv_event_t *e);
 void filterPopupCreate(void);
 
 // @file element_messagePopup.c
-void messagePopupCreate(const char *popupTitleText, const char *popupText, const char *textButton1, const char *textButton2, lv_obj_t *whoCallMe);
+void messagePopupCreate(const char *popupTitleText, const char *popupText, const char *textButton1, const char *textButton2, void *whoCallMe);
 void event_messagePopup(lv_event_t *e);
 
 

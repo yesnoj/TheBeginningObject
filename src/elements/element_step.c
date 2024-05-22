@@ -14,7 +14,6 @@ extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
-processNode * processNodeReference;
 
 /******************************
 *  LINKED LIST IMPLEMENTATION
@@ -79,6 +78,7 @@ bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference )
 		lv_obj_delete_async( stepToDelete->step.stepElement );			// Delete all LVGL objects associated with entry
 		free( stepToDelete );												// Free the list entry itself
 		processReference->process.processDetails->stepElementsList.size--;
+    lv_obj_send_event(processReference->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 		return true;
 	}
 	return false;
@@ -129,7 +129,8 @@ void event_stepElement(lv_event_t * e){
       if(code == LV_EVENT_LONG_PRESSED_REPEAT) {    
         if(gui.element.messagePopup.mBoxPopupParent == NULL){
         LV_LOG_USER("Long press element");
-        messagePopupCreate(deletePopupTitle_text,deletePopupBody_text, deleteButton_text, stepDetailCancel_text, currentNode->step.stepElement);
+        tempStepNode = currentNode;
+        messagePopupCreate(deletePopupTitle_text,deletePopupBody_text, deleteButton_text, stepDetailCancel_text, tempStepNode);
         return;
       }
     }
@@ -148,8 +149,8 @@ bool stepElementCreate(stepNode * newStep,processNode * processReference, char *
 
   LV_LOG_USER("Step Creation");
 
-  processNodeReference = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-  tempProcessNode = processNodeReference = processReference;
+
+  tempProcessNode = processReference;
   
   
   LV_LOG_USER("Step element created with address 0x%p", newStep);
@@ -203,8 +204,11 @@ bool stepElementCreate(stepNode * newStep,processNode * processReference, char *
         //lv_obj_set_style_text_color(newStep->step.stepTimeIcon, lv_color_hex(GREY), LV_PART_MAIN);
         lv_obj_align(newStep->step.stepTimeIcon, LV_ALIGN_LEFT_MID, -10, 17);
         
-        newStep->step.stepTime = lv_label_create(newStep->step.stepElementSummary);         
-        lv_label_set_text(newStep->step.stepTime, "6m30s"); 
+        newStep->step.stepTime = lv_label_create(newStep->step.stepElementSummary);    
+        char formatted_string[20]; // Assicurati che la dimensione sia sufficiente per contenere la stringa formattata
+        sprintf(formatted_string, "%dm%ds", timeMins, timeSecs);
+
+        lv_label_set_text(newStep->step.stepTime, formatted_string); 
         lv_obj_set_style_text_font(newStep->step.stepTime, &lv_font_montserrat_18, 0);              
         lv_obj_align(newStep->step.stepTime, LV_ALIGN_LEFT_MID, 10, 17);
 

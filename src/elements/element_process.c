@@ -33,7 +33,6 @@ extern struct gui_components gui;
 	gui.page.processes.processElementsList.size++;
 
   LV_LOG_USER("processElementsList.size: %d", gui.page.processes.processElementsList.size);
-  
 	return processToAdd;
 }
 

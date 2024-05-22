@@ -85,7 +85,7 @@ void event_messagePopup(lv_event_t *e)
         if (obj == gui.element.messagePopup.mBoxPopupButton2)
         {
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton2");
-            if (gui.element.messagePopup.whoCallMe == processElement || gui.element.messagePopup.whoCallMe == processDetailParent || gui.element.messagePopup.whoCallMe == stepElement)
+            if (gui.element.messagePopup.whoCallMe == tempProcessNode || gui.element.messagePopup.whoCallMe == processDetailParent || gui.element.messagePopup.whoCallMe == tempStepNode)
             {
                 LV_LOG_USER("Cancel delete element!");
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
@@ -98,7 +98,7 @@ void event_messagePopup(lv_event_t *e)
 
 }       
 
-void messagePopupCreate(const char * popupTitleText,const char * popupText,const char * textButton1, const char * textButton2, lv_obj_t * whoCallMe){
+void messagePopupCreate(const char * popupTitleText,const char * popupText,const char * textButton1, const char * textButton2, void * whoCallMe){
   /*********************
   *    PAGE HEADER
   *********************/
