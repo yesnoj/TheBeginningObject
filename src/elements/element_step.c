@@ -1,3 +1,5 @@
+#include "misc/lv_event.h"
+#include "core/lv_obj_event.h"
 /**
  * @file element_step.c
  *
@@ -33,6 +35,9 @@ stepNode *addStepElement(stepNode * stepToAdd, processNode * processReference) {
 	processReference->process.processDetails->stepElementsList.size++;
   
   LV_LOG_USER("stepElementsList.size: %d", processReference->process.processDetails->stepElementsList.size);
+
+
+  lv_obj_send_event(processReference->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 	return stepToAdd;
 }
 
@@ -116,7 +121,7 @@ void event_stepElement(lv_event_t * e){
   
 
   //if(obj == currentNode->step.stepElementSummary){
-      if(code == LV_EVENT_CLICKED) {    
+      if(code == LV_EVENT_SHORT_CLICKED) {    
         LV_LOG_USER("Process Element Details");
         stepDetail(data);
         return;
@@ -124,7 +129,7 @@ void event_stepElement(lv_event_t * e){
       if(code == LV_EVENT_LONG_PRESSED_REPEAT) {    
         if(gui.element.messagePopup.mBoxPopupParent == NULL){
         LV_LOG_USER("Long press element");
-        //messagePopupCreate(deletePopupTitle_text,deletePopupBody_text, deleteButton_text, stepDetailCancel_text, currentNode->step.stepElement);
+        messagePopupCreate(deletePopupTitle_text,deletePopupBody_text, deleteButton_text, stepDetailCancel_text, currentNode->step.stepElement);
         return;
       }
     }
@@ -136,7 +141,6 @@ void event_stepElement(lv_event_t * e){
   }
 }
 
-
 bool stepElementCreate(stepNode * newStep,processNode * processReference, char *name, uint32_t timeMins, uint32_t timeSecs, chemicalType type){
   /*********************
   *    PAGE HEADER
@@ -145,7 +149,8 @@ bool stepElementCreate(stepNode * newStep,processNode * processReference, char *
   LV_LOG_USER("Step Creation");
 
   processNodeReference = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-  processNodeReference = processReference;
+  tempProcessNode = processNodeReference = processReference;
+  
   
   LV_LOG_USER("Step element created with address 0x%p", newStep);
   LV_LOG_USER("Process element associated with address 0x%p", processReference);
@@ -179,7 +184,7 @@ bool stepElementCreate(stepNode * newStep,processNode * processReference, char *
         lv_obj_set_size(newStep->step.stepElementSummary, 235, 66);
         lv_obj_align(newStep->step.stepElementSummary, LV_ALIGN_TOP_LEFT, -16, -16);
         lv_obj_remove_flag(newStep->step.stepElementSummary, LV_OBJ_FLAG_SCROLLABLE);  
-        lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_CLICKED, processReference);  
+        lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_SHORT_CLICKED, processReference);  
         lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_LONG_PRESSED_REPEAT, processReference);
 
         lv_obj_add_style(newStep->step.stepElementSummary, &newStep->step.stepStyle, 0);

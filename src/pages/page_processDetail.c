@@ -1,3 +1,4 @@
+#include "misc/lv_event.h"
 /**
  * @file page_processDetail.c
  *
@@ -31,6 +32,7 @@ void event_processDetail(lv_event_t * e)
   if(code == LV_EVENT_CLICKED) {
     if(data == newProcess->process.processDetails->processDetailCloseButton){
         newProcess->process.processDetails->stepElementsList.size = 0;
+        lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
         lv_msgbox_close(mboxCont);
         lv_obj_delete(mboxCont);
         LV_LOG_USER("Close Process Detail");
@@ -41,10 +43,7 @@ void event_processDetail(lv_event_t * e)
         newProcess->process.processDetails->filmType = COLOR_FILM;
         newProcess->process.processDetails->somethingChanged = 1;
 
-        if(newProcess->process.processDetails->stepElementsList.size > 0){
-          lv_obj_clear_state(newProcess->process.processDetails->processSaveLabel, LV_STATE_DISABLED);
-          lv_obj_set_style_text_color(newProcess->process.processDetails->processSaveLabel, lv_color_hex(WHITE), LV_PART_MAIN);
-        }
+        lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 
         LV_LOG_USER("Pressed newProcess->process.processDetails->processColorLabel");
     }
@@ -53,38 +52,29 @@ void event_processDetail(lv_event_t * e)
         lv_obj_set_style_text_color(newProcess->process.processDetails->processColorLabel, lv_color_hex(WHITE), LV_PART_MAIN);
         newProcess->process.processDetails->filmType = BLACK_AND_WHITE_FILM;
         newProcess->process.processDetails->somethingChanged = 1;
-        if(newProcess->process.processDetails->stepElementsList.size > 0){
-          lv_obj_clear_state(newProcess->process.processDetails->processSaveLabel, LV_STATE_DISABLED);
-          lv_obj_set_style_text_color(newProcess->process.processDetails->processSaveLabel, lv_color_hex(WHITE), LV_PART_MAIN);
-        }
+        
+        lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);     
         LV_LOG_USER("Pressed newProcess->process.processDetails->processBnWLabel");
     }
 
     if(data == newProcess->process.processDetails->processPreferredLabel){
-        if(isPreferred == 0){
+        if(newProcess->process.processDetails->isPreferred == 0){
           lv_obj_set_style_text_color(newProcess->process.processDetails->processPreferredLabel, lv_color_hex(RED), LV_PART_MAIN);
-          isPreferred = 1;
+          newProcess->process.processDetails->isPreferred = 1;
           newProcess->process.processDetails->somethingChanged = 1;
 
-          if(newProcess->process.processDetails->stepElementsList.size > 0){
-            lv_obj_clear_state(newProcess->process.processDetails->processSaveLabel, LV_STATE_DISABLED);
-            lv_obj_set_style_text_color(newProcess->process.processDetails->processSaveLabel, lv_color_hex(WHITE), LV_PART_MAIN);
-          }
+          lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
         }
         else{
           lv_obj_set_style_text_color(newProcess->process.processDetails->processPreferredLabel, lv_color_hex(WHITE), LV_PART_MAIN);
-          isPreferred = 0;
+          newProcess->process.processDetails->isPreferred = 0;
         }
         LV_LOG_USER("Process is preferred :%d",isPreferred);
     }
-    if(data == newProcess->process.processDetails->processSaveLabel && newProcess->process.processDetails->stepElementsList.size > 0){
-        if(newProcess->process.processDetails->isSaved == 0){
-          newProcess->process.processDetails->isSaved = 1;
+    if(data == newProcess->process.processDetails->processSaveButton && newProcess->process.processDetails->stepElementsList.size > 0){
           newProcess->process.processDetails->somethingChanged = 0;
           lv_obj_clear_state(newProcess->process.processDetails->processRunButton, LV_STATE_DISABLED);
-
-          lv_obj_set_style_text_color(newProcess->process.processDetails->processSaveLabel, lv_color_hex(GREY), LV_PART_MAIN);
-          lv_obj_add_state(newProcess->process.processDetails->processSaveLabel, LV_STATE_DISABLED);
+          lv_obj_add_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
 
                 // for testing
                 static char 				name[80];	// Test Code
@@ -92,30 +82,33 @@ void event_processDetail(lv_event_t * e)
                 static filmType 	  type = BLACK_AND_WHITE_FILM; // Test Code
                 static uint32_t			temp = 38;	// Test Code
                 lv_snprintf( name, sizeof(name), "A Test Process creation index %02d", test_index ); // Test code
-                if( !processElementCreate(newProcess, name, temp, type) ){	// Needs to be called with user populated values eventually
-                  LV_LOG_USER("Process element not created!");
-                } else {
-                  type = !type; // flip type every time for testing
-                  temp ++;	// for test increase temp each time
-                  test_index ++;	// for test increase index for name generation
+                if(isNodeInList(&gui.page.processes.processElementsList, newProcess, PROCESS_NODE) == NULL)
+                {
+                  LV_LOG_USER("Process not present yet, let's create!");
+                  if( !processElementCreate(newProcess, name, temp, type) ){	// Needs to be called with user populated values eventually
+                      LV_LOG_USER("Process element not created!");
+                    } 
+                  else {
+                      type = !type; // flip type every time for testing
+                      temp ++;	// for test increase temp each time
+                      test_index ++;	// for test increase index for name generation
 
-                  if(addProcessElement(newProcess) != NULL){
-                      LV_LOG_USER("Process element %d created",gui.page.processes.processElementsList.size);                  }
-                  else{
-                      LV_LOG_USER("Process element creation failed, maximum entries reached" );
-                      }
+                      if(addProcessElement(newProcess) != NULL)
+                        {
+                          LV_LOG_USER("Process element %d created",gui.page.processes.processElementsList.size);                  
+                        }
+                      else
+                        {
+                          LV_LOG_USER("Process element creation failed, maximum entries reached" );
+                        }
+                    }
                 }
-        }
-        else{
-          newProcess->process.processDetails->isSaved = 0;
-        }
-        LV_LOG_USER("Pressed newProcess->process.processDetails->processSaveLabel");
+                else{
+                   LV_LOG_USER("Process already present in list!");
+                }
+        LV_LOG_USER("Pressed newProcess->process.processDetails->processSaveButton");
     }
-    if(data == newProcess->process.processDetails->processDeleteButton){
-        newProcess->process.processDetails->stepElementsList.size = 0;
-        messagePopupCreate(deletePopupTitle_text,deletePopupBody_text, deleteButton_text, stepDetailCancel_text, newProcess->process.processDetails->processDetailParent);
-        LV_LOG_USER("Pressed newProcess->process.processDetails->processDeleteButton");
-    }
+
     if(data == newProcess->process.processDetails->processRunButton){
         newProcess->process.processDetails->stepElementsList.size = 0;
         lv_msgbox_close(mboxCont);
@@ -126,12 +119,8 @@ void event_processDetail(lv_event_t * e)
     if(data == newProcess->process.processDetails->processNewStepButton){
         LV_LOG_USER("Pressed newProcess->process.processDetails->processNewStepButton");
         newProcess->process.processDetails->somethingChanged = 1;
-        lv_obj_clear_state(newProcess->process.processDetails->processSaveLabel, LV_STATE_DISABLED);
+        lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 
-        if(newProcess->process.processDetails->stepElementsList.size > 0){
-          lv_obj_clear_state(newProcess->process.processDetails->processSaveLabel, LV_STATE_DISABLED);
-          lv_obj_set_style_text_color(newProcess->process.processDetails->processSaveLabel, lv_color_hex(WHITE), LV_PART_MAIN);
-        }
         stepDetail(newProcess);
     }
   }
@@ -140,15 +129,29 @@ void event_processDetail(lv_event_t * e)
     //TBD
   }
 
+  if(code == LV_EVENT_REFRESH){
+    if(obj == newProcess->process.processDetails->processSaveButton){
+        if(newProcess->process.processDetails->stepElementsList.size > 0){
+              lv_obj_clear_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
+              LV_LOG_USER("Updated SAVE button: ENABLED");
+        }
+        else{
+              lv_obj_add_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
+              LV_LOG_USER("Updated SAVE button : DISABLED");   
+        }
+        if(newProcess->process.processDetails->somethingChanged == 1 && newProcess->process.processDetails->stepElementsList.size > 0){
+              lv_obj_clear_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
+              LV_LOG_USER("Updated SAVE button : ENABLED");
+        }
+    }
+  }
+
   if(code == LV_EVENT_VALUE_CHANGED) {
       if(data == newProcess->process.processDetails->processTempControlSwitch){
           LV_LOG_USER("Temperature controlled : %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
           newProcess->process.processDetails->somethingChanged = 1;
 
-          if(newProcess->process.processDetails->stepElementsList.size > 0){
-            lv_obj_clear_state(newProcess->process.processDetails->processSaveLabel, LV_STATE_DISABLED);
-            lv_obj_set_style_text_color(newProcess->process.processDetails->processSaveLabel, lv_color_hex(WHITE), LV_PART_MAIN);
-          }
+          lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
       }
   }
 
@@ -192,7 +195,6 @@ void processDetail(lv_obj_t * processContainer)
   tempProcessNode = newProcess;
 
   newProcess->process.processDetails->filmType = COLOR_FILM;
-  newProcess->process.processDetails->isSaved = 0;
   newProcess->process.processDetails->somethingChanged = 0;
   newProcess->process.processDetails->stepElementsList.size = 0;
 
@@ -418,33 +420,25 @@ void processDetail(lv_obj_t * processContainer)
                   newProcess->process.processDetails->processPreferredLabel = lv_label_create(newProcess->process.processDetails->processInfoContainer);         
                   lv_label_set_text(newProcess->process.processDetails->processPreferredLabel, preferred_icon); 
                   lv_obj_set_style_text_font(newProcess->process.processDetails->processPreferredLabel, &FilMachineFontIcons_30, 0);              
-                  lv_obj_align(newProcess->process.processDetails->processPreferredLabel, LV_ALIGN_TOP_LEFT, 100, 140);
+                  lv_obj_align(newProcess->process.processDetails->processPreferredLabel, LV_ALIGN_TOP_LEFT, 120, 140);
                   lv_obj_add_flag(newProcess->process.processDetails->processPreferredLabel, LV_OBJ_FLAG_CLICKABLE);
                   lv_obj_add_event_cb(newProcess->process.processDetails->processPreferredLabel, event_processDetail, LV_EVENT_CLICKED, newProcess->process.processDetails->processPreferredLabel);
 
 
-                  newProcess->process.processDetails->processSaveLabel = lv_label_create(newProcess->process.processDetails->processInfoContainer);         
-                  lv_label_set_text(newProcess->process.processDetails->processSaveLabel, save_Icon); 
-                  lv_obj_set_style_text_font(newProcess->process.processDetails->processSaveLabel, &FilMachineFontIcons_30, 0);              
-                  lv_obj_align(newProcess->process.processDetails->processSaveLabel, LV_ALIGN_TOP_LEFT, 150, 140);
-                  lv_obj_add_flag(newProcess->process.processDetails->processSaveLabel, LV_OBJ_FLAG_CLICKABLE);
-                  lv_obj_add_state(newProcess->process.processDetails->processSaveLabel, LV_STATE_DISABLED);
-                  lv_obj_add_event_cb(newProcess->process.processDetails->processSaveLabel, event_processDetail, LV_EVENT_CLICKED, newProcess->process.processDetails->processSaveLabel);
-                  lv_obj_set_style_text_color(newProcess->process.processDetails->processSaveLabel, lv_color_hex(GREY), LV_PART_MAIN);
 
-                  newProcess->process.processDetails->processDeleteButton = lv_button_create(newProcess->process.processDetails->processDetailContainer);
-                  lv_obj_set_size(newProcess->process.processDetails->processDeleteButton, BUTTON_PROCESS_WIDTH, BUTTON_PROCESS_HEIGHT);
-                  lv_obj_align(newProcess->process.processDetails->processDeleteButton, LV_ALIGN_BOTTOM_RIGHT, -103, 10);
-                  lv_obj_add_event_cb(newProcess->process.processDetails->processDeleteButton, event_processDetail, LV_EVENT_CLICKED, newProcess->process.processDetails->processDeleteButton);
-                  lv_obj_set_style_bg_color(newProcess->process.processDetails->processDeleteButton, lv_color_hex(RED_DARK), LV_PART_MAIN);
-                  lv_obj_add_state(newProcess->process.processDetails->processDeleteButton, LV_STATE_DISABLED);
+                  newProcess->process.processDetails->processSaveButton = lv_button_create(newProcess->process.processDetails->processDetailContainer);
+                  lv_obj_set_size(newProcess->process.processDetails->processSaveButton, BUTTON_PROCESS_WIDTH, BUTTON_PROCESS_HEIGHT);
+                  lv_obj_align(newProcess->process.processDetails->processSaveButton, LV_ALIGN_BOTTOM_RIGHT, -103, 10);
+                  lv_obj_add_event_cb(newProcess->process.processDetails->processSaveButton, event_processDetail, LV_EVENT_REFRESH, NULL);
+                  lv_obj_add_event_cb(newProcess->process.processDetails->processSaveButton, event_processDetail, LV_EVENT_CLICKED, newProcess->process.processDetails->processSaveButton);
+                  lv_obj_set_style_bg_color(newProcess->process.processDetails->processSaveButton, lv_color_hex(BLUE_DARK), LV_PART_MAIN);
+                  lv_obj_add_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
 
 
-                          newProcess->process.processDetails->processDeleteLabel = lv_label_create(newProcess->process.processDetails->processDeleteButton);         
-                          lv_label_set_text(newProcess->process.processDetails->processDeleteLabel, trash_Icon); 
-                          lv_obj_set_style_text_font(newProcess->process.processDetails->processDeleteLabel, &FilMachineFontIcons_20, 0);              
-                          lv_obj_align(newProcess->process.processDetails->processDeleteLabel, LV_ALIGN_CENTER, 0, 0);
-                          lv_obj_add_flag(newProcess->process.processDetails->processDeleteLabel, LV_OBJ_FLAG_CLICKABLE);
+                          newProcess->process.processDetails->processSaveLabel = lv_label_create(newProcess->process.processDetails->processSaveButton);         
+                          lv_label_set_text(newProcess->process.processDetails->processSaveLabel, save_Icon); 
+                          lv_obj_set_style_text_font(newProcess->process.processDetails->processSaveLabel, &FilMachineFontIcons_30, 0);              
+                          lv_obj_align(newProcess->process.processDetails->processSaveLabel, LV_ALIGN_CENTER, 0, 0);
 
                   
                   newProcess->process.processDetails->processRunButton = lv_button_create(newProcess->process.processDetails->processDetailContainer);
@@ -459,7 +453,7 @@ void processDetail(lv_obj_t * processContainer)
                  
                           newProcess->process.processDetails->processRunLabel = lv_label_create(newProcess->process.processDetails->processRunButton);         
                           lv_label_set_text(newProcess->process.processDetails->processRunLabel, play_Icon); 
-                          lv_obj_set_style_text_font(newProcess->process.processDetails->processRunLabel, &FilMachineFontIcons_20, 0);              
+                          lv_obj_set_style_text_font(newProcess->process.processDetails->processRunLabel, &FilMachineFontIcons_30, 0);              
                           lv_obj_align(newProcess->process.processDetails->processRunLabel, LV_ALIGN_CENTER, 0, 0);
                           lv_obj_add_flag(newProcess->process.processDetails->processRunLabel, LV_OBJ_FLAG_CLICKABLE);
 }

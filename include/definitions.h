@@ -273,16 +273,15 @@ typedef struct sProcessDetail {
 	lv_obj_t			*processColorLabel;
 	lv_obj_t			*processBnWLabel;
 	lv_obj_t			*processPreferredLabel;
-	lv_obj_t			*processDeleteLabel;
-	lv_obj_t			*processRunLabel;
 	lv_obj_t			*processSaveLabel;
+	lv_obj_t			*processRunLabel;
 	lv_obj_t			*processNewStepLabel;
 	lv_obj_t			*processTotalTimeLabel;
 	lv_obj_t			*processTotalTimeValue;
 
 	lv_obj_t			*processDetailCloseButton;
 	lv_obj_t			*processRunButton;
-	lv_obj_t			*processDeleteButton;
+	lv_obj_t			*processSaveButton;
 	lv_obj_t			*processNewStepButton;
 
 	lv_obj_t			*processTempTextArea;
@@ -296,7 +295,6 @@ typedef struct sProcessDetail {
     uint8_t            tempTolerance;
     uint8_t            isTempControlled;
     uint8_t            isPreferred;
-    uint8_t            isSaved;
     uint8_t            somethingChanged;
     filmType           filmType;
     uint32_t           totalTime;

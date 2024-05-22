@@ -1,3 +1,4 @@
+#include "misc/lv_area.h"
 /**
  * @file element_messagePopup.c
  *
@@ -38,7 +39,7 @@ void event_messagePopup(lv_event_t *e)
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton1");
             if (gui.element.messagePopup.whoCallMe == tempProcessNode)
             {
-                LV_LOG_USER("Delete process from long Process press!");
+                LV_LOG_USER("Delete process from long press!");
 
                 if( !deleteProcessElement( gui.element.messagePopup.whoCallMe ) ) {
                   LV_LOG_USER("Delete process element instance at address 0x%p Failed!", gui.element.messagePopup.whoCallMe);
@@ -54,8 +55,12 @@ void event_messagePopup(lv_event_t *e)
 
             if (gui.element.messagePopup.whoCallMe == tempStepNode)
             {
-                LV_LOG_USER("Delete process from long Step press!");
-                //TBD
+                LV_LOG_USER("Delete step from long Step press!");
+                if( !deleteStepElement( gui.element.messagePopup.whoCallMe , tempProcessNode) ) {
+                  LV_LOG_USER("Delete step element instance at address 0x%p Failed!", gui.element.messagePopup.whoCallMe);
+                } else {
+                  LV_LOG_USER("Delete step element instance at address 0x%p", gui.element.messagePopup.whoCallMe);
+                }
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
                 lv_obj_delete(mboxCont);
@@ -140,7 +145,7 @@ void messagePopupCreate(const char * popupTitleText,const char * popupText,const
          gui.element.messagePopup.mBoxPopupText = lv_label_create(gui.element.messagePopup.mBoxPopupTextContainer);         
          lv_label_set_text(gui.element.messagePopup.mBoxPopupText, popupText); 
          lv_obj_set_style_text_font(gui.element.messagePopup.mBoxPopupText, &lv_font_montserrat_20, 0);              
-         lv_obj_align(gui.element.messagePopup.mBoxPopupText, LV_ALIGN_TOP_MID, 0, -18);
+         lv_obj_align(gui.element.messagePopup.mBoxPopupText, LV_ALIGN_CENTER, 0, -18);
          lv_obj_set_size(gui.element.messagePopup.mBoxPopupText, 295, LV_SIZE_CONTENT);
          lv_label_set_long_mode(gui.element.messagePopup.mBoxPopupText, LV_LABEL_LONG_WRAP);
          lv_obj_set_style_text_align(gui.element.messagePopup.mBoxPopupText , LV_TEXT_ALIGN_CENTER, 0);
