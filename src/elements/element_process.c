@@ -32,7 +32,7 @@ extern struct gui_components gui;
 	gui.page.processes.processElementsList.end->next = NULL;
 	gui.page.processes.processElementsList.size++;
 
-  LV_LOG_USER("processElementsList.size: %d", gui.page.processes.processElementsList.size);
+  LV_LOG_USER("Processes available %d steps",gui.page.processes.processElementsList.size); 
 	return processToAdd;
 }
 
@@ -74,6 +74,8 @@ bool deleteProcessElement( processNode	*processToDelete ) {
 		lv_obj_delete_async( processToDelete->process.processElement );			// Delete all LVGL objects associated with entry
 		free( processToDelete );												// Free the list entry itself
 		gui.page.processes.processElementsList.size--;
+
+    LV_LOG_USER("Processes available %d steps",gui.page.processes.processElementsList.size); 
 		return true;
 	}
 	return false;
@@ -158,7 +160,7 @@ void event_processElement(lv_event_t * e){
 }
 
 
-bool processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType type ) {
+bool processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType_t type ) {
 	if(newProcess->process.processStyle.values_and_props == NULL ) {		/* Only initialise the style once! */
 		lv_style_init(&newProcess->process.processStyle);
 

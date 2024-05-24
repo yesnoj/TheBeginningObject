@@ -7,10 +7,12 @@
 /*********************
  *      INCLUDES
  *********************/
-#include <string.h>
 #include "lvgl.h"
 #include "definitions.h"
 
+#include <FS.h>
+#include <SPI.h>
+#include <Wire.h>
 /**********************
  *      MACROS
  **********************/
@@ -21,6 +23,7 @@
 
 struct gui_components	gui;
 
+extern LGFX lcd;
 
 void event_cb(lv_event_t * e)
 {
@@ -311,29 +314,6 @@ lv_obj_t * create_switch(lv_obj_t * parent, const char * icon, const char * txt,
 }
 
 
-
-
-
-
-void sd_init()
-{
-  /*
-    SD_SPI.begin(SD_CS, SD_MISO, SD_MOSI, SD_CS);
-    if (!SD.begin(SD_CS, SD_SPI))
-    {
-        LV_LOG_USER("SD Card Failed");
-        while (1)
-            delay(1000);
-    }
-    else
-    {
-        LV_LOG_USER("Card Mount Successed");
-    }
-    LV_LOG_USER("SD init over.");
-    */
-}
-
-
 void createQuestionMark(lv_obj_t * parent,lv_obj_t * element,lv_event_cb_t e, const int32_t x, const int32_t y){
     questionMark = lv_label_create(parent);
     lv_obj_set_size(questionMark, lv_font_get_line_height(&FilMachineFontIcons_15) * 1.5, lv_font_get_line_height(&FilMachineFontIcons_15) * 1.5);       
@@ -410,7 +390,7 @@ void myLongEvent(lv_event_t * e, uint32_t howLongInMs)
     }
 }
 
-void* allocateAndInitializeNode(NodeType type) {
+void* allocateAndInitializeNode(NodeType_t type) {
     void *node = NULL;
     
     // Initialize and allocate according the node type
@@ -456,7 +436,7 @@ void* allocateAndInitializeNode(NodeType type) {
 }
 
 
-void* isNodeInList(void* list, void* node, NodeType type) {
+void* isNodeInList(void* list, void* node, NodeType_t type) {
     if (list == NULL || node == NULL) {
         return NULL;
     }
@@ -499,14 +479,6 @@ void init_globals( void ) {
   // Initialise the main GUI structure to zero
 	memset( &gui, 0, sizeof( gui ) );		
 
-
-  //gui.element.step.stepDetails = (sStepDetail *)malloc(sizeof(sStepDetail));
-
-  
-  //gui.page.processes.processElementsList.start->process.processDetails = (sProcessDetail *)malloc(sizeof(sProcessDetail));
-  
-  //gui.page.processes.processElementsList.start->process.processDetails
-
   // We only need to initialise the non-zero values
   gui.element.filterPopup.titleLinePoints[1].x = 200;
   gui.element.rollerPopup.titleLinePoints[1].x = 200;
@@ -520,9 +492,288 @@ void init_globals( void ) {
   gui.element.rollerPopup.minutesOptions = createRollerValues(240,"");
   gui.element.rollerPopup.secondsOptions = createRollerValues(60,""); 
   gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(5,"0.");
-  
-  
-
 }
 
 
+void my_touchpad_read(lv_indev_t* dev, lv_indev_data_t* data) {
+      uint16_t touchX, touchY;
+
+      data->state = LV_INDEV_STATE_REL;
+
+      if (lcd.getTouch(&touchX, &touchY))
+      {
+          data->state = LV_INDEV_STATE_PR;
+          data->point.x = touchX;
+          data->point.y = touchY;
+      }
+}
+
+
+#if LV_USE_LOG != 0
+void my_print( lv_log_level_t level, const char * buf )
+{
+    LV_UNUSED(level);
+    Serial.println(buf);
+    Serial.flush();
+}
+#endif
+
+void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data) {
+
+  uint16_t w = (area->x2 - area->x1 + 1);
+  uint16_t h = (area->y2 - area->y1 + 1);
+  uint32_t size =  w * h * 2;
+
+  lv_draw_sw_rgb565_swap(data, size);
+  lcd.pushImageDMA(area->x1, area->y1, w, h, (uint16_t*)data);
+  lv_display_flush_ready(display);
+}
+
+int SD_init()
+{
+
+    if (!SD.begin(SD_CS))
+    {
+        LV_LOG_USER("Card Mount Failed");
+        return 1;
+    }
+    uint8_t cardType = SD.cardType();
+
+    if (cardType == CARD_NONE)
+    {
+        LV_LOG_USER("No SD card attached");
+        return 1;
+    }
+
+    LV_LOG_USER("SD Card Type: ");
+    if (cardType == CARD_MMC)
+    {
+        LV_LOG_USER("MMC");
+    }
+    else if (cardType == CARD_SD)
+    {
+        LV_LOG_USER("SDSC");
+    }
+    else if (cardType == CARD_SDHC)
+    {
+        LV_LOG_USER("SDHC");
+    }
+    else
+    {
+        LV_LOG_USER("UNKNOWN");
+    }
+
+    uint64_t cardSize = SD.cardSize() / (1024 * 1024);
+    LV_LOG_USER("SD Card Size: %lluMB\n", cardSize);
+    //listDir(SD, "/", 2);
+
+    LV_LOG_USER("SD init over.");
+    return 0;
+}
+
+void initSD_I2C(){
+  uint8_t err_code = 0;
+
+  if (SD_init())
+    {
+        LV_LOG_USER("ERROR:   SD");
+        err_code += 1;
+    }
+    else
+        LV_LOG_USER("SD INIT OVER");
+
+    //I2C init
+    Wire.begin(I2C_SDA, I2C_SCL);
+    byte error, address;
+
+    Wire.beginTransmission(I2C_ADR);
+    error = Wire.endTransmission();
+
+    lcd.setCursor(0, 48);
+    if (error == 0)
+    {
+        LV_LOG_USER("I2C device found at address 0x%x! TOUCH INIT OVER",I2C_ADR);
+    }
+    else
+    {
+        LV_LOG_USER("Unknown error at address 0x%x ERROR:   TOUCH",I2C_ADR);
+        err_code += 1;
+    }
+
+    lcd.setCursor(0, 64);
+    if (err_code)
+    {
+
+        LV_LOG_USER("SOMETHING WRONG");
+        while (1)
+            ;
+    }
+    else
+        LV_LOG_USER("ALL SUCCESS");
+}
+
+
+// Funzione per scrivere su un file
+void writeFile(fs::FS &fs, const char *path, const char *message) {
+    LV_LOG_USER("Writing file: %s", path);
+    File file = fs.open(path, FILE_WRITE);
+    if (!file) {
+        LV_LOG_USER("Failed to open file for writing");
+        return;
+    }
+    if (file.print(message)) {
+        LV_LOG_USER("File written successfully");
+    } else {
+        LV_LOG_USER("Write failed");
+    }
+    file.close();
+}
+
+// Funzione per leggere un file
+void readFile(fs::FS &fs, const char *path) {
+    LV_LOG_USER("Reading file: %s", path);
+
+    char data[100]; // Supponiamo che tu legga al massimo 100 byte
+    File file = fs.open(path);
+    if (!file) {
+        LV_LOG_USER("Failed to open file for reading");
+        return;
+    }
+    LV_LOG_USER("File Content:");
+    while (file.available()) {
+        LV_LOG_USER("Data read from file: %.*s", file.readBytes(data, sizeof(data)), data);
+    }
+    file.close();
+}
+
+/*
+
+void listDir(fs::FS &fs, const char *dirname, uint8_t levels)
+{
+    LV_LOG_USER("Listing directory: %s", dirname);
+
+    File root = fs.open(dirname);
+    if (!root)
+    {
+        LV_LOG_USER("Failed to open directory");
+        return;
+    }
+    if (!root.isDirectory())
+    {
+        LV_LOG_USER("Not a directory");
+        return;
+    }
+
+    File file = root.openNextFile();
+    while (file)
+    {
+        if (file.isDirectory())
+        {
+            LV_LOG_USER("  DIR : %s",file.name());
+            if (levels)
+            {
+                listDir(fs, file.name(), levels - 1);
+            }
+        }
+        else
+        {
+            LV_LOG_USER("  FILE: %s",file.name());
+            LV_LOG_USER("  SIZE: %s",file.size());
+        }
+        file = root.openNextFile();
+    }
+}
+
+
+
+
+void readFile(fs::FS &fs, const char *path)
+{
+   LV_LOG_USER("Reading file: %s", path);
+
+    File file = fs.open(path);
+    if (!file)
+    {
+        LV_LOG_USER("Failed to open file for reading");
+        return;
+    }
+
+    LV_LOG_USER("Read from file: ");
+    while (file.available())
+    {
+        LV_LOG_USER("%s",file.read());
+    }
+    file.close();
+}
+
+void writeFile(fs::FS &fs, const char *path, const char *message)
+{
+    LV_LOG_USER("Writing file: %s", path);
+
+    File file = fs.open(path, FILE_WRITE);
+    if (!file)
+    {
+        LV_LOG_USER("Failed to open file for writing");
+        return;
+    }
+    if (file.print(message))
+    {
+        LV_LOG_USER("File written");
+    }
+    else
+    {
+        LV_LOG_USER("Write failed");
+    }
+    file.close();
+}
+
+void appendFile(fs::FS &fs, const char *path, const char *message)
+{
+    LV_LOG_USER("Appending to file: %s", path);
+
+    File file = fs.open(path, FILE_APPEND);
+    if (!file)
+    {
+        LV_LOG_USER("Failed to open file for appending");
+        return;
+    }
+    if (file.print(message))
+    {
+        LV_LOG_USER("Message appended");
+    }
+    else
+    {
+        LV_LOG_USER("Append failed");
+    }
+    file.close();
+}
+
+
+
+//Display image from file
+int print_img(fs::FS &fs, String filename, int x, int y)
+{
+    File f = fs.open(filename, "r");
+    if (!f)
+    {
+        LV_LOG_USER("Failed to open file for reading");
+        f.close();
+        return 0;
+    }
+
+    f.seek(54);
+    int X = x;
+    int Y = y;
+    uint8_t RGB[3 * X];
+    for (int row = 0; row < Y; row++)
+    {
+        f.seek(54 + 3 * X * row);
+        f.read(RGB, 3 * X);
+        lcd.pushImage(0, row, X, 1, (lgfx::rgb888_t *)RGB);
+    }
+
+    f.close();
+    return 0;
+}
+
+*/

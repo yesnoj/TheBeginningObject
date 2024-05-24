@@ -79,7 +79,7 @@ void event_processDetail(lv_event_t * e)
                 // for testing
                 static char 				name[80];	// Test Code
                 static uint16_t			test_index = 1; // Test Code
-                static filmType 	  type = BLACK_AND_WHITE_FILM; // Test Code
+                static filmType_t 	type = BLACK_AND_WHITE_FILM; // Test Code
                 static uint32_t			temp = 38;	// Test Code
                 lv_snprintf( name, sizeof(name), "A Test Process creation index %02d", test_index ); // Test code
                 if(isNodeInList(&gui.page.processes.processElementsList, newProcess, PROCESS_NODE) == NULL)
@@ -95,7 +95,7 @@ void event_processDetail(lv_event_t * e)
 
                       if(addProcessElement(newProcess) != NULL)
                         {
-                          LV_LOG_USER("Process element %d created",gui.page.processes.processElementsList.size);                  
+                            LV_LOG_USER("Process address 0x%p, with n:%d steps",newProcess, newProcess->process.processDetails->stepElementsList.size); 
                         }
                       else
                         {
@@ -118,9 +118,6 @@ void event_processDetail(lv_event_t * e)
     }
     if(data == newProcess->process.processDetails->processNewStepButton){
         LV_LOG_USER("Pressed newProcess->process.processDetails->processNewStepButton");
-        newProcess->process.processDetails->somethingChanged = 1;
-        lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
-
         stepDetail(newProcess);
     }
   }
@@ -190,11 +187,13 @@ void processDetail(lv_obj_t * processContainer)
 /*********************
   *    PAGE HEADER
 *********************/
-
+    
   newProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
   tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
   tempProcessNode = newProcess;
 
+
+  LV_LOG_USER("Process address 0x%p, with n:%d steps",newProcess, newProcess->process.processDetails->stepElementsList.size); 
   newProcess->process.processDetails->filmType = COLOR_FILM;
   newProcess->process.processDetails->somethingChanged = 0;
   newProcess->process.processDetails->stepElementsList.size = 0;

@@ -39,6 +39,7 @@ void event_checkup(lv_event_t * e){
   if(code == LV_EVENT_FOCUSED) {
       if(data == referenceProcess->process.processDetails->checkup->checkupTankSizeTextArea){
           LV_LOG_USER("Set Tank Size");
+          tempProcessNode = referenceProcess;
           rollerPopupCreate(checkupTankSizesList,checkupTankSize_text,referenceProcess);
       }
   }
@@ -137,6 +138,8 @@ void initCheckup(processNode *processToCheckup)
 
       referenceProcess = processToCheckup;
 
+      tempProcessNode = processToCheckup;
+
       LV_LOG_USER("Final checks, current on processToCheckup->process.processDetails->checkup->processStep :%d",processToCheckup->process.processDetails->checkup->processStep);
 
 
@@ -205,7 +208,8 @@ void checkup(processNode *processToCheckup)
 
 
         //LEFT SIDE OF SCREEN
-        if(processToCheckup->process.processDetails->checkup->isProcessing == 0 && isProcessingStatus0created == 0){
+        if(processToCheckup->process.processDetails->checkup->isProcessing == 0){
+            if(isProcessingStatus0created == 0){
                   processToCheckup->process.processDetails->checkup->checkupNextStepsLabel = lv_label_create(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer);         
                   lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupNextStepsLabel, checkupNexStepsTitle_text); 
                   lv_obj_set_width(processToCheckup->process.processDetails->checkup->checkupNextStepsLabel, LV_SIZE_CONTENT);
@@ -225,9 +229,9 @@ void checkup(processNode *processToCheckup)
                   //lv_obj_set_style_border_color(processToCheckup->process.processDetails->checkup->checkupWaterFillContainer, lv_color_hex(GREEN_DARK), 0);
                   lv_obj_set_style_border_opa(processToCheckup->process.processDetails->checkup->checkupWaterFillContainer, LV_OPA_TRANSP, 0);
 
-
+                  
                           processToCheckup->process.processDetails->checkup->checkupWaterFillStatusIcon = lv_label_create(processToCheckup->process.processDetails->checkup->checkupWaterFillContainer);         
-                          lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupWaterFillStatusIcon, checkupStepStatuses[0][processToCheckup->process.processDetails->checkup->stepFillWaterStatus]); 
+                          //lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupWaterFillStatusIcon, checkupStepStatuses[0][processToCheckup->process.processDetails->checkup->stepFillWaterStatus]); 
                           lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupWaterFillStatusIcon, &FilMachineFontIcons_15, 0);              
                           lv_obj_align(processToCheckup->process.processDetails->checkup->checkupWaterFillStatusIcon, LV_ALIGN_LEFT_MID, -15, 0);
 
@@ -247,7 +251,7 @@ void checkup(processNode *processToCheckup)
                   lv_obj_set_style_border_opa(processToCheckup->process.processDetails->checkup->checkupReachTempContainer, LV_OPA_TRANSP, 0);
 
                           processToCheckup->process.processDetails->checkup->checkupReachTempStatusIcon = lv_label_create(processToCheckup->process.processDetails->checkup->checkupReachTempContainer);         
-                          lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupReachTempStatusIcon, checkupStepStatuses[0][processToCheckup->process.processDetails->checkup->stepReachTempStatus]); 
+                          //lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupReachTempStatusIcon, checkupStepStatuses[0][processToCheckup->process.processDetails->checkup->stepReachTempStatus]); 
                           lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupReachTempStatusIcon, &FilMachineFontIcons_15, 0);              
                           lv_obj_align(processToCheckup->process.processDetails->checkup->checkupReachTempStatusIcon, LV_ALIGN_LEFT_MID, -15, 0);
 
@@ -269,7 +273,7 @@ void checkup(processNode *processToCheckup)
                   lv_obj_set_style_border_opa(processToCheckup->process.processDetails->checkup->checkupTankAndFilmContainer, LV_OPA_TRANSP, 0);
 
                           processToCheckup->process.processDetails->checkup->checkupTankAndFilmStatusIcon = lv_label_create(processToCheckup->process.processDetails->checkup->checkupTankAndFilmContainer);         
-                          lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupTankAndFilmStatusIcon, checkupStepStatuses[0][processToCheckup->process.processDetails->checkup->stepCheckFilmStatus]); 
+                          //lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupTankAndFilmStatusIcon, checkupStepStatuses[0][processToCheckup->process.processDetails->checkup->stepCheckFilmStatus]); 
                           lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupTankAndFilmStatusIcon, &FilMachineFontIcons_15, 0);              
                           lv_obj_align(processToCheckup->process.processDetails->checkup->checkupTankAndFilmStatusIcon, LV_ALIGN_LEFT_MID, -15, 0);
 
@@ -297,7 +301,13 @@ void checkup(processNode *processToCheckup)
                           lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupStopStepsButtonLabel, &lv_font_montserrat_22, 0);              
                           lv_obj_align(processToCheckup->process.processDetails->checkup->checkupStopStepsButtonLabel, LV_ALIGN_CENTER, 0, 0);
             
-            isProcessingStatus0created = 1;
+                  isProcessingStatus0created = 1;
+            }
+
+            lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupWaterFillStatusIcon, checkupStepStatuses[0][processToCheckup->process.processDetails->checkup->stepFillWaterStatus]); 
+            lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupTankAndFilmStatusIcon, checkupStepStatuses[0][processToCheckup->process.processDetails->checkup->stepCheckFilmStatus]); 
+            lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupReachTempStatusIcon, checkupStepStatuses[0][processToCheckup->process.processDetails->checkup->stepReachTempStatus]); 
+
         }
         if(processToCheckup->process.processDetails->checkup->isProcessing == 1 && isProcessingStatus1created == 0){
                   lv_obj_clean(processToCheckup->process.processDetails->checkup->checkupNextStepsContainer);
@@ -322,7 +332,7 @@ void checkup(processNode *processToCheckup)
                           lv_obj_align(processToCheckup->process.processDetails->checkup->checkupStepSourceLabel, LV_ALIGN_LEFT_MID, -15, 0);
 
                           processToCheckup->process.processDetails->checkup->checkupStepSourceValue = lv_label_create(processToCheckup->process.processDetails->checkup->checkupStepSourceContainer);         
-                          lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupStepSourceValue, &processSourceList[1][0]); 
+                          lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupStepSourceValue, processSourceList[1]); 
                           lv_obj_set_width(processToCheckup->process.processDetails->checkup->checkupStepSourceValue, LV_SIZE_CONTENT);
                           lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupStepSourceValue, &lv_font_montserrat_20, 0);              
                           lv_obj_align(processToCheckup->process.processDetails->checkup->checkupStepSourceValue, LV_ALIGN_RIGHT_MID, 10, 0);
@@ -342,7 +352,7 @@ void checkup(processNode *processToCheckup)
                           lv_obj_align(processToCheckup->process.processDetails->checkup->checkupTempControlLabel, LV_ALIGN_LEFT_MID, -15, 0);
 
                           processToCheckup->process.processDetails->checkup->checkupTempControlValue = lv_label_create(processToCheckup->process.processDetails->checkup->checkupTempControlContainer);         
-                          lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupTempControlValue, &processTempControlList[1][0]); 
+                          lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupTempControlValue, processTempControlList[1]); 
                           lv_obj_set_width(processToCheckup->process.processDetails->checkup->checkupTempControlValue, LV_SIZE_CONTENT);
                           lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupTempControlValue, &lv_font_montserrat_20, 0);              
                           lv_obj_align(processToCheckup->process.processDetails->checkup->checkupTempControlValue, LV_ALIGN_RIGHT_MID, 10, 0);
@@ -457,7 +467,7 @@ void checkup(processNode *processToCheckup)
                               lv_obj_add_state(processToCheckup->process.processDetails->checkup->checkupTankSizeTextArea, LV_STATE_FOCUSED); /*To be sure the cursor is visible*/
                               lv_obj_set_style_bg_color(processToCheckup->process.processDetails->checkup->checkupTankSizeTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                               lv_obj_set_style_text_align(processToCheckup->process.processDetails->checkup->checkupTankSizeTextArea , LV_TEXT_ALIGN_CENTER, 0);
-                              //lv_style_set_text_font(&textAreaStyle, &lv_font_montserrat_18);
+                              lv_style_set_text_font(&textAreaStyle, &lv_font_montserrat_18);
                               lv_obj_add_style(processToCheckup->process.processDetails->checkup->checkupTankSizeTextArea, &textAreaStyle, LV_PART_MAIN);
                               lv_obj_set_style_border_color(processToCheckup->process.processDetails->checkup->checkupTankSizeTextArea, lv_color_hex(WHITE), 0);
 

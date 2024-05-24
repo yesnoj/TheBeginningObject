@@ -34,12 +34,12 @@ void event_Roller(lv_event_t * e)
   lv_obj_t * objCont = (lv_obj_t *)lv_obj_get_parent(obj);
   lv_obj_t * mboxCont = (lv_obj_t *)lv_obj_get_parent(objCont);
   lv_obj_t * godFatherCont = (lv_obj_t *)lv_obj_get_parent(mboxCont);
-  lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
+  void * data = lv_event_get_user_data(e);
 
     if(code == LV_EVENT_CLICKED){
         if(obj == gui.element.rollerPopup.mBoxRollerButton)
         {   
-            if(data == gui.page.settings.tempSensorTuneButton){
+            if((lv_obj_t *)data == gui.page.settings.tempSensorTuneButton){
               LV_LOG_USER("SET BUTTON from tempSensorTuneButton value %d:",rollerSelected);
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
@@ -48,7 +48,7 @@ void event_Roller(lv_event_t * e)
               gui.page.settings.calibratedTemp = rollerSelected;  
               return;   
             }
-            if(data == tempProcessNode->process.processDetails->processTempTextArea){
+            if((lv_obj_t *)data == tempProcessNode->process.processDetails->processTempTextArea){
               LV_LOG_USER("SET BUTTON from processTempTextArea value %d:",rollerSelected);
               itoa(rollerSelected, tempBuffer, 10);
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
@@ -59,7 +59,7 @@ void event_Roller(lv_event_t * e)
               lv_obj_delete(godFatherCont);
               return; 
             }
-            if(data == tempProcessNode->process.processDetails->processToleranceTextArea){
+            if((lv_obj_t *)data == tempProcessNode->process.processDetails->processToleranceTextArea){
               LV_LOG_USER("SET BUTTON from processToleranceTextArea value %d:",rollerSelected);
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
@@ -69,27 +69,27 @@ void event_Roller(lv_event_t * e)
               lv_obj_delete(godFatherCont);
               return; 
             }
-            if(data == tempStepNode->step.stepDetails->stepDetailMinTextArea){
+            if(((stepNode *)data)->step.stepDetails->stepDetailMinTextArea == tempStepNode->step.stepDetails->stepDetailMinTextArea){ //NOT WORKING, CRASH!
               LV_LOG_USER("SET BUTTON from stepDetailMinTextArea value %d:",rollerSelected);
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(tempStepNode->step.stepDetails->stepDetailMinTextArea, tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
-              lv_msgbox_close(godFatherCont);
-              lv_obj_delete(godFatherCont);
+              lv_msgbox_close(gui.element.rollerPopup.mBoxRollerParent);
+              lv_obj_delete(gui.element.rollerPopup.mBoxRollerParent);
               return; 
             }
-            if(data == tempStepNode->step.stepDetails->stepDetailSecTextArea){
+            if(((stepNode *)data)->step.stepDetails->stepDetailSecTextArea == tempStepNode->step.stepDetails->stepDetailSecTextArea){ //NOT WORKING, CRASH!
               LV_LOG_USER("SET BUTTON from stepDetailSecTextArea value %d:",rollerSelected);
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(tempStepNode->step.stepDetails->stepDetailSecTextArea, tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
-              lv_msgbox_close(godFatherCont);
-              lv_obj_delete(godFatherCont);
+              lv_msgbox_close(gui.element.rollerPopup.mBoxRollerParent);
+              lv_obj_delete(gui.element.rollerPopup.mBoxRollerParent);
               return; 
             }
-            if(data == tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
+            if(((processNode *)data)->process.processDetails->checkup->checkupTankSizeTextArea == tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
               LV_LOG_USER("SET BUTTON from checkupTankSizeTextArea value %d:",rollerSelected);
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
@@ -121,7 +121,7 @@ void event_Roller(lv_event_t * e)
 }       
 
 
-void rollerPopupCreate(const char * tempOptions,const char * popupTitle, lv_obj_t *whoCallMe){
+void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *whoCallMe){
   /*********************
   *    PAGE HEADER
   *********************/

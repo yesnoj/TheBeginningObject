@@ -1,4 +1,3 @@
-#include "misc/lv_types.h"
 /**
  * @file definitions.h
  *
@@ -8,52 +7,214 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+/*********************
+*LovyanGFX Parameters 
+*********************/
+
+/*Set to your screen resolution*/
+#define TFT_WIDTH   320
+#define TFT_HEIGHT  480
+
+#define LV_TICK_PERIOD_MS 1
+#define LV_TITLE_ANIM_TIME 150
+#define LV_TITLE_ANIM_Y (TFT_WIDTH / 20)
+
+#define TFT_HOR_RES   TFT_HEIGHT
+#define TFT_VER_RES   TFT_WIDTH
+
+// SD CARD - SPI
+#define SDSPI_HOST_ID SPI3_HOST
+#define SD_MISO       GPIO_NUM_41 
+#define SD_MOSI       GPIO_NUM_2
+#define SD_SCLK       GPIO_NUM_42
+#define SD_CS         GPIO_NUM_1
+
+
+#define I2C_SDA 38
+#define I2C_SCL 39
+#define I2C_INT 40
+#define I2C_ADR 0x38
+
+#define LCD_BLK 45
+
+#define LCD_WR   35
+#define LCD_RD   48
+#define LCD_RS   36
+#define LCD_CS   37
+#define LCD_RST  -1
+#define LCD_BSY  -1
+
+#define LCD_D0   47
+#define LCD_D1   21
+#define LCD_D2   14
+#define LCD_D3   13
+#define LCD_D4   12
+#define LCD_D5   11
+#define LCD_D6   10
+#define LCD_D7   9
+#define LCD_D8   3
+#define LCD_D9   8
+#define LCD_D10  16
+#define LCD_D11  15
+#define LCD_D12  7
+#define LCD_D13  6
+#define LCD_D14  5
+#define LCD_D15  4
+
+
+
+//Definition of LGFX, it's here because can't be managed easly a .cpp library inside a .c file
 #ifdef __cplusplus
+
+#define LGFX_USE_V1
+#include <LovyanGFX.hpp>
+
+class LGFX : public lgfx::LGFX_Device
+{
+    static constexpr int I2C_PORT_NUM = I2C_NUM_0;
+    static constexpr int I2C_PIN_SDA  = I2C_SDA;
+    static constexpr int I2C_PIN_SCL  = I2C_SCL;
+    static constexpr int I2C_PIN_INT  = I2C_INT;
+
+    lgfx::Panel_ILI9488     _panel_instance;
+    lgfx::Bus_Parallel16    _bus_instance; 
+    lgfx::Light_PWM         _light_instance;
+    lgfx::Touch_FT5x06      _touch_instance;
+public:
+
+  LGFX(void)
+    {
+        {                                      
+            auto cfg = _bus_instance.config(); 
+            
+            cfg.port = 0;              
+            cfg.freq_write = 20000000; 
+            cfg.pin_wr = LCD_WR;           
+            cfg.pin_rd = LCD_RD;           
+            cfg.pin_rs = LCD_RS;           
+
+            cfg.pin_d0 = LCD_D0;
+            cfg.pin_d1 = LCD_D1;
+            cfg.pin_d2 = LCD_D2;
+            cfg.pin_d3 = LCD_D3;
+            cfg.pin_d4 = LCD_D4;
+            cfg.pin_d5 = LCD_D5;
+            cfg.pin_d6 = LCD_D6;
+            cfg.pin_d7 = LCD_D7;
+            cfg.pin_d8 = LCD_D8;
+            cfg.pin_d9 = LCD_D9;
+            cfg.pin_d10 = LCD_D10;
+            cfg.pin_d11 = LCD_D11;
+            cfg.pin_d12 = LCD_D12;
+            cfg.pin_d13 = LCD_D13;
+            cfg.pin_d14 = LCD_D14;
+            cfg.pin_d15 = LCD_D15;
+
+            _bus_instance.config(cfg);              
+            _panel_instance.setBus(&_bus_instance); 
+        }
+
+        {                                        
+            auto cfg = _panel_instance.config(); 
+
+            cfg.pin_cs = LCD_CS;   
+            cfg.pin_rst = LCD_RST;  
+            cfg.pin_busy = LCD_BSY; 
+
+            cfg.memory_width = TFT_WIDTH;   
+            cfg.memory_height = TFT_HEIGHT;  
+            cfg.panel_width = TFT_WIDTH;    
+            cfg.panel_height = TFT_HEIGHT;   
+            cfg.offset_x = 0;         
+            cfg.offset_y = 0;         
+            cfg.offset_rotation = 0;  
+            cfg.dummy_read_pixel = 8; 
+            cfg.dummy_read_bits = 1;  
+            cfg.readable = true;      
+            cfg.invert = false;       
+            cfg.rgb_order = false;    
+            cfg.dlen_16bit = true;    
+            cfg.bus_shared = true;//false;    
+
+            _panel_instance.config(cfg);
+}
+
+    {
+      auto cfg = _light_instance.config();    
+
+      cfg.pin_bl = LCD_BLK;              
+      cfg.invert = false;           
+      cfg.freq   = 44100;           
+      cfg.pwm_channel = 7;          
+
+      _light_instance.config(cfg);
+      _panel_instance.setLight(&_light_instance);  
+    }
+
+    { 
+      auto cfg = _touch_instance.config();
+
+      cfg.x_min      = 0;
+      cfg.x_max      = TFT_WIDTH - 1;
+      cfg.y_min      = 0;  
+      cfg.y_max      = TFT_HEIGHT - 1;
+      cfg.pin_int    = I2C_PIN_INT;  
+      cfg.bus_shared = true; 
+      cfg.offset_rotation = 0;
+
+      cfg.i2c_port = I2C_PORT_NUM;     
+      cfg.i2c_addr = I2C_ADR;  
+      cfg.pin_sda  = I2C_PIN_SDA;   
+      cfg.pin_scl  = I2C_PIN_SCL;   
+      cfg.freq = 400000;  
+
+      _touch_instance.config(cfg);
+      _panel_instance.setTouch(&_touch_instance);  
+    }
+        setPanel(&_panel_instance); 
+    }
+};
+
+
 extern "C" {
 #endif
 
-
 #include <lvgl.h>
 
-
-
-//#include <SPI.h>
 /*********************
 * ACCESSORY STRUCTS
 *********************/
-
-typedef enum {
+typedef enum{
     STEP_NODE,
     PROCESS_NODE
-} NodeType;
+} NodeType_t;
 
-
-typedef enum filmType {
+typedef enum {
     BLACK_AND_WHITE_FILM,
     COLOR_FILM,
     FILM_TYPE_NA
-} filmType;
+} filmType_t;
 
-typedef enum tempUnit {
+typedef enum {
     CELSIUS_TEMP,
     FAHRENHEIT_TEMP,
     TEMP_UNIT_NA
-} tempUnit;
+} tempUnit_t;
 
-typedef enum chemicalType {
+typedef enum {
     CHEMISTRY,
     RINSE,
     MULTI_RINSE,
     CHEMICAL_TYPE_NA
-} chemicalType;
+} chemicalType_t;
 
-typedef enum chemicalSource {
+typedef enum {
 	  C1,
     C2,
     C3,
     WB,
     CHEMICAL_SOURCE_NA
-} chemicalSource;
+} chemicalSource_t;
 
 
 /*********************
@@ -112,8 +273,8 @@ typedef struct sStepDetail {
     char              *stepNameString;
     uint32_t           timeMins;
     uint32_t           timeSecs;
-    chemicalType       type;
-    chemicalSource     source;
+    chemicalType_t       type;
+    chemicalSource_t     source;
     uint8_t            discardAfterProc;
 } sStepDetail;
 
@@ -296,7 +457,7 @@ typedef struct sProcessDetail {
     uint8_t            isTempControlled;
     uint8_t            isPreferred;
     uint8_t            somethingChanged;
-    filmType           filmType;
+    filmType_t           filmType;
     uint32_t           totalTime;
 }sProcessDetail;
 
@@ -523,7 +684,7 @@ struct sSettings {
 
 
   /* Params objects */
-  tempUnit 	        	tempUnit; //0= C° 1= °F
+  tempUnit_t 	        	tempUnit; //0= C° 1= °F
   uint8_t 	        	waterInlet;
   float 	        	  calibratedTemp;
   uint8_t 	        	filmRotationSpeedSetpoint;
@@ -663,58 +824,7 @@ struct gui_components {
 
 
 
-/*********************
-*LovyanGFX Parameters 
-*********************/
 
-/*Set to your screen resolution*/
-#define TFT_WIDTH   320
-#define TFT_HEIGHT  480
-
-#define LV_TICK_PERIOD_MS 1
-#define LV_TITLE_ANIM_TIME 150
-#define LV_TITLE_ANIM_Y (TFT_WIDTH / 20)
-
-#define TFT_HOR_RES   TFT_HEIGHT
-#define TFT_VER_RES   TFT_WIDTH
-
-// SD CARD - SPI
-#define SDSPI_HOST_ID SPI3_HOST
-#define SD_MISO       GPIO_NUM_41 
-#define SD_MOSI       GPIO_NUM_2
-#define SD_SCLK       GPIO_NUM_42
-#define SD_CS         GPIO_NUM_1
-
-#define I2C_SDA 38
-#define I2C_SCL 39
-#define I2C_INT 40
-#define I2C_ADR 0x38
-
-#define LCD_BLK 45
-
-#define LCD_WR   35
-#define LCD_RD   48
-#define LCD_RS   36
-#define LCD_CS   37
-#define LCD_RST  -1
-#define LCD_BSY  -1
-
-#define LCD_D0   47
-#define LCD_D1   21
-#define LCD_D2   14
-#define LCD_D3   13
-#define LCD_D4   12
-#define LCD_D5   11
-#define LCD_D6   10
-#define LCD_D7   9
-#define LCD_D8   3
-#define LCD_D9   8
-#define LCD_D10  16
-#define LCD_D11  15
-#define LCD_D12  7
-#define LCD_D13  6
-#define LCD_D14  5
-#define LCD_D15  4
 
 /********************* APPLICATION DEFINES *********************/
 
@@ -882,8 +992,7 @@ lv_obj_t * processToleranceTextArea;
 *********************/
 #define stepDetailTitle_text 						"New step"
 #define stepDetailName_text 						"Name:"
-#define stepDetailDuration_text 			   		"Duration:"
-#define stepDetailDurationTimeSep_text 				":"
+#define stepDetailDuration_text 			   		"Duration:             :"
 #define stepDetailDurationMinPlaceHolder_text  		"min"
 #define stepDetailDurationSecPlaceHolder_text  		"sec"
 #define stepDetailType_text 						"Type:"
@@ -894,8 +1003,7 @@ lv_obj_t * processToleranceTextArea;
 #define stepDetailSave_text 						"Save"
 #define stepDetailCancel_text 						"Cancel"
 #define stepDetailCurrentTemp_text 			   		"Current   :"
-lv_obj_t * stepDetailMinTextArea;
-lv_obj_t * stepDetailSecTextArea;
+
 
 static char* stepTypeList = "Chemistry\n"
 		                          "Rinse\n"
@@ -906,8 +1014,8 @@ static char* stepSourceList = "C1\n"
 		                            "C3\n"
 		                            "WB";
 
-static char* processSourceList[4][3]       = {"C1","C2","C3","WB"};
-static char* processTempControlList[3][6]  = {"Off","Run","Susp."};
+static char* processSourceList[4] = {"C1", "C2", "C3", "WB"};
+static char* processTempControlList[3] = {"Off", "Run", "Susp."};
                         
 uint8_t stepType;
 uint8_t stepSource;
@@ -1021,6 +1129,8 @@ lv_obj_t * keyboard_textArea;
 processNode	* tempProcessNode;
 stepNode	  * tempStepNode;
 
+
+
 /*********************
 * ELEMENTS Function Prototypes
 *********************/
@@ -1036,16 +1146,16 @@ void event_messagePopup(lv_event_t *e);
 
 // @file element_process.c
 void event_processElement(lv_event_t *e);
-bool processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType type );
+bool processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType_t type );
 processNode *getProcElementEntryByObject( lv_obj_t *obj );
 
 // @file element_rollerPopup.c
 void event_Roller(lv_event_t *e);
-void rollerPopupCreate(const char *tempOptions, const char *popupTitle, lv_obj_t *whoCallMe);
+void rollerPopupCreate(const char *tempOptions, const char *popupTitle, void *whoCallMe);
 
 // @file element_step.c
 void event_stepElement(lv_event_t *e);
-bool stepElementCreate(stepNode * newStep, processNode * processReference, char *name, uint32_t timeMins, uint32_t timeSecs, chemicalType type);
+bool stepElementCreate(stepNode *newStep, processNode *processReference, char *name, uint32_t timeMins, uint32_t timeSecs, chemicalType_t type);
 
 
 /*********************
@@ -1089,7 +1199,7 @@ void settings(void);
 
 // @file page_stepDetail.c
 void event_stepDetail(lv_event_t *e);
-void stepDetail(processNode * referenceNode);
+void stepDetail(processNode *referenceNode);
 
 // @file page_tools.c
 void event_toolsElement(lv_event_t *e);
@@ -1102,8 +1212,8 @@ lv_obj_t * create_text(lv_obj_t * parent, const char * icon, const char * txt);
 lv_obj_t * create_slider(lv_obj_t * parent, const char * icon, const char * txt, int32_t min, int32_t max,int32_t val);
 lv_obj_t * create_switch(lv_obj_t * parent, const char * icon, const char * txt, bool chk);
 
-void* isNodeInList(void* list, void* node, NodeType type);
-void* allocateAndInitializeNode(NodeType type);
+void* isNodeInList(void* list, void* node, NodeType_t type);
+void* allocateAndInitializeNode(NodeType_t type);
 
 void event_cb(lv_event_t * e);
 void event_checkbox_handler(lv_event_t * e);
@@ -1115,6 +1225,16 @@ void create_keyboard(lv_obj_t * keyB);
 void sd_init();
 
 char *createRollerValues( uint32_t maxVal, const char* extra_str );
+
+int SD_init();
+void initStuff();
+
+
+//@file initDisplay.c
+void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);
+void my_touchpad_read(lv_indev_t* dev, lv_indev_data_t* data);
+
+
 
 #ifdef __cplusplus
 } /*extern "C"*/

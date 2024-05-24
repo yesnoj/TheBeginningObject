@@ -35,8 +35,10 @@ stepNode *addStepElement(stepNode * stepToAdd, processNode * processReference) {
   
   LV_LOG_USER("stepElementsList.size: %d", processReference->process.processDetails->stepElementsList.size);
 
-
+  processReference->process.processDetails->somethingChanged = 1;
   lv_obj_send_event(processReference->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
+
+  LV_LOG_USER("Process address 0x%p, with n:%d steps",processReference, processReference->process.processDetails->stepElementsList.size); 
 	return stepToAdd;
 }
 
@@ -79,6 +81,9 @@ bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference )
 		free( stepToDelete );												// Free the list entry itself
 		processReference->process.processDetails->stepElementsList.size--;
     lv_obj_send_event(processReference->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
+
+    LV_LOG_USER("Process address 0x%p, with n:%d steps",processReference, processReference->process.processDetails->stepElementsList.size); 
+
 		return true;
 	}
 	return false;
@@ -142,7 +147,7 @@ void event_stepElement(lv_event_t * e){
   }
 }
 
-bool stepElementCreate(stepNode * newStep,processNode * processReference, char *name, uint32_t timeMins, uint32_t timeSecs, chemicalType type){
+bool stepElementCreate(stepNode * newStep,processNode * processReference, char *name, uint32_t timeMins, uint32_t timeSecs, chemicalType_t type){
   /*********************
   *    PAGE HEADER
   *********************/

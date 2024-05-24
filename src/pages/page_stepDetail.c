@@ -33,22 +33,23 @@ void event_stepDetail(lv_event_t * e)
       LV_LOG_USER("Pressed newStep->step.stepDetails->stepSaveButton");
 
                 // for testing
-          static char 				name[80];	// Test Code
-          static uint16_t			test_index = 1; // Test Code
-          static uint32_t			timeMins = 12;	// Test Code
-          static uint32_t			timeSecs = 32;	// Test Code
-          static chemicalType type = RINSE; // Test Code
+          static char 			  	name[80];	// Test Code
+          static uint16_t			  test_index = 1; // Test Code
+          static uint32_t			  timeMins = 12;	// Test Code
+          static uint32_t			  timeSecs = 32;	// Test Code
+          static chemicalType_t type = RINSE; // Test Code
           lv_snprintf( name, sizeof(name), "A Test Step creation index %02d", test_index ); // Test code
 
 
             timeMins ++;	// for test increase temp each time
             timeSecs ++;	// for test increase index for name generation
-
+            type != type;
           if( !stepElementCreate(newStep , data ,name, timeMins, timeSecs, type) ){	// Needs to be called with user populated values eventually
             LV_LOG_USER("Step element not created!");
           } else {
                 if(addStepElement(newStep, data) != NULL){
-                    LV_LOG_USER("Step element created");
+                    LV_LOG_USER("Step 0x%p element created!Now process 0x%p has n: %d steps",newStep,data, ((processNode *)data)->process.processDetails->stepElementsList.size);
+
                 }
                 else{
                     LV_LOG_USER("Step element creation failed, maximum entries reached" );
@@ -59,21 +60,18 @@ void event_stepDetail(lv_event_t * e)
       lv_obj_delete(mboxCont);
 
     }
-    else
     if(obj == newStep->step.stepDetails->stepCancelButton){
       LV_LOG_USER("Pressed newStep->step.stepDetails->stepCancelButton");
       lv_msgbox_close(mboxCont);
       lv_obj_delete(mboxCont);
     }
-    else
     if(obj == newStep->step.stepDetails->stepDetailMinTextArea){
       LV_LOG_USER("Set minutes");
-      rollerPopupCreate(gui.element.rollerPopup.minutesOptions, setMinutesPopupTitle_text,newStep->step.stepDetails->stepDetailMinTextArea);
+      rollerPopupCreate(gui.element.rollerPopup.minutesOptions, setMinutesPopupTitle_text,newStep);
     }
-    else
     if(obj == newStep->step.stepDetails->stepDetailSecTextArea){
       LV_LOG_USER("Set seconds");
-      rollerPopupCreate(gui.element.rollerPopup.secondsOptions, setSecondsPopupTitle_text,newStep->step.stepDetails->stepDetailSecTextArea);
+      rollerPopupCreate(gui.element.rollerPopup.secondsOptions, setSecondsPopupTitle_text,newStep);
     }
  }
 
@@ -132,7 +130,24 @@ void event_stepDetail(lv_event_t * e)
   }
 }
  
-
+void event_Pippo(lv_event_t * e)
+{   
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
+    void * data = lv_event_get_user_data(e);
+  
+   if(code == LV_EVENT_CLICKED) {
+    LV_LOG_USER("Pippo");
+    if(obj == newStep->step.stepDetails->stepDetailMinTextArea){
+      LV_LOG_USER("Set minutes");
+      rollerPopupCreate(gui.element.rollerPopup.minutesOptions, setMinutesPopupTitle_text,newStep);
+    }
+    if(obj == newStep->step.stepDetails->stepDetailSecTextArea){
+      LV_LOG_USER("Set seconds");
+      rollerPopupCreate(gui.element.rollerPopup.secondsOptions, setSecondsPopupTitle_text,newStep);
+    }
+   }
+}
 
 /*********************
 *    STEP DETAIL
@@ -217,6 +232,8 @@ void stepDetail(processNode * referenceNode)
                   lv_label_set_text(newStep->step.stepDetails->stepDurationLabel, stepDetailDuration_text); 
                   lv_obj_set_style_text_font(newStep->step.stepDetails->stepDurationLabel, &lv_font_montserrat_22, 0);              
                   lv_obj_align(newStep->step.stepDetails->stepDurationLabel, LV_ALIGN_LEFT_MID, -10, 0);
+                  //lv_obj_add_flag(newStep->step.stepDetails->stepDurationLabel, LV_OBJ_FLAG_CLICKABLE);
+                  //lv_obj_add_event_cb(newStep->step.stepDetails->stepDurationLabel, event_Pippo, LV_EVENT_CLICKED, newStep);
 
 
                   newStep->step.stepDetails->stepDetailMinTextArea = lv_textarea_create(newStep->step.stepDetails->stepDurationContainer);
@@ -224,35 +241,26 @@ void stepDetail(processNode * referenceNode)
                   lv_textarea_set_placeholder_text(newStep->step.stepDetails->stepDetailMinTextArea, stepDetailDurationMinPlaceHolder_text);
                   lv_obj_align(newStep->step.stepDetails->stepDetailMinTextArea, LV_ALIGN_LEFT_MID, 100, 0);
                   lv_obj_set_width(newStep->step.stepDetails->stepDetailMinTextArea, 60);
-                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailMinTextArea, event_stepDetail, LV_EVENT_CLICKED, NULL);
-                  //lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailMinTextArea, event_stepDetail, LV_EVENT_FOCUSED, newStep->step.stepDetails->stepDetailMinTextArea);
-                  //lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailMinTextArea, event_stepDetail, LV_EVENT_DEFOCUSED, newStep->step.stepDetails->stepDetailMinTextArea);
-
-                  lv_obj_add_state(newStep->step.stepDetails->stepDetailMinTextArea, LV_STATE_FOCUSED); 
+                  //lv_obj_add_flag(newStep->step.stepDetails->stepDetailMinTextArea, LV_OBJ_FLAG_CLICKABLE);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailMinTextArea, event_Pippo, LV_EVENT_CLICKED, newStep);
+                  //lv_obj_add_state(newStep->step.stepDetails->stepDetailMinTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailMinTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_text_align(newStep->step.stepDetails->stepDetailMinTextArea , LV_TEXT_ALIGN_CENTER, 0);
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailMinTextArea, lv_color_hex(WHITE), 0);
+                  //lv_obj_move_foreground(newStep->step.stepDetails->stepDetailMinTextArea);
 
-
-                  newStep->step.stepDetails->stepDurationMinLabel = lv_label_create(newStep->step.stepDetails->stepDurationContainer);         
-                  lv_label_set_text(newStep->step.stepDetails->stepDurationMinLabel, stepDetailDurationTimeSep_text); 
-                  lv_obj_set_style_text_font(newStep->step.stepDetails->stepDurationMinLabel, &lv_font_montserrat_22, 0);              
-                  lv_obj_align(newStep->step.stepDetails->stepDurationMinLabel, LV_ALIGN_LEFT_MID, 170, 0);
 
                   newStep->step.stepDetails->stepDetailSecTextArea = lv_textarea_create(newStep->step.stepDetails->stepDurationContainer);
                   lv_textarea_set_one_line(newStep->step.stepDetails->stepDetailSecTextArea, true);
                   lv_textarea_set_placeholder_text(newStep->step.stepDetails->stepDetailSecTextArea, stepDetailDurationSecPlaceHolder_text);
                   lv_obj_align(newStep->step.stepDetails->stepDetailSecTextArea, LV_ALIGN_LEFT_MID, 187, 0);
                   lv_obj_set_width(newStep->step.stepDetails->stepDetailSecTextArea, 60);
-                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailSecTextArea, event_stepDetail, LV_EVENT_CLICKED, NULL);
-                  //lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailSecTextArea, event_stepDetail, LV_EVENT_FOCUSED, newStep->step.stepDetails->stepDetailSecTextArea);
-                  //lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailSecTextArea, event_stepDetail, LV_EVENT_DEFOCUSED, newStep->step.stepDetails->stepDetailSecTextArea);
-
-                 //lv_obj_add_state(newStep->step.stepDetails->stepDetailSecTextArea, LV_STATE_FOCUSED); 
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailSecTextArea, event_Pippo, LV_EVENT_CLICKED, newStep);
+                  //lv_obj_add_state(newStep->step.stepDetails->stepDetailSecTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailSecTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_text_align(newStep->step.stepDetails->stepDetailSecTextArea , LV_TEXT_ALIGN_CENTER, 0);
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailSecTextArea, lv_color_hex(WHITE), 0);
-
+                  //lv_obj_move_foreground(newStep->step.stepDetails->stepDetailSecTextArea);
 
     
             newStep->step.stepDetails->stepTypeContainer = lv_obj_create(newStep->step.stepDetails->stepDetailContainer);
