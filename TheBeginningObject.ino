@@ -17,6 +17,8 @@ lv_indev_t *lvInput;
 
 LGFX lcd;
 
+uint8_t initErrors = 0;
+
 /*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/
 const unsigned int lvBufferSize = TFT_HOR_RES * TFT_VER_RES * 2 / 10;
 void *lvBuffer1 = malloc(lvBufferSize);
@@ -26,9 +28,12 @@ void *lvBuffer2 = malloc(lvBufferSize);
 void eventSave(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);
-  if(code == LV_EVENT_REFRESH)
+  if(code == LV_EVENT_REFRESH){
+    LV_LOG_USER("Save JSON!");
+  }
     writeJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
 }
+
 
 void setup()
 {
@@ -74,7 +79,6 @@ void setup()
     //readFile(SD, FILENAME_SAVE);
    
     readJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
-    printJSONFile();
 }
 
 void loop()

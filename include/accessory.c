@@ -574,44 +574,52 @@ int SD_init()
 
 
 void initSD_I2C(){
-  uint8_t err_code = 0;
+  
 
   if (SD_init())
     {
-        LV_LOG_USER("ERROR:   SD");
-        err_code += 1;
+        LV_LOG_USER("ERROR:   SD initErrors %d",initErrors);
+        initErrors += 1;
     }
     else
-        LV_LOG_USER("SD INIT OVER");
+        LV_LOG_USER("SD INIT OVER initErrors %d",initErrors);
 
     //I2C init
     Wire.begin(I2C_SDA, I2C_SCL);
-    byte error, address;
-
     Wire.beginTransmission(I2C_ADR);
-    error = Wire.endTransmission();
 
-    lcd.setCursor(0, 48);
-    if (error == 0)
+    if (Wire.endTransmission() == 0)
     {
         LV_LOG_USER("I2C device found at address 0x%x! TOUCH INIT OVER",I2C_ADR);
     }
     else
     {
         LV_LOG_USER("Unknown error at address 0x%x ERROR:   TOUCH",I2C_ADR);
-        err_code += 1;
+        initErrors += 1;
     }
 
     lcd.setCursor(0, 64);
-    if (err_code)
+    if (initErrors)
     {
 
-        LV_LOG_USER("SOMETHING WRONG");
-        while (1)
-            ;
+        LV_LOG_USER("SOMETHING WRONG initErrors %d",initErrors);
     }
     else
-        LV_LOG_USER("ALL SUCCESS");
+        LV_LOG_USER("ALL SUCCESS initErrors %d",initErrors);
+}
+
+
+void printJSONFile(){
+    LV_LOG_USER("JSON READ settingsParams");
+    LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
+    LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
+    LV_LOG_USER("calibratedTemp:%d",gui.page.settings.settingsParams.calibratedTemp);
+    LV_LOG_USER("filmRotationSpeedSetpoint:%d",gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
+    LV_LOG_USER("rotationIntervalSetpoint:%d",gui.page.settings.settingsParams.rotationIntervalSetpoint);
+    LV_LOG_USER("randomSetpoint:%d",gui.page.settings.settingsParams.randomSetpoint);
+    LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
+    LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
+    LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
 }
 
 machineSettings readJSONFile(fs::FS &fs, const char *filename, machineSettings &settings) {
@@ -623,21 +631,23 @@ machineSettings readJSONFile(fs::FS &fs, const char *filename, machineSettings &
     DeserializationError error = deserializeJson(doc, file);
     if (error)
       LV_LOG_USER("Failed to read file, using default configuration");
-
+    else{
     // Copy values from the JsonDocument to the Config
-    settings.tempUnit = doc["tempUnit"];                 
-    settings.waterInlet = doc["waterInlet"];                
-    settings.calibratedTemp = doc["calibratedTemp"] ;
-    settings.filmRotationSpeedSetpoint = doc["filmRotationSpeedSetpoint"];
-    settings.rotationIntervalSetpoint = doc["rotationIntervalSetpoint"];
-    settings.randomSetpoint = doc["randomSetpoint"];
-    settings.isPersistentAlarm = doc["isPersistentAlarm"];
-    settings.isProcessAutostart = doc["isProcessAutostart"];
-    settings.drainFillOverlapSetpoint = doc["drainFillOverlapSetpoint"];
+        settings.tempUnit = doc["tempUnit"];                 
+        settings.waterInlet = doc["waterInlet"];                
+        settings.calibratedTemp = doc["calibratedTemp"] ;
+        settings.filmRotationSpeedSetpoint = doc["filmRotationSpeedSetpoint"];
+        settings.rotationIntervalSetpoint = doc["rotationIntervalSetpoint"];
+        settings.randomSetpoint = doc["randomSetpoint"];
+        settings.isPersistentAlarm = doc["isPersistentAlarm"];
+        settings.isProcessAutostart = doc["isProcessAutostart"];
+        settings.drainFillOverlapSetpoint = doc["drainFillOverlapSetpoint"];
 
-    // Close the file (Curiously, File's destructor doesn't close the file)
+        // Close the file (Curiously, File's destructor doesn't close the file)
+        printJSONFile();
+    }
+   
     file.close();
-
     return settings;
 }
 
@@ -705,18 +715,7 @@ void readFile(fs::FS &fs, const char *path) {
     file.close();
 }
 
-void printJSONFile(){
-    LV_LOG_USER("JSON READ settingsParams");
-    LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
-    LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
-    LV_LOG_USER("calibratedTemp:%d",gui.page.settings.settingsParams.calibratedTemp);
-    LV_LOG_USER("filmRotationSpeedSetpoint:%d",gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
-    LV_LOG_USER("rotationIntervalSetpoint:%d",gui.page.settings.settingsParams.rotationIntervalSetpoint);
-    LV_LOG_USER("randomSetpoint:%d",gui.page.settings.settingsParams.randomSetpoint);
-    LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
-    LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
-    LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
-}
+
 
 /*
 

@@ -19,7 +19,6 @@ extern struct gui_components gui;
 #define TAB_TOOLS     3
 
 
-
 void event_tab_switch(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);

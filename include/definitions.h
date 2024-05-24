@@ -602,6 +602,8 @@ struct sHome {
 	lv_obj_t *screen_home;
   lv_obj_t *startButton;
   lv_obj_t *splashImage;
+  lv_obj_t *errorButtonLabel;
+  lv_obj_t *errorLabel;
 	/* Params objects */
 };
 
@@ -833,9 +835,6 @@ struct gui_components {
 #define LOGO_WIDTH                102
 
 
-
-
-
 /********************* APPLICATION DEFINES *********************/
 
 
@@ -904,6 +903,11 @@ struct gui_components {
 #define arrowStep_Icon   "\xEF\x81\xA1"
 #define dotStep_Icon     "\xEF\x86\x92"
 #define clock_Icon       "\xEF\x80\x97"
+#define bomb_Icon        "\xEF\x8B\x9B"
+#define alert_icon       "\xEF\x81\xAA"
+#define sdCard_icon      "\xEF\x9F\x82"
+
+#define initError_text "INITIALIZATION ERROR!\nSD-CARD MISSING!\nINSERT SD-CARD!\nTHEN CLICK ON ICON TO REBOOT!"
 
 /*********************
 * Process tab strings
@@ -1140,7 +1144,7 @@ processNode	* tempProcessNode;
 stepNode	  * tempStepNode;
 
 lv_obj_t    *fakeObject;
-
+extern uint8_t initErrors;
 /*********************
 * ELEMENTS Function Prototypes
 *********************/
@@ -1246,6 +1250,7 @@ void my_touchpad_read(lv_indev_t* dev, lv_indev_data_t* data);
 
 //@file THeBeginningObject.ino
 void eventSave(lv_event_t * e);
+
 
 #ifdef __cplusplus
 } /*extern "C"*/
