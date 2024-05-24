@@ -530,9 +530,9 @@ void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* 
   lv_display_flush_ready(display);
 }
 
+
 int SD_init()
 {
-
     if (!SD.begin(SD_CS))
     {
         LV_LOG_USER("Card Mount Failed");
@@ -571,6 +571,7 @@ int SD_init()
     LV_LOG_USER("SD init over.");
     return 0;
 }
+
 
 void initSD_I2C(){
   uint8_t err_code = 0;
@@ -613,8 +614,33 @@ void initSD_I2C(){
         LV_LOG_USER("ALL SUCCESS");
 }
 
+machineSettings readJSONFile(fs::FS &fs, const char *filename, machineSettings &settings) {
+    File file = fs.open(filename);
+    
+    StaticJsonDocument<192> doc;
 
-// Funzione per scrivere su un file
+    // Deserialize the JSON document
+    DeserializationError error = deserializeJson(doc, file);
+    if (error)
+      LV_LOG_USER("Failed to read file, using default configuration");
+
+    // Copy values from the JsonDocument to the Config
+    settings.tempUnit = doc["tempUnit"];                 
+    settings.waterInlet = doc["waterInlet"];                
+    settings.calibratedTemp = doc["calibratedTemp"] ;
+    settings.filmRotationSpeedSetpoint = doc["filmRotationSpeedSetpoint"];
+    settings.rotationIntervalSetpoint = doc["rotationIntervalSetpoint"];
+    settings.randomSetpoint = doc["randomSetpoint"];
+    settings.isPersistentAlarm = doc["isPersistentAlarm"];
+    settings.isProcessAutostart = doc["isProcessAutostart"];
+    settings.drainFillOverlapSetpoint = doc["drainFillOverlapSetpoint"];
+
+    // Close the file (Curiously, File's destructor doesn't close the file)
+    file.close();
+
+    return settings;
+}
+
 void writeJSONFile(fs::FS &fs, const char *path,const machineSettings &settings) {
     LV_LOG_USER("Writing file: %s", path);
     SD.remove(path);
@@ -627,15 +653,15 @@ void writeJSONFile(fs::FS &fs, const char *path,const machineSettings &settings)
 
     StaticJsonDocument<192> doc;
 
-    doc["tempUnit"] = settings.tempUnit;
-    doc["waterInlet"] = settings.waterInlet;
-    doc["calibratedTemp"] = settings.calibratedTemp;
-    doc["filmRotationSpeedSetpoint"] = settings.filmRotationSpeedSetpoint;
-    doc["rotationIntervalSetpoint"] = settings.rotationIntervalSetpoint;
-    doc["randomSetpoint"] = settings.randomSetpoint;
-    doc["isPersistentAlarm"] = settings.isPersistentAlarm;
-    doc["isProcessAutostart"] = settings.isProcessAutostart;
-    doc["drainFillOverlapSetpoint"] = settings.drainFillOverlapSetpoint;
+    doc["tempUnit"]                   = settings.tempUnit;
+    doc["waterInlet"]                 = settings.waterInlet;
+    doc["calibratedTemp"]             = settings.calibratedTemp;
+    doc["filmRotationSpeedSetpoint"]  = settings.filmRotationSpeedSetpoint;
+    doc["rotationIntervalSetpoint"]   = settings.rotationIntervalSetpoint;
+    doc["randomSetpoint"]             = settings.randomSetpoint;
+    doc["isPersistentAlarm"]          = settings.isPersistentAlarm;
+    doc["isProcessAutostart"]         = settings.isProcessAutostart;
+    doc["drainFillOverlapSetpoint"]   = settings.drainFillOverlapSetpoint;
 
     if (serializeJson(doc, file)) {
         file.close();
@@ -677,6 +703,19 @@ void readFile(fs::FS &fs, const char *path) {
         LV_LOG_USER("Data read from file: %.*s", file.readBytes(data, sizeof(data)), data);
     }
     file.close();
+}
+
+void printJSONFile(){
+    LV_LOG_USER("JSON READ settingsParams");
+    LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
+    LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
+    LV_LOG_USER("calibratedTemp:%d",gui.page.settings.settingsParams.calibratedTemp);
+    LV_LOG_USER("filmRotationSpeedSetpoint:%d",gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
+    LV_LOG_USER("rotationIntervalSetpoint:%d",gui.page.settings.settingsParams.rotationIntervalSetpoint);
+    LV_LOG_USER("randomSetpoint:%d",gui.page.settings.settingsParams.randomSetpoint);
+    LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
+    LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
+    LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
 }
 
 /*

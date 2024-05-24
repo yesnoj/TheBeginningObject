@@ -73,7 +73,8 @@ void setup()
     //writeJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
     //readFile(SD, FILENAME_SAVE);
    
-    
+    readJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
+    printJSONFile();
 }
 
 void loop()
