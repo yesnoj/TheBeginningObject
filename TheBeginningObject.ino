@@ -17,11 +17,18 @@ lv_indev_t *lvInput;
 
 LGFX lcd;
 
-
 /*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/
 const unsigned int lvBufferSize = TFT_HOR_RES * TFT_VER_RES * 2 / 10;
 void *lvBuffer1 = malloc(lvBufferSize);
 void *lvBuffer2 = malloc(lvBufferSize);
+
+
+void eventSave(lv_event_t * e)
+{
+  lv_event_code_t code = lv_event_get_code(e);
+  if(code == LV_EVENT_REFRESH)
+    writeJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
+}
 
 void setup()
 {
@@ -53,13 +60,20 @@ void setup()
 
 
     actualMillis = millis();
-
+    
+ 
     initSD_I2C();
     homePage();
     
-    writeFile(SD, "/example.txt", "Hello, this is a test file\n");
-    readFile(SD, "/example.txt");
+    fakeObject = lv_obj_create(NULL);
 
+    lv_obj_add_event_cb(fakeObject, eventSave, LV_EVENT_REFRESH, NULL);  
+
+    //writeFile(SD, FILENAME_SAVE, "Hello, this is a test file\n");
+    //writeJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
+    //readFile(SD, FILENAME_SAVE);
+   
+    
 }
 
 void loop()

@@ -8,6 +8,7 @@
 #include "../../resources/splash.c"
 #include "../../include/definitions.h"
 
+
 extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
@@ -22,6 +23,7 @@ void event_btn_start(lv_event_t * e)
    menu();
   }   
 } 
+
 
 
 void homePage(void)
@@ -45,5 +47,5 @@ void homePage(void)
     lv_obj_add_event_cb(gui.page.home.startButton, event_btn_start, LV_EVENT_CLICKED, gui.page.home.startButton);
     lv_obj_set_style_bg_opa(gui.page.home.startButton, LV_OPA_TRANSP, 0);
     lv_obj_set_style_border_opa(gui.page.home.startButton, LV_OPA_TRANSP, 0);
-    lv_obj_remove_flag(gui.page.home.startButton, LV_OBJ_FLAG_SCROLLABLE);     
+    lv_obj_remove_flag(gui.page.home.startButton, LV_OBJ_FLAG_SCROLLABLE);   
 }

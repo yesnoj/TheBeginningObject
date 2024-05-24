@@ -76,14 +76,16 @@ void event_settings_handler(lv_event_t * e)
             lv_obj_add_state(act_cb, LV_STATE_CHECKED); 
             *active_id = lv_obj_get_index(act_cb);
             LV_LOG_USER("Selected °C or °F: %d", (int)gui.page.settings.active_index);
-            gui.page.settings.tempUnit = (int)gui.page.settings.active_index;
+            gui.page.settings.settingsParams.tempUnit = (int)gui.page.settings.active_index;
+            lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
        }
     }
  
     if(act_cb == gui.page.settings.waterInletSwitch){
       if(code == LV_EVENT_VALUE_CHANGED) {
           LV_LOG_USER("State Inlet: %s", lv_obj_has_state(act_cb, LV_STATE_CHECKED) ? "On" : "Off");
-          gui.page.settings.waterInlet = lv_obj_has_state(act_cb, LV_STATE_CHECKED);
+          gui.page.settings.settingsParams.waterInlet = lv_obj_has_state(act_cb, LV_STATE_CHECKED);
+          lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
         }
     }
 
@@ -102,7 +104,8 @@ void event_settings_handler(lv_event_t * e)
       if(code == LV_EVENT_VALUE_CHANGED) {
           lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%d%%", lv_slider_get_value(act_cb));
           LV_LOG_USER("Film Speed Rotation : %d",lv_slider_get_value(act_cb));
-          gui.page.settings.filmRotationSpeedSetpoint = lv_slider_get_value(act_cb);
+          gui.page.settings.settingsParams.filmRotationSpeedSetpoint = lv_slider_get_value(act_cb);
+          lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
         }
     }
 
@@ -110,7 +113,8 @@ void event_settings_handler(lv_event_t * e)
       if(code == LV_EVENT_VALUE_CHANGED) {
           lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%dsec%", lv_slider_get_value(act_cb));
           LV_LOG_USER("Film Rotation Inversion Interval : %d",lv_slider_get_value(act_cb));
-          gui.page.settings.rotationIntervalSetpoint = lv_slider_get_value(act_cb);
+          gui.page.settings.settingsParams.rotationIntervalSetpoint = lv_slider_get_value(act_cb);
+          lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
         }
     }
 
@@ -118,21 +122,24 @@ void event_settings_handler(lv_event_t * e)
       if(code == LV_EVENT_VALUE_CHANGED) {
         lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%~%d%%", lv_slider_get_value(act_cb));
         LV_LOG_USER("Film Randomness : %d",lv_slider_get_value(act_cb));
-        gui.page.settings.randomSetpoint = lv_slider_get_value(act_cb);
+        gui.page.settings.settingsParams.randomSetpoint = lv_slider_get_value(act_cb);
+        lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
         }
     }
 
     if(act_cb == gui.page.settings.persistentAlarmSwitch){
       if(code == LV_EVENT_VALUE_CHANGED) {
           LV_LOG_USER("Persistent Alarm: %s", lv_obj_has_state(act_cb, LV_STATE_CHECKED) ? "On" : "Off");
-          gui.page.settings.isPersistentAlarm = lv_obj_has_state(act_cb, LV_STATE_CHECKED);
+          gui.page.settings.settingsParams.isPersistentAlarm = lv_obj_has_state(act_cb, LV_STATE_CHECKED);
+          lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
         }
     }
 
     if(act_cb == gui.page.settings.autostartSwitch){
       if(code == LV_EVENT_VALUE_CHANGED) {
           LV_LOG_USER("Autostart : %s", lv_obj_has_state(act_cb, LV_STATE_CHECKED) ? "On" : "Off");
-          gui.page.settings.isProcessAutostart = lv_obj_has_state(act_cb, LV_STATE_CHECKED);
+          gui.page.settings.settingsParams.isProcessAutostart = lv_obj_has_state(act_cb, LV_STATE_CHECKED);
+          lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
         }
     }
     
@@ -140,7 +147,8 @@ void event_settings_handler(lv_event_t * e)
       if(code == LV_EVENT_VALUE_CHANGED) {
           lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%d%%", lv_slider_get_value(act_cb));
           LV_LOG_USER("Drain/fill time overlap percent : %d",lv_slider_get_value(act_cb));
-          gui.page.settings.drainFillOverlapSetpoint = lv_slider_get_value(act_cb);
+          gui.page.settings.settingsParams.drainFillOverlapSetpoint = lv_slider_get_value(act_cb);
+          lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
           }
     }
 }

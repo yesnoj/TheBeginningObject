@@ -9,6 +9,7 @@
  *********************/
 #include "lvgl.h"
 #include "definitions.h"
+#include <ArduinoJson.h>
 
 #include <FS.h>
 #include <SPI.h>
@@ -612,6 +613,38 @@ void initSD_I2C(){
         LV_LOG_USER("ALL SUCCESS");
 }
 
+
+// Funzione per scrivere su un file
+void writeJSONFile(fs::FS &fs, const char *path,const machineSettings &settings) {
+    LV_LOG_USER("Writing file: %s", path);
+    SD.remove(path);
+
+    File file = fs.open(path, FILE_WRITE);
+    if (!file) {
+        LV_LOG_USER("Failed to open file for writing");
+        return;
+    }
+
+    StaticJsonDocument<192> doc;
+
+    doc["tempUnit"] = settings.tempUnit;
+    doc["waterInlet"] = settings.waterInlet;
+    doc["calibratedTemp"] = settings.calibratedTemp;
+    doc["filmRotationSpeedSetpoint"] = settings.filmRotationSpeedSetpoint;
+    doc["rotationIntervalSetpoint"] = settings.rotationIntervalSetpoint;
+    doc["randomSetpoint"] = settings.randomSetpoint;
+    doc["isPersistentAlarm"] = settings.isPersistentAlarm;
+    doc["isProcessAutostart"] = settings.isProcessAutostart;
+    doc["drainFillOverlapSetpoint"] = settings.drainFillOverlapSetpoint;
+
+    if (serializeJson(doc, file)) {
+        file.close();
+        LV_LOG_USER("File written successfully");
+    } else {
+        LV_LOG_USER("Write failed");
+    }
+    file.close();
+}
 
 // Funzione per scrivere su un file
 void writeFile(fs::FS &fs, const char *path, const char *message) {

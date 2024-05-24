@@ -216,6 +216,23 @@ typedef enum {
     CHEMICAL_SOURCE_NA
 } chemicalSource_t;
 
+typedef enum {
+	  YES,
+    NO,
+} yesOrNo_t;
+
+struct machineSettings {
+  tempUnit_t 	        tempUnit; //0= C° 1= °F
+  yesOrNo_t 	        waterInlet;
+  float 	        	  calibratedTemp;
+  uint8_t 	        	filmRotationSpeedSetpoint;
+	uint8_t 	        	rotationIntervalSetpoint;
+  uint8_t 	        	randomSetpoint;
+  yesOrNo_t 	        isPersistentAlarm;
+  yesOrNo_t 	        isProcessAutostart;
+  uint8_t 	        	drainFillOverlapSetpoint;
+};
+
 
 /*********************
 * ELEMENTS STRUCTS
@@ -684,15 +701,7 @@ struct sSettings {
 
 
   /* Params objects */
-  tempUnit_t 	        	tempUnit; //0= C° 1= °F
-  uint8_t 	        	waterInlet;
-  float 	        	  calibratedTemp;
-  uint8_t 	        	filmRotationSpeedSetpoint;
-	uint8_t 	        	rotationIntervalSetpoint;
-  uint8_t 	        	randomSetpoint;
-  uint8_t 	        	isPersistentAlarm;
-  uint8_t 	        	isProcessAutostart;
-  uint8_t 	        	drainFillOverlapSetpoint;
+  struct machineSettings settingsParams;
 };
 
 
@@ -796,6 +805,7 @@ struct gui_components {
 * GLOBAL DEFINES
 *********************/
 
+#define FILENAME_SAVE         "/FilMachine.txt"
 
 #define MAX_PROC_NAME_LEN		  20
 #define MAX_PROC_ELEMENTS		  30
@@ -1129,7 +1139,7 @@ lv_obj_t * keyboard_textArea;
 processNode	* tempProcessNode;
 stepNode	  * tempStepNode;
 
-
+lv_obj_t    *fakeObject;
 
 /*********************
 * ELEMENTS Function Prototypes
@@ -1234,7 +1244,8 @@ void initStuff();
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);
 void my_touchpad_read(lv_indev_t* dev, lv_indev_data_t* data);
 
-
+//@file THeBeginningObject.ino
+void eventSave(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/
