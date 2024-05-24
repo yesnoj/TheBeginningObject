@@ -807,7 +807,7 @@ struct gui_components {
 * GLOBAL DEFINES
 *********************/
 
-#define FILENAME_SAVE         "/FilMachine.txt"
+#define FILENAME_SAVE         "/FilMachine.json"
 
 #define MAX_PROC_NAME_LEN		  20
 #define MAX_PROC_ELEMENTS		  30
@@ -1236,13 +1236,9 @@ void kb_event_cb(lv_event_t* e);
 void createQuestionMark(lv_obj_t * parent,lv_obj_t * element,lv_event_cb_t e, const int32_t x, const int32_t y);
 void createMessageBox(char *title, char *text, char *button1Text, char *button2Text);
 void create_keyboard(lv_obj_t * keyB);
-void sd_init();
-
 char *createRollerValues( uint32_t maxVal, const char* extra_str );
-
 int SD_init();
-void initStuff();
-
+void initSD_I2C();
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);
@@ -1251,7 +1247,7 @@ void my_touchpad_read(lv_indev_t* dev, lv_indev_data_t* data);
 //@file THeBeginningObject.ino
 void eventSave(lv_event_t * e);
 
-
+extern void (*rebootBoard)(void);
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif

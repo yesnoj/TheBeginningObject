@@ -15,8 +15,6 @@ extern struct gui_components gui;
 
 LV_IMG_DECLARE(splash_img);
 
-void(* rebootBoard) (void) = 0; 
-
 void event_btn_start(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);

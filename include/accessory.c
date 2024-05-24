@@ -25,6 +25,7 @@
 struct gui_components	gui;
 
 extern LGFX lcd;
+void (*rebootBoard)(void) = 0;
 
 void event_cb(lv_event_t * e)
 {
@@ -658,7 +659,8 @@ void writeJSONFile(fs::FS &fs, const char *path,const machineSettings &settings)
     File file = fs.open(path, FILE_WRITE);
     if (!file) {
         LV_LOG_USER("Failed to open file for writing");
-        return;
+        rebootBoard();
+        //return;
     }
 
     StaticJsonDocument<192> doc;
