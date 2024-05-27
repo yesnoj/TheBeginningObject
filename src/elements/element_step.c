@@ -100,6 +100,7 @@ stepNode *getStepElementEntryByObject(lv_obj_t *obj, processNode * processRefere
     if( obj == currentNode->step.stepTime ) break;
     if( obj == currentNode->step.stepTimeIcon ) break;
     if( obj == currentNode->step.stepTypeIcon ) break;
+    if( obj == currentNode ) break;
 		currentNode = currentNode->next;
 	}
   
@@ -127,13 +128,13 @@ void event_stepElement(lv_event_t * e){
 
   //if(obj == currentNode->step.stepElementSummary){
       if(code == LV_EVENT_SHORT_CLICKED) {    
-        LV_LOG_USER("Process Element Details");
-        stepDetail(data);
+        LV_LOG_USER("Step Element Details address 0x%p",currentNode);
+        stepDetail(data, currentNode);
         return;
       }
       if(code == LV_EVENT_LONG_PRESSED_REPEAT) {    
         if(gui.element.messagePopup.mBoxPopupParent == NULL){
-        LV_LOG_USER("Long press element");
+        LV_LOG_USER("Long press element address 0x%p",currentNode);
         tempStepNode = currentNode;
         messagePopupCreate(deletePopupTitle_text,deletePopupBody_text, deleteButton_text, stepDetailCancel_text, tempStepNode);
         return;

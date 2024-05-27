@@ -287,7 +287,7 @@ typedef struct sStepDetail {
 	/* Params objects */
 
 	processNode       *referenceProcess;  // Use a pointer instead of an instance
-    char              *stepNameString;
+    const char              *stepNameString;
     uint32_t           timeMins;
     uint32_t           timeSecs;
     chemicalType_t       type;
@@ -468,7 +468,7 @@ typedef struct sProcessDetail {
 	/* Params objects */
     stepList           stepElementsList;  /* Process steps list */
 	sCheckup		   *checkup;
-    char               *processNameString;
+    const char               *processNameString;
     uint32_t           temp;
     uint8_t            tempTolerance;
     uint8_t            isTempControlled;
@@ -1213,7 +1213,7 @@ void settings(void);
 
 // @file page_stepDetail.c
 void event_stepDetail(lv_event_t *e);
-void stepDetail(processNode *referenceNode);
+void stepDetail(processNode *referenceNode, stepNode *currentNode);
 
 // @file page_tools.c
 void event_toolsElement(lv_event_t *e);

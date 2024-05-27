@@ -49,7 +49,7 @@ void event_stepDetail(lv_event_t * e)
           } else {
                 if(addStepElement(newStep, data) != NULL){
                     LV_LOG_USER("Step 0x%p element created!Now process 0x%p has n: %d steps",newStep,data, ((processNode *)data)->process.processDetails->stepElementsList.size);
-
+                    //lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
                 }
                 else{
                     LV_LOG_USER("Step element creation failed, maximum entries reached" );
@@ -106,18 +106,25 @@ void event_stepDetail(lv_event_t * e)
           LV_LOG_USER("Selected newStep->step.stepDetails->stepTypeDropDownList multiRinse_Icon value:%d",stepType);
           lv_label_set_text(newStep->step.stepDetails->stepTypeHelpIcon, multiRinse_Icon);
       }
+      newStep->step.stepDetails->type = stepType;
     }
 
     if(obj == newStep->step.stepDetails->stepDiscardAfterSwitch){
       discardAfter = lv_obj_has_state(obj, LV_STATE_CHECKED);
+      newStep->step.stepDetails->discardAfterProc = discardAfter;
       LV_LOG_USER("Discard After : %s", discardAfter ? "On" : "Off");
     }
 
     if(obj == newStep->step.stepDetails->stepSourceDropDownList){
          stepSource = lv_dropdown_get_selected(newStep->step.stepDetails->stepSourceDropDownList);
+         newStep->step.stepDetails->source = stepSource;
+
          LV_LOG_USER("Selected newStep->step.stepDetails->stepSourceDropDownList %d",stepSource);
     }
   }
+
+
+
 
   if(code == LV_EVENT_DELETE) {
        LV_LOG_USER("Delete Styles");
@@ -129,7 +136,9 @@ void event_stepDetail(lv_event_t * e)
            }
   }
 }
- 
+
+
+//EVENT FOR TEST
 void event_Pippo(lv_event_t * e)
 {   
     lv_event_code_t code = lv_event_get_code(e);
@@ -153,11 +162,17 @@ void event_Pippo(lv_event_t * e)
 *    STEP DETAIL
 *********************/
 
-void stepDetail(processNode * referenceNode)
+void stepDetail(processNode * referenceNode, stepNode * currentNode)
 {   
 /*********************
   *    PAGE ELEMENTS
 *********************/
+
+      if(currentNode != NULL && getStepElementEntryByObject(currentNode) != NULL)
+        LV_LOG_USER("Step already exist with address 0x%p", currentNode);
+      else
+        LV_LOG_USER("Step still not present!Let's create it!");
+
 
       newStep = (stepNode*) allocateAndInitializeNode(STEP_NODE);
       tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);
@@ -218,8 +233,7 @@ void stepDetail(processNode * referenceNode)
                   lv_obj_add_state(newStep->step.stepDetails->stepDetailNamelTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_color_hex(WHITE), 0);
-
-
+                  newStep->step.stepDetails->stepNameString = "TI BI DI";
 
             newStep->step.stepDetails->stepDurationContainer = lv_obj_create(newStep->step.stepDetails->stepDetailContainer);
             lv_obj_remove_flag(newStep->step.stepDetails->stepDurationContainer, LV_OBJ_FLAG_SCROLLABLE); 

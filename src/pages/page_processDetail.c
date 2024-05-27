@@ -62,7 +62,6 @@ void event_processDetail(lv_event_t * e)
           lv_obj_set_style_text_color(newProcess->process.processDetails->processPreferredLabel, lv_color_hex(RED), LV_PART_MAIN);
           newProcess->process.processDetails->isPreferred = 1;
           newProcess->process.processDetails->somethingChanged = 1;
-
           lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
         }
         else{
@@ -96,6 +95,7 @@ void event_processDetail(lv_event_t * e)
                       if(addProcessElement(newProcess) != NULL)
                         {
                             LV_LOG_USER("Process address 0x%p, with n:%d steps",newProcess, newProcess->process.processDetails->stepElementsList.size); 
+                            lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
                         }
                       else
                         {
@@ -118,7 +118,7 @@ void event_processDetail(lv_event_t * e)
     }
     if(data == newProcess->process.processDetails->processNewStepButton){
         LV_LOG_USER("Pressed newProcess->process.processDetails->processNewStepButton");
-        stepDetail(newProcess);
+        stepDetail(newProcess, NULL);
     }
   }
 
@@ -148,7 +148,7 @@ void event_processDetail(lv_event_t * e)
       if(data == newProcess->process.processDetails->processTempControlSwitch){
           LV_LOG_USER("Temperature controlled : %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
           newProcess->process.processDetails->somethingChanged = 1;
-
+          newProcess->process.processDetails->isTempControlled = lv_obj_has_state(obj, LV_STATE_CHECKED);
           lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
       }
   }
@@ -187,10 +187,10 @@ void processDetail(lv_obj_t * processContainer)
 /*********************
   *    PAGE HEADER
 *********************/
-    
-  newProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-  tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-  tempProcessNode = newProcess;
+        newProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+        tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+        tempProcessNode = newProcess;
+
 
 
   LV_LOG_USER("Process address 0x%p, with n:%d steps",newProcess, newProcess->process.processDetails->stepElementsList.size); 
@@ -244,6 +244,7 @@ void processDetail(lv_obj_t * processContainer)
                   lv_obj_set_style_text_font(newProcess->process.processDetails->processDetailName, &lv_font_montserrat_30, 0);              
                   lv_obj_align(newProcess->process.processDetails->processDetailName, LV_ALIGN_TOP_LEFT, -10, -8);
                   lv_label_set_long_mode(newProcess->process.processDetails->processDetailName, LV_LABEL_LONG_SCROLL_CIRCULAR);
+                  newProcess->process.processDetails->processNameString = "E6 six baths";
 
             newProcess->process.processDetails->processDetailStepsLabel = lv_label_create(newProcess->process.processDetails->processDetailContainer);         
             lv_label_set_text(newProcess->process.processDetails->processDetailStepsLabel, processDetailStep_text); 
@@ -308,7 +309,6 @@ void processDetail(lv_obj_t * processContainer)
 
 
                  
-
                   newProcess->process.processDetails->processTempContainer = lv_obj_create(newProcess->process.processDetails->processInfoContainer);
                   lv_obj_remove_flag(newProcess->process.processDetails->processTempContainer, LV_OBJ_FLAG_SCROLLABLE); 
                   lv_obj_align(newProcess->process.processDetails->processTempContainer, LV_ALIGN_TOP_LEFT, -15, 20);
@@ -390,7 +390,7 @@ void processDetail(lv_obj_t * processContainer)
                           lv_label_set_text(newProcess->process.processDetails->processTotalTimeValue, "32m20s"); 
                           lv_obj_set_style_text_font(newProcess->process.processDetails->processTotalTimeValue, &lv_font_montserrat_20, 0);              
                           lv_obj_align(newProcess->process.processDetails->processTotalTimeValue, LV_ALIGN_LEFT_MID, 100, 0);
-
+                          newProcess->process.processDetails->totalTime = 666;    
 
 
                   newProcess->process.processDetails->processColorOrBnWContainer = lv_obj_create(newProcess->process.processDetails->processInfoContainer);
@@ -456,5 +456,16 @@ void processDetail(lv_obj_t * processContainer)
                           lv_obj_set_style_text_font(newProcess->process.processDetails->processRunLabel, &FilMachineFontIcons_30, 0);              
                           lv_obj_align(newProcess->process.processDetails->processRunLabel, LV_ALIGN_CENTER, 0, 0);
                           lv_obj_add_flag(newProcess->process.processDetails->processRunLabel, LV_OBJ_FLAG_CLICKABLE);
-}
 
+
+            if(getProcElementEntryByObject(processContainer) != NULL){
+              LV_LOG_USER("Process already exist with address 0x%p with n:%d steps", getProcElementEntryByObject(processContainer),getProcElementEntryByObject(processContainer)->process.processDetails->stepElementsList.size);
+              stepNode	*currentNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+              currentNode = getProcElementEntryByObject(processContainer)->process.processDetails->stepElementsList.start;
+
+              while(currentNode){
+                  stepElementCreate(currentNode, newProcess ,currentNode->step.stepDetails->stepNameString, currentNode->step.stepDetails->timeMins, currentNode->step.stepDetails->timeSecs, currentNode->step.stepDetails->type);
+                  currentNode = currentNode->next;
+              } 
+        }
+}

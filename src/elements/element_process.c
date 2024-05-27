@@ -93,6 +93,7 @@ processNode *getProcElementEntryByObject( lv_obj_t *obj ) {
 		if( obj == currentNode->process.processTemp ) break;
 		if( obj == currentNode->process.processTempIcon ) break;
 		if( obj == currentNode->process.processTypeIcon ) break;
+    if( obj == currentNode) break;
 		currentNode = currentNode->next;
 	}
 	return currentNode;
@@ -143,7 +144,7 @@ void event_processElement(lv_event_t * e){
 
   if(obj == currentNode->process.processElementSummary){
       if(code == LV_EVENT_SHORT_CLICKED) {    
-        LV_LOG_USER("Process Element Details");
+        LV_LOG_USER("Process Element Details address 0x%p",currentNode);
         processDetail(currentNode); 
       }
       if(code == LV_EVENT_LONG_PRESSED_REPEAT){

@@ -575,12 +575,10 @@ int SD_init()
 
 
 void initSD_I2C(){
-  
-
   if (SD_init())
     {
-        LV_LOG_USER("ERROR:   SD initErrors %d",initErrors);
         initErrors += 1;
+        LV_LOG_USER("ERROR:   SD initErrors %d",initErrors);
     }
     else
         LV_LOG_USER("SD INIT OVER initErrors %d",initErrors);
@@ -595,8 +593,8 @@ void initSD_I2C(){
     }
     else
     {
-        LV_LOG_USER("Unknown error at address 0x%x ERROR:   TOUCH",I2C_ADR);
         initErrors += 1;
+        LV_LOG_USER("Unknown error at address 0x%x ERROR:   TOUCH",I2C_ADR);
     }
 
     lcd.setCursor(0, 64);
@@ -609,19 +607,6 @@ void initSD_I2C(){
         LV_LOG_USER("ALL SUCCESS initErrors %d",initErrors);
 }
 
-
-void printJSONFile(){
-    LV_LOG_USER("JSON READ settingsParams");
-    LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
-    LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
-    LV_LOG_USER("calibratedTemp:%d",gui.page.settings.settingsParams.calibratedTemp);
-    LV_LOG_USER("filmRotationSpeedSetpoint:%d",gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
-    LV_LOG_USER("rotationIntervalSetpoint:%d",gui.page.settings.settingsParams.rotationIntervalSetpoint);
-    LV_LOG_USER("randomSetpoint:%d",gui.page.settings.settingsParams.randomSetpoint);
-    LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
-    LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
-    LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
-}
 
 machineSettings readJSONFile(fs::FS &fs, const char *filename, machineSettings &settings) {
     File file = fs.open(filename);
@@ -645,14 +630,14 @@ machineSettings readJSONFile(fs::FS &fs, const char *filename, machineSettings &
         settings.drainFillOverlapSetpoint = doc["drainFillOverlapSetpoint"];
 
         // Close the file (Curiously, File's destructor doesn't close the file)
-        printJSONFile();
     }
    
     file.close();
     return settings;
 }
 
-void writeJSONFile(fs::FS &fs, const char *path,const machineSettings &settings) {
+void writeJSONFile(fs::FS &fs, const char *path,const machineSettings &settings){
+  if(initErrors == 0){
     LV_LOG_USER("Writing file: %s", path);
     SD.remove(path);
 
@@ -682,6 +667,265 @@ void writeJSONFile(fs::FS &fs, const char *path,const machineSettings &settings)
         LV_LOG_USER("Write failed");
     }
     file.close();
+  }
+  else
+    return;
+}
+
+
+gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui) {
+    if(initErrors == 0){
+        File file = fs.open(filename);
+        
+        DynamicJsonDocument doc(49152);
+
+        // Deserialize the JSON document
+        DeserializationError error = deserializeJson(doc, file);
+        if (error) {
+            LV_LOG_USER("Failed to read file, using default configuration");
+        } else {
+            // Copy values from the JsonDocument to the Config
+            JsonObject machineSettings = doc["machineSettings"];
+            gui.page.settings.settingsParams.tempUnit                  = machineSettings["tempUnit"];                 
+            gui.page.settings.settingsParams.waterInlet                = machineSettings["waterInlet"];                
+            gui.page.settings.settingsParams.calibratedTemp            = machineSettings["calibratedTemp"];
+            gui.page.settings.settingsParams.filmRotationSpeedSetpoint = machineSettings["filmRotationSpeedSetpoint"];
+            gui.page.settings.settingsParams.rotationIntervalSetpoint  = machineSettings["rotationIntervalSetpoint"];
+            gui.page.settings.settingsParams.randomSetpoint            = machineSettings["randomSetpoint"];
+            gui.page.settings.settingsParams.isPersistentAlarm         = machineSettings["isPersistentAlarm"];
+            gui.page.settings.settingsParams.isProcessAutostart        = machineSettings["isProcessAutostart"];
+            gui.page.settings.settingsParams.drainFillOverlapSetpoint  = machineSettings["drainFillOverlapSetpoint"];
+
+            LV_LOG_USER("JSON read file params:");
+            LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
+            LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
+            LV_LOG_USER("calibratedTemp:%d",gui.page.settings.settingsParams.calibratedTemp);
+            LV_LOG_USER("filmRotationSpeedSetpoint:%d",gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
+            LV_LOG_USER("rotationIntervalSetpoint:%d",gui.page.settings.settingsParams.rotationIntervalSetpoint);
+            LV_LOG_USER("randomSetpoint:%d",gui.page.settings.settingsParams.randomSetpoint);
+            LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
+            LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
+            LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
+
+
+            processList *processElementsList;
+            processElementsList = (processList *) malloc(sizeof(processList));          
+            memset( &processElementsList, 0, sizeof( processList ) );	
+            processElementsList = &(gui.page.processes.processElementsList);
+
+            processNode *nodeP = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+
+            for (JsonPair Processe : doc["Processes"].as<JsonObject>()) {
+                const char* Processe_key = Processe.key().c_str();
+
+                  if(processElementsList->start == NULL){
+
+                    nodeP->process.processDetails->processNameString = Processe.value()["processNameString"];
+                    nodeP->process.processDetails->temp = Processe.value()["temp"];
+                    nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
+                    nodeP->process.processDetails->isPreferred = Processe.value()["isPreferred"];
+                    nodeP->process.processDetails->filmType = Processe.value()["filmType"];
+                    nodeP->process.processDetails->totalTime = Processe.value()["totalTime"];
+                    processElementsList->start = nodeP;
+                    nodeP->prev = NULL;
+                  }
+                  else{
+                    nodeP->process.processDetails->processNameString = Processe.value()["processNameString"];
+                    nodeP->process.processDetails->temp = Processe.value()["temp"];
+                    nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
+                    nodeP->process.processDetails->isPreferred = Processe.value()["isPreferred"];
+                    nodeP->process.processDetails->filmType = Processe.value()["filmType"];
+                    nodeP->process.processDetails->totalTime = Processe.value()["totalTime"];
+                    processElementsList->end->next = nodeP;
+                    nodeP->prev = processElementsList->end;
+                  }
+
+                    LV_LOG_USER("processNameString:%s",nodeP->process.processDetails->processNameString);
+                    LV_LOG_USER("temp:%d",nodeP->process.processDetails->temp);
+                    LV_LOG_USER("isTempControlled:%d",nodeP->process.processDetails->isTempControlled);
+                    LV_LOG_USER("isPreferred:%d",nodeP->process.processDetails->isPreferred);
+                    LV_LOG_USER("filmType:%d",nodeP->process.processDetails->filmType);
+                    LV_LOG_USER("totalTime:%d",nodeP->process.processDetails->totalTime);
+
+                    processElementsList->end = nodeP;
+                    processElementsList->end->next = NULL;
+                    processElementsList->size++;
+
+                    stepList *stepElementsList;
+                    stepElementsList = (stepList *) malloc(sizeof(stepList));
+                    memset( &stepElementsList, 0, sizeof( stepList ) );	
+                    stepElementsList = &(processElementsList->start->process.processDetails->stepElementsList);   
+
+                    stepNode *nodeS = (stepNode*) allocateAndInitializeNode(STEP_NODE);
+  
+                    for (JsonPair Processe_value_Step : Processe.value()["Steps"].as<JsonObject>()) {
+                        const char* Processe_value_Step_key = Processe_value_Step.key().c_str(); // "step1", "step2", "step3", ...
+
+                            if(stepElementsList->start == NULL)
+                            {
+                                nodeS->step.stepDetails->stepNameString = Processe_value_Step.value()["stepNameString"];
+                                nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
+                                nodeS->step.stepDetails->timeMins = Processe_value_Step.value()["timeMins"];
+                                nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];
+                                nodeS->step.stepDetails->source = Processe_value_Step.value()["source"];
+                                nodeS->step.stepDetails->discardAfterProc = Processe_value_Step.value()["discardAfterProc"];
+                                stepElementsList->start = nodeS;
+                                nodeS->prev = NULL;
+                            }
+                            else
+                            {
+                                nodeS->step.stepDetails->stepNameString = Processe_value_Step.value()["stepNameString"];
+                                nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
+                                nodeS->step.stepDetails->timeMins = Processe_value_Step.value()["timeMins"];
+                                nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];
+                                nodeS->step.stepDetails->source = Processe_value_Step.value()["source"];
+                                nodeS->step.stepDetails->discardAfterProc = Processe_value_Step.value()["discardAfterProc"];
+                                stepElementsList->end->next = nodeS;
+                                nodeS->prev = stepElementsList->end;
+                            }
+
+                            LV_LOG_USER("stepNameString:%s",nodeS->step.stepDetails->stepNameString);
+                            LV_LOG_USER("timeSecs:%d",nodeS->step.stepDetails->timeSecs);
+                            LV_LOG_USER("timeMins:%d",nodeS->step.stepDetails->timeMins);
+                            LV_LOG_USER("type:%d",nodeS->step.stepDetails->type);
+                            LV_LOG_USER("source:%d",nodeS->step.stepDetails->source);
+                            LV_LOG_USER("discardAfterProc:%d",nodeS->step.stepDetails->discardAfterProc);
+
+                            stepElementsList->end = nodeS;    
+                            stepElementsList->end->next = NULL;
+                            stepElementsList->size++;
+
+                            stepElementsList->start = stepElementsList->end->next;
+                    }
+                    processElementsList->start = processElementsList->end->next;
+                  }
+            }
+        file.close();
+        return gui;
+    }
+}
+
+
+void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
+    if(initErrors == 0){
+        LV_LOG_USER("Writing file: %s", path);
+        SD.remove(path);
+        uint8_t processCounter = 0;
+        uint8_t stepCounter = 0;
+        char processName[20];
+        char stepName[20];
+
+        File file = fs.open(path, FILE_WRITE);
+        if (!file) {
+            LV_LOG_USER("Failed to open file for writing");
+            rebootBoard();
+            //return;
+        }
+
+        StaticJsonDocument<65536> doc;
+        JsonObject machineSettings = doc.createNestedObject("machineSettings");
+
+        machineSettings["tempUnit"]                   = gui.page.settings.settingsParams.tempUnit;
+        machineSettings["waterInlet"]                 = gui.page.settings.settingsParams.waterInlet;
+        machineSettings["calibratedTemp"]             = gui.page.settings.settingsParams.calibratedTemp;
+        machineSettings["filmRotationSpeedSetpoint"]  = gui.page.settings.settingsParams.filmRotationSpeedSetpoint;
+        machineSettings["rotationIntervalSetpoint"]   = gui.page.settings.settingsParams.rotationIntervalSetpoint;
+        machineSettings["randomSetpoint"]             = gui.page.settings.settingsParams.randomSetpoint;
+        machineSettings["isPersistentAlarm"]          = gui.page.settings.settingsParams.isPersistentAlarm;
+        machineSettings["isProcessAutostart"]         = gui.page.settings.settingsParams.isProcessAutostart;
+        machineSettings["drainFillOverlapSetpoint"]   = gui.page.settings.settingsParams.drainFillOverlapSetpoint;
+
+        LV_LOG_USER("JSON wrote file params:");
+        LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
+        LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
+        LV_LOG_USER("calibratedTemp:%d",gui.page.settings.settingsParams.calibratedTemp);
+        LV_LOG_USER("filmRotationSpeedSetpoint:%d",gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
+        LV_LOG_USER("rotationIntervalSetpoint:%d",gui.page.settings.settingsParams.rotationIntervalSetpoint);
+        LV_LOG_USER("randomSetpoint:%d",gui.page.settings.settingsParams.randomSetpoint);
+        LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
+        LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
+        LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
+
+        JsonObject Processes = doc.createNestedObject("Processes");
+        
+        const processList *processElementsList;
+        memset( &processElementsList, 0, sizeof( processElementsList ) );	
+        processElementsList = &(gui.page.processes.processElementsList);
+
+        processNode *currentProcessNode;
+        memset( &currentProcessNode, 0, sizeof( currentProcessNode ) );	
+        currentProcessNode = processElementsList->start;
+
+        while(currentProcessNode != NULL){
+            snprintf(processName, sizeof(processName), "Process%d", processCounter);
+            JsonObject currentProcess = Processes.createNestedObject(processName);
+            currentProcess["processNameString"] = currentProcessNode->process.processDetails->processNameString;
+            currentProcess["temp"] = currentProcessNode->process.processDetails->temp;
+            currentProcess["isTempControlled"] = currentProcessNode->process.processDetails->isTempControlled;
+            currentProcess["isPreferred"] = currentProcessNode->process.processDetails->isPreferred;
+            currentProcess["filmType"] = currentProcessNode->process.processDetails->filmType;
+            currentProcess["totalTime"] = currentProcessNode->process.processDetails->totalTime;
+
+            LV_LOG_USER("processNameString:%s",currentProcessNode->process.processDetails->processNameString);
+            LV_LOG_USER("temp:%d",currentProcessNode->process.processDetails->temp);
+            LV_LOG_USER("isTempControlled:%d",currentProcessNode->process.processDetails->isTempControlled);
+            LV_LOG_USER("isPreferred:%d",currentProcessNode->process.processDetails->isPreferred);
+            LV_LOG_USER("filmType:%d",currentProcessNode->process.processDetails->filmType);
+            LV_LOG_USER("totalTime:%d",currentProcessNode->process.processDetails->totalTime);
+
+
+            stepList *stepElementsList;
+            memset( &stepElementsList, 0, sizeof( stepElementsList ) );	
+            stepElementsList = &(currentProcessNode->process.processDetails->stepElementsList);   
+
+            stepNode *currentStepNode;
+            memset( &currentStepNode, 0, sizeof( currentStepNode ) );	
+            currentStepNode = stepElementsList->start;
+
+            processCounter++;
+            stepCounter = 0;
+
+            JsonObject currentProcessSteps = currentProcess.createNestedObject("Steps");
+            while(currentStepNode != NULL){                
+                snprintf(stepName, sizeof(stepName), "Step%d", stepCounter);
+                JsonObject currentStep = currentProcessSteps.createNestedObject(stepName);
+                currentStep["stepNameString"] = currentStepNode->step.stepDetails->stepNameString;
+                currentStep["timeSecs"] = currentStepNode->step.stepDetails->timeSecs;
+                currentStep["timeMins"] = currentStepNode->step.stepDetails->timeMins;
+                currentStep["type"] = currentStepNode->step.stepDetails->type;
+                currentStep["source"] = currentStepNode->step.stepDetails->source;
+                currentStep["discardAfterProc"] = currentStepNode->step.stepDetails->discardAfterProc;
+
+                LV_LOG_USER("stepNameString:%s",currentStepNode->step.stepDetails->stepNameString);
+                LV_LOG_USER("timeSecs:%d",currentStepNode->step.stepDetails->timeSecs);
+                LV_LOG_USER("timeMins:%d",currentStepNode->step.stepDetails->timeMins);
+                LV_LOG_USER("type:%d",currentStepNode->step.stepDetails->type);
+                LV_LOG_USER("source:%d",currentStepNode->step.stepDetails->source);
+                LV_LOG_USER("discardAfterProc:%d",currentStepNode->step.stepDetails->discardAfterProc);
+
+                currentStepNode = currentStepNode->next;
+                stepCounter++;
+            }
+
+          currentProcessNode = currentProcessNode->next;
+        }
+        
+        
+
+
+        processCounter = 0;
+        stepCounter = 0;
+
+        if (serializeJson(doc, file)) {
+            file.close();
+            LV_LOG_USER("File written successfully");
+        } else {
+            LV_LOG_USER("Write failed");
+        }
+        file.close();
+    }
+    else
+        return;
 }
 
 // Funzione per scrivere su un file

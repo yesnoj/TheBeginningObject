@@ -25,13 +25,17 @@ void *lvBuffer1 = malloc(lvBufferSize);
 void *lvBuffer2 = malloc(lvBufferSize);
 
 
+//All is managed in this file, because the libs FS,SD require C++, so all the other files can trigger this method here 
 void eventSave(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);
   if(code == LV_EVENT_REFRESH){
     LV_LOG_USER("Save JSON!");
+    //writeJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
+    writeFullJSONFile(SD, FILENAME_SAVE,gui);
   }
-    writeJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
+    
+    
 }
 
 
@@ -78,7 +82,10 @@ void setup()
     //writeJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
     //readFile(SD, FILENAME_SAVE);
    
-    readJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
+    //readJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
+    
+    //writeFullJSONFile(SD, FILENAME_SAVE,gui);
+    readFULLJSONFile(SD, FILENAME_SAVE,gui);
 }
 
 void loop()
