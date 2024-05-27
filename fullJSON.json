@@ -1,0 +1,5711 @@
+{
+  "machineSettings": {
+    "tempUnit": 0,
+    "waterInlet": 1,
+    "calibratedTemp": 0,
+    "filmRotationSpeedSetpoint": 59,
+    "rotationIntervalSetpoint": 16,
+    "randomSetpoint": 19,
+    "isPersistentAlarm": 1,
+    "isProcessAutostart": 1,
+    "drainFillOverlapSetpoint": 36
+  },
+  "Processes": {
+    "Process0": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process1": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process2": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process3": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process4": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process5": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process6": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process7": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process8": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process9": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process10": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process10": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process11": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process12": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process13": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process14": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process15": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process16": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process17": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process18": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process19": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process10": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+        "Process20": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process21": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process22": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process23": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process24": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process25": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process26": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process27": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process28": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    },
+    "Process29": {
+      "processNameString": "E6 six baths",
+      "temp": 38,
+      "isTempControlled": 0,
+      "isPreferred": 0,
+      "filmType": 0,
+      "totalTime": 666,
+      "Steps": {
+        "Step0": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step1": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step2": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step3": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step4": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step5": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step6": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step7": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step8": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step9": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step10": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step11": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step12": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step13": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step14": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step15": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        },
+        "Step16": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 0,
+          "discardAfterProc": 1
+        },
+        "Step17": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 1,
+          "source": 1,
+          "discardAfterProc": 0
+        },
+        "Step18": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 3,
+          "discardAfterProc": 1
+        },
+        "Step19": {
+          "stepNameString": "TI BI DI",
+          "timeSecs": 0,
+          "timeMins": 0,
+          "type": 0,
+          "source": 2,
+          "discardAfterProc": 0
+        }
+      }
+    }
+  }
+}

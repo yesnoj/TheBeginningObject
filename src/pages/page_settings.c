@@ -1,3 +1,4 @@
+#include "misc/lv_event.h"
 #include "widgets/slider/lv_slider.h"
 /**
  * @file page_settings.c
@@ -106,6 +107,8 @@ void event_settings_handler(lv_event_t * e)
           lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%d%%", lv_slider_get_value(act_cb));
           LV_LOG_USER("Film Speed Rotation : %d",lv_slider_get_value(act_cb));
           gui.page.settings.settingsParams.filmRotationSpeedSetpoint = lv_slider_get_value(act_cb);
+        }
+      if(code == LV_EVENT_RELEASED){
           lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
         }
     }
@@ -115,18 +118,20 @@ void event_settings_handler(lv_event_t * e)
           lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%dsec%", lv_slider_get_value(act_cb));
           LV_LOG_USER("Film Rotation Inversion Interval : %d",lv_slider_get_value(act_cb));
           gui.page.settings.settingsParams.rotationIntervalSetpoint = lv_slider_get_value(act_cb);
-          lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
         }
-    }
+      if(code == LV_EVENT_RELEASED){
+          lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
+        }    }
 
     if(act_cb == gui.page.settings.filmRandomlSlider){
       if(code == LV_EVENT_VALUE_CHANGED) {
         lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%~%d%%", lv_slider_get_value(act_cb));
         LV_LOG_USER("Film Randomness : %d",lv_slider_get_value(act_cb));
         gui.page.settings.settingsParams.randomSetpoint = lv_slider_get_value(act_cb);
-        lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
         }
-    }
+      if(code == LV_EVENT_RELEASED){
+          lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
+        }    }
 
     if(act_cb == gui.page.settings.persistentAlarmSwitch){
       if(code == LV_EVENT_VALUE_CHANGED) {
@@ -149,9 +154,10 @@ void event_settings_handler(lv_event_t * e)
           lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%d%%", lv_slider_get_value(act_cb));
           LV_LOG_USER("Drain/fill time overlap percent : %d",lv_slider_get_value(act_cb));
           gui.page.settings.settingsParams.drainFillOverlapSetpoint = lv_slider_get_value(act_cb);
-          lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
           }
-    }
+      if(code == LV_EVENT_RELEASED){
+          lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
+        }    }
 }
 
 //TO TEST
@@ -305,7 +311,7 @@ static void initSettings(void){
         gui.page.settings.filmRotationSpeedValueLabel = lv_label_create(gui.page.settings.filmRotationSpeedContainer);
         lv_obj_set_style_text_font(gui.page.settings.filmRotationSpeedValueLabel, &lv_font_montserrat_22, 0);              
         lv_obj_align(gui.page.settings.filmRotationSpeedValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.filmRotationSpeedValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_ALL, gui.page.settings.filmRotationSpeedValueLabel);
         lv_label_set_text_fmt(gui.page.settings.filmRotationSpeedValueLabel, "%d%%", gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
 
 
@@ -336,7 +342,7 @@ static void initSettings(void){
         gui.page.settings.filmRotationInverseIntervalValueLabel = lv_label_create(gui.page.settings.filmRotationInverseIntervallContainer);
         lv_obj_set_style_text_font(gui.page.settings.filmRotationInverseIntervalValueLabel, &lv_font_montserrat_22, 0);              
         lv_obj_align(gui.page.settings.filmRotationInverseIntervalValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(gui.page.settings.filmRotationInversionIntervalSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.filmRotationInverseIntervalValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationInversionIntervalSlider, event_settings_handler, LV_EVENT_ALL, gui.page.settings.filmRotationInverseIntervalValueLabel);
         lv_label_set_text_fmt(gui.page.settings.filmRotationInverseIntervalValueLabel, "%dsec%", gui.page.settings.settingsParams.rotationIntervalSetpoint);
 
   
@@ -365,7 +371,7 @@ static void initSettings(void){
         gui.page.settings.filmRotationRandomValueLabel = lv_label_create(gui.page.settings.randomContainer);
         lv_obj_set_style_text_font(gui.page.settings.filmRotationRandomValueLabel, &lv_font_montserrat_22, 0);              
         lv_obj_align(gui.page.settings.filmRotationRandomValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.filmRotationRandomValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_ALL, gui.page.settings.filmRotationRandomValueLabel);
         lv_label_set_text_fmt(gui.page.settings.filmRotationRandomValueLabel, "~%d%", gui.page.settings.settingsParams.randomSetpoint);
 
 
@@ -441,7 +447,7 @@ static void initSettings(void){
         gui.page.settings.drainFillTimeValueLabel = lv_label_create(gui.page.settings.drainFillTimeContainer);
         lv_obj_set_style_text_font(gui.page.settings.drainFillTimeValueLabel, &lv_font_montserrat_22, 0);              
         lv_obj_align(gui.page.settings.drainFillTimeValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.drainFillTimeValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_ALL, gui.page.settings.drainFillTimeValueLabel);
         lv_label_set_text_fmt(gui.page.settings.drainFillTimeValueLabel, "%d%%", gui.page.settings.settingsParams.drainFillOverlapSetpoint);
 
 }
