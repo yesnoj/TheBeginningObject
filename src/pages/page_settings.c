@@ -1,3 +1,4 @@
+#include "widgets/slider/lv_slider.h"
 /**
  * @file page_settings.c
  *
@@ -217,9 +218,15 @@ static void initSettings(void){
 
         gui.page.settings.tempUnitCelsiusRadioButton = create_radiobutton(gui.page.settings.tempUnitContainer, celsius_text, -55, 0, 27, &lv_font_montserrat_18, lv_color_hex(ORANGE_DARK), lv_color_hex(ORANGE));
         gui.page.settings.tempUnitFahrenheitRadioButton = create_radiobutton(gui.page.settings.tempUnitContainer, fahrenheit_text, 5, 0, 27, &lv_font_montserrat_18, lv_color_hex(ORANGE_DARK), lv_color_hex(ORANGE));
+        
 
-        //Make the first checkbox checked
-        lv_obj_add_state(lv_obj_get_child(gui.page.settings.tempUnitContainer, 0), LV_STATE_CHECKED);
+/*
+        machineSettings["calibratedTemp"]             = gui.page.settings.settingsParams.calibratedTemp;
+        machineSettings["drainFillOverlapSetpoint"]   = gui.page.settings.settingsParams.drainFillOverlapSetpoint;
+*/
+        //Make the checkbox checked according the saved param
+        gui.page.settings.active_index = gui.page.settings.settingsParams.tempUnit;
+        lv_obj_add_state(lv_obj_get_child(gui.page.settings.tempUnitContainer, gui.page.settings.settingsParams.tempUnit), LV_STATE_CHECKED);
            
         gui.page.settings.tempUnitLabel = lv_label_create(gui.page.settings.tempUnitContainer);         
         lv_label_set_text(gui.page.settings.tempUnitLabel, tempUnit_text); 
@@ -245,7 +252,7 @@ static void initSettings(void){
         lv_obj_set_style_bg_color(gui.page.settings.waterInletSwitch,  lv_palette_darken(LV_PALETTE_GREY, 3), LV_STATE_DEFAULT);
         lv_obj_set_style_bg_color(gui.page.settings.waterInletSwitch,  lv_color_hex(ORANGE), LV_PART_KNOB | LV_STATE_DEFAULT);
         lv_obj_set_style_bg_color(gui.page.settings.waterInletSwitch,  lv_color_hex(ORANGE_DARK), LV_PART_INDICATOR | LV_STATE_CHECKED);
-
+        lv_obj_add_state(gui.page.settings.waterInletSwitch, gui.page.settings.settingsParams.waterInlet);
 
 
   gui.page.settings.tempTuningContainer = lv_obj_create(gui.page.settings.settingsContainer);
@@ -293,12 +300,13 @@ static void initSettings(void){
         lv_obj_set_style_bg_color(gui.page.settings.filmRotationSpeedSlider,lv_color_hex(ORANGE) , LV_PART_KNOB);
         lv_obj_set_style_bg_color(gui.page.settings.filmRotationSpeedSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
         lv_obj_set_style_bg_color(gui.page.settings.filmRotationSpeedSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
-        
+        lv_slider_set_value(gui.page.settings.filmRotationSpeedSlider, gui.page.settings.settingsParams.filmRotationSpeedSetpoint, LV_ANIM_OFF);
+  
         gui.page.settings.filmRotationSpeedValueLabel = lv_label_create(gui.page.settings.filmRotationSpeedContainer);
         lv_obj_set_style_text_font(gui.page.settings.filmRotationSpeedValueLabel, &lv_font_montserrat_22, 0);              
-        lv_label_set_text(gui.page.settings.filmRotationSpeedValueLabel, "0%");
         lv_obj_align(gui.page.settings.filmRotationSpeedValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
         lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.filmRotationSpeedValueLabel);
+        lv_label_set_text_fmt(gui.page.settings.filmRotationSpeedValueLabel, "%d%%", gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
 
 
 
@@ -322,12 +330,14 @@ static void initSettings(void){
         lv_obj_set_style_bg_color(gui.page.settings.filmRotationInversionIntervalSlider,lv_color_hex(ORANGE) , LV_PART_KNOB);
         lv_obj_set_style_bg_color(gui.page.settings.filmRotationInversionIntervalSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
         lv_obj_set_style_bg_color(gui.page.settings.filmRotationInversionIntervalSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
-        
+        lv_slider_set_value(gui.page.settings.filmRotationInversionIntervalSlider, gui.page.settings.settingsParams.rotationIntervalSetpoint, LV_ANIM_OFF);
+  
+
         gui.page.settings.filmRotationInverseIntervalValueLabel = lv_label_create(gui.page.settings.filmRotationInverseIntervallContainer);
         lv_obj_set_style_text_font(gui.page.settings.filmRotationInverseIntervalValueLabel, &lv_font_montserrat_22, 0);              
-        lv_label_set_text(gui.page.settings.filmRotationInverseIntervalValueLabel, "0sec");
         lv_obj_align(gui.page.settings.filmRotationInverseIntervalValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
         lv_obj_add_event_cb(gui.page.settings.filmRotationInversionIntervalSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.filmRotationInverseIntervalValueLabel);
+        lv_label_set_text_fmt(gui.page.settings.filmRotationInverseIntervalValueLabel, "%dsec%", gui.page.settings.settingsParams.rotationIntervalSetpoint);
 
   
   gui.page.settings.randomContainer = lv_obj_create(gui.page.settings.settingsContainer);
@@ -350,12 +360,14 @@ static void initSettings(void){
         lv_obj_set_style_bg_color(gui.page.settings.filmRandomlSlider,lv_color_hex(ORANGE) , LV_PART_KNOB);
         lv_obj_set_style_bg_color(gui.page.settings.filmRandomlSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
         lv_obj_set_style_bg_color(gui.page.settings.filmRandomlSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
+        lv_slider_set_value(gui.page.settings.filmRandomlSlider, gui.page.settings.settingsParams.randomSetpoint, LV_ANIM_OFF);
         
         gui.page.settings.filmRotationRandomValueLabel = lv_label_create(gui.page.settings.randomContainer);
         lv_obj_set_style_text_font(gui.page.settings.filmRotationRandomValueLabel, &lv_font_montserrat_22, 0);              
-        lv_label_set_text(gui.page.settings.filmRotationRandomValueLabel, "~0%");
         lv_obj_align(gui.page.settings.filmRotationRandomValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
         lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.filmRotationRandomValueLabel);
+        lv_label_set_text_fmt(gui.page.settings.filmRotationRandomValueLabel, "~%d%", gui.page.settings.settingsParams.randomSetpoint);
+
 
   gui.page.settings.persistentAlarmContainer = lv_obj_create(gui.page.settings.settingsContainer);
   lv_obj_align(gui.page.settings.persistentAlarmContainer, LV_ALIGN_TOP_LEFT, -15, 362);                         
@@ -377,6 +389,7 @@ static void initSettings(void){
         lv_obj_set_style_bg_color(gui.page.settings.persistentAlarmSwitch,  lv_palette_darken(LV_PALETTE_GREY, 3), LV_STATE_DEFAULT);
         lv_obj_set_style_bg_color(gui.page.settings.persistentAlarmSwitch,  lv_color_hex(ORANGE), LV_PART_KNOB | LV_STATE_DEFAULT);
         lv_obj_set_style_bg_color(gui.page.settings.persistentAlarmSwitch,  lv_color_hex(ORANGE_DARK), LV_PART_INDICATOR | LV_STATE_CHECKED);
+        lv_obj_add_state(gui.page.settings.persistentAlarmSwitch, gui.page.settings.settingsParams.isPersistentAlarm);
 
 
   gui.page.settings.autostartContainer = lv_obj_create(gui.page.settings.settingsContainer);
@@ -399,6 +412,7 @@ static void initSettings(void){
         lv_obj_set_style_bg_color(gui.page.settings.autostartSwitch,  lv_palette_darken(LV_PALETTE_GREY, 3), LV_STATE_DEFAULT);
         lv_obj_set_style_bg_color(gui.page.settings.autostartSwitch,  lv_color_hex(ORANGE), LV_PART_KNOB | LV_STATE_DEFAULT);
         lv_obj_set_style_bg_color(gui.page.settings.autostartSwitch,  lv_color_hex(ORANGE_DARK), LV_PART_INDICATOR | LV_STATE_CHECKED);
+        lv_obj_add_state(gui.page.settings.autostartSwitch, gui.page.settings.settingsParams.isProcessAutostart);
 
 
   gui.page.settings.drainFillTimeContainer = lv_obj_create(gui.page.settings.settingsContainer);
@@ -421,12 +435,15 @@ static void initSettings(void){
         lv_obj_set_style_bg_color(gui.page.settings.drainFillTimeSlider,lv_color_hex(ORANGE) , LV_PART_KNOB);
         lv_obj_set_style_bg_color(gui.page.settings.drainFillTimeSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
         lv_obj_set_style_bg_color(gui.page.settings.drainFillTimeSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
-        
+        lv_slider_set_value(gui.page.settings.drainFillTimeSlider, gui.page.settings.settingsParams.drainFillOverlapSetpoint, LV_ANIM_OFF);
+
+
         gui.page.settings.drainFillTimeValueLabel = lv_label_create(gui.page.settings.drainFillTimeContainer);
         lv_obj_set_style_text_font(gui.page.settings.drainFillTimeValueLabel, &lv_font_montserrat_22, 0);              
-        lv_label_set_text(gui.page.settings.drainFillTimeValueLabel, "0%");
         lv_obj_align(gui.page.settings.drainFillTimeValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
         lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.drainFillTimeValueLabel);
+        lv_label_set_text_fmt(gui.page.settings.drainFillTimeValueLabel, "%d%%", gui.page.settings.settingsParams.drainFillOverlapSetpoint);
+
 }
 
 void settings(void)
