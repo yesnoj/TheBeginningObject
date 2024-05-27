@@ -1165,7 +1165,7 @@ processNode *getProcElementEntryByObject( lv_obj_t *obj );
 
 // @file element_rollerPopup.c
 void event_Roller(lv_event_t *e);
-void rollerPopupCreate(const char *tempOptions, const char *popupTitle, void *whoCallMe);
+void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *whoCallMe, uint32_t currentVal);
 
 // @file element_step.c
 void event_stepElement(lv_event_t *e);

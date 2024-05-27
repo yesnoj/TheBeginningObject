@@ -125,7 +125,7 @@ void event_Roller(lv_event_t * e)
 }       
 
 
-void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *whoCallMe){
+void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *whoCallMe, uint32_t currentVal){
   /*********************
   *    PAGE HEADER
   *********************/
@@ -188,6 +188,8 @@ void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *w
   lv_obj_add_style(gui.element.rollerPopup.roller, &gui.element.rollerPopup.style_roller, LV_PART_SELECTED);  
   lv_roller_set_selected(gui.element.rollerPopup.roller, 0, LV_ANIM_OFF);   
   lv_obj_set_style_border_color(gui.element.rollerPopup.roller, lv_color_hex(WHITE), LV_PART_MAIN);
+  lv_roller_set_selected(gui.element.rollerPopup.roller, currentVal, LV_ANIM_OFF);
+
 
    gui.element.rollerPopup.mBoxRollerButton = lv_button_create(gui.element.rollerPopup.mBoxRollerRollerContainer);
    lv_obj_set_size(gui.element.rollerPopup.mBoxRollerButton, BUTTON_TUNE_WIDTH, BUTTON_TUNE_HEIGHT);

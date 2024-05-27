@@ -67,11 +67,11 @@ void event_stepDetail(lv_event_t * e)
     }
     if(obj == newStep->step.stepDetails->stepDetailMinTextArea){
       LV_LOG_USER("Set minutes");
-      rollerPopupCreate(gui.element.rollerPopup.minutesOptions, setMinutesPopupTitle_text,newStep);
+      rollerPopupCreate(gui.element.rollerPopup.minutesOptions, setMinutesPopupTitle_text,newStep, 0);
     }
     if(obj == newStep->step.stepDetails->stepDetailSecTextArea){
       LV_LOG_USER("Set seconds");
-      rollerPopupCreate(gui.element.rollerPopup.secondsOptions, setSecondsPopupTitle_text,newStep);
+      rollerPopupCreate(gui.element.rollerPopup.secondsOptions, setSecondsPopupTitle_text,newStep, 0);
     }
  }
 
@@ -149,11 +149,11 @@ void event_Pippo(lv_event_t * e)
     LV_LOG_USER("Pippo");
     if(obj == newStep->step.stepDetails->stepDetailMinTextArea){
       LV_LOG_USER("Set minutes");
-      rollerPopupCreate(gui.element.rollerPopup.minutesOptions, setMinutesPopupTitle_text,newStep);
+      rollerPopupCreate(gui.element.rollerPopup.minutesOptions, setMinutesPopupTitle_text,newStep, 0);
     }
     if(obj == newStep->step.stepDetails->stepDetailSecTextArea){
       LV_LOG_USER("Set seconds");
-      rollerPopupCreate(gui.element.rollerPopup.secondsOptions, setSecondsPopupTitle_text,newStep);
+      rollerPopupCreate(gui.element.rollerPopup.secondsOptions, setSecondsPopupTitle_text,newStep, 0);
     }
    }
 }

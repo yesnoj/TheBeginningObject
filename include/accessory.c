@@ -673,7 +673,7 @@ void writeJSONFile(fs::FS &fs, const char *path,const machineSettings &settings)
 }
 
 
-gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui) {
+gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uint32_t enableLog) {
     if(initErrors == 0){
         File file = fs.open(filename);
         
@@ -696,6 +696,7 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
             gui.page.settings.settingsParams.isProcessAutostart        = machineSettings["isProcessAutostart"];
             gui.page.settings.settingsParams.drainFillOverlapSetpoint  = machineSettings["drainFillOverlapSetpoint"];
 
+          if(enableLog){
             LV_LOG_USER("JSON read file params:");
             LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
             LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
@@ -706,7 +707,7 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
             LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
             LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
             LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
-
+          }
 
             processList *processElementsList;
             processElementsList = (processList *) malloc(sizeof(processList));          
@@ -740,12 +741,14 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                     nodeP->prev = processElementsList->end;
                   }
 
-                    LV_LOG_USER("processNameString:%s",nodeP->process.processDetails->processNameString);
-                    LV_LOG_USER("temp:%d",nodeP->process.processDetails->temp);
-                    LV_LOG_USER("isTempControlled:%d",nodeP->process.processDetails->isTempControlled);
-                    LV_LOG_USER("isPreferred:%d",nodeP->process.processDetails->isPreferred);
-                    LV_LOG_USER("filmType:%d",nodeP->process.processDetails->filmType);
-                    LV_LOG_USER("totalTime:%d",nodeP->process.processDetails->totalTime);
+                    if(enableLog){
+                        LV_LOG_USER("processNameString:%s",nodeP->process.processDetails->processNameString);
+                        LV_LOG_USER("temp:%d",nodeP->process.processDetails->temp);
+                        LV_LOG_USER("isTempControlled:%d",nodeP->process.processDetails->isTempControlled);
+                        LV_LOG_USER("isPreferred:%d",nodeP->process.processDetails->isPreferred);
+                        LV_LOG_USER("filmType:%d",nodeP->process.processDetails->filmType);
+                        LV_LOG_USER("totalTime:%d",nodeP->process.processDetails->totalTime);
+                    }
 
                     processElementsList->end = nodeP;
                     processElementsList->end->next = NULL;
@@ -784,13 +787,14 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                                 nodeS->prev = stepElementsList->end;
                             }
 
-                            LV_LOG_USER("stepNameString:%s",nodeS->step.stepDetails->stepNameString);
-                            LV_LOG_USER("timeSecs:%d",nodeS->step.stepDetails->timeSecs);
-                            LV_LOG_USER("timeMins:%d",nodeS->step.stepDetails->timeMins);
-                            LV_LOG_USER("type:%d",nodeS->step.stepDetails->type);
-                            LV_LOG_USER("source:%d",nodeS->step.stepDetails->source);
-                            LV_LOG_USER("discardAfterProc:%d",nodeS->step.stepDetails->discardAfterProc);
-
+                            if(enableLog){
+                                LV_LOG_USER("stepNameString:%s",nodeS->step.stepDetails->stepNameString);
+                                LV_LOG_USER("timeSecs:%d",nodeS->step.stepDetails->timeSecs);
+                                LV_LOG_USER("timeMins:%d",nodeS->step.stepDetails->timeMins);
+                                LV_LOG_USER("type:%d",nodeS->step.stepDetails->type);
+                                LV_LOG_USER("source:%d",nodeS->step.stepDetails->source);
+                                LV_LOG_USER("discardAfterProc:%d",nodeS->step.stepDetails->discardAfterProc);
+                              }
                             stepElementsList->end = nodeS;    
                             stepElementsList->end->next = NULL;
                             stepElementsList->size++;

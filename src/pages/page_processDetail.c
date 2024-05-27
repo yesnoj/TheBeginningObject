@@ -157,11 +157,11 @@ void event_processDetail(lv_event_t * e)
       tempProcessNode = newProcess;
       if(data == newProcess->process.processDetails->processTempTextArea){
           LV_LOG_USER("Set Temperature");
-          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusOptions,tuneTempPopupTitle_text,newProcess->process.processDetails->processTempTextArea);
+          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusOptions,tuneTempPopupTitle_text,newProcess->process.processDetails->processTempTextArea, 0);
       }
       if(data == newProcess->process.processDetails->processToleranceTextArea){
           LV_LOG_USER("Set Tolerance");
-          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusToleranceOptions,tuneTempPopupTitle_text,newProcess->process.processDetails->processToleranceTextArea);
+          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusToleranceOptions,tuneTempPopupTitle_text,newProcess->process.processDetails->processToleranceTextArea, 0);
       }
   }
 }

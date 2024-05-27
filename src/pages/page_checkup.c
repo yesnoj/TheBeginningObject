@@ -40,7 +40,7 @@ void event_checkup(lv_event_t * e){
       if(data == referenceProcess->process.processDetails->checkup->checkupTankSizeTextArea){
           LV_LOG_USER("Set Tank Size");
           tempProcessNode = referenceProcess;
-          rollerPopupCreate(checkupTankSizesList,checkupTankSize_text,referenceProcess);
+          rollerPopupCreate(checkupTankSizesList,checkupTankSize_text,referenceProcess, 0);
       }
   }
 
