@@ -709,6 +709,21 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
             LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
           }
 
+
+            JsonObject Filter = doc["Filter"];
+            gui.element.filterPopup.filterName = Filter["filterName"];
+            gui.element.filterPopup.isColorFilter = Filter["isColorFilter"];
+            gui.element.filterPopup.isBnWFilter = Filter["isBnWFilter"];
+            gui.element.filterPopup.preferredOnly = Filter["preferredOnly"];
+
+          if(enableLog){
+            LV_LOG_USER("filterName:%d",gui.element.filterPopup.filterName);
+            LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
+            LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
+            LV_LOG_USER("preferredOnly:%d",gui.element.filterPopup.preferredOnly);
+          }
+
+
             processList *processElementsList;
             processElementsList = (processList *) malloc(sizeof(processList));          
             memset( &processElementsList, 0, sizeof( processList ) );	
@@ -849,6 +864,18 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
         LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
         LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
         LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
+
+
+        JsonObject Filter = doc.createNestedObject("Filter");
+        Filter["filterName"] = gui.element.filterPopup.filterName;
+        Filter["isColorFilter"] = gui.element.filterPopup.isColorFilter;
+        Filter["isBnWFilter"] = gui.element.filterPopup.isBnWFilter;
+        Filter["preferredOnly"] = gui.element.filterPopup.preferredOnly;
+
+        LV_LOG_USER("filterName:%d",gui.element.filterPopup.filterName);
+        LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
+        LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
+        LV_LOG_USER("preferredOnly:%d",gui.element.filterPopup.preferredOnly);
 
         JsonObject Processes = doc.createNestedObject("Processes");
         

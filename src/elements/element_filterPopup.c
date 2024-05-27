@@ -10,7 +10,7 @@
 
 
 extern struct gui_components gui;
-
+uint8_t filterFilmType = 0;
 //ACCESSORY INCLUDES
 
 
@@ -39,6 +39,12 @@ void event_filterMBox(lv_event_t * e){
           lv_obj_remove_state(gui.element.filterPopup.mBoxOnlyPreferredSwitch, LV_STATE_CHECKED);
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectColorRadioButton, LV_STATE_CHECKED);
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectBnWRadioButton, LV_STATE_CHECKED);
+          
+          gui.element.filterPopup.isColorFilter = 0;
+          gui.element.filterPopup.isBnWFilter = 0;
+          gui.element.filterPopup.preferredOnly = 0;
+          gui.element.filterPopup.filterName = "";
+          lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
         }
       }
   }
@@ -61,21 +67,29 @@ void event_filterMBox(lv_event_t * e){
 
   if(obj == gui.element.filterPopup.mBoxSelectColorRadioButton || obj == gui.element.filterPopup.mBoxSelectBnWRadioButton){
     if(code == LV_EVENT_VALUE_CHANGED) {
-        if(obj == gui.element.filterPopup.mBoxSelectColorRadioButton)
+        if(obj == gui.element.filterPopup.mBoxSelectColorRadioButton){
           LV_LOG_USER("State color: %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
-        if(obj == gui.element.filterPopup.mBoxSelectBnWRadioButton)
+          gui.element.filterPopup.isColorFilter = lv_obj_has_state(obj, LV_STATE_CHECKED);
+          }
+        if(obj == gui.element.filterPopup.mBoxSelectBnWRadioButton){
           LV_LOG_USER("State bnw: %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
+          gui.element.filterPopup.isBnWFilter = lv_obj_has_state(obj, LV_STATE_CHECKED);
+          }
+        lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
       }
     }
   if(obj == gui.element.filterPopup.mBoxOnlyPreferredSwitch){
     if(code == LV_EVENT_VALUE_CHANGED) {
         LV_LOG_USER("State preferred: %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
+        gui.element.filterPopup.preferredOnly = lv_obj_has_state(obj, LV_STATE_CHECKED);  
+        lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
       }
     }
 }
 
 
 
+       //     LV_LOG_USER("filterName:%d",gui.element.filterPopup.filterName);
 
 
 

@@ -192,6 +192,7 @@ typedef enum{
 typedef enum {
     BLACK_AND_WHITE_FILM,
     COLOR_FILM,
+    BOTH_FILM,
     FILM_TYPE_NA
 } filmType_t;
 
@@ -564,7 +565,12 @@ struct sFilterPopup {
 	lv_obj_t	      		*mBoxResetFilterButton;
 	lv_obj_t	      		*mBoxApplyFilterButton;
 
+  
 	/* Params objects */
+  const char          *filterName;
+  uint8_t             isColorFilter;
+  uint8_t             isBnWFilter;
+  uint8_t             preferredOnly;
 };
 
 
