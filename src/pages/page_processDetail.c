@@ -45,7 +45,7 @@ void event_processDetail(lv_event_t * e)
 
         lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 
-        LV_LOG_USER("Pressed newProcess->process.processDetails->processColorLabel");
+        LV_LOG_USER("Pressed newProcess->process.processDetails->processColorLabel %d",newProcess->process.processDetails->filmType);
     }
     if(data == newProcess->process.processDetails->processBnWLabel){
         lv_obj_set_style_text_color(newProcess->process.processDetails->processBnWLabel, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
@@ -54,7 +54,7 @@ void event_processDetail(lv_event_t * e)
         newProcess->process.processDetails->somethingChanged = 1;
         
         lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);     
-        LV_LOG_USER("Pressed newProcess->process.processDetails->processBnWLabel");
+        LV_LOG_USER("Pressed newProcess->process.processDetails->processBnWLabel %d",newProcess->process.processDetails->filmType);
     }
 
     if(data == newProcess->process.processDetails->processPreferredLabel){
@@ -75,23 +75,13 @@ void event_processDetail(lv_event_t * e)
           lv_obj_clear_state(newProcess->process.processDetails->processRunButton, LV_STATE_DISABLED);
           lv_obj_add_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
 
-                // for testing
-                static char 				name[80];	// Test Code
-                static uint16_t			test_index = 1; // Test Code
-                static filmType_t 	type = BLACK_AND_WHITE_FILM; // Test Code
-                static uint32_t			temp = 38;	// Test Code
-                lv_snprintf( name, sizeof(name), "A Test Process creation index %02d", test_index ); // Test code
                 if(isNodeInList(&gui.page.processes.processElementsList, newProcess, PROCESS_NODE) == NULL)
                 {
                   LV_LOG_USER("Process not present yet, let's create!");
-                  if( !processElementCreate(newProcess, name, temp, type) ){	// Needs to be called with user populated values eventually
+                  if( !processElementCreate(newProcess, newProcess->process.processDetails->processNameString, newProcess->process.processDetails->temp, newProcess->process.processDetails->filmType) ){
                       LV_LOG_USER("Process element not created!");
                     } 
                   else {
-                      type = !type; // flip type every time for testing
-                      temp ++;	// for test increase temp each time
-                      test_index ++;	// for test increase index for name generation
-
                       if(addProcessElement(newProcess) != NULL)
                         {
                             LV_LOG_USER("Process address 0x%p, with n:%d steps",newProcess, newProcess->process.processDetails->stepElementsList.size); 
@@ -104,6 +94,7 @@ void event_processDetail(lv_event_t * e)
                     }
                 }
                 else{
+                   lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
                    LV_LOG_USER("Process already present in list!");
                 }
         LV_LOG_USER("Pressed newProcess->process.processDetails->processSaveButton");
@@ -187,9 +178,9 @@ void processDetail(lv_obj_t * processContainer)
 /*********************
   *    PAGE HEADER
 *********************/
-        newProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-        tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-        tempProcessNode = newProcess;
+  newProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+  tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+  tempProcessNode = newProcess;
 
 
 

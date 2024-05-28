@@ -55,8 +55,8 @@ void event_Roller(lv_event_t * e)
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(tempProcessNode->process.processDetails->processTempTextArea,tempBuffer);
               tempProcessNode->process.processDetails->temp = rollerSelected;
+
               lv_style_reset(&gui.element.rollerPopup.style_roller);
-              
               lv_msgbox_close(godFatherCont);
               lv_obj_delete(godFatherCont);
               return; 
@@ -66,6 +66,8 @@ void event_Roller(lv_event_t * e)
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(tempProcessNode->process.processDetails->processToleranceTextArea, tempBuffer);
+              tempProcessNode->process.processDetails->tempTolerance = rollerSelected;
+
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);
               lv_obj_delete(godFatherCont);

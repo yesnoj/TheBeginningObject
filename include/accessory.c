@@ -697,7 +697,7 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
             gui.page.settings.settingsParams.drainFillOverlapSetpoint  = machineSettings["drainFillOverlapSetpoint"];
 
           if(enableLog){
-            LV_LOG_USER("JSON read file params:");
+            LV_LOG_USER("--- MACHINE PARAMS ---");
             LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
             LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
             LV_LOG_USER("calibratedTemp:%d",gui.page.settings.settingsParams.calibratedTemp);
@@ -717,6 +717,7 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
             gui.element.filterPopup.preferredOnly = Filter["preferredOnly"];
 
           if(enableLog){
+            LV_LOG_USER("--- FILTER PARAMS ---");
             LV_LOG_USER("filterName:%d",gui.element.filterPopup.filterName);
             LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
             LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
@@ -738,6 +739,7 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
 
                     nodeP->process.processDetails->processNameString = Processe.value()["processNameString"];
                     nodeP->process.processDetails->temp = Processe.value()["temp"];
+                    nodeP->process.processDetails->tempTolerance = Processe.value()["tempTolerance"];
                     nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
                     nodeP->process.processDetails->isPreferred = Processe.value()["isPreferred"];
                     nodeP->process.processDetails->filmType = Processe.value()["filmType"];
@@ -748,6 +750,7 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                   else{
                     nodeP->process.processDetails->processNameString = Processe.value()["processNameString"];
                     nodeP->process.processDetails->temp = Processe.value()["temp"];
+                    nodeP->process.processDetails->tempTolerance = Processe.value()["tempTolerance"];
                     nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
                     nodeP->process.processDetails->isPreferred = Processe.value()["isPreferred"];
                     nodeP->process.processDetails->filmType = Processe.value()["filmType"];
@@ -757,8 +760,10 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                   }
 
                     if(enableLog){
+                        LV_LOG_USER("--- PROCESS PARAMS ---");
                         LV_LOG_USER("processNameString:%s",nodeP->process.processDetails->processNameString);
                         LV_LOG_USER("temp:%d",nodeP->process.processDetails->temp);
+                        LV_LOG_USER("tempTolerance:%d",nodeP->process.processDetails->tempTolerance);
                         LV_LOG_USER("isTempControlled:%d",nodeP->process.processDetails->isTempControlled);
                         LV_LOG_USER("isPreferred:%d",nodeP->process.processDetails->isPreferred);
                         LV_LOG_USER("filmType:%d",nodeP->process.processDetails->filmType);
@@ -803,6 +808,7 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                             }
 
                             if(enableLog){
+                                LV_LOG_USER("--- STEP PARAMS ---");
                                 LV_LOG_USER("stepNameString:%s",nodeS->step.stepDetails->stepNameString);
                                 LV_LOG_USER("timeSecs:%d",nodeS->step.stepDetails->timeSecs);
                                 LV_LOG_USER("timeMins:%d",nodeS->step.stepDetails->timeMins);
@@ -854,7 +860,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
         machineSettings["isProcessAutostart"]         = gui.page.settings.settingsParams.isProcessAutostart;
         machineSettings["drainFillOverlapSetpoint"]   = gui.page.settings.settingsParams.drainFillOverlapSetpoint;
 
-        LV_LOG_USER("JSON wrote file params:");
+        LV_LOG_USER("--- MACHINE PARAMS ---");
         LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
         LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
         LV_LOG_USER("calibratedTemp:%d",gui.page.settings.settingsParams.calibratedTemp);
@@ -872,6 +878,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
         Filter["isBnWFilter"] = gui.element.filterPopup.isBnWFilter;
         Filter["preferredOnly"] = gui.element.filterPopup.preferredOnly;
 
+        LV_LOG_USER("--- FILTER PARAMS ---");
         LV_LOG_USER("filterName:%d",gui.element.filterPopup.filterName);
         LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
         LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
@@ -892,13 +899,16 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
             JsonObject currentProcess = Processes.createNestedObject(processName);
             currentProcess["processNameString"] = currentProcessNode->process.processDetails->processNameString;
             currentProcess["temp"] = currentProcessNode->process.processDetails->temp;
+            currentProcess["tempTolerance"] = currentProcessNode->process.processDetails->tempTolerance;
             currentProcess["isTempControlled"] = currentProcessNode->process.processDetails->isTempControlled;
             currentProcess["isPreferred"] = currentProcessNode->process.processDetails->isPreferred;
             currentProcess["filmType"] = currentProcessNode->process.processDetails->filmType;
             currentProcess["totalTime"] = currentProcessNode->process.processDetails->totalTime;
 
+            LV_LOG_USER("--- PROCESS PARAMS ---");
             LV_LOG_USER("processNameString:%s",currentProcessNode->process.processDetails->processNameString);
             LV_LOG_USER("temp:%d",currentProcessNode->process.processDetails->temp);
+            LV_LOG_USER("tempTolerance:%d",currentProcessNode->process.processDetails->tempTolerance);
             LV_LOG_USER("isTempControlled:%d",currentProcessNode->process.processDetails->isTempControlled);
             LV_LOG_USER("isPreferred:%d",currentProcessNode->process.processDetails->isPreferred);
             LV_LOG_USER("filmType:%d",currentProcessNode->process.processDetails->filmType);
@@ -927,6 +937,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
                 currentStep["source"] = currentStepNode->step.stepDetails->source;
                 currentStep["discardAfterProc"] = currentStepNode->step.stepDetails->discardAfterProc;
 
+                LV_LOG_USER("--- STEP PARAMS ---");
                 LV_LOG_USER("stepNameString:%s",currentStepNode->step.stepDetails->stepNameString);
                 LV_LOG_USER("timeSecs:%d",currentStepNode->step.stepDetails->timeSecs);
                 LV_LOG_USER("timeMins:%d",currentStepNode->step.stepDetails->timeMins);
@@ -941,9 +952,6 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
           currentProcessNode = currentProcessNode->next;
         }
         
-        
-
-
         processCounter = 0;
         stepCounter = 0;
 
