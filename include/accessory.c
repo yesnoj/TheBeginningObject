@@ -404,8 +404,8 @@ void* allocateAndInitializeNode(NodeType_t type) {
                 stepNode* step = (stepNode*)node;
                 step->step.stepDetails = (sStepDetail *) malloc(sizeof(sStepDetail));
                 if (step->step.stepDetails == NULL) {
-                    // Handle memory allocation failure
-                    free(step->step.stepDetails);  // Clean up previously allocated memory
+                //    // Handle memory allocation failure
+                   free(step->step.stepDetails);  // Clean up previously allocated memory
                 }
                 memset(step->step.stepDetails, 0, sizeof(sStepDetail));
              }
@@ -479,7 +479,11 @@ void* isNodeInList(void* list, void* node, NodeType_t type) {
 
 void init_globals( void ) {
   // Initialise the main GUI structure to zero
-	memset( &gui, 0, sizeof( gui ) );		
+	memset(&gui, 0, sizeof(gui));		
+  
+  gui.page.processes.processElementsList.start = NULL;
+  gui.page.processes.processElementsList.end   = NULL;
+  gui.page.processes.processElementsList.size  = 0;
 
   // We only need to initialise the non-zero values
   gui.element.filterPopup.titleLinePoints[1].x = 200;
@@ -494,6 +498,10 @@ void init_globals( void ) {
   gui.element.rollerPopup.minutesOptions = createRollerValues(240,"");
   gui.element.rollerPopup.secondsOptions = createRollerValues(60,""); 
   gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(5,"0.");
+
+  tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+  tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);  
+ 
 }
 
 

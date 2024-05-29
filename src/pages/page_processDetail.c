@@ -31,7 +31,7 @@ void event_processDetail(lv_event_t * e)
 
   if(code == LV_EVENT_CLICKED) {
     if(data == newProcess->process.processDetails->processDetailCloseButton){
-        newProcess->process.processDetails->stepElementsList.size = 0;
+        //newProcess->process.processDetails->stepElementsList.size = 0;
         lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
         lv_msgbox_close(mboxCont);
         lv_obj_delete(mboxCont);
@@ -45,7 +45,7 @@ void event_processDetail(lv_event_t * e)
 
         lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 
-        LV_LOG_USER("Pressed newProcess->process.processDetails->processColorLabel %d",newProcess->process.processDetails->filmType);
+        LV_LOG_USER("Pressed processColorLabel %d",newProcess->process.processDetails->filmType);
     }
     if(data == newProcess->process.processDetails->processBnWLabel){
         lv_obj_set_style_text_color(newProcess->process.processDetails->processBnWLabel, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
@@ -54,7 +54,7 @@ void event_processDetail(lv_event_t * e)
         newProcess->process.processDetails->somethingChanged = 1;
         
         lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);     
-        LV_LOG_USER("Pressed newProcess->process.processDetails->processBnWLabel %d",newProcess->process.processDetails->filmType);
+        LV_LOG_USER("Pressed processBnWLabel %d",newProcess->process.processDetails->filmType);
     }
 
     if(data == newProcess->process.processDetails->processPreferredLabel){
@@ -75,10 +75,19 @@ void event_processDetail(lv_event_t * e)
           lv_obj_clear_state(newProcess->process.processDetails->processRunButton, LV_STATE_DISABLED);
           lv_obj_add_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
 
-                if(isNodeInList(&gui.page.processes.processElementsList, newProcess, PROCESS_NODE) == NULL)
+          if(addProcessElement(newProcess) != NULL){
+             LV_LOG_USER("Process not present yet, let's create!");
+             processElementCreate(newProcess, newProcess->process.processDetails->processNameString, newProcess->process.processDetails->temp, newProcess->process.processDetails->filmType);
+          }    
+            else{
+                  LV_LOG_USER("Process element creation failed, maximum entries reached" );
+            }
+          
+                 /*
+                if(getProcElementEntryByObject(newProcess) == NULL)
                 {
                   LV_LOG_USER("Process not present yet, let's create!");
-                  if( !processElementCreate(newProcess, newProcess->process.processDetails->processNameString, newProcess->process.processDetails->temp, newProcess->process.processDetails->filmType) ){
+                  if(!processElementCreate(newProcess, newProcess->process.processDetails->processNameString, newProcess->process.processDetails->temp, newProcess->process.processDetails->filmType) ){
                       LV_LOG_USER("Process element not created!");
                     } 
                   else {
@@ -97,18 +106,20 @@ void event_processDetail(lv_event_t * e)
                    lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
                    LV_LOG_USER("Process already present in list!");
                 }
-        LV_LOG_USER("Pressed newProcess->process.processDetails->processSaveButton");
+                */
+            
+        LV_LOG_USER("Pressed processSaveButton");
     }
 
     if(data == newProcess->process.processDetails->processRunButton){
-        newProcess->process.processDetails->stepElementsList.size = 0;
+        //newProcess->process.processDetails->stepElementsList.size = 0;
         lv_msgbox_close(mboxCont);
         lv_obj_delete(mboxCont);
-        LV_LOG_USER("Pressed newProcess->process.processDetails->processRunButton");
+        LV_LOG_USER("Pressed processRunButton");
         checkup(newProcess);
     }
     if(data == newProcess->process.processDetails->processNewStepButton){
-        LV_LOG_USER("Pressed newProcess->process.processDetails->processNewStepButton");
+        LV_LOG_USER("Pressed processNewStepButton");
         stepDetail(newProcess, NULL);
     }
   }
@@ -178,16 +189,24 @@ void processDetail(lv_obj_t * processContainer)
 /*********************
   *    PAGE HEADER
 *********************/
-  newProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-  tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-  tempProcessNode = newProcess;
+  
+processNode* existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), processContainer, PROCESS_NODE);
+if(existingProcess != NULL) {
+    LV_LOG_USER("Process already present");
+    newProcess = existingProcess; // Usa il nodo già presente anziché allocarne uno nuovo
+} else {
+    newProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
+}
+
+tempProcessNode = newProcess;
 
 
-
+  LV_LOG_USER("Processes available %d",gui.page.processes.processElementsList.size);
   LV_LOG_USER("Process address 0x%p, with n:%d steps",newProcess, newProcess->process.processDetails->stepElementsList.size); 
-  newProcess->process.processDetails->filmType = COLOR_FILM;
+
+
+  newProcess->process.processDetails->filmType = FILM_TYPE_NA;
   newProcess->process.processDetails->somethingChanged = 0;
-  newProcess->process.processDetails->stepElementsList.size = 0;
 
   newProcess->process.processDetails->processesContainer = processContainer;
 
@@ -199,9 +218,7 @@ void processDetail(lv_obj_t * processContainer)
   
   lv_style_init(&newProcess->process.processDetails->textAreaStyle);
   
-  /*********************
-  *    PAGE ELEMENTS
-  *********************/
+
       newProcess->process.processDetails->processDetailContainer = lv_obj_create(newProcess->process.processDetails->processDetailParent);
       lv_obj_align(newProcess->process.processDetails->processDetailContainer, LV_ALIGN_CENTER, 0, 0);
       lv_obj_set_size(newProcess->process.processDetails->processDetailContainer, LV_PCT(100), LV_PCT(100));
@@ -318,7 +335,7 @@ void processDetail(lv_obj_t * processContainer)
                           lv_obj_align(newProcess->process.processDetails->processTempTextArea, LV_ALIGN_LEFT_MID, 100, 0);
                           lv_obj_set_width(newProcess->process.processDetails->processTempTextArea, 60);
                           lv_obj_add_event_cb(newProcess->process.processDetails->processTempTextArea, event_processDetail, LV_EVENT_ALL, newProcess->process.processDetails->processTempTextArea);
-                          lv_obj_add_state(newProcess->process.processDetails->processTempTextArea, LV_STATE_FOCUSED); /*To be sure the cursor is visible*/
+                          lv_obj_add_state(newProcess->process.processDetails->processTempTextArea, LV_STATE_FOCUSED);
                           lv_obj_set_style_bg_color(newProcess->process.processDetails->processTempTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                           lv_obj_set_style_text_align(newProcess->process.processDetails->processTempTextArea , LV_TEXT_ALIGN_CENTER, 0);
                           lv_style_set_text_font(&newProcess->process.processDetails->textAreaStyle, &lv_font_montserrat_18);
@@ -351,7 +368,7 @@ void processDetail(lv_obj_t * processContainer)
                           lv_obj_set_width(newProcess->process.processDetails->processToleranceTextArea, 60);
 
                           lv_obj_add_event_cb(newProcess->process.processDetails->processToleranceTextArea, event_processDetail, LV_EVENT_ALL, newProcess->process.processDetails->processToleranceTextArea);
-                          lv_obj_add_state(newProcess->process.processDetails->processToleranceTextArea, LV_STATE_FOCUSED); /*To be sure the cursor is visible*/
+                          lv_obj_add_state(newProcess->process.processDetails->processToleranceTextArea, LV_STATE_FOCUSED);
                           lv_obj_set_style_bg_color(newProcess->process.processDetails->processToleranceTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                           lv_obj_set_style_text_align(newProcess->process.processDetails->processToleranceTextArea , LV_TEXT_ALIGN_CENTER, 0);
                           //lv_style_set_text_font(&newProcess->process.processDetails->textAreaStyle, &lv_font_montserrat_18);
@@ -448,15 +465,26 @@ void processDetail(lv_obj_t * processContainer)
                           lv_obj_align(newProcess->process.processDetails->processRunLabel, LV_ALIGN_CENTER, 0, 0);
                           lv_obj_add_flag(newProcess->process.processDetails->processRunLabel, LV_OBJ_FLAG_CLICKABLE);
 
-
-            if(getProcElementEntryByObject(processContainer) != NULL){
-              LV_LOG_USER("Process already exist with address 0x%p with n:%d steps", getProcElementEntryByObject(processContainer),getProcElementEntryByObject(processContainer)->process.processDetails->stepElementsList.size);
-              stepNode	*currentNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-              currentNode = getProcElementEntryByObject(processContainer)->process.processDetails->stepElementsList.start;
-
-              while(currentNode){
-                  stepElementCreate(currentNode, newProcess ,currentNode->step.stepDetails->stepNameString, currentNode->step.stepDetails->timeMins, currentNode->step.stepDetails->timeSecs, currentNode->step.stepDetails->type);
+              
+              if(newProcess->process.processDetails->stepElementsList.size > 0){
+                stepNode *currentNode = newProcess->process.processDetails->stepElementsList.start;
+                uint8_t tempSize = 0;
+                while(currentNode != NULL){               
+                  LV_LOG_USER("Adding to process with address 0x%p n:%d steps", newProcess,newProcess->process.processDetails->stepElementsList.size);
+                  stepElementCreate(currentNode, newProcess ,currentNode->step.stepDetails->stepNameString, currentNode->step.stepDetails->timeMins, currentNode->step.stepDetails->timeSecs, currentNode->step.stepDetails->type, tempSize);
                   currentNode = currentNode->next;
-              } 
-        }
+                  tempSize ++;
+                } 
+            }
+            /*
+            if (newProcess != NULL) {
+              stepNode *currentNode = newProcess->process.processDetails->stepElementsList.end; // Parti dall'ultimo nodo
+              uint8_t tempSize = 0; // Inizia dalla dimensione - 1
+              while (currentNode != NULL) {
+                  LV_LOG_USER("Adding to process with address 0x%p n:%d steps", newProcess, newProcess->process.processDetails->stepElementsList.size);
+                  stepElementCreate(currentNode, newProcess ,currentNode->step.stepDetails->stepNameString, currentNode->step.stepDetails->timeMins, currentNode->step.stepDetails->timeSecs, currentNode->step.stepDetails->type, tempSize);
+                  currentNode = currentNode->prev; // Passa al nodo precedente
+                  tempSize++;
+              }
+          }  */           
 }

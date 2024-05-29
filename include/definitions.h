@@ -1166,7 +1166,7 @@ void event_messagePopup(lv_event_t *e);
 
 // @file element_process.c
 void event_processElement(lv_event_t *e);
-bool processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType_t type );
+void processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType_t type );
 processNode *getProcElementEntryByObject( lv_obj_t *obj );
 
 // @file element_rollerPopup.c
@@ -1175,7 +1175,8 @@ void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *w
 
 // @file element_step.c
 void event_stepElement(lv_event_t *e);
-bool stepElementCreate(stepNode *newStep, processNode *processReference, char *name, uint32_t timeMins, uint32_t timeSecs, chemicalType_t type);
+void stepElementCreate(stepNode * newStep,processNode * processReference, char *name, uint32_t timeMins, uint32_t timeSecs, chemicalType_t type, int8_t tempSize);
+
 
 
 /*********************

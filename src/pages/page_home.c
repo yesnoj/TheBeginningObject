@@ -20,8 +20,9 @@ void event_btn_start(lv_event_t * e)
   lv_event_code_t code = lv_event_get_code(e);
   LV_LOG_USER("initErrors %d",initErrors);
   if(code == LV_EVENT_CLICKED) {
-   if(initErrors == 0)
+   if(initErrors == 0){
       menu();
+      }
     else
       rebootBoard();
   }   
@@ -32,7 +33,7 @@ void event_btn_start(lv_event_t * e)
 void homePage(void)
 {
     init_globals();
-  
+
     lv_obj_del(lv_screen_active());
 
     gui.page.home.screen_home = lv_obj_create(NULL);

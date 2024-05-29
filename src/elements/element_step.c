@@ -20,7 +20,7 @@ extern struct gui_components gui;
 ******************************/
 stepNode *addStepElement(stepNode * stepToAdd, processNode * processReference) {
   
-	if(processReference->process.processDetails->stepElementsList.size == MAX_STEP_ELEMENTS) return NULL;		// Put some limit on things!
+	if(processReference->process.processDetails->stepElementsList.size == MAX_STEP_ELEMENTS || isNodeInList((void*)&(processReference->process.processDetails->stepElementsList), stepToAdd, STEP_NODE) != NULL) return NULL;		// Put some limit on things!
 	
   if(processReference->process.processDetails->stepElementsList.start == NULL) {					/* Deals with the first entry */
 		processReference->process.processDetails->stepElementsList.start = stepToAdd;
@@ -148,7 +148,7 @@ void event_stepElement(lv_event_t * e){
   }
 }
 
-bool stepElementCreate(stepNode * newStep,processNode * processReference, char *name, uint32_t timeMins, uint32_t timeSecs, chemicalType_t type){
+void stepElementCreate(stepNode * newStep,processNode * processReference, char *name, uint32_t timeMins, uint32_t timeSecs, chemicalType_t type, int8_t tempSize){
   /*********************
   *    PAGE HEADER
   *********************/
@@ -177,7 +177,14 @@ bool stepElementCreate(stepNode * newStep,processNode * processReference, char *
 
   newStep->step.stepElement = lv_obj_create(processReference->process.processDetails->processStepsContainer);
   
-  newStep->step.container_y = -13 + ((processReference->process.processDetails->stepElementsList.size) * 70);
+  if(tempSize == -1){
+		LV_LOG_USER("New Step");
+    newStep->step.container_y = -13 + ((processReference->process.processDetails->stepElementsList.size - 1) * 70);
+  }
+  else{
+		LV_LOG_USER("Previous Step");
+    newStep->step.container_y = -13 + ((tempSize) * 70);
+  }
   lv_obj_set_pos(newStep->step.stepElement, -13, newStep->step.container_y);        
   lv_obj_set_size(newStep->step.stepElement, 240, 70);
   lv_obj_remove_flag(newStep->step.stepElement, LV_OBJ_FLAG_SCROLLABLE); 
@@ -218,12 +225,17 @@ bool stepElementCreate(stepNode * newStep,processNode * processReference, char *
         lv_obj_set_style_text_font(newStep->step.stepTime, &lv_font_montserrat_18, 0);              
         lv_obj_align(newStep->step.stepTime, LV_ALIGN_LEFT_MID, 10, 17);
 
-        newStep->step.stepTypeIcon = lv_label_create(newStep->step.stepElementSummary);     
-        lv_label_set_text(newStep->step.stepTypeIcon, chemical_Icon);     
+        newStep->step.stepTypeIcon = lv_label_create(newStep->step.stepElementSummary);
+
+        if(type == CHEMISTRY)
+            lv_label_set_text(newStep->step.stepTypeIcon, chemical_Icon);
+         if(type == RINSE)
+            lv_label_set_text(newStep->step.stepTypeIcon, rinse_Icon);           
+         if(type == MULTI_RINSE)
+            lv_label_set_text(newStep->step.stepTypeIcon, multiRinse_Icon); 
+
         lv_obj_set_style_text_font(newStep->step.stepTypeIcon, &FilMachineFontIcons_20, 0);              
         lv_obj_align(newStep->step.stepTypeIcon, LV_ALIGN_RIGHT_MID, 9, 0);
 
-
-return true;
 }
 

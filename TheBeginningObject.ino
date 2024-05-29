@@ -31,8 +31,8 @@ void eventSave(lv_event_t * e)
   lv_event_code_t code = lv_event_get_code(e);
   if(code == LV_EVENT_REFRESH){
     LV_LOG_USER("Save JSON!");
-    //writeJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
-    writeFullJSONFile(SD, FILENAME_SAVE,gui);
+    //TEMPORARY DISABLED, BUT WORKING!
+    //writeFullJSONFile(SD, FILENAME_SAVE,gui);
   }
     
     

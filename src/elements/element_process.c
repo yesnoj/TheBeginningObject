@@ -19,21 +19,22 @@ extern struct gui_components gui;
 ******************************/
   processNode *addProcessElement(processNode	*processToAdd) {
 
-	if( gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS ) return NULL;		// Put some limit on things!
- 
-	if( gui.page.processes.processElementsList.start == NULL) {					/* Deals with the first entry */
-		gui.page.processes.processElementsList.start = processToAdd;
-		processToAdd->prev = NULL;
-	} else {
-		gui.page.processes.processElementsList.end->next = processToAdd;				/* Do this after the first */
-		processToAdd->prev = gui.page.processes.processElementsList.end;
-	}
-	gui.page.processes.processElementsList.end = processToAdd;
-	gui.page.processes.processElementsList.end->next = NULL;
-	gui.page.processes.processElementsList.size++;
+	if( gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS || isNodeInList((void*)&(gui.page.processes.processElementsList), processToAdd, PROCESS_NODE) != NULL) return NULL;		// Put some limit on things!
+  
+  LV_LOG_USER("Processes available %d first",gui.page.processes.processElementsList.size);
+      if( gui.page.processes.processElementsList.start == NULL) {					/* Deals with the first entry */
+        gui.page.processes.processElementsList.start = processToAdd;
+        processToAdd->prev = NULL;
+      } else {
+        gui.page.processes.processElementsList.end->next = processToAdd;				/* Do this after the first */
+        processToAdd->prev = gui.page.processes.processElementsList.end;
+      }
+      gui.page.processes.processElementsList.end = processToAdd;
+      gui.page.processes.processElementsList.end->next = NULL;
+      gui.page.processes.processElementsList.size++;
 
-  LV_LOG_USER("Processes available %d steps",gui.page.processes.processElementsList.size); 
-	return processToAdd;
+      LV_LOG_USER("Processes available %d after",gui.page.processes.processElementsList.size -1); 
+      return processToAdd;
 }
 
 
@@ -81,22 +82,23 @@ bool deleteProcessElement( processNode	*processToDelete ) {
 	return false;
 }
 
-processNode *getProcElementEntryByObject( lv_obj_t *obj ) {
+processNode* getProcElementEntryByObject(lv_obj_t* obj) {
+    processNode* currentNode = gui.page.processes.processElementsList.start;
 
-	processNode	*currentNode  = gui.page.processes.processElementsList.start;
-
-	while( currentNode  ) {
-		if( obj == currentNode->process.processElement ) break;				/* Check all objects if any match return element pointer, not styles! */
-		if( obj == currentNode->process.preferredIcon ) break;
-		if( obj == currentNode->process.processElementSummary ) break;
-		if( obj == currentNode->process.processName ) break;
-		if( obj == currentNode->process.processTemp ) break;
-		if( obj == currentNode->process.processTempIcon ) break;
-		if( obj == currentNode->process.processTypeIcon ) break;
-    if( obj == currentNode) break;
-		currentNode = currentNode->next;
-	}
-	return currentNode;
+    while (currentNode) {
+        // Check all objects if any match, return element pointer, not styles!
+        if (obj == currentNode->process.processElement || 
+            obj == currentNode->process.preferredIcon || 
+            obj == currentNode->process.processElementSummary || 
+            obj == currentNode->process.processName || 
+            obj == currentNode->process.processTemp || 
+            obj == currentNode->process.processTempIcon || 
+            obj == currentNode->process.processTypeIcon) {
+            return currentNode;
+        }
+        currentNode = currentNode->next;
+    }
+    return NULL; // Return nullptr if no matching processNode is found
 }
 
 static bool deleteProcessElementByObj( lv_obj_t *obj ) {
@@ -161,7 +163,7 @@ void event_processElement(lv_event_t * e){
 }
 
 
-bool processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType_t type ) {
+void processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType_t type ) {
 	if(newProcess->process.processStyle.values_and_props == NULL ) {		/* Only initialise the style once! */
 		lv_style_init(&newProcess->process.processStyle);
 
@@ -174,8 +176,9 @@ bool processElementCreate(processNode *newProcess, char *name, uint32_t temp, fi
 		LV_LOG_USER("First call to processElementCreate style now initialised");
 	}
 
+  LV_LOG_USER("Process size :%d",gui.page.processes.processElementsList.size);
 	newProcess->process.processElement = lv_obj_create(gui.page.processes.processesListContainer);
-	newProcess->process.container_y = -10 + ((gui.page.processes.processElementsList.size) * 70);
+	newProcess->process.container_y = -10 + ((gui.page.processes.processElementsList.size - 2) * 70);
 	lv_obj_set_pos(newProcess->process.processElement, -10, newProcess->process.container_y);
 	lv_obj_set_size(newProcess->process.processElement, 315, 70);
 	lv_obj_remove_flag(newProcess->process.processElement, LV_OBJ_FLAG_SCROLLABLE);
@@ -235,7 +238,5 @@ bool processElementCreate(processNode *newProcess, char *name, uint32_t temp, fi
         }
         
         lv_obj_add_event_cb(newProcess->process.preferredIcon, event_processElement, LV_EVENT_CLICKED, newProcess->process.preferredIcon);
-
-        return true;
 }
 

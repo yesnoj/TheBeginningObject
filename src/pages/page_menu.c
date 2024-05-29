@@ -87,8 +87,7 @@ void menu(void){
     lv_scr_load(gui.page.menu.screen_mainMenu);
 
     processes();
-
-
+ 
     gui.page.menu.processesTab = lv_obj_create(gui.page.menu.screen_mainMenu);
     lv_obj_set_pos(gui.page.menu.processesTab, 5, 7);                            
     lv_obj_set_size(gui.page.menu.processesTab, 130, 97);   

@@ -30,31 +30,19 @@ void event_stepDetail(lv_event_t * e)
 
  if(code == LV_EVENT_CLICKED){
     if(obj == newStep->step.stepDetails->stepSaveButton){
-      LV_LOG_USER("Pressed newStep->step.stepDetails->stepSaveButton");
+      LV_LOG_USER("Pressed stepSaveButton");
 
                 // for testing
           static char 			  	name[80];	// Test Code
-          static uint16_t			  test_index = 1; // Test Code
-          static uint32_t			  timeMins = 12;	// Test Code
-          static uint32_t			  timeSecs = 32;	// Test Code
-          static chemicalType_t type = RINSE; // Test Code
-          lv_snprintf( name, sizeof(name), "A Test Step creation index %02d", test_index ); // Test code
 
-
-            timeMins ++;	// for test increase temp each time
-            timeSecs ++;	// for test increase index for name generation
-            type != type;
-          if( !stepElementCreate(newStep , data ,name, timeMins, timeSecs, type) ){	// Needs to be called with user populated values eventually
-            LV_LOG_USER("Step element not created!");
-          } else {
                 if(addStepElement(newStep, data) != NULL){
-                    LV_LOG_USER("Step 0x%p element created!Now process 0x%p has n: %d steps",newStep,data, ((processNode *)data)->process.processDetails->stepElementsList.size);
+                    LV_LOG_USER("Step %p element created!Now process %p has n: %d steps",newStep,data, ((processNode *)data)->process.processDetails->stepElementsList.size);
+                    stepElementCreate(newStep , data ,name, newStep->step.stepDetails->timeMins , newStep->step.stepDetails->timeSecs, newStep->step.stepDetails->type, -1);
                     //lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
                 }
                 else{
                     LV_LOG_USER("Step element creation failed, maximum entries reached" );
                 }
-            }
 
       lv_msgbox_close(mboxCont);
       lv_obj_delete(mboxCont);
@@ -175,8 +163,6 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
 
 
       newStep = (stepNode*) allocateAndInitializeNode(STEP_NODE);
-      tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);
-
       tempStepNode = newStep;
       LV_LOG_USER("Step detail creation");
 
