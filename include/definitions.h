@@ -883,10 +883,10 @@ LV_IMG_DECLARE(splash_img);
 /*********************
 * Icon chars
 *********************/
-#define oldCamera_icon      "\xEF\x82\x83"
-#define plusplus_icon       "\xEF\x84\x81"
+#define oldCamera_icon      "\xEF\x82\x83" //never used, to add into font.c file in case need to be used
+#define plusplus_icon       "\xEF\x84\x81" //never used, to add into font.c file in case need to be used
 #define film_icon           "\xEF\x80\x88" //never used, to add into font.c file in case need to be used
-#define image_icon          "\xEF\x80\xBE"
+#define image_icon          "\xEF\x80\xBE" //never used, to add into font.c file in case need to be used
 
 #define tabProcess_label    "Process list"
 #define tabProcess_icon     "\xEF\x85\xA0"
@@ -919,8 +919,8 @@ LV_IMG_DECLARE(splash_img);
 #define arrowStep_Icon      "\xEF\x81\xA1"
 #define dotStep_Icon        "\xEF\x86\x92"
 #define clock_Icon          "\xEF\x80\x97"
-#define bomb_Icon           "\xEF\x8B\x9B"
-#define alert_icon          "\xEF\x81\xAA"
+#define bomb_Icon           "\xEF\x8B\x9B" //never used, to add into font.c file in case need to be used
+#define alert_icon          "\xEF\x81\xAA" //never used, to add into font.c file in case need to be used
 #define sdCard_icon         "\xEF\x9F\x82"
 #define discardAfter_icon   "\xEF\x8B\xB5"
 
