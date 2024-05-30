@@ -10,6 +10,7 @@
 #include "../../include/definitions.h"
 
 extern struct gui_components gui;
+char formatted_string[20];
 
 //ACCESSORY INCLUDES
 
@@ -77,37 +78,11 @@ void event_processDetail(lv_event_t * e)
 
           if(addProcessElement(newProcess) != NULL){
              LV_LOG_USER("Process not present yet, let's create!");
-             processElementCreate(newProcess, newProcess->process.processDetails->processNameString, newProcess->process.processDetails->temp, newProcess->process.processDetails->filmType);
+             processElementCreate(newProcess);
           }    
             else{
                   LV_LOG_USER("Process element creation failed, maximum entries reached" );
             }
-          
-                 /*
-                if(getProcElementEntryByObject(newProcess) == NULL)
-                {
-                  LV_LOG_USER("Process not present yet, let's create!");
-                  if(!processElementCreate(newProcess, newProcess->process.processDetails->processNameString, newProcess->process.processDetails->temp, newProcess->process.processDetails->filmType) ){
-                      LV_LOG_USER("Process element not created!");
-                    } 
-                  else {
-                      if(addProcessElement(newProcess) != NULL)
-                        {
-                            LV_LOG_USER("Process address 0x%p, with n:%d steps",newProcess, newProcess->process.processDetails->stepElementsList.size); 
-                            lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
-                        }
-                      else
-                        {
-                          LV_LOG_USER("Process element creation failed, maximum entries reached" );
-                        }
-                    }
-                }
-                else{
-                   lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
-                   LV_LOG_USER("Process already present in list!");
-                }
-                */
-            
         LV_LOG_USER("Pressed processSaveButton");
     }
 
@@ -194,6 +169,7 @@ processNode* existingProcess = (processNode*)isNodeInList((void*)&(gui.page.proc
 if(existingProcess != NULL) {
     LV_LOG_USER("Process already present");
     newProcess = existingProcess; // Usa il nodo già presente anziché allocarne uno nuovo
+
 } else {
     newProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
 }
@@ -204,8 +180,6 @@ tempProcessNode = newProcess;
   LV_LOG_USER("Processes available %d",gui.page.processes.processElementsList.size);
   LV_LOG_USER("Process address 0x%p, with n:%d steps",newProcess, newProcess->process.processDetails->stepElementsList.size); 
 
-
-  newProcess->process.processDetails->filmType = FILM_TYPE_NA;
   newProcess->process.processDetails->somethingChanged = 0;
 
   newProcess->process.processDetails->processesContainer = processContainer;
@@ -395,10 +369,10 @@ tempProcessNode = newProcess;
                           lv_obj_align(newProcess->process.processDetails->processTotalTimeLabel, LV_ALIGN_LEFT_MID, -15, 0);
 
                           newProcess->process.processDetails->processTotalTimeValue = lv_label_create(newProcess->process.processDetails->processTotalTimeContainer);         
-                          lv_label_set_text(newProcess->process.processDetails->processTotalTimeValue, "32m20s"); 
                           lv_obj_set_style_text_font(newProcess->process.processDetails->processTotalTimeValue, &lv_font_montserrat_20, 0);              
-                          lv_obj_align(newProcess->process.processDetails->processTotalTimeValue, LV_ALIGN_LEFT_MID, 100, 0);
-                          newProcess->process.processDetails->totalTime = 666;    
+                          lv_obj_align(newProcess->process.processDetails->processTotalTimeValue, LV_ALIGN_LEFT_MID, 100, 0);   
+                          sprintf(formatted_string, "%dm%ds", newProcess->process.processDetails->timeMins, newProcess->process.processDetails->timeSecs);
+                          lv_label_set_text(newProcess->process.processDetails->processTotalTimeValue, formatted_string); 
 
 
                   newProcess->process.processDetails->processColorOrBnWContainer = lv_obj_create(newProcess->process.processDetails->processInfoContainer);
@@ -423,7 +397,18 @@ tempProcessNode = newProcess;
                           lv_obj_align(newProcess->process.processDetails->processBnWLabel, LV_ALIGN_LEFT_MID, 45, 0);
                           lv_obj_add_flag(newProcess->process.processDetails->processBnWLabel, LV_OBJ_FLAG_CLICKABLE);
                           lv_obj_add_event_cb(newProcess->process.processDetails->processBnWLabel, event_processDetail, LV_EVENT_CLICKED, newProcess->process.processDetails->processBnWLabel);
-
+                          if(newProcess->process.processDetails->filmType = COLOR_FILM){
+                              lv_obj_set_style_text_color(newProcess->process.processDetails->processColorLabel, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+                              lv_obj_set_style_text_color(newProcess->process.processDetails->processBnWLabel, lv_color_hex(WHITE), LV_PART_MAIN);
+                          }
+                          if(newProcess->process.processDetails->filmType = BLACK_AND_WHITE_FILM){
+                              lv_obj_set_style_text_color(newProcess->process.processDetails->processBnWLabel, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+                              lv_obj_set_style_text_color(newProcess->process.processDetails->processColorLabel, lv_color_hex(WHITE), LV_PART_MAIN);
+                          }
+                          if(newProcess->process.processDetails->filmType = FILM_TYPE_NA){
+                              lv_obj_set_style_text_color(newProcess->process.processDetails->processBnWLabel, lv_color_hex(WHITE), LV_PART_MAIN);
+                              lv_obj_set_style_text_color(newProcess->process.processDetails->processColorLabel, lv_color_hex(WHITE), LV_PART_MAIN);
+                          }
 
                   newProcess->process.processDetails->processPreferredLabel = lv_label_create(newProcess->process.processDetails->processInfoContainer);         
                   lv_label_set_text(newProcess->process.processDetails->processPreferredLabel, preferred_icon); 
@@ -431,8 +416,12 @@ tempProcessNode = newProcess;
                   lv_obj_align(newProcess->process.processDetails->processPreferredLabel, LV_ALIGN_TOP_LEFT, 120, 140);
                   lv_obj_add_flag(newProcess->process.processDetails->processPreferredLabel, LV_OBJ_FLAG_CLICKABLE);
                   lv_obj_add_event_cb(newProcess->process.processDetails->processPreferredLabel, event_processDetail, LV_EVENT_CLICKED, newProcess->process.processDetails->processPreferredLabel);
-
-
+                  if(newProcess->process.processDetails->isPreferred == 0){
+                    lv_obj_set_style_text_color(newProcess->process.processDetails->processPreferredLabel, lv_color_hex(WHITE), LV_PART_MAIN);
+                  }
+                  else{
+                    lv_obj_set_style_text_color(newProcess->process.processDetails->processPreferredLabel, lv_color_hex(RED), LV_PART_MAIN);
+                  }
 
                   newProcess->process.processDetails->processSaveButton = lv_button_create(newProcess->process.processDetails->processDetailContainer);
                   lv_obj_set_size(newProcess->process.processDetails->processSaveButton, BUTTON_PROCESS_WIDTH, BUTTON_PROCESS_HEIGHT);
@@ -471,7 +460,7 @@ tempProcessNode = newProcess;
                 uint8_t tempSize = 0;
                 while(currentNode != NULL){               
                   LV_LOG_USER("Adding to process with address 0x%p n:%d steps", newProcess,newProcess->process.processDetails->stepElementsList.size);
-                  stepElementCreate(currentNode, newProcess ,currentNode->step.stepDetails->stepNameString, currentNode->step.stepDetails->timeMins, currentNode->step.stepDetails->timeSecs, currentNode->step.stepDetails->type, tempSize);
+                  stepElementCreate(currentNode, newProcess, tempSize);
                   currentNode = currentNode->next;
                   tempSize ++;
                 } 

@@ -11,6 +11,7 @@
 #include "../../include/definitions.h"
 
 extern struct gui_components gui;
+char formatted_string[20];
 
 //ACCESSORY INCLUDES
 
@@ -148,7 +149,7 @@ void event_stepElement(lv_event_t * e){
   }
 }
 
-void stepElementCreate(stepNode * newStep,processNode * processReference, char *name, uint32_t timeMins, uint32_t timeSecs, chemicalType_t type, int8_t tempSize){
+void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t tempSize){
   /*********************
   *    PAGE HEADER
   *********************/
@@ -203,12 +204,25 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, char *
 
         lv_obj_add_style(newStep->step.stepElementSummary, &newStep->step.stepStyle, 0);
 
+        newStep->step.stepTypeIcon = lv_label_create(newStep->step.stepElementSummary);
+
+        if(newStep->step.stepDetails->type == CHEMISTRY)
+            lv_label_set_text(newStep->step.stepTypeIcon, chemical_Icon);
+        if(newStep->step.stepDetails->type == RINSE)
+            lv_label_set_text(newStep->step.stepTypeIcon, rinse_Icon);           
+        if(newStep->step.stepDetails->type == MULTI_RINSE)
+            lv_label_set_text(newStep->step.stepTypeIcon, multiRinse_Icon); 
+
+        lv_obj_set_style_text_font(newStep->step.stepTypeIcon, &FilMachineFontIcons_20, 0);              
+        lv_obj_align(newStep->step.stepTypeIcon, LV_ALIGN_LEFT_MID, -10, -12);
+
+
         newStep->step.stepName = lv_label_create(newStep->step.stepElementSummary);         
-        lv_label_set_text(newStep->step.stepName, "Precipitevolissimevolmente"); 
+        lv_label_set_text(newStep->step.stepName, newStep->step.stepDetails->stepNameString); 
         lv_obj_set_style_text_font(newStep->step.stepName, &lv_font_montserrat_22, 0);      
         lv_label_set_long_mode(newStep->step.stepName, LV_LABEL_LONG_SCROLL_CIRCULAR);
-        lv_obj_set_width(newStep->step.stepName, 190);        
-        lv_obj_align(newStep->step.stepName, LV_ALIGN_LEFT_MID, -10, -10);
+        lv_obj_set_width(newStep->step.stepName, 175);        
+        lv_obj_align(newStep->step.stepName, LV_ALIGN_LEFT_MID, 12, -12);
         lv_obj_remove_flag(newStep->step.stepName, LV_OBJ_FLAG_SCROLLABLE); 
 
         newStep->step.stepTimeIcon = lv_label_create(newStep->step.stepElementSummary);          
@@ -218,24 +232,29 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, char *
         lv_obj_align(newStep->step.stepTimeIcon, LV_ALIGN_LEFT_MID, -10, 17);
         
         newStep->step.stepTime = lv_label_create(newStep->step.stepElementSummary);    
-        char formatted_string[20]; // Assicurati che la dimensione sia sufficiente per contenere la stringa formattata
-        sprintf(formatted_string, "%dm%ds", timeMins, timeSecs);
-
+        sprintf(formatted_string, "%dm%ds", newStep->step.stepDetails->timeMins, newStep->step.stepDetails->timeSecs);
         lv_label_set_text(newStep->step.stepTime, formatted_string); 
         lv_obj_set_style_text_font(newStep->step.stepTime, &lv_font_montserrat_18, 0);              
-        lv_obj_align(newStep->step.stepTime, LV_ALIGN_LEFT_MID, 10, 17);
+        lv_obj_align(newStep->step.stepTime, LV_ALIGN_LEFT_MID, 12, 17);
 
-        newStep->step.stepTypeIcon = lv_label_create(newStep->step.stepElementSummary);
+        newStep->step.sourceLabel = lv_label_create(newStep->step.stepElementSummary); 
+        sprintf(formatted_string, "From:%s", "C2");        
+        lv_label_set_text(newStep->step.sourceLabel, formatted_string); 
+        lv_obj_set_style_text_font(newStep->step.sourceLabel, &lv_font_montserrat_18, 0);      
+        lv_obj_set_width(newStep->step.sourceLabel, 120);        
+        lv_obj_align(newStep->step.sourceLabel, LV_ALIGN_LEFT_MID, 85, 17);
+        lv_obj_remove_flag(newStep->step.sourceLabel, LV_OBJ_FLAG_SCROLLABLE); 
 
-        if(type == CHEMISTRY)
-            lv_label_set_text(newStep->step.stepTypeIcon, chemical_Icon);
-         if(type == RINSE)
-            lv_label_set_text(newStep->step.stepTypeIcon, rinse_Icon);           
-         if(type == MULTI_RINSE)
-            lv_label_set_text(newStep->step.stepTypeIcon, multiRinse_Icon); 
+        newStep->step.discardAfterIcon = lv_label_create(newStep->step.stepElementSummary);        
+        lv_label_set_text(newStep->step.discardAfterIcon, discardAfter_icon); 
+        lv_obj_set_style_text_font(newStep->step.discardAfterIcon, &FilMachineFontIcons_20, 0);            
+        lv_obj_align(newStep->step.discardAfterIcon, LV_ALIGN_RIGHT_MID, 13, 17);
 
-        lv_obj_set_style_text_font(newStep->step.stepTypeIcon, &FilMachineFontIcons_20, 0);              
-        lv_obj_align(newStep->step.stepTypeIcon, LV_ALIGN_RIGHT_MID, 9, 0);
+        if(newStep->step.stepDetails->discardAfterProc){
+            lv_obj_set_style_text_color(newStep->step.discardAfterIcon, lv_color_hex(WHITE), LV_PART_MAIN);
+          } else {
+            lv_obj_set_style_text_color(newStep->step.discardAfterIcon, lv_color_hex(GREY), LV_PART_MAIN);
+          }
 
 }
 

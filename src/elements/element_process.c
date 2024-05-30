@@ -163,7 +163,7 @@ void event_processElement(lv_event_t * e){
 }
 
 
-void processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType_t type ) {
+void processElementCreate(processNode *newProcess) {
 	if(newProcess->process.processStyle.values_and_props == NULL ) {		/* Only initialise the style once! */
 		lv_style_init(&newProcess->process.processStyle);
 
@@ -198,7 +198,7 @@ void processElementCreate(processNode *newProcess, char *name, uint32_t temp, fi
         lv_obj_add_style(newProcess->process.processElementSummary, &newProcess->process.processStyle, 0);
 
         newProcess->process.processName = lv_label_create(newProcess->process.processElementSummary);
-        lv_label_set_text(newProcess->process.processName, name );
+        lv_label_set_text(newProcess->process.processName, newProcess->process.processDetails->processNameString);
         lv_obj_set_style_text_font(newProcess->process.processName, &lv_font_montserrat_22, 0);
         lv_label_set_long_mode(newProcess->process.processName, LV_LABEL_LONG_SCROLL_CIRCULAR);
         lv_obj_set_width(newProcess->process.processName, 220);
@@ -212,14 +212,14 @@ void processElementCreate(processNode *newProcess, char *name, uint32_t temp, fi
         lv_obj_align(newProcess->process.processTempIcon, LV_ALIGN_LEFT_MID, -10, 17);
 
         newProcess->process.processTemp = lv_label_create(newProcess->process.processElementSummary);
-        lv_label_set_text_fmt(newProcess->process.processTemp, "%d °C", temp );
-        newProcess->process.processDetails->temp = temp;
+        lv_label_set_text_fmt(newProcess->process.processTemp, "%d °C", newProcess->process.processDetails->temp );
+        newProcess->process.processDetails->temp = newProcess->process.processDetails->temp;
         lv_obj_set_style_text_font(newProcess->process.processTemp, &lv_font_montserrat_18, 0);
         lv_obj_align(newProcess->process.processTemp, LV_ALIGN_LEFT_MID, 7, 17);
 
         newProcess->process.processTypeIcon = lv_label_create(newProcess->process.processElementSummary);
-        lv_label_set_text(newProcess->process.processTypeIcon, type == BLACK_AND_WHITE_FILM ? blackwhite_icon : colorpalette_icon);
-        newProcess->process.processDetails->filmType = type;
+        lv_label_set_text(newProcess->process.processTypeIcon, newProcess->process.processDetails->filmType == BLACK_AND_WHITE_FILM ? blackwhite_icon : colorpalette_icon);
+        newProcess->process.processDetails->filmType = newProcess->process.processDetails->filmType;
         lv_obj_set_style_text_font(newProcess->process.processTypeIcon, &FilMachineFontIcons_20, 0);
         lv_obj_align(newProcess->process.processTypeIcon, LV_ALIGN_RIGHT_MID, 7, 0);
         

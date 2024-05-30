@@ -289,8 +289,8 @@ typedef struct sStepDetail {
 
 	processNode       *referenceProcess;  // Use a pointer instead of an instance
     const char              *stepNameString;
-    uint32_t           timeMins;
-    uint32_t           timeSecs;
+    uint8_t           timeMins;
+    uint8_t           timeSecs;
     chemicalType_t       type;
     chemicalSource_t     source;
     uint8_t            discardAfterProc;
@@ -301,12 +301,14 @@ typedef struct singleStep { //GRAPHIC ELEMENT IN THE STEPS LIST
     /* LVGL objects */
     lv_obj_t           *stepElement;
     lv_obj_t           *stepElementSummary;
-    lv_style_t          stepStyle;
+    lv_style_t         stepStyle;
     lv_obj_t           *stepName;
     lv_obj_t           *stepTime;
     lv_obj_t           *stepTimeIcon;
     lv_obj_t           *stepTypeIcon;
-    lv_coord_t          container_y;
+    lv_obj_t           *discardAfterIcon;
+    lv_obj_t           *sourceLabel;
+    lv_coord_t         container_y;
 
     /* Params objects */
     sStepDetail 	  *stepDetails;
@@ -469,14 +471,15 @@ typedef struct sProcessDetail {
 	/* Params objects */
     stepList           stepElementsList;  /* Process steps list */
 	sCheckup		   *checkup;
-    const char               *processNameString;
+    const char         *processNameString;
     uint32_t           temp;
     uint8_t            tempTolerance;
     uint8_t            isTempControlled;
     uint8_t            isPreferred;
     uint8_t            somethingChanged;
     filmType_t           filmType;
-    uint32_t           totalTime;
+    uint8_t            timeMins;
+    uint8_t            timeSecs;
 }sProcessDetail;
 
 
@@ -813,6 +816,14 @@ struct gui_components {
 * GLOBAL DEFINES
 *********************/
 
+LV_FONT_DECLARE(FilMachineFontIcons_15);
+LV_FONT_DECLARE(FilMachineFontIcons_20);
+LV_FONT_DECLARE(FilMachineFontIcons_30);
+LV_FONT_DECLARE(FilMachineFontIcons_40);
+LV_FONT_DECLARE(FilMachineFontIcons_100);
+
+LV_IMG_DECLARE(splash_img);
+
 #define FILENAME_SAVE         "/FilMachine.json"
 
 #define MAX_PROC_NAME_LEN		  20
@@ -862,7 +873,7 @@ struct gui_components {
 #define ORANGE_DARK      0x6b470e
 #define ORANGE_LIGHT     0xfcba03
 #define YELLOW           0xf5ec00
-#define GREY             0xaaaaaa
+#define GREY             0xd6d6d6
 #define WHITE            0xffffff
 #define BLACK            0x000000
 #define LIGHT_BLUE       0x1fd3e0
@@ -872,46 +883,46 @@ struct gui_components {
 /*********************
 * Icon chars
 *********************/
-#define oldCamera_icon   "\xEF\x82\x83"
-#define beuta_icon       "\xEF\x83\x83"
-#define plusplus_icon    "\xEF\x84\x81"
-#define film_icon        "\xEF\x80\x88"
-#define image_icon       "\xEF\x80\xBE"
+#define oldCamera_icon      "\xEF\x82\x83"
+#define plusplus_icon       "\xEF\x84\x81"
+#define film_icon           "\xEF\x80\x88" //never used, to add into font.c file in case need to be used
+#define image_icon          "\xEF\x80\xBE"
 
-#define tabProcess_label "Process list"
-#define tabProcess_icon  "\xEF\x85\xA0"
-#define tabSetting_label "Settings"
-#define tabSetting_icon  "\xEF\x93\xBE"
-#define tabTools_label   "Tools"
-#define tabTools_icon    "\xEF\x9F\x99"
+#define tabProcess_label    "Process list"
+#define tabProcess_icon     "\xEF\x85\xA0"
+#define tabSetting_label    "Settings"
+#define tabSetting_icon     "\xEF\x93\xBE"
+#define tabTools_label      "Tools"
+#define tabTools_icon       "\xEF\x9F\x99"
 
-#define filter_icon      "\xEF\x87\x9E"
-#define funnel_icon      "\xEF\x82\xB0"
-#define newProcess_icon  "\xEF\x83\xBE"
-#define preferred_icon   "\xEF\x80\x84"
-#define colorpalette_icon"\xEF\x94\xBF"
-#define temp_icon        "\xEF\x8B\x89"
-#define blackwhite_icon  "\xEF\x81\x82"
-#define questionMark_icon"\xEF\x81\x99"
-#define closePopup_icon  "\xEF\x80\x8D"
-#define play_Icon        "\xEF\x81\x8B"
+#define filter_icon         "\xEF\x87\x9E" //never used, to add into font.c file in case need to be used
+#define funnel_icon         "\xEF\x82\xB0"
+#define newProcess_icon     "\xEF\x83\xBE"
+#define preferred_icon      "\xEF\x80\x84"
+#define colorpalette_icon   "\xEF\x94\xBF"
+#define temp_icon           "\xEF\x8B\x89"
+#define blackwhite_icon     "\xEF\x81\x82"
+#define questionMark_icon   "\xEF\x81\x99"
+#define closePopup_icon     "\xEF\x80\x8D"
+#define play_Icon           "\xEF\x81\x8B"
 
-#define save_Icon        "\xEF\x83\x87"
-#define trash_Icon       "\xEF\x8B\xAD"
-#define moveUp_Icon      "\xEF\x81\xB7"
-#define moveDown_Icon    "\xEF\x81\xB8"
-#define chemical_Icon    "\xEF\x83\x83"
-#define rinse_Icon       "\xEF\x81\x83"
-#define multiRinse_Icon  "\xEF\x86\xB8"
-#define edit_Icon        "\xEF\x81\x84"
-#define copy_Icon        "\xEF\x83\x85"
-#define checkStep_Icon   "\xEF\x80\x8C"
-#define arrowStep_Icon   "\xEF\x81\xA1"
-#define dotStep_Icon     "\xEF\x86\x92"
-#define clock_Icon       "\xEF\x80\x97"
-#define bomb_Icon        "\xEF\x8B\x9B"
-#define alert_icon       "\xEF\x81\xAA"
-#define sdCard_icon      "\xEF\x9F\x82"
+#define save_Icon           "\xEF\x83\x87"
+#define trash_Icon          "\xEF\x8B\xAD" //never used, to add into font.c file in case need to be used
+#define moveUp_Icon         "\xEF\x81\xB7" //never used, to add into font.c file in case need to be used
+#define moveDown_Icon       "\xEF\x81\xB8" //never used, to add into font.c file in case need to be used
+#define chemical_Icon       "\xEF\x83\x83"
+#define rinse_Icon          "\xEF\x81\x83"
+#define multiRinse_Icon     "\xEF\x86\xB8"
+#define edit_Icon           "\xEF\x81\x84" //never used, to add into font.c file in case need to be used
+#define copy_Icon           "\xEF\x83\x85" //never used, to add into font.c file in case need to be used
+#define checkStep_Icon      "\xEF\x80\x8C"
+#define arrowStep_Icon      "\xEF\x81\xA1"
+#define dotStep_Icon        "\xEF\x86\x92"
+#define clock_Icon          "\xEF\x80\x97"
+#define bomb_Icon           "\xEF\x8B\x9B"
+#define alert_icon          "\xEF\x81\xAA"
+#define sdCard_icon         "\xEF\x9F\x82"
+#define discardAfter_icon   "\xEF\x8B\xB5"
 
 #define initError_text "INITIALIZATION ERROR!\nSD-CARD MISSING!\nINSERT SD-CARD!\nTHEN CLICK ON ICON TO REBOOT!"
 
@@ -1166,7 +1177,7 @@ void event_messagePopup(lv_event_t *e);
 
 // @file element_process.c
 void event_processElement(lv_event_t *e);
-void processElementCreate(processNode *newProcess, char *name, uint32_t temp, filmType_t type );
+void processElementCreate(processNode *newProcess);
 processNode *getProcElementEntryByObject( lv_obj_t *obj );
 
 // @file element_rollerPopup.c
@@ -1175,8 +1186,7 @@ void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *w
 
 // @file element_step.c
 void event_stepElement(lv_event_t *e);
-void stepElementCreate(stepNode * newStep,processNode * processReference, char *name, uint32_t timeMins, uint32_t timeSecs, chemicalType_t type, int8_t tempSize);
-
+void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t tempSize);
 
 
 /*********************

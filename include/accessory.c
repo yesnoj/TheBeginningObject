@@ -751,7 +751,8 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                     nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
                     nodeP->process.processDetails->isPreferred = Processe.value()["isPreferred"];
                     nodeP->process.processDetails->filmType = Processe.value()["filmType"];
-                    nodeP->process.processDetails->totalTime = Processe.value()["totalTime"];
+                    nodeP->process.processDetails->timeMins = Processe.value()["timeMins"];
+                    nodeP->process.processDetails->timeSecs = Processe.value()["timeSecs"];
                     processElementsList->start = nodeP;
                     nodeP->prev = NULL;
                   }
@@ -762,7 +763,8 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                     nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
                     nodeP->process.processDetails->isPreferred = Processe.value()["isPreferred"];
                     nodeP->process.processDetails->filmType = Processe.value()["filmType"];
-                    nodeP->process.processDetails->totalTime = Processe.value()["totalTime"];
+                    nodeP->process.processDetails->timeMins = Processe.value()["timeMins"];
+                    nodeP->process.processDetails->timeSecs = Processe.value()["timeSecs"];
                     processElementsList->end->next = nodeP;
                     nodeP->prev = processElementsList->end;
                   }
@@ -775,7 +777,8 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                         LV_LOG_USER("isTempControlled:%d",nodeP->process.processDetails->isTempControlled);
                         LV_LOG_USER("isPreferred:%d",nodeP->process.processDetails->isPreferred);
                         LV_LOG_USER("filmType:%d",nodeP->process.processDetails->filmType);
-                        LV_LOG_USER("totalTime:%d",nodeP->process.processDetails->totalTime);
+                        LV_LOG_USER("timeMins:%d",nodeP->process.processDetails->timeMins);
+                        LV_LOG_USER("timeSecs:%d",nodeP->process.processDetails->timeSecs);
                     }
 
                     processElementsList->end = nodeP;
@@ -795,8 +798,8 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                             if(stepElementsList->start == NULL)
                             {
                                 nodeS->step.stepDetails->stepNameString = Processe_value_Step.value()["stepNameString"];
-                                nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
                                 nodeS->step.stepDetails->timeMins = Processe_value_Step.value()["timeMins"];
+                                nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
                                 nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];
                                 nodeS->step.stepDetails->source = Processe_value_Step.value()["source"];
                                 nodeS->step.stepDetails->discardAfterProc = Processe_value_Step.value()["discardAfterProc"];
@@ -806,8 +809,8 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                             else
                             {
                                 nodeS->step.stepDetails->stepNameString = Processe_value_Step.value()["stepNameString"];
-                                nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
                                 nodeS->step.stepDetails->timeMins = Processe_value_Step.value()["timeMins"];
+                                nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
                                 nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];
                                 nodeS->step.stepDetails->source = Processe_value_Step.value()["source"];
                                 nodeS->step.stepDetails->discardAfterProc = Processe_value_Step.value()["discardAfterProc"];
@@ -911,7 +914,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
             currentProcess["isTempControlled"] = currentProcessNode->process.processDetails->isTempControlled;
             currentProcess["isPreferred"] = currentProcessNode->process.processDetails->isPreferred;
             currentProcess["filmType"] = currentProcessNode->process.processDetails->filmType;
-            currentProcess["totalTime"] = currentProcessNode->process.processDetails->totalTime;
+            currentProcess["timeSecs"] = currentProcessNode->process.processDetails->timeSecs;
+            currentProcess["timeMins"] = currentProcessNode->process.processDetails->timeMins;
 
             LV_LOG_USER("--- PROCESS PARAMS ---");
             LV_LOG_USER("processNameString:%s",currentProcessNode->process.processDetails->processNameString);
@@ -920,8 +924,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
             LV_LOG_USER("isTempControlled:%d",currentProcessNode->process.processDetails->isTempControlled);
             LV_LOG_USER("isPreferred:%d",currentProcessNode->process.processDetails->isPreferred);
             LV_LOG_USER("filmType:%d",currentProcessNode->process.processDetails->filmType);
-            LV_LOG_USER("totalTime:%d",currentProcessNode->process.processDetails->totalTime);
-
+            LV_LOG_USER("timeMins:%d",currentProcessNode->process.processDetails->timeMins);
+            LV_LOG_USER("timeSecs:%d",currentProcessNode->process.processDetails->timeSecs);
 
             stepList *stepElementsList;
             memset( &stepElementsList, 0, sizeof( stepElementsList ) );	
@@ -939,16 +943,16 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
                 snprintf(stepName, sizeof(stepName), "Step%d", stepCounter);
                 JsonObject currentStep = currentProcessSteps.createNestedObject(stepName);
                 currentStep["stepNameString"] = currentStepNode->step.stepDetails->stepNameString;
-                currentStep["timeSecs"] = currentStepNode->step.stepDetails->timeSecs;
                 currentStep["timeMins"] = currentStepNode->step.stepDetails->timeMins;
+                currentStep["timeSecs"] = currentStepNode->step.stepDetails->timeSecs;
                 currentStep["type"] = currentStepNode->step.stepDetails->type;
                 currentStep["source"] = currentStepNode->step.stepDetails->source;
                 currentStep["discardAfterProc"] = currentStepNode->step.stepDetails->discardAfterProc;
 
                 LV_LOG_USER("--- STEP PARAMS ---");
                 LV_LOG_USER("stepNameString:%s",currentStepNode->step.stepDetails->stepNameString);
-                LV_LOG_USER("timeSecs:%d",currentStepNode->step.stepDetails->timeSecs);
                 LV_LOG_USER("timeMins:%d",currentStepNode->step.stepDetails->timeMins);
+                LV_LOG_USER("timeSecs:%d",currentStepNode->step.stepDetails->timeSecs);
                 LV_LOG_USER("type:%d",currentStepNode->step.stepDetails->type);
                 LV_LOG_USER("source:%d",currentStepNode->step.stepDetails->source);
                 LV_LOG_USER("discardAfterProc:%d",currentStepNode->step.stepDetails->discardAfterProc);

@@ -37,7 +37,7 @@ void event_stepDetail(lv_event_t * e)
 
                 if(addStepElement(newStep, data) != NULL){
                     LV_LOG_USER("Step %p element created!Now process %p has n: %d steps",newStep,data, ((processNode *)data)->process.processDetails->stepElementsList.size);
-                    stepElementCreate(newStep , data ,name, newStep->step.stepDetails->timeMins , newStep->step.stepDetails->timeSecs, newStep->step.stepDetails->type, -1);
+                    stepElementCreate(newStep , data , -1);
                     //lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
                 }
                 else{
