@@ -10,10 +10,8 @@
 
 
 extern struct gui_components gui;
-
 //ACCESSORY INCLUDES
 
-LV_IMG_DECLARE(splash_img);
 
 void event_btn_start(lv_event_t * e)
 {
@@ -66,7 +64,7 @@ void homePage(void)
           lv_obj_set_style_border_opa(gui.page.home.startButton, LV_OPA_TRANSP, 0);
 
           gui.page.home.errorButtonLabel = lv_label_create(gui.page.home.startButton);         
-          lv_label_set_text(gui.page.home.errorButtonLabel, sdCard_icon); 
+          lv_label_set_text(gui.page.home.errorButtonLabel, sdCard_icon);
           lv_obj_set_style_text_font(gui.page.home.errorButtonLabel, &FilMachineFontIcons_100, 0);              
           lv_obj_align(gui.page.home.errorButtonLabel, LV_ALIGN_CENTER, 0, 0);
           
