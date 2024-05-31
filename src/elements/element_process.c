@@ -178,7 +178,7 @@ void processElementCreate(processNode *newProcess) {
 
   LV_LOG_USER("Process size :%d",gui.page.processes.processElementsList.size);
 	newProcess->process.processElement = lv_obj_create(gui.page.processes.processesListContainer);
-	newProcess->process.container_y = -10 + ((gui.page.processes.processElementsList.size - 2) * 70);
+	newProcess->process.container_y = -10 + ((gui.page.processes.processElementsList.size - 1) * 70);
 	lv_obj_set_pos(newProcess->process.processElement, -10, newProcess->process.container_y);
 	lv_obj_set_size(newProcess->process.processElement, 315, 70);
 	lv_obj_remove_flag(newProcess->process.processElement, LV_OBJ_FLAG_SCROLLABLE);
@@ -217,10 +217,23 @@ void processElementCreate(processNode *newProcess) {
         lv_obj_set_style_text_font(newProcess->process.processTemp, &lv_font_montserrat_18, 0);
         lv_obj_align(newProcess->process.processTemp, LV_ALIGN_LEFT_MID, 7, 17);
 
+        newProcess->process.processTimeIcon = lv_label_create(newProcess->process.processElementSummary);          
+        lv_label_set_text(newProcess->process.processTimeIcon, clock_Icon);                  
+        lv_obj_set_style_text_font(newProcess->process.processTimeIcon, &FilMachineFontIcons_20, 0);
+        //lv_obj_set_style_text_color(newStep->step.stepTimeIcon, lv_color_hex(GREY), LV_PART_MAIN);
+        lv_obj_align(newProcess->process.processTimeIcon, LV_ALIGN_LEFT_MID, 65, 17);
+
+        newProcess->process.processTime = lv_label_create(newProcess->process.processElementSummary);    
+        sprintf(formatted_string, "%dm%ds", newProcess->process.processDetails->timeMins, newProcess->process.processDetails->timeSecs);
+        lv_label_set_text(newProcess->process.processTime, formatted_string); 
+        lv_obj_set_style_text_font(newProcess->process.processTime, &lv_font_montserrat_18, 0);              
+        lv_obj_align(newProcess->process.processTime, LV_ALIGN_LEFT_MID, 87, 17);
+
+
         newProcess->process.processTypeIcon = lv_label_create(newProcess->process.processElementSummary);
         lv_label_set_text(newProcess->process.processTypeIcon, newProcess->process.processDetails->filmType == BLACK_AND_WHITE_FILM ? blackwhite_icon : colorpalette_icon);
         newProcess->process.processDetails->filmType = newProcess->process.processDetails->filmType;
-        lv_obj_set_style_text_font(newProcess->process.processTypeIcon, &FilMachineFontIcons_20, 0);
+        lv_obj_set_style_text_font(newProcess->process.processTypeIcon, &FilMachineFontIcons_30, 0);
         lv_obj_align(newProcess->process.processTypeIcon, LV_ALIGN_RIGHT_MID, 7, 0);
         
         newProcess->process.preferredIcon = lv_label_create(newProcess->process.processElement);

@@ -131,19 +131,31 @@ void event_Pippo(lv_event_t * e)
 {   
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
+    lv_obj_t * objCont = (lv_obj_t *)lv_obj_get_parent(obj);  
+    lv_obj_t *obj2 = (lv_obj_t *)lv_event_get_current_target(e);
     void * data = lv_event_get_user_data(e);
-  
-   if(code == LV_EVENT_CLICKED) {
-    LV_LOG_USER("Pippo");
-    if(obj == newStep->step.stepDetails->stepDetailMinTextArea){
-      LV_LOG_USER("Set minutes");
-      rollerPopupCreate(gui.element.rollerPopup.minutesOptions, setMinutesPopupTitle_text,newStep, 0);
+
+    /*
+    LV_LOG_USER("Event triggered on object: 0x%p", obj);
+    LV_LOG_USER("newStep address: 0x%p", newStep);
+    LV_LOG_USER("objCont address: 0x%p", objCont);
+    LV_LOG_USER("obj2 address: 0x%p", obj2);
+    LV_LOG_USER("Min TextArea address: 0x%p", newStep->step.stepDetails->stepDetailMinTextArea);
+    LV_LOG_USER("Sec TextArea address: 0x%p", newStep->step.stepDetails->stepDetailSecTextArea);
+    LV_LOG_USER("data: 0x%p", data);
+*/
+
+    if(code == LV_EVENT_FOCUSED) {
+        LV_LOG_USER("Pippo");
+        if(data == newStep->step.stepDetails->stepDetailMinTextArea){
+            LV_LOG_USER("Set minutes");
+            rollerPopupCreate(gui.element.rollerPopup.minutesOptions, setMinutesPopupTitle_text, newStep->step.stepDetails->stepDetailMinTextArea, 0);
+        }
+        if(data == newStep->step.stepDetails->stepDetailSecTextArea){
+            LV_LOG_USER("Set seconds");
+            rollerPopupCreate(gui.element.rollerPopup.secondsOptions, setSecondsPopupTitle_text, newStep->step.stepDetails->stepDetailMinTextArea, 0);
+        }
     }
-    if(obj == newStep->step.stepDetails->stepDetailSecTextArea){
-      LV_LOG_USER("Set seconds");
-      rollerPopupCreate(gui.element.rollerPopup.secondsOptions, setSecondsPopupTitle_text,newStep, 0);
-    }
-   }
 }
 
 /*********************
@@ -156,15 +168,31 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
   *    PAGE ELEMENTS
 *********************/
 
-      if(currentNode != NULL && getStepElementEntryByObject(currentNode) != NULL)
-        LV_LOG_USER("Step already exist with address 0x%p", currentNode);
-      else
-        LV_LOG_USER("Step still not present!Let's create it!");
 
+      stepNode* existingStep = (stepNode*)isNodeInList((void*)&(referenceNode->process.processDetails->stepElementsList), currentNode, STEP_NODE);
+      if(existingStep != NULL) {
+          LV_LOG_USER("Step already exist with address 0x%p", currentNode);
+          newStep = existingStep; // Usa il nodo già presente anziché allocarne uno nuovo
 
-      newStep = (stepNode*) allocateAndInitializeNode(STEP_NODE);
+      } else {
+          newStep = (stepNode*)allocateAndInitializeNode(STEP_NODE);
+          LV_LOG_USER("New stepNode created at address 0x%p", newStep);
+      }
+
       tempStepNode = newStep;
+
+      //newStep->step.stepDetails->dropDownListStyle = malloc(sizeof(lv_style_t));
+      //lv_style_init(&newStep->step.stepDetails->dropDownListStyle);
+      //lv_style_set_text_font(&newStep->step.stepDetails->dropDownListStyle, &lv_font_montserrat_20);
+
       LV_LOG_USER("Step detail creation");
+
+     // if(newStep->step.stepDetails->dropDownListStyle->values_and_props == NULL ) {		/* Only initialise the style once! */
+         // lv_style_init(&newStep->step.stepDetails->dropDownListStyle);
+         // lv_style_set_text_font(&newStep->step.stepDetails->dropDownListStyle, &lv_font_montserrat_20);
+       
+      //  }
+
 
       newStep->step.stepDetails->stepDetailParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
       lv_obj_class_init_obj(newStep->step.stepDetails->stepDetailParent);
@@ -213,13 +241,14 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_textarea_set_placeholder_text(newStep->step.stepDetails->stepDetailNamelTextArea, stepDetailPlaceHolder_text);
                   lv_obj_align(newStep->step.stepDetails->stepDetailNamelTextArea, LV_ALIGN_LEFT_MID, 70, 0);
                   lv_obj_set_width(newStep->step.stepDetails->stepDetailNamelTextArea, 210);
-                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailNamelTextArea, event_stepDetail, LV_EVENT_CLICKED, newStep->step.stepDetails->stepDetailNamelTextArea);
                   lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailNamelTextArea, event_stepDetail, LV_EVENT_FOCUSED, newStep->step.stepDetails->stepDetailNamelTextArea);
                   lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailNamelTextArea, event_stepDetail, LV_EVENT_DEFOCUSED, newStep->step.stepDetails->stepDetailNamelTextArea);
                   lv_obj_add_state(newStep->step.stepDetails->stepDetailNamelTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_color_hex(WHITE), 0);
                   newStep->step.stepDetails->stepNameString = "TI BI DI";
+
+
 
             newStep->step.stepDetails->stepDurationContainer = lv_obj_create(newStep->step.stepDetails->stepDetailContainer);
             lv_obj_remove_flag(newStep->step.stepDetails->stepDurationContainer, LV_OBJ_FLAG_SCROLLABLE); 
@@ -232,18 +261,15 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_label_set_text(newStep->step.stepDetails->stepDurationLabel, stepDetailDuration_text); 
                   lv_obj_set_style_text_font(newStep->step.stepDetails->stepDurationLabel, &lv_font_montserrat_22, 0);              
                   lv_obj_align(newStep->step.stepDetails->stepDurationLabel, LV_ALIGN_LEFT_MID, -10, 0);
-                  //lv_obj_add_flag(newStep->step.stepDetails->stepDurationLabel, LV_OBJ_FLAG_CLICKABLE);
-                  //lv_obj_add_event_cb(newStep->step.stepDetails->stepDurationLabel, event_Pippo, LV_EVENT_CLICKED, newStep);
-
 
                   newStep->step.stepDetails->stepDetailMinTextArea = lv_textarea_create(newStep->step.stepDetails->stepDurationContainer);
                   lv_textarea_set_one_line(newStep->step.stepDetails->stepDetailMinTextArea, true);
                   lv_textarea_set_placeholder_text(newStep->step.stepDetails->stepDetailMinTextArea, stepDetailDurationMinPlaceHolder_text);
                   lv_obj_align(newStep->step.stepDetails->stepDetailMinTextArea, LV_ALIGN_LEFT_MID, 100, 0);
                   lv_obj_set_width(newStep->step.stepDetails->stepDetailMinTextArea, 60);
-                  //lv_obj_add_flag(newStep->step.stepDetails->stepDetailMinTextArea, LV_OBJ_FLAG_CLICKABLE);
-                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailMinTextArea, event_Pippo, LV_EVENT_CLICKED, newStep);
-                  //lv_obj_add_state(newStep->step.stepDetails->stepDetailMinTextArea, LV_STATE_FOCUSED); 
+                 
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailMinTextArea, event_Pippo, LV_EVENT_ALL, newStep->step.stepDetails->stepDetailMinTextArea);
+                  lv_obj_add_state(newStep->step.stepDetails->stepDetailMinTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailMinTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_text_align(newStep->step.stepDetails->stepDetailMinTextArea , LV_TEXT_ALIGN_CENTER, 0);
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailMinTextArea, lv_color_hex(WHITE), 0);
@@ -255,14 +281,24 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_textarea_set_placeholder_text(newStep->step.stepDetails->stepDetailSecTextArea, stepDetailDurationSecPlaceHolder_text);
                   lv_obj_align(newStep->step.stepDetails->stepDetailSecTextArea, LV_ALIGN_LEFT_MID, 187, 0);
                   lv_obj_set_width(newStep->step.stepDetails->stepDetailSecTextArea, 60);
-                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailSecTextArea, event_Pippo, LV_EVENT_CLICKED, newStep);
-                  //lv_obj_add_state(newStep->step.stepDetails->stepDetailSecTextArea, LV_STATE_FOCUSED); 
+
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailSecTextArea, event_Pippo, LV_EVENT_ALL, newStep->step.stepDetails->stepDetailSecTextArea);
+                  lv_obj_add_state(newStep->step.stepDetails->stepDetailSecTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailSecTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_text_align(newStep->step.stepDetails->stepDetailSecTextArea , LV_TEXT_ALIGN_CENTER, 0);
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailSecTextArea, lv_color_hex(WHITE), 0);
                   //lv_obj_move_foreground(newStep->step.stepDetails->stepDetailSecTextArea);
 
     
+    
+
+
+
+
+
+
+
+
             newStep->step.stepDetails->stepTypeContainer = lv_obj_create(newStep->step.stepDetails->stepDetailContainer);
             lv_obj_remove_flag(newStep->step.stepDetails->stepTypeContainer, LV_OBJ_FLAG_SCROLLABLE); 
             lv_obj_align(newStep->step.stepDetails->stepTypeContainer, LV_ALIGN_TOP_LEFT, -15, 110);
@@ -277,12 +313,12 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_align(newStep->step.stepDetails->stepTypeLabel, LV_ALIGN_LEFT_MID, -10, 0);
 
 
-                  lv_style_init(&newStep->step.stepDetails->dropDownListStyle);
+                  //lv_style_init(&newStep->step.stepDetails->dropDownListStyle);
                   newStep->step.stepDetails->stepTypeDropDownList = lv_dropdown_create(newStep->step.stepDetails->stepTypeContainer);
                   lv_obj_set_style_border_opa(newStep->step.stepDetails->stepTypeDropDownList, LV_OPA_TRANSP, 0);
                   lv_dropdown_set_options(newStep->step.stepDetails->stepTypeDropDownList, stepTypeList);
-                  lv_style_set_text_font(&newStep->step.stepDetails->dropDownListStyle, &lv_font_montserrat_20);
-                  lv_obj_add_style(newStep->step.stepDetails->stepTypeDropDownList, &newStep->step.stepDetails->dropDownListStyle, 0);
+                  //lv_style_set_text_font(&newStep->step.stepDetails->dropDownListStyle, &lv_font_montserrat_20);
+                  //lv_obj_add_style(newStep->step.stepDetails->stepTypeDropDownList, &newStep->step.stepDetails->dropDownListStyle, 0);
                   lv_obj_align(newStep->step.stepDetails->stepTypeDropDownList, LV_ALIGN_LEFT_MID, 50, 2);
                   lv_obj_set_size(newStep->step.stepDetails->stepTypeDropDownList, 165, 50); 
                   lv_obj_add_event_cb(newStep->step.stepDetails->stepTypeDropDownList, event_stepDetail, LV_EVENT_VALUE_CHANGED, newStep->step.stepDetails->stepTypeDropDownList);
@@ -294,6 +330,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_set_style_text_font(newStep->step.stepDetails->stepTypeHelpIcon, &FilMachineFontIcons_20, 0);              
                   lv_obj_align(newStep->step.stepDetails->stepTypeHelpIcon, LV_ALIGN_LEFT_MID, 210, 0);
 
+   
 
             newStep->step.stepDetails->stepSourceContainer = lv_obj_create(newStep->step.stepDetails->stepDetailContainer);
             lv_obj_remove_flag(newStep->step.stepDetails->stepSourceContainer, LV_OBJ_FLAG_SCROLLABLE); 
@@ -309,12 +346,11 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_align(newStep->step.stepDetails->stepSourceLabel, LV_ALIGN_LEFT_MID, -10, 0);
 
 
-                  lv_style_init(&newStep->step.stepDetails->dropDownListStyle);
+                  //lv_style_init(&newStep->step.stepDetails->dropDownListStyle);
                   newStep->step.stepDetails->stepSourceDropDownList = lv_dropdown_create(newStep->step.stepDetails->stepSourceContainer);
                   lv_obj_set_style_border_opa(newStep->step.stepDetails->stepSourceDropDownList, LV_OPA_TRANSP, 0);
                   lv_dropdown_set_options(newStep->step.stepDetails->stepSourceDropDownList, stepSourceList);
-                  lv_style_set_text_font(&newStep->step.stepDetails->dropDownListStyle, &lv_font_montserrat_20);
-                  lv_obj_add_style(newStep->step.stepDetails->stepSourceDropDownList, &newStep->step.stepDetails->dropDownListStyle, 0);
+                  //lv_style_set_text_font(&newStep->step.stepDetails->dropDownListStyle, &lv_font_montserrat_20);
                   lv_obj_align(newStep->step.stepDetails->stepSourceDropDownList, LV_ALIGN_LEFT_MID, 71, 2);
                   lv_obj_set_size(newStep->step.stepDetails->stepSourceDropDownList, 83, 50); 
                   lv_obj_add_event_cb(newStep->step.stepDetails->stepSourceDropDownList, event_stepDetail, LV_EVENT_VALUE_CHANGED, newStep->step.stepDetails->stepSourceDropDownList);
@@ -337,6 +373,18 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_label_set_text(newStep->step.stepDetails->stepSourceTempValue, "20.4°C");  
                   lv_obj_set_style_text_font(newStep->step.stepDetails->stepSourceTempValue, &lv_font_montserrat_18, 0);              
                   lv_obj_align(newStep->step.stepDetails->stepSourceTempValue, LV_ALIGN_LEFT_MID, 245, 1);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -392,7 +440,6 @@ if(keyboardStep == NULL){
   LV_LOG_USER("create_keyboard");
     //create_keyboard(keyboardStep, newStep->step.stepDetails->stepDetailParent);
     }
-
   
 }
 

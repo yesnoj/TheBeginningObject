@@ -11,7 +11,7 @@
 #include "../../include/definitions.h"
 
 extern struct gui_components gui;
-char formatted_string[20];
+
 
 //ACCESSORY INCLUDES
 

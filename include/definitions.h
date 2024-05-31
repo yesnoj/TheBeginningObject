@@ -88,7 +88,7 @@ public:
             auto cfg = _bus_instance.config(); 
             
             cfg.port = 0;              
-            cfg.freq_write = 20000000; 
+            cfg.freq_write = 40000000;//20000000; 
             cfg.pin_wr = LCD_WR;           
             cfg.pin_rd = LCD_RD;           
             cfg.pin_rs = LCD_RS;           
@@ -493,6 +493,8 @@ typedef struct singleProcess {
     lv_obj_t          *processName;
     lv_obj_t          *processTemp;
     lv_obj_t          *processTempIcon;
+    lv_obj_t          *processTime;
+    lv_obj_t          *processTimeIcon;
     lv_obj_t          *processTypeIcon;
     lv_coord_t         container_y;
 
@@ -1162,6 +1164,8 @@ stepNode	  * tempStepNode;
 
 lv_obj_t    *fakeObject;
 extern uint8_t initErrors;
+char formatted_string[20];
+
 /*********************
 * ELEMENTS Function Prototypes
 *********************/
