@@ -424,13 +424,14 @@ void* allocateAndInitializeNode(NodeType_t type) {
                 memset(process->process.processDetails, 0, sizeof(sProcessDetail));
 
 
-
+                
                 process->process.processDetails->checkup = (sCheckup *)malloc(sizeof(sCheckup));
-                if (process->process.processDetails == NULL) {
+                if (process->process.processDetails->checkup == NULL) {
                   // Handle memory allocation failure
                   free(process->process.processDetails->checkup);  // Clean up previously allocated memory
                 }
                 memset(process->process.processDetails->checkup, 0, sizeof(sCheckup));
+                
             }
         break;
     }

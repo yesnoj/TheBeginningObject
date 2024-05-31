@@ -1031,11 +1031,10 @@ lv_obj_t * processToleranceTextArea;
 #define stepDetailType_text 						"Type:"
 #define stepDetailSource_text 						"Source:"
 #define stepDetailDiscardAfter_text 		   		"Discard after:"
-#define stepDetailCurrentSourceTemp_text 	   		"Current temp:"
 #define stepDetailPlaceHolder_text 			   		"Enter name for new step"
 #define stepDetailSave_text 						"Save"
 #define stepDetailCancel_text 						"Cancel"
-#define stepDetailCurrentTemp_text 			   		"Current   :"
+#define stepDetailCurrentTemp_text 			   		"Now:"
 
 
 static char* stepTypeList = "Chemistry\n"

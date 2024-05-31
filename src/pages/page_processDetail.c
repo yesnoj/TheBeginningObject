@@ -54,7 +54,7 @@ void event_processDetail(lv_event_t * e)
         newProcess->process.processDetails->filmType = BLACK_AND_WHITE_FILM;
         newProcess->process.processDetails->somethingChanged = 1;
         
-        lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);     
+        lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);    
         LV_LOG_USER("Pressed processBnWLabel %d",newProcess->process.processDetails->filmType);
     }
 
@@ -79,6 +79,7 @@ void event_processDetail(lv_event_t * e)
           if(addProcessElement(newProcess) != NULL){
              LV_LOG_USER("Process not present yet, let's create!");
              processElementCreate(newProcess);
+             lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
           }    
             else{
                   LV_LOG_USER("Process element creation failed, maximum entries reached" );
@@ -386,7 +387,7 @@ tempProcessNode = newProcess;
                           newProcess->process.processDetails->processColorLabel = lv_label_create(newProcess->process.processDetails->processColorOrBnWContainer);         
                           lv_label_set_text(newProcess->process.processDetails->processColorLabel, colorpalette_icon); 
                           lv_obj_set_style_text_font(newProcess->process.processDetails->processColorLabel, &FilMachineFontIcons_30, 0);              
-                          lv_obj_align(newProcess->process.processDetails->processColorLabel, LV_ALIGN_LEFT_MID, -5, 0);
+                          lv_obj_align(newProcess->process.processDetails->processColorLabel, LV_ALIGN_LEFT_MID, 45, 0);
                           lv_obj_add_flag(newProcess->process.processDetails->processColorLabel, LV_OBJ_FLAG_CLICKABLE);
                           lv_obj_add_event_cb(newProcess->process.processDetails->processColorLabel, event_processDetail, LV_EVENT_CLICKED, newProcess->process.processDetails->processColorLabel);
 
@@ -394,7 +395,7 @@ tempProcessNode = newProcess;
                           newProcess->process.processDetails->processBnWLabel = lv_label_create(newProcess->process.processDetails->processColorOrBnWContainer);         
                           lv_label_set_text(newProcess->process.processDetails->processBnWLabel, blackwhite_icon); 
                           lv_obj_set_style_text_font(newProcess->process.processDetails->processBnWLabel, &FilMachineFontIcons_30, 0);              
-                          lv_obj_align(newProcess->process.processDetails->processBnWLabel, LV_ALIGN_LEFT_MID, 45, 0);
+                          lv_obj_align(newProcess->process.processDetails->processBnWLabel, LV_ALIGN_LEFT_MID, -5, 0);
                           lv_obj_add_flag(newProcess->process.processDetails->processBnWLabel, LV_OBJ_FLAG_CLICKABLE);
                           lv_obj_add_event_cb(newProcess->process.processDetails->processBnWLabel, event_processDetail, LV_EVENT_CLICKED, newProcess->process.processDetails->processBnWLabel);
                           if(newProcess->process.processDetails->filmType = COLOR_FILM){

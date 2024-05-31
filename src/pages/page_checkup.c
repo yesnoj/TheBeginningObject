@@ -134,52 +134,45 @@ void exitCheckup(){
 
 void initCheckup(processNode *processToCheckup)
 {  
-      referenceProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-
-      referenceProcess = processToCheckup;
-
-      tempProcessNode = processToCheckup;
-
       LV_LOG_USER("Final checks, current on processToCheckup->process.processDetails->checkup->processStep :%d",processToCheckup->process.processDetails->checkup->processStep);
 
+      processToCheckup->process.processDetails->checkup->checkupParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
+      lv_obj_class_init_obj(processToCheckup->process.processDetails->checkup->checkupParent);
+      lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupParent, LV_OBJ_FLAG_IGNORE_LAYOUT);
+      lv_obj_set_size(processToCheckup->process.processDetails->checkup->checkupParent, LV_PCT(100), LV_PCT(100));
 
-      referenceProcess->process.processDetails->checkup->checkupParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
-      lv_obj_class_init_obj(referenceProcess->process.processDetails->checkup->checkupParent);
-      lv_obj_remove_flag(referenceProcess->process.processDetails->checkup->checkupParent, LV_OBJ_FLAG_IGNORE_LAYOUT);
-      lv_obj_set_size(referenceProcess->process.processDetails->checkup->checkupParent, LV_PCT(100), LV_PCT(100));
+      processToCheckup->process.processDetails->checkup->checkupContainer = lv_obj_create(processToCheckup->process.processDetails->checkup->checkupParent);
+      lv_obj_align(processToCheckup->process.processDetails->checkup->checkupContainer, LV_ALIGN_CENTER, 0, 0);
+      lv_obj_set_size(processToCheckup->process.processDetails->checkup->checkupContainer, LV_PCT(100), LV_PCT(100)); 
+      lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupContainer, LV_OBJ_FLAG_SCROLLABLE); 
 
-      referenceProcess->process.processDetails->checkup->checkupContainer = lv_obj_create(referenceProcess->process.processDetails->checkup->checkupParent);
-      lv_obj_align(referenceProcess->process.processDetails->checkup->checkupContainer, LV_ALIGN_CENTER, 0, 0);
-      lv_obj_set_size(referenceProcess->process.processDetails->checkup->checkupContainer, LV_PCT(100), LV_PCT(100)); 
-      lv_obj_remove_flag(referenceProcess->process.processDetails->checkup->checkupContainer, LV_OBJ_FLAG_SCROLLABLE); 
-
-            referenceProcess->process.processDetails->checkup->checkupCloseButton = lv_button_create(referenceProcess->process.processDetails->checkup->checkupContainer);
-            lv_obj_set_size(referenceProcess->process.processDetails->checkup->checkupCloseButton, BUTTON_POPUP_CLOSE_WIDTH * 1.2, BUTTON_POPUP_CLOSE_HEIGHT * 1.2);
-            lv_obj_align(referenceProcess->process.processDetails->checkup->checkupCloseButton, LV_ALIGN_TOP_RIGHT, 7 , -10);
-            lv_obj_add_event_cb(referenceProcess->process.processDetails->checkup->checkupCloseButton, event_checkup, LV_EVENT_CLICKED, referenceProcess->process.processDetails->checkup->checkupCloseButton);
-            lv_obj_set_style_bg_color(referenceProcess->process.processDetails->checkup->checkupCloseButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
-            if(referenceProcess->process.processDetails->checkup->processStep > 0){
-              lv_obj_add_state(referenceProcess->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);            
+            processToCheckup->process.processDetails->checkup->checkupCloseButton = lv_button_create(processToCheckup->process.processDetails->checkup->checkupContainer);
+            lv_obj_set_size(processToCheckup->process.processDetails->checkup->checkupCloseButton, BUTTON_POPUP_CLOSE_WIDTH * 1.2, BUTTON_POPUP_CLOSE_HEIGHT * 1.2);
+            lv_obj_align(processToCheckup->process.processDetails->checkup->checkupCloseButton, LV_ALIGN_TOP_RIGHT, 7 , -10);
+            lv_obj_add_event_cb(processToCheckup->process.processDetails->checkup->checkupCloseButton, event_checkup, LV_EVENT_CLICKED, processToCheckup->process.processDetails->checkup->checkupCloseButton);
+            lv_obj_set_style_bg_color(processToCheckup->process.processDetails->checkup->checkupCloseButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+            if(processToCheckup->process.processDetails->checkup->processStep > 0){
+              lv_obj_add_state(processToCheckup->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);            
             }
 
-                  referenceProcess->process.processDetails->checkup->checkupCloseButtonLabel = lv_label_create(referenceProcess->process.processDetails->checkup->checkupCloseButton);         
-                  lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupCloseButtonLabel, closePopup_icon); 
-                  lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupCloseButtonLabel, &FilMachineFontIcons_30, 0);              
-                  lv_obj_align(referenceProcess->process.processDetails->checkup->checkupCloseButtonLabel, LV_ALIGN_CENTER, 0, 0);
+                  processToCheckup->process.processDetails->checkup->checkupCloseButtonLabel = lv_label_create(processToCheckup->process.processDetails->checkup->checkupCloseButton);         
+                  lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupCloseButtonLabel, closePopup_icon); 
+                  lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupCloseButtonLabel, &FilMachineFontIcons_30, 0);              
+                  lv_obj_align(processToCheckup->process.processDetails->checkup->checkupCloseButtonLabel, LV_ALIGN_CENTER, 0, 0);
 
 
-            referenceProcess->process.processDetails->checkup->checkupProcessNameContainer = lv_obj_create(referenceProcess->process.processDetails->checkup->checkupContainer);
-            lv_obj_remove_flag(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer, LV_OBJ_FLAG_SCROLLABLE); 
-            lv_obj_align(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer, LV_ALIGN_TOP_LEFT, -10, -15);
-            lv_obj_set_size(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer, 350, 50); 
-            //lv_obj_set_style_border_color(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer, lv_color_hex(GREEN_DARK), 0);
-            lv_obj_set_style_border_opa(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer, LV_OPA_TRANSP, 0);
+            processToCheckup->process.processDetails->checkup->checkupProcessNameContainer = lv_obj_create(processToCheckup->process.processDetails->checkup->checkupContainer);
+            lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->checkupProcessNameContainer, LV_OBJ_FLAG_SCROLLABLE); 
+            lv_obj_align(processToCheckup->process.processDetails->checkup->checkupProcessNameContainer, LV_ALIGN_TOP_LEFT, -10, -15);
+            lv_obj_set_size(processToCheckup->process.processDetails->checkup->checkupProcessNameContainer, 350, 50); 
+            //lv_obj_set_style_border_color(processToCheckup->process.processDetails->checkup->checkupProcessNameContainer, lv_color_hex(GREEN_DARK), 0);
+            lv_obj_set_style_border_opa(processToCheckup->process.processDetails->checkup->checkupProcessNameContainer, LV_OPA_TRANSP, 0);
 
-                  referenceProcess->process.processDetails->checkup->checkupProcessNameValue = lv_label_create(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer);         
-                  lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupProcessNameValue, "E6 six baths"); 
-                  lv_obj_set_width(referenceProcess->process.processDetails->checkup->checkupProcessNameValue, 300);
-                  lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupProcessNameValue, &lv_font_montserrat_30, 0);              
-                  lv_obj_align(referenceProcess->process.processDetails->checkup->checkupProcessNameValue, LV_ALIGN_TOP_LEFT, -10, -8);
+                  processToCheckup->process.processDetails->checkup->checkupProcessNameValue = lv_label_create(processToCheckup->process.processDetails->checkup->checkupProcessNameContainer);         
+                  lv_label_set_text(processToCheckup->process.processDetails->checkup->checkupProcessNameValue, "E6 six baths"); 
+                  lv_obj_set_width(processToCheckup->process.processDetails->checkup->checkupProcessNameValue, 300);
+                  lv_obj_set_style_text_font(processToCheckup->process.processDetails->checkup->checkupProcessNameValue, &lv_font_montserrat_30, 0);              
+                  lv_obj_align(processToCheckup->process.processDetails->checkup->checkupProcessNameValue, LV_ALIGN_TOP_LEFT, -10, -8);
                   lv_label_set_long_mode(processToCheckup->process.processDetails->checkup->checkupProcessNameValue, LV_LABEL_LONG_SCROLL_CIRCULAR);
 
             //RIGHT GREEN CONTAINER
@@ -201,11 +194,34 @@ void initCheckup(processNode *processToCheckup)
 
 void checkup(processNode *processToCheckup)
 {   
+
+/*
+  processNode* existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), processToCheckup, PROCESS_NODE);
+      if(existingProcess != NULL) {
+          LV_LOG_USER("Process already present");
+          referenceProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
+          referenceProcess = existingProcess; // Usa il nodo già presente anziché allocarne uno nuovo
+          tempProcessNode = processToCheckup;
+      } else {
+          LV_LOG_USER("Process not present?!?!?");
+      }
+
+
+      //referenceProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+      //referenceProcess = processToCheckup;
+      //tempProcessNode = processToCheckup;
+*/
+
+
   if(processToCheckup->process.processDetails->checkup->checkupParent == NULL){
     LV_LOG_USER("initCheckup");
+
+    referenceProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+    referenceProcess = processToCheckup;
+
     initCheckup(processToCheckup);
   }
-
+    LV_LOG_USER("initCheckup Done!");
 
         //LEFT SIDE OF SCREEN
         if(processToCheckup->process.processDetails->checkup->isProcessing == 0){
@@ -725,7 +741,7 @@ void checkup(processNode *processToCheckup)
                                 lv_obj_remove_flag(processToCheckup->process.processDetails->checkup->stepArc, LV_OBJ_FLAG_CLICKABLE);
                                 lv_obj_set_style_arc_color(processToCheckup->process.processDetails->checkup->stepArc,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
                                 lv_obj_set_style_arc_color(processToCheckup->process.processDetails->checkup->stepArc, lv_color_hex(ORANGE_DARK), LV_PART_MAIN);
-                                lv_obj_move_foreground(referenceProcess->process.processDetails->checkup->stepArc);
+                                lv_obj_move_foreground(processToCheckup->process.processDetails->checkup->stepArc);
 
                  
                       isStepStatus4created = 1;

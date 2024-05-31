@@ -120,7 +120,7 @@ void event_stepDetail(lv_event_t * e)
        LV_LOG_USER("Delete Styles");
         //list of all styles to be reset, so clean the memory.
         lv_style_reset(&newStep->step.stepDetails->style_mBoxStepPopupTitleLine);
-        lv_style_reset(&newStep->step.stepDetails->dropDownListStyle);
+        //lv_style_reset(&newStep->step.stepDetails->dropDownListStyle);
         if(keyboardStep == NULL){
           LV_LOG_USER("create_keyboard");
            }
@@ -171,7 +171,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
 
             newStep->step.stepDetails->stepDetailContainer = lv_obj_create(newStep->step.stepDetails->stepDetailParent);
             lv_obj_align(newStep->step.stepDetails->stepDetailContainer, LV_ALIGN_CENTER, 0, 0);
-            lv_obj_set_size(newStep->step.stepDetails->stepDetailContainer, 340, 300); 
+            lv_obj_set_size(newStep->step.stepDetails->stepDetailContainer, 350, 300); 
             lv_obj_remove_flag(newStep->step.stepDetails->stepDetailContainer, LV_OBJ_FLAG_SCROLLABLE); 
 
                     newStep->step.stepDetails->stepDetailLabel = lv_label_create(newStep->step.stepDetails->stepDetailContainer);         
@@ -296,7 +296,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
             newStep->step.stepDetails->stepSourceContainer = lv_obj_create(newStep->step.stepDetails->stepDetailContainer);
             lv_obj_remove_flag(newStep->step.stepDetails->stepSourceContainer, LV_OBJ_FLAG_SCROLLABLE); 
             lv_obj_align(newStep->step.stepDetails->stepSourceContainer, LV_ALIGN_TOP_LEFT, -15, 150);
-            lv_obj_set_size(newStep->step.stepDetails->stepSourceContainer, 325, 40); 
+            lv_obj_set_size(newStep->step.stepDetails->stepSourceContainer, 340, 40); 
             lv_obj_set_style_border_opa(newStep->step.stepDetails->stepSourceContainer, LV_OPA_TRANSP, 0);
             //lv_obj_set_style_border_color(newStep->step.stepDetails->stepSourceContainer, lv_color_hex(GREEN_DARK), 0);
 
@@ -320,8 +320,8 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
 
                   newStep->step.stepDetails->stepSourceTempLabel = lv_label_create(newStep->step.stepDetails->stepSourceContainer);         
                   lv_label_set_text(newStep->step.stepDetails->stepSourceTempLabel, stepDetailCurrentTemp_text); 
-                  lv_obj_set_style_text_font(newStep->step.stepDetails->stepSourceTempLabel, &lv_font_montserrat_18, 0);              
-                  lv_obj_align(newStep->step.stepDetails->stepSourceTempLabel, LV_ALIGN_LEFT_MID, 155, 0);
+                  lv_obj_set_style_text_font(newStep->step.stepDetails->stepSourceTempLabel, &lv_font_montserrat_22, 0);              
+                  lv_obj_align(newStep->step.stepDetails->stepSourceTempLabel, LV_ALIGN_LEFT_MID, 165, 0);
 
                   newStep->step.stepDetails->stepSourceTempHelpIcon = lv_label_create(newStep->step.stepDetails->stepSourceContainer);         
                   lv_label_set_text(newStep->step.stepDetails->stepSourceTempHelpIcon, temp_icon); 
@@ -332,21 +332,8 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   newStep->step.stepDetails->stepSourceTempValue = lv_label_create(newStep->step.stepDetails->stepSourceContainer);         
                   //lv_label_set_text(newStep->step.stepDetails->stepSourceTempValue, convertFloatToTemp(stepSourceTemp)); //THIS NOT WORKS!
                   lv_label_set_text(newStep->step.stepDetails->stepSourceTempValue, "20.4°C");  
-                  lv_obj_set_style_text_font(newStep->step.stepDetails->stepSourceTempValue, &lv_font_montserrat_18, 0);              
+                  lv_obj_set_style_text_font(newStep->step.stepDetails->stepSourceTempValue, &lv_font_montserrat_22, 0);              
                   lv_obj_align(newStep->step.stepDetails->stepSourceTempValue, LV_ALIGN_LEFT_MID, 245, 1);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
             newStep->step.stepDetails->stepDiscardAfterContainer = lv_obj_create(newStep->step.stepDetails->stepDetailContainer);
