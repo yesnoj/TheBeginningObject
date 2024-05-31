@@ -13,19 +13,6 @@ extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
-/*
-    if(act_cb == gui.page.settings.tempSensorTuneButton){
-      if(code == LV_EVENT_SHORT_CLICKED) {
-          LV_LOG_USER("TUNE short click");
-          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusOptions,tuneTempPopupTitle_text,gui.page.settings.tempSensorTuneButton);
-        }
-      if(code == LV_EVENT_LONG_PRESSED_REPEAT) {
-          LV_LOG_USER("TUNE Long click");
-        }
-    }
-*/
-
-
 
 void event_Roller(lv_event_t * e)
 {
@@ -73,7 +60,7 @@ void event_Roller(lv_event_t * e)
               lv_obj_delete(godFatherCont);
               return; 
             }
-            if(((stepNode *)data)->step.stepDetails->stepDetailMinTextArea == tempStepNode->step.stepDetails->stepDetailMinTextArea){ //NOT WORKING, CRASH!
+            if((lv_obj_t *)data == tempStepNode->step.stepDetails->stepDetailMinTextArea){
               LV_LOG_USER("SET BUTTON from stepDetailMinTextArea value %d:",rollerSelected);
               tempStepNode->step.stepDetails->timeMins = rollerSelected;
 
@@ -84,7 +71,7 @@ void event_Roller(lv_event_t * e)
               lv_obj_delete(gui.element.rollerPopup.mBoxRollerParent);
               return; 
             }
-            if(((stepNode *)data)->step.stepDetails->stepDetailSecTextArea == tempStepNode->step.stepDetails->stepDetailSecTextArea){ //NOT WORKING, CRASH!
+            if((lv_obj_t *)data == tempStepNode->step.stepDetails->stepDetailSecTextArea){
               LV_LOG_USER("SET BUTTON from stepDetailSecTextArea value %d:",rollerSelected);
               tempStepNode->step.stepDetails->timeSecs = rollerSelected;
 
