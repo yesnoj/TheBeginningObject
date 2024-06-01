@@ -122,17 +122,13 @@ void event_checkup(lv_event_t * e){
     }
     if(obj == referenceProcess->process.processDetails->checkup->checkupStopAfterButton){
         LV_LOG_USER("User pressed referenceProcess->process.processDetails->checkup->checkupStopAfterButton");
-        messagePopupCreate(warningPopupTitle_text,stopProcessPopupBody_text,checkupStop_text,stepDetailCancel_text, referenceProcess->process.processDetails->checkup->checkupParent);
+        messagePopupCreate(warningPopupTitle_text,stopProcessPopupBody_text,checkupStop_text,stepDetailCancel_text, referenceProcess->process.processDetails->checkup->checkupStopAfterButton);
     }
     if(obj == referenceProcess->process.processDetails->checkup->checkupStopNowButton){
         LV_LOG_USER("User pressed referenceProcess->process.processDetails->checkup->checkupStopNowButton");
-        messagePopupCreate(warningPopupTitle_text,stopProcessPopupBody_text,checkupStop_text,stepDetailCancel_text, referenceProcess->process.processDetails->checkup->checkupParent);
+        messagePopupCreate(warningPopupTitle_text,stopProcessPopupBody_text,checkupStop_text,stepDetailCancel_text, referenceProcess->process.processDetails->checkup->checkupStopNowButton);
     }
-    if(obj == referenceProcess->process.processDetails->checkup->checkupStopStepsButton){
-        LV_LOG_USER("User pressed referenceProcess->process.processDetails->checkup->checkupStopStepsButton");
-        lv_msgbox_close(mboxParent);
-        lv_obj_delete(mboxParent);
-    }
+
   }
 }
 
@@ -196,27 +192,31 @@ void processTimer(lv_timer_t * timer)
     uint8_t remainingStepSecsOnly = remainingStepSecs % 60;
 
 
-    if(tempStepNode != NULL) {                
-        stepPercentage = calculate_percentage(minutesStepElapsed, secondsStepElapsed, tempStepNode->step.stepDetails->timeMins, tempStepNode->step.stepDetails->timeSecs);
-        lv_arc_set_value(referenceProcess->process.processDetails->checkup->stepArc, stepPercentage);
-        lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepSourceValue, processSourceList[tempStepNode->step.stepDetails->source]);
-        lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, tempStepNode->step.stepDetails->stepNameString); 
-        
-        sprintf(formatted_string, "%dm%ds", remainingStepMins, remainingStepSecsOnly);
-        lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, formatted_string);
-        
-        if(stepPercentage == 100) {
-            stepPercentage = 0;
-            minutesStepElapsed = 0;
-            secondsStepElapsed = 0;
-            tempStepNode = tempStepNode->next;
+    if(tempStepNode != NULL) { 
+        if(tempProcessNode->process.processDetails->checkup->stopAfter == 1 && remainingStepMins == 0 && remainingStepSecsOnly == 0){
+            lv_obj_clear_state(tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);
+            lv_timer_delete(tempProcessNode->process.processDetails->checkup->timer);
+        }
+        else{              
+          stepPercentage = calculate_percentage(minutesStepElapsed, secondsStepElapsed, tempStepNode->step.stepDetails->timeMins, tempStepNode->step.stepDetails->timeSecs);
+          lv_arc_set_value(referenceProcess->process.processDetails->checkup->stepArc, stepPercentage);
+          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepSourceValue, processSourceList[tempStepNode->step.stepDetails->source]);
+          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, tempStepNode->step.stepDetails->stepNameString); 
+          
+          sprintf(formatted_string, "%dm%ds", remainingStepMins, remainingStepSecsOnly);
+          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, formatted_string);
+          
+          if(stepPercentage == 100) {
+              stepPercentage = 0;
+              minutesStepElapsed = 0;
+              secondsStepElapsed = 0;
+              tempStepNode = tempStepNode->next;
+          }
         }
     }
-
-    
-
-    // Display the remaining times
-   
+    else{
+        lv_timer_delete(tempProcessNode->process.processDetails->checkup->timer);
+    }
 
     sprintf(formatted_string, "%dm%ds", remainingProcessMins, remainingProcessSecsOnly);
     lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, formatted_string);
@@ -227,7 +227,7 @@ void processTimer(lv_timer_t * timer)
         secondsProcessElapsed++;
         secondsStepElapsed++;
         if(processPercentage == 100) {
-            lv_timer_enable(false);  // Stop the timer when processPercentage reaches 100%
+          lv_timer_delete(tempProcessNode->process.processDetails->checkup->timer);
         }
     }
 }
@@ -342,7 +342,7 @@ void checkup(processNode *processToCheckup)
     referenceProcess->process.processDetails->checkup->stepCheckFilmStatus = 0;
     referenceProcess->process.processDetails->checkup->stepReachTempStatus = 0;
     referenceProcess->process.processDetails->checkup->activeVolume_index  = 0;
-
+    referenceProcess->process.processDetails->checkup->stopAfter  = 0;
 
     LV_LOG_USER("isProcessing %d", referenceProcess->process.processDetails->checkup->isProcessing);
     if(referenceProcess->process.processDetails->checkup->isProcessing == NULL)
@@ -429,22 +429,6 @@ void checkup(processNode *processToCheckup)
                           lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupTankAndFilmLabel, &lv_font_montserrat_18, 0);              
                           lv_obj_align(referenceProcess->process.processDetails->checkup->checkupTankAndFilmLabel, LV_ALIGN_LEFT_MID, 2, 0);
                           lv_label_set_long_mode(referenceProcess->process.processDetails->checkup->checkupTankAndFilmLabel, LV_LABEL_LONG_SCROLL_CIRCULAR);
-
-
-                  referenceProcess->process.processDetails->checkup->checkupStopStepsButton = lv_button_create(referenceProcess->process.processDetails->checkup->checkupNextStepsContainer);
-                  lv_obj_set_size(referenceProcess->process.processDetails->checkup->checkupStopStepsButton, BUTTON_PROCESS_WIDTH, BUTTON_PROCESS_HEIGHT);
-                  lv_obj_align(referenceProcess->process.processDetails->checkup->checkupStopStepsButton, LV_ALIGN_BOTTOM_MID, 0, 10);
-                  lv_obj_add_event_cb(referenceProcess->process.processDetails->checkup->checkupStopStepsButton, event_checkup, LV_EVENT_CLICKED, referenceProcess->process.processDetails->checkup->checkupStopStepsButton);
-                  lv_obj_set_style_bg_color(referenceProcess->process.processDetails->checkup->checkupStopStepsButton, lv_color_hex(RED_DARK), LV_PART_MAIN);
-                  lv_obj_move_foreground(referenceProcess->process.processDetails->checkup->checkupStopStepsButton);
-                  if(referenceProcess->process.processDetails->checkup->processStep == 0){
-                    lv_obj_add_state(referenceProcess->process.processDetails->checkup->checkupStopStepsButton, LV_STATE_DISABLED);            
-                  }
-
-                          referenceProcess->process.processDetails->checkup->checkupStopStepsButtonLabel = lv_label_create(referenceProcess->process.processDetails->checkup->checkupStopStepsButton);         
-                          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStopStepsButtonLabel, checkupStop_text); 
-                          lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupStopStepsButtonLabel, &lv_font_montserrat_22, 0);              
-                          lv_obj_align(referenceProcess->process.processDetails->checkup->checkupStopStepsButtonLabel, LV_ALIGN_CENTER, 0, 0);
             
                   isProcessingStatus0created = 1;
             }
@@ -549,7 +533,7 @@ void checkup(processNode *processToCheckup)
                   referenceProcess->process.processDetails->checkup->checkupStopNowButton = lv_button_create(referenceProcess->process.processDetails->checkup->checkupNextStepsContainer);
                   lv_obj_set_size(referenceProcess->process.processDetails->checkup->checkupStopNowButton, BUTTON_PROCESS_WIDTH, BUTTON_PROCESS_HEIGHT);
                   lv_obj_align(referenceProcess->process.processDetails->checkup->checkupStopNowButton, LV_ALIGN_BOTTOM_LEFT, -10, 10);
-                  lv_obj_add_event_cb(referenceProcess->process.processDetails->checkup->checkupStopNowButton, event_checkup, LV_EVENT_CLICKED, referenceProcess->process.processDetails->checkup->checkupStopStepsButton);
+                  lv_obj_add_event_cb(referenceProcess->process.processDetails->checkup->checkupStopNowButton, event_checkup, LV_EVENT_CLICKED, referenceProcess->process.processDetails->checkup->checkupStopNowButton);
                   lv_obj_set_style_bg_color(referenceProcess->process.processDetails->checkup->checkupStopNowButton, lv_color_hex(RED_DARK), LV_PART_MAIN);
                   lv_obj_move_foreground(referenceProcess->process.processDetails->checkup->checkupStopNowButton);
 
@@ -821,6 +805,7 @@ void checkup(processNode *processToCheckup)
 
                   if(referenceProcess->process.processDetails->checkup->processStep == 4 && isStepStatus4created == 0){
                         referenceProcess->process.processDetails->checkup->timer = lv_timer_create(processTimer, 1000,  &referenceProcess);
+                        lv_obj_add_state(tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);
 
                         lv_obj_clean(referenceProcess->process.processDetails->checkup->checkupStepContainer);
                         referenceProcess->process.processDetails->checkup->checkupProcessingContainer = lv_obj_create(referenceProcess->process.processDetails->checkup->checkupStepContainer);

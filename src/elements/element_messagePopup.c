@@ -81,11 +81,36 @@ void event_messagePopup(lv_event_t *e)
                 lv_obj_delete(processDetailParent);
                 processDetailParent = NULL;
             }
+            if (gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopNowButton)
+            {
+                LV_LOG_USER("Stop process NOW!");
+                lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
+                lv_msgbox_close(mboxCont);
+                lv_obj_delete(mboxCont);
+                gui.element.messagePopup.mBoxPopupParent = NULL;
+                
+                if(tempProcessNode->process.processDetails->checkup->stopAfter == 0){
+                    lv_timer_delete(tempProcessNode->process.processDetails->checkup->timer);
+                    lv_obj_add_state(tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);  
+                    lv_obj_clear_state(tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);  
+                  }
+            }
+            if (gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopAfterButton)
+            {
+                LV_LOG_USER("Stop process AFTER!");
+                lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
+                lv_msgbox_close(mboxCont);
+                lv_obj_delete(mboxCont);
+                gui.element.messagePopup.mBoxPopupParent = NULL;
+
+                tempProcessNode->process.processDetails->checkup->stopAfter = 1;
+                lv_obj_add_state(tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED); 
+            }
         }
         if (obj == gui.element.messagePopup.mBoxPopupButton2)
         {
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton2");
-            if (gui.element.messagePopup.whoCallMe == tempProcessNode || gui.element.messagePopup.whoCallMe == processDetailParent || gui.element.messagePopup.whoCallMe == tempStepNode)
+            if (gui.element.messagePopup.whoCallMe == tempProcessNode || gui.element.messagePopup.whoCallMe == processDetailParent || gui.element.messagePopup.whoCallMe == tempStepNode || gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopAfterButton || gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopNowButton)
             {
                 LV_LOG_USER("Cancel delete element!");
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
@@ -95,7 +120,6 @@ void event_messagePopup(lv_event_t *e)
             }
         }
     }
-
 }       
 
 void messagePopupCreate(const char * popupTitleText,const char * popupText,const char * textButton1, const char * textButton2, void * whoCallMe){

@@ -361,7 +361,6 @@ typedef struct sCheckup{
 	lv_obj_t			*checkupReachTempLabel;
 	lv_obj_t			*checkupTankAndFilmLabel;
 	lv_obj_t			*checkupMachineWillDoLabel;
-	lv_obj_t			*checkupStopStepsButtonLabel;
 	lv_obj_t			*checkupCloseButtonLabel;
 	lv_obj_t			*checkupStepSourceLabel;
 	lv_obj_t			*checkupTempControlLabel;
@@ -407,13 +406,13 @@ typedef struct sCheckup{
 	lv_obj_t			*checkupStartButton;
 	lv_obj_t			*checkupStopAfterButton;
 	lv_obj_t			*checkupStopNowButton;
-	lv_obj_t			*checkupStopStepsButton;
 	lv_obj_t			*checkupCloseButton;
   lv_timer_t    *timer;
 
 	uint8_t 			isProcessing; // 0 or 1
 	uint8_t 			processStep;//0 or 1 or 2 or 3 or 4
 	uint32_t			activeVolume_index;
+	uint8_t 			stopAfter;
 
 	uint8_t 			stepFillWaterStatus;
 	uint8_t 			stepReachTempStatus;
