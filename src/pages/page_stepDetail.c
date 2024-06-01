@@ -73,18 +73,18 @@ void event_stepDetail(lv_event_t * e)
     if(obj == newStep->step.stepDetails->stepTypeDropDownList){
       if(lv_dropdown_get_selected(newStep->step.stepDetails->stepTypeDropDownList) == 0){
           stepType = 0;
-          LV_LOG_USER("Selected newStep->step.stepDetails->stepTypeDropDownList chemical_Icon value:%d",stepType);
-          lv_label_set_text(newStep->step.stepDetails->stepTypeHelpIcon, chemical_Icon);
+          LV_LOG_USER("Selected newStep->step.stepDetails->stepTypeDropDownList chemical_icon value:%d",stepType);
+          lv_label_set_text(newStep->step.stepDetails->stepTypeHelpIcon, chemical_icon);
       }
       if(lv_dropdown_get_selected(newStep->step.stepDetails->stepTypeDropDownList) == 1){
           stepType = 1;
-          LV_LOG_USER("Selected newStep->step.stepDetails->stepTypeDropDownList rinse_Icon value:%d",stepType);
-          lv_label_set_text(newStep->step.stepDetails->stepTypeHelpIcon, rinse_Icon);
+          LV_LOG_USER("Selected newStep->step.stepDetails->stepTypeDropDownList rinse_icon value:%d",stepType);
+          lv_label_set_text(newStep->step.stepDetails->stepTypeHelpIcon, rinse_icon);
       }
       if(lv_dropdown_get_selected(newStep->step.stepDetails->stepTypeDropDownList) == 2){
           stepType = 2;
-          LV_LOG_USER("Selected newStep->step.stepDetails->stepTypeDropDownList multiRinse_Icon value:%d",stepType);
-          lv_label_set_text(newStep->step.stepDetails->stepTypeHelpIcon, multiRinse_Icon);
+          LV_LOG_USER("Selected newStep->step.stepDetails->stepTypeDropDownList multiRinse_icon value:%d",stepType);
+          lv_label_set_text(newStep->step.stepDetails->stepTypeHelpIcon, multiRinse_icon);
       }
       newStep->step.stepDetails->type = stepType;
     }
@@ -287,7 +287,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
 
 
                   newStep->step.stepDetails->stepTypeHelpIcon = lv_label_create(newStep->step.stepDetails->stepTypeContainer);         
-                  lv_label_set_text(newStep->step.stepDetails->stepTypeHelpIcon, chemical_Icon); 
+                  lv_label_set_text(newStep->step.stepDetails->stepTypeHelpIcon, chemical_icon); 
                   lv_obj_set_style_text_font(newStep->step.stepDetails->stepTypeHelpIcon, &FilMachineFontIcons_20, 0);              
                   lv_obj_align(newStep->step.stepDetails->stepTypeHelpIcon, LV_ALIGN_LEFT_MID, 210, 0);
 

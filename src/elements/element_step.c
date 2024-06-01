@@ -159,6 +159,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
 
   tempProcessNode = processReference;
   
+  calcolateTotalTime(processReference);
   
   LV_LOG_USER("Step element created with address 0x%p", newStep);
   LV_LOG_USER("Process element associated with address 0x%p", processReference);
@@ -206,11 +207,11 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
                 newStep->step.stepTypeIcon = lv_label_create(newStep->step.stepElementSummary);
 
                 if(newStep->step.stepDetails->type == CHEMISTRY)
-                    lv_label_set_text(newStep->step.stepTypeIcon, chemical_Icon);
+                    lv_label_set_text(newStep->step.stepTypeIcon, chemical_icon);
                 if(newStep->step.stepDetails->type == RINSE)
-                    lv_label_set_text(newStep->step.stepTypeIcon, rinse_Icon);           
+                    lv_label_set_text(newStep->step.stepTypeIcon, rinse_icon);           
                 if(newStep->step.stepDetails->type == MULTI_RINSE)
-                    lv_label_set_text(newStep->step.stepTypeIcon, multiRinse_Icon); 
+                    lv_label_set_text(newStep->step.stepTypeIcon, multiRinse_icon); 
 
                 lv_obj_set_style_text_font(newStep->step.stepTypeIcon, &FilMachineFontIcons_20, 0);              
                 lv_obj_align(newStep->step.stepTypeIcon, LV_ALIGN_LEFT_MID, -9, -12);
@@ -225,7 +226,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
                 lv_obj_remove_flag(newStep->step.stepName, LV_OBJ_FLAG_SCROLLABLE); 
 
                 newStep->step.stepTimeIcon = lv_label_create(newStep->step.stepElementSummary);          
-                lv_label_set_text(newStep->step.stepTimeIcon, clock_Icon);                  
+                lv_label_set_text(newStep->step.stepTimeIcon, clock_icon);                  
                 lv_obj_set_style_text_font(newStep->step.stepTimeIcon, &FilMachineFontIcons_20, 0);
                 //lv_obj_set_style_text_color(newStep->step.stepTimeIcon, lv_color_hex(GREY), LV_PART_MAIN);
                 lv_obj_align(newStep->step.stepTimeIcon, LV_ALIGN_LEFT_MID, -10, 17);

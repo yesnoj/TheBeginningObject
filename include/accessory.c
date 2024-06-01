@@ -125,6 +125,7 @@ void kb_event_cb(lv_event_t* e)
         }
     }
     if (code == LV_EVENT_CANCEL) {
+      /* 
             if(obj == gui.element.filterPopup.mBoxFilterPopupParent){
                 LV_LOG_USER("Press cancel from gui.element.filterPopup.mBoxFilterPopupParent");
                 lv_textarea_set_text(keyboard_textArea, "");
@@ -132,7 +133,7 @@ void kb_event_cb(lv_event_t* e)
                 lv_obj_remove_flag(gui.element.filterPopup.mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
               }
 
-      /*        if(obj == gui.element.step.stepDetails->stepDetailParent){
+             if(obj == gui.element.step.stepDetails->stepDetailParent){
                 LV_LOG_USER("Press cancel from gui.element.step.stepDetails->stepDetailParent");
                 lv_textarea_set_text(keyboard_textArea, "");
                 lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
@@ -357,12 +358,12 @@ uint32_t calc_buf_len( uint32_t maxVal, uint8_t extra_len ) {
     }
 }
 
-char *createRollerValues( uint32_t maxVal, const char* extra_str ) {
+char *createRollerValues( uint32_t minVal ,uint32_t maxVal, const char* extra_str ) {
     uint32_t buf_len = calc_buf_len( maxVal, strlen(extra_str));
     uint32_t buf_ptr = 0;
     char *buf = (char *)malloc( buf_len );
 
-    for( uint32_t i = 1; i <= maxVal; i++ ) {
+    for( uint32_t i = minVal; i <= maxVal; i++ ) {
         buf_ptr += lv_snprintf( &buf[buf_ptr], (buf_len - buf_ptr), "%s%d\n", extra_str, i );
     }
     //LV_LOG_USER("Created :%s",buf);
@@ -418,22 +419,22 @@ void* allocateAndInitializeNode(NodeType_t type) {
                 processNode* process = (processNode*)node;
                 process->process.processDetails = (sProcessDetail *)malloc(sizeof(sProcessDetail));
                 if (process->process.processDetails == NULL) {
-                  // Handle memory allocation failure
-                  free(process->process.processDetails);  // Clean up previously allocated memory
+                    // Handle memory allocation failure
+                    free(process);
+                    return NULL;
                 }
                 memset(process->process.processDetails, 0, sizeof(sProcessDetail));
-
-
                 
                 process->process.processDetails->checkup = (sCheckup *)malloc(sizeof(sCheckup));
                 if (process->process.processDetails->checkup == NULL) {
-                  // Handle memory allocation failure
-                  free(process->process.processDetails->checkup);  // Clean up previously allocated memory
+                    // Handle memory allocation failure
+                    free(process->process.processDetails);
+                    free(process);
+                    return NULL;
                 }
                 memset(process->process.processDetails->checkup, 0, sizeof(sCheckup));
-                
             }
-        break;
+            break;
     }
     return node;
 }
@@ -495,10 +496,10 @@ void init_globals( void ) {
   gui.page.settings.titleLinePoints[1].x = 310;
   gui.page.tools.titleLinePoints[1].x = 310;
   
-  gui.element.rollerPopup.tempCelsiusOptions = createRollerValues(40,"");
-  gui.element.rollerPopup.minutesOptions = createRollerValues(240,"");
-  gui.element.rollerPopup.secondsOptions = createRollerValues(60,""); 
-  gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(5,"0.");
+  gui.element.rollerPopup.tempCelsiusOptions = createRollerValues(1,40,"");
+  gui.element.rollerPopup.minutesOptions = createRollerValues(0,240,"");
+  gui.element.rollerPopup.secondsOptions = createRollerValues(0,60,""); 
+  gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(0,5,"0.");
 
   tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
   tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);  
@@ -1013,7 +1014,57 @@ void readFile(fs::FS &fs, const char *path) {
     file.close();
 }
 
+void calcolateTotalTime(processNode *processNode){
+    uint32_t mins = 0;
+    uint8_t  secs = 0;
 
+     stepList *stepElementsList;
+     memset( &stepElementsList, 0, sizeof( stepElementsList ) );	
+     stepElementsList = &(processNode->process.processDetails->stepElementsList);   
+
+            stepNode *stepNode;
+            memset( &stepNode, 0, sizeof( stepNode ) );	
+            stepNode = stepElementsList->start;
+
+            while(stepNode != NULL){                
+                mins += stepNode->step.stepDetails->timeMins;
+                secs += stepNode->step.stepDetails->timeSecs;
+
+                if (secs >= 60) {
+                    mins += secs / 60;
+                    secs = secs % 60;
+                }
+                stepNode = stepNode->next;
+            }
+    processNode->process.processDetails->timeMins = mins;
+    processNode->process.processDetails->timeSecs = secs;
+
+    sprintf(formatted_string, "%dm%ds", processNode->process.processDetails->timeMins, processNode->process.processDetails->timeSecs);
+    lv_label_set_text(processNode->process.processDetails->processTotalTimeValue, formatted_string); 
+    LV_LOG_USER("Process %p has a total tilme of %dmin:%dsec", processNode, mins, secs);
+}
+
+
+
+uint8_t calculate_percentage(uint32_t minutes, uint8_t seconds, uint32_t total_minutes, uint8_t total_seconds) {
+    // Calcola il tempo totale in secondi
+    uint32_t total_time_seconds = total_minutes * 60 + total_seconds;
+
+    // Calcola il tempo trascorso in secondi
+    uint32_t elapsed_time_seconds = minutes * 60 + seconds;
+
+    // Calcola la percentuale di tempo trascorso rispetto al tempo totale
+    int percentage = (int)((elapsed_time_seconds * 100) / total_time_seconds);
+
+    // Assicurati che la percentuale sia compresa tra 0 e 100
+    if (percentage < 0) {
+        percentage = 0;
+    } else if (percentage > 100) {
+        percentage = 100;
+    }
+
+    return percentage;
+}
 
 /*
 

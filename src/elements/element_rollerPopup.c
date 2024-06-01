@@ -61,8 +61,8 @@ void event_Roller(lv_event_t * e)
               return; 
             }
             if((lv_obj_t *)data == tempStepNode->step.stepDetails->stepDetailMinTextArea){
-              LV_LOG_USER("SET BUTTON from stepDetailMinTextArea value %d:",rollerSelected);
-              tempStepNode->step.stepDetails->timeMins = rollerSelected;
+              LV_LOG_USER("SET BUTTON from stepDetailMinTextArea value %d:",rollerSelected - 1);
+              tempStepNode->step.stepDetails->timeMins = rollerSelected - 1;
 
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(tempStepNode->step.stepDetails->stepDetailMinTextArea, tempBuffer);
@@ -72,8 +72,8 @@ void event_Roller(lv_event_t * e)
               return; 
             }
             if((lv_obj_t *)data == tempStepNode->step.stepDetails->stepDetailSecTextArea){
-              LV_LOG_USER("SET BUTTON from stepDetailSecTextArea value %d:",rollerSelected);
-              tempStepNode->step.stepDetails->timeSecs = rollerSelected;
+              LV_LOG_USER("SET BUTTON from stepDetailSecTextArea value %d:",rollerSelected - 1);
+              tempStepNode->step.stepDetails->timeSecs = rollerSelected - 1;
 
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(tempStepNode->step.stepDetails->stepDetailSecTextArea, tempBuffer);

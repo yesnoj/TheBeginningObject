@@ -115,7 +115,7 @@ static void initTools(void){
       lv_obj_align(gui.page.tools.toolsCleaningLabel, LV_ALIGN_LEFT_MID, -5, 0);
 
       gui.page.tools.toolsCleaningIcon = lv_label_create(gui.page.tools.toolsCleaningContainer);
-      lv_label_set_text(gui.page.tools.toolsCleaningIcon, play_Icon);
+      lv_label_set_text(gui.page.tools.toolsCleaningIcon, play_icon);
       lv_obj_set_style_text_font(gui.page.tools.toolsCleaningIcon, &FilMachineFontIcons_30, 0);
       lv_obj_align(gui.page.tools.toolsCleaningIcon, LV_ALIGN_RIGHT_MID, 0, 0);
       lv_obj_add_flag(gui.page.tools.toolsCleaningIcon, LV_OBJ_FLAG_CLICKABLE);
@@ -137,7 +137,7 @@ static void initTools(void){
       lv_obj_align(gui.page.tools.toolsDrainingLabel, LV_ALIGN_LEFT_MID, -5, 0);
 
       gui.page.tools.toolsDrainingIcon = lv_label_create(gui.page.tools.toolsDrainingContainer);
-      lv_label_set_text(gui.page.tools.toolsDrainingIcon, play_Icon);
+      lv_label_set_text(gui.page.tools.toolsDrainingIcon, play_icon);
       lv_obj_set_style_text_font(gui.page.tools.toolsDrainingIcon, &FilMachineFontIcons_30, 0);
       lv_obj_align(gui.page.tools.toolsDrainingIcon, LV_ALIGN_RIGHT_MID, 0, 0);
       lv_obj_add_flag(gui.page.tools.toolsDrainingIcon, LV_OBJ_FLAG_CLICKABLE);
@@ -177,7 +177,7 @@ static void initTools(void){
       createQuestionMark(gui.page.tools.toolsImportContainer,gui.page.tools.toolsImportLabel,event_toolsElement, 2, -3);
 
       gui.page.tools.toolsImportIcon = lv_label_create(gui.page.tools.toolsImportContainer);
-      lv_label_set_text(gui.page.tools.toolsImportIcon, play_Icon);
+      lv_label_set_text(gui.page.tools.toolsImportIcon, play_icon);
       lv_obj_set_style_text_font(gui.page.tools.toolsImportIcon, &FilMachineFontIcons_30, 0);
       lv_obj_align(gui.page.tools.toolsImportIcon, LV_ALIGN_RIGHT_MID, 0, 0);
       lv_obj_add_flag(gui.page.tools.toolsImportIcon, LV_OBJ_FLAG_CLICKABLE);
@@ -201,7 +201,7 @@ static void initTools(void){
       createQuestionMark(gui.page.tools.toolsExportContainer,gui.page.tools.toolsExportLabel,event_toolsElement, 2, -3);
 
       gui.page.tools.toolsExportIcon = lv_label_create(gui.page.tools.toolsExportContainer);
-      lv_label_set_text(gui.page.tools.toolsExportIcon, play_Icon);
+      lv_label_set_text(gui.page.tools.toolsExportIcon, play_icon);
       lv_obj_set_style_text_font(gui.page.tools.toolsExportIcon, &FilMachineFontIcons_30, 0);
       lv_obj_align(gui.page.tools.toolsExportIcon, LV_ALIGN_RIGHT_MID, 0, 0);
       lv_obj_add_flag(gui.page.tools.toolsExportIcon, LV_OBJ_FLAG_CLICKABLE);

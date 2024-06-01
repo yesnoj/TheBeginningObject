@@ -218,7 +218,7 @@ void processElementCreate(processNode *newProcess) {
         lv_obj_align(newProcess->process.processTemp, LV_ALIGN_LEFT_MID, 7, 17);
 
         newProcess->process.processTimeIcon = lv_label_create(newProcess->process.processElementSummary);          
-        lv_label_set_text(newProcess->process.processTimeIcon, clock_Icon);                  
+        lv_label_set_text(newProcess->process.processTimeIcon, clock_icon);                  
         lv_obj_set_style_text_font(newProcess->process.processTimeIcon, &FilMachineFontIcons_20, 0);
         //lv_obj_set_style_text_color(newStep->step.stepTimeIcon, lv_color_hex(GREY), LV_PART_MAIN);
         lv_obj_align(newProcess->process.processTimeIcon, LV_ALIGN_LEFT_MID, 65, 17);

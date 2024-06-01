@@ -346,7 +346,7 @@ tempProcessNode = newProcess;
                           lv_obj_add_state(newProcess->process.processDetails->processToleranceTextArea, LV_STATE_FOCUSED);
                           lv_obj_set_style_bg_color(newProcess->process.processDetails->processToleranceTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                           lv_obj_set_style_text_align(newProcess->process.processDetails->processToleranceTextArea , LV_TEXT_ALIGN_CENTER, 0);
-                          //lv_style_set_text_font(&newProcess->process.processDetails->textAreaStyle, &lv_font_montserrat_18);
+                          lv_style_set_text_font(&newProcess->process.processDetails->textAreaStyle, &lv_font_montserrat_18);
                           lv_obj_add_style(newProcess->process.processDetails->processToleranceTextArea, &newProcess->process.processDetails->textAreaStyle, LV_PART_MAIN);
                           lv_obj_set_style_border_color(newProcess->process.processDetails->processToleranceTextArea, lv_color_hex(WHITE), 0);
 
@@ -434,7 +434,7 @@ tempProcessNode = newProcess;
 
 
                           newProcess->process.processDetails->processSaveLabel = lv_label_create(newProcess->process.processDetails->processSaveButton);         
-                          lv_label_set_text(newProcess->process.processDetails->processSaveLabel, save_Icon); 
+                          lv_label_set_text(newProcess->process.processDetails->processSaveLabel, save_icon); 
                           lv_obj_set_style_text_font(newProcess->process.processDetails->processSaveLabel, &FilMachineFontIcons_30, 0);              
                           lv_obj_align(newProcess->process.processDetails->processSaveLabel, LV_ALIGN_CENTER, 0, 0);
 
@@ -450,7 +450,7 @@ tempProcessNode = newProcess;
                       lv_obj_clear_state(newProcess->process.processDetails->processRunButton, LV_STATE_DISABLED);
                  
                           newProcess->process.processDetails->processRunLabel = lv_label_create(newProcess->process.processDetails->processRunButton);         
-                          lv_label_set_text(newProcess->process.processDetails->processRunLabel, play_Icon); 
+                          lv_label_set_text(newProcess->process.processDetails->processRunLabel, play_icon); 
                           lv_obj_set_style_text_font(newProcess->process.processDetails->processRunLabel, &FilMachineFontIcons_30, 0);              
                           lv_obj_align(newProcess->process.processDetails->processRunLabel, LV_ALIGN_CENTER, 0, 0);
                           lv_obj_add_flag(newProcess->process.processDetails->processRunLabel, LV_OBJ_FLAG_CLICKABLE);

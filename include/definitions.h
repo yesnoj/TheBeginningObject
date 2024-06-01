@@ -330,7 +330,7 @@ typedef struct stepList {
 typedef struct sCheckup{
     /* LVGL objects */
 	lv_obj_t			*checkupParent;
-
+	lv_style_t		    textAreaStyleCheckup;
 	lv_obj_t			*checkupContainer;
 	lv_obj_t			*checkupNextStepsContainer;
 	lv_obj_t			*checkupProcessNameContainer;
@@ -409,6 +409,7 @@ typedef struct sCheckup{
 	lv_obj_t			*checkupStopNowButton;
 	lv_obj_t			*checkupStopStepsButton;
 	lv_obj_t			*checkupCloseButton;
+  lv_timer_t    *timer;
 
 	uint8_t 			isProcessing; // 0 or 1
 	uint8_t 			processStep;//0 or 1 or 2 or 3 or 4
@@ -906,22 +907,22 @@ LV_IMG_DECLARE(splash_img);
 #define blackwhite_icon     "\xEF\x81\x82"
 #define questionMark_icon   "\xEF\x81\x99"
 #define closePopup_icon     "\xEF\x80\x8D"
-#define play_Icon           "\xEF\x81\x8B"
+#define play_icon           "\xEF\x81\x8B"
 
-#define save_Icon           "\xEF\x83\x87"
-#define trash_Icon          "\xEF\x8B\xAD" //never used, to add into font.c file in case need to be used
-#define moveUp_Icon         "\xEF\x81\xB7" //never used, to add into font.c file in case need to be used
-#define moveDown_Icon       "\xEF\x81\xB8" //never used, to add into font.c file in case need to be used
-#define chemical_Icon       "\xEF\x83\x83"
-#define rinse_Icon          "\xEF\x81\x83"
-#define multiRinse_Icon     "\xEF\x86\xB8"
-#define edit_Icon           "\xEF\x81\x84" //never used, to add into font.c file in case need to be used
-#define copy_Icon           "\xEF\x83\x85" //never used, to add into font.c file in case need to be used
-#define checkStep_Icon      "\xEF\x80\x8C"
-#define arrowStep_Icon      "\xEF\x81\xA1"
-#define dotStep_Icon        "\xEF\x86\x92"
-#define clock_Icon          "\xEF\x80\x97"
-#define bomb_Icon           "\xEF\x8B\x9B" //never used, to add into font.c file in case need to be used
+#define save_icon           "\xEF\x83\x87"
+#define trash_icon          "\xEF\x8B\xAD" //never used, to add into font.c file in case need to be used
+#define moveUp_icon         "\xEF\x81\xB7" //never used, to add into font.c file in case need to be used
+#define moveDown_icon       "\xEF\x81\xB8" //never used, to add into font.c file in case need to be used
+#define chemical_icon       "\xEF\x83\x83"
+#define rinse_icon          "\xEF\x81\x83"
+#define multiRinse_icon     "\xEF\x86\xB8"
+#define edit_icon           "\xEF\x81\x84" //never used, to add into font.c file in case need to be used
+#define copy_icon           "\xEF\x83\x85" //never used, to add into font.c file in case need to be used
+#define checkStep_icon      "\xEF\x80\x8C"
+#define arrowStep_icon      "\xEF\x81\xA1"
+#define dotStep_icon        "\xEF\x86\x92"
+#define clock_icon          "\xEF\x80\x97"
+#define bomb_icon           "\xEF\x8B\x9B" //never used, to add into font.c file in case need to be used
 #define alert_icon          "\xEF\x81\xAA" //never used, to add into font.c file in case need to be used
 #define sdCard_icon         "\xEF\x9F\x82"
 #define discardAfter_icon   "\xEF\x8B\xB5"
@@ -1079,7 +1080,6 @@ uint32_t rollerSelected;
 lv_obj_t * questionMark;
 lv_obj_t * roller;
 lv_style_t style_roller;
-lv_style_t textAreaStyle;
 char tempBuffer [10];
 
 
@@ -1121,8 +1121,9 @@ static char * checkupTankSizesList = "Small\n"
                                     	   "Large";
 
 
-static char * checkupStepStatuses [3][14] = {"\xEF\x86\x92", "\xEF\x81\xA1", "\xEF\x80\x8C"};  //dotStep_Icon, arrowStep_Icon, checkStep_icon
+//static char * checkupStepStatuses [3][14] = {"\xEF\x86\x92", "\xEF\x81\xA1", "\xEF\x80\x8C"};  
 
+static const char *checkupStepStatuses[] = { dotStep_icon, arrowStep_icon, checkStep_icon };
 
 static uint16_t tankFullSizes [3] = {500, 700, 1000}; 
 static uint16_t tankLowSizes  [3] = {250, 350, 550}; 
@@ -1259,6 +1260,9 @@ void create_keyboard(lv_obj_t * keyB);
 char *createRollerValues( uint32_t maxVal, const char* extra_str );
 int SD_init();
 void initSD_I2C();
+
+void calcolateTotalTime(processNode *processNode);
+uint8_t calculate_percentage(uint32_t minutes, uint8_t seconds, uint32_t total_minutes, uint8_t total_seconds);
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);
