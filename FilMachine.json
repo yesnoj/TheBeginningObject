@@ -1,0 +1,1401 @@
+{
+    "machineSettings": {
+        "tempUnit": 0,
+        "waterInlet": 0,
+        "calibratedTemp": 0,
+        "filmRotationSpeedSetpoint": 0,
+        "rotationIntervalSetpoint": 0,
+        "randomSetpoint": 0,
+        "isPersistentAlarm": 0,
+        "isProcessAutostart": 0,
+        "drainFillOverlapSetpoint": 0
+    },
+    "Filter": {
+        "filterName": null,
+        "isColorFilter": 0,
+        "isBnWFilter": 0,
+        "preferredOnly": 0
+    },
+    "Processes": {
+        "Process0": {
+            "processNameString": "vldzolztcbbi",
+            "temp": 24,
+            "tempTolerance": 5,
+            "isTempControlled": 0,
+            "isPreferred": 0,
+            "filmType": 1,
+            "timeMins": 45,
+            "timeSecs": 19,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "jlycwproujuzr",
+                    "timeMins": 26,
+                    "timeSecs": 32,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step1": {
+                    "stepNameString": "bnoddoc",
+                    "timeMins": 2,
+                    "timeSecs": 43,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step2": {
+                    "stepNameString": "jwxuqsyzhdyepj",
+                    "timeMins": 44,
+                    "timeSecs": 10,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step3": {
+                    "stepNameString": "uqaazgnqjgdrsnj",
+                    "timeMins": 14,
+                    "timeSecs": 38,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step4": {
+                    "stepNameString": "egyxfcv",
+                    "timeMins": 23,
+                    "timeSecs": 35,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 0
+                },
+                "Step5": {
+                    "stepNameString": "xlucidtkhzvwaj",
+                    "timeMins": 16,
+                    "timeSecs": 23,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step6": {
+                    "stepNameString": "kuzsfbtzqi",
+                    "timeMins": 4,
+                    "timeSecs": 12,
+                    "type": 1,
+                    "source": 2,
+                    "discardAfterProc": 0
+                },
+                "Step7": {
+                    "stepNameString": "muedbj",
+                    "timeMins": 5,
+                    "timeSecs": 40,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step8": {
+                    "stepNameString": "loxrjnifz",
+                    "timeMins": 45,
+                    "timeSecs": 35,
+                    "type": 0,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step9": {
+                    "stepNameString": "egrfupno",
+                    "timeMins": 13,
+                    "timeSecs": 19,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 0
+                }
+            }
+        },
+        "Process1": {
+            "processNameString": "hwcugmz",
+            "temp": 11,
+            "tempTolerance": 5,
+            "isTempControlled": 0,
+            "isPreferred": 0,
+            "filmType": 1,
+            "timeMins": 3,
+            "timeSecs": 42,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "wtdxpahtiz",
+                    "timeMins": 53,
+                    "timeSecs": 34,
+                    "type": 0,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step1": {
+                    "stepNameString": "tljccqlt",
+                    "timeMins": 27,
+                    "timeSecs": 5,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step2": {
+                    "stepNameString": "ltrgpqes",
+                    "timeMins": 23,
+                    "timeSecs": 37,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step3": {
+                    "stepNameString": "agwujpmbxwut",
+                    "timeMins": 51,
+                    "timeSecs": 13,
+                    "type": 1,
+                    "source": 2,
+                    "discardAfterProc": 0
+                },
+                "Step4": {
+                    "stepNameString": "jxsqwuk",
+                    "timeMins": 3,
+                    "timeSecs": 23,
+                    "type": 0,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step5": {
+                    "stepNameString": "qbkhpkjdcuk",
+                    "timeMins": 53,
+                    "timeSecs": 52,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step6": {
+                    "stepNameString": "peiudvcida",
+                    "timeMins": 44,
+                    "timeSecs": 24,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step7": {
+                    "stepNameString": "lublqqrkwebqk",
+                    "timeMins": 43,
+                    "timeSecs": 41,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step8": {
+                    "stepNameString": "bwcuunl",
+                    "timeMins": 7,
+                    "timeSecs": 22,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step9": {
+                    "stepNameString": "ypekhtapwkwn",
+                    "timeMins": 43,
+                    "timeSecs": 36,
+                    "type": 0,
+                    "source": 0,
+                    "discardAfterProc": 0
+                }
+            }
+        },
+        "Process2": {
+            "processNameString": "tqeywpofbin",
+            "temp": 1,
+            "tempTolerance": 9,
+            "isTempControlled": 1,
+            "isPreferred": 0,
+            "filmType": 0,
+            "timeMins": 59,
+            "timeSecs": 30,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "htxgkxywpb",
+                    "timeMins": 35,
+                    "timeSecs": 46,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step1": {
+                    "stepNameString": "sxqrada",
+                    "timeMins": 4,
+                    "timeSecs": 54,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step2": {
+                    "stepNameString": "pfoidxgu",
+                    "timeMins": 20,
+                    "timeSecs": 43,
+                    "type": 1,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step3": {
+                    "stepNameString": "zapxohaag",
+                    "timeMins": 50,
+                    "timeSecs": 31,
+                    "type": 1,
+                    "source": 2,
+                    "discardAfterProc": 0
+                },
+                "Step4": {
+                    "stepNameString": "hvtiirdsah",
+                    "timeMins": 33,
+                    "timeSecs": 42,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step5": {
+                    "stepNameString": "phsfrojyjzuv",
+                    "timeMins": 33,
+                    "timeSecs": 11,
+                    "type": 0,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step6": {
+                    "stepNameString": "wbhqwhlyryzdw",
+                    "timeMins": 50,
+                    "timeSecs": 40,
+                    "type": 0,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step7": {
+                    "stepNameString": "zyftmawtn",
+                    "timeMins": 40,
+                    "timeSecs": 34,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step8": {
+                    "stepNameString": "btiyocnfxzi",
+                    "timeMins": 18,
+                    "timeSecs": 22,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step9": {
+                    "stepNameString": "imaaqbtgapsboyk",
+                    "timeMins": 23,
+                    "timeSecs": 21,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 1
+                }
+            }
+        },
+        "Process3": {
+            "processNameString": "qmxhzqfu",
+            "temp": 58,
+            "tempTolerance": 5,
+            "isTempControlled": 0,
+            "isPreferred": 1,
+            "filmType": 0,
+            "timeMins": 34,
+            "timeSecs": 21,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "cbkaj",
+                    "timeMins": 46,
+                    "timeSecs": 44,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 0
+                },
+                "Step1": {
+                    "stepNameString": "bepkayhmoynn",
+                    "timeMins": 8,
+                    "timeSecs": 43,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step2": {
+                    "stepNameString": "ynaxzirnjcsu",
+                    "timeMins": 53,
+                    "timeSecs": 10,
+                    "type": 1,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step3": {
+                    "stepNameString": "dxtpnecta",
+                    "timeMins": 19,
+                    "timeSecs": 22,
+                    "type": 1,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step4": {
+                    "stepNameString": "yztcbawado",
+                    "timeMins": 24,
+                    "timeSecs": 19,
+                    "type": 0,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step5": {
+                    "stepNameString": "zpqdoeuzbrebc",
+                    "timeMins": 20,
+                    "timeSecs": 18,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step6": {
+                    "stepNameString": "yzrvn",
+                    "timeMins": 38,
+                    "timeSecs": 53,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step7": {
+                    "stepNameString": "wyzyvce",
+                    "timeMins": 50,
+                    "timeSecs": 2,
+                    "type": 1,
+                    "source": 2,
+                    "discardAfterProc": 0
+                },
+                "Step8": {
+                    "stepNameString": "jcfqgtorjlpvbb",
+                    "timeMins": 10,
+                    "timeSecs": 56,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step9": {
+                    "stepNameString": "vnunurzcgndvy",
+                    "timeMins": 33,
+                    "timeSecs": 44,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 1
+                }
+            }
+        },
+        "Process4": {
+            "processNameString": "bvsolhmdenfoi",
+            "temp": 14,
+            "tempTolerance": 8,
+            "isTempControlled": 1,
+            "isPreferred": 0,
+            "filmType": 0,
+            "timeMins": 27,
+            "timeSecs": 23,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "szkjzk",
+                    "timeMins": 13,
+                    "timeSecs": 28,
+                    "type": 1,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step1": {
+                    "stepNameString": "unuvy",
+                    "timeMins": 9,
+                    "timeSecs": 15,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step2": {
+                    "stepNameString": "qwczghjariuxu",
+                    "timeMins": 11,
+                    "timeSecs": 34,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step3": {
+                    "stepNameString": "prjmjlhdwjdpng",
+                    "timeMins": 33,
+                    "timeSecs": 29,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step4": {
+                    "stepNameString": "avqjfkbpnqhh",
+                    "timeMins": 28,
+                    "timeSecs": 43,
+                    "type": 1,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step5": {
+                    "stepNameString": "bqdtdp",
+                    "timeMins": 0,
+                    "timeSecs": 48,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step6": {
+                    "stepNameString": "fjlrbahk",
+                    "timeMins": 29,
+                    "timeSecs": 5,
+                    "type": 0,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step7": {
+                    "stepNameString": "ympyxlkkita",
+                    "timeMins": 5,
+                    "timeSecs": 10,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step8": {
+                    "stepNameString": "cqhbg",
+                    "timeMins": 23,
+                    "timeSecs": 8,
+                    "type": 0,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step9": {
+                    "stepNameString": "wdzkvvzxyujpq",
+                    "timeMins": 40,
+                    "timeSecs": 37,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 1
+                }
+            }
+        },
+        "Process5": {
+            "processNameString": "qgapuk",
+            "temp": 26,
+            "tempTolerance": 3,
+            "isTempControlled": 0,
+            "isPreferred": 0,
+            "filmType": 0,
+            "timeMins": 51,
+            "timeSecs": 5,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "iotuwfbhc",
+                    "timeMins": 24,
+                    "timeSecs": 42,
+                    "type": 0,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step1": {
+                    "stepNameString": "xxwtsby",
+                    "timeMins": 12,
+                    "timeSecs": 45,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step2": {
+                    "stepNameString": "spokaityi",
+                    "timeMins": 53,
+                    "timeSecs": 10,
+                    "type": 0,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step3": {
+                    "stepNameString": "novcflfekqv",
+                    "timeMins": 4,
+                    "timeSecs": 20,
+                    "type": 0,
+                    "source": 2,
+                    "discardAfterProc": 0
+                },
+                "Step4": {
+                    "stepNameString": "wkxonp",
+                    "timeMins": 44,
+                    "timeSecs": 55,
+                    "type": 1,
+                    "source": 2,
+                    "discardAfterProc": 0
+                },
+                "Step5": {
+                    "stepNameString": "uiktvafvtguqr",
+                    "timeMins": 14,
+                    "timeSecs": 53,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step6": {
+                    "stepNameString": "qmhbi",
+                    "timeMins": 29,
+                    "timeSecs": 20,
+                    "type": 1,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step7": {
+                    "stepNameString": "mnmqgux",
+                    "timeMins": 40,
+                    "timeSecs": 25,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step8": {
+                    "stepNameString": "sbspobr",
+                    "timeMins": 6,
+                    "timeSecs": 20,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step9": {
+                    "stepNameString": "hpmsy",
+                    "timeMins": 49,
+                    "timeSecs": 32,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 0
+                }
+            }
+        },
+        "Process6": {
+            "processNameString": "enrchfm",
+            "temp": 7,
+            "tempTolerance": 0,
+            "isTempControlled": 1,
+            "isPreferred": 1,
+            "filmType": 0,
+            "timeMins": 38,
+            "timeSecs": 58,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "xihhmr",
+                    "timeMins": 15,
+                    "timeSecs": 8,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step1": {
+                    "stepNameString": "elqlpa",
+                    "timeMins": 56,
+                    "timeSecs": 28,
+                    "type": 2,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step2": {
+                    "stepNameString": "usyijx",
+                    "timeMins": 55,
+                    "timeSecs": 55,
+                    "type": 0,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step3": {
+                    "stepNameString": "gtzkpeivygfwus",
+                    "timeMins": 21,
+                    "timeSecs": 35,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step4": {
+                    "stepNameString": "kxjagnrkylbjx",
+                    "timeMins": 24,
+                    "timeSecs": 38,
+                    "type": 0,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step5": {
+                    "stepNameString": "thiwurtcb",
+                    "timeMins": 3,
+                    "timeSecs": 57,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step6": {
+                    "stepNameString": "umpzcmsrjvnbwa",
+                    "timeMins": 51,
+                    "timeSecs": 57,
+                    "type": 0,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step7": {
+                    "stepNameString": "jdvghzjsktf",
+                    "timeMins": 38,
+                    "timeSecs": 23,
+                    "type": 1,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step8": {
+                    "stepNameString": "gcmqnclu",
+                    "timeMins": 13,
+                    "timeSecs": 33,
+                    "type": 2,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step9": {
+                    "stepNameString": "jxvemkpnaotk",
+                    "timeMins": 25,
+                    "timeSecs": 18,
+                    "type": 0,
+                    "source": 3,
+                    "discardAfterProc": 0
+                }
+            }
+        },
+        "Process7": {
+            "processNameString": "xnmrwrffvx",
+            "temp": 98,
+            "tempTolerance": 4,
+            "isTempControlled": 0,
+            "isPreferred": 1,
+            "filmType": 1,
+            "timeMins": 36,
+            "timeSecs": 42,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "qiaiptvbfxjik",
+                    "timeMins": 2,
+                    "timeSecs": 14,
+                    "type": 0,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step1": {
+                    "stepNameString": "wdrri",
+                    "timeMins": 29,
+                    "timeSecs": 42,
+                    "type": 1,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step2": {
+                    "stepNameString": "dactthqd",
+                    "timeMins": 33,
+                    "timeSecs": 52,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step3": {
+                    "stepNameString": "ybitiza",
+                    "timeMins": 18,
+                    "timeSecs": 53,
+                    "type": 0,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step4": {
+                    "stepNameString": "kyklv",
+                    "timeMins": 3,
+                    "timeSecs": 3,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step5": {
+                    "stepNameString": "naxyxcjwrfywk",
+                    "timeMins": 32,
+                    "timeSecs": 40,
+                    "type": 0,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step6": {
+                    "stepNameString": "wlzrzcgwkynqtq",
+                    "timeMins": 25,
+                    "timeSecs": 35,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step7": {
+                    "stepNameString": "rsdmmhqhzyfsxew",
+                    "timeMins": 12,
+                    "timeSecs": 45,
+                    "type": 1,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step8": {
+                    "stepNameString": "czitbldzkny",
+                    "timeMins": 10,
+                    "timeSecs": 58,
+                    "type": 2,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step9": {
+                    "stepNameString": "sihbousbpkahfd",
+                    "timeMins": 47,
+                    "timeSecs": 11,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 0
+                }
+            }
+        },
+        "Process8": {
+            "processNameString": "mnqul",
+            "temp": 97,
+            "tempTolerance": 4,
+            "isTempControlled": 0,
+            "isPreferred": 0,
+            "filmType": 0,
+            "timeMins": 57,
+            "timeSecs": 30,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "bypzkrn",
+                    "timeMins": 6,
+                    "timeSecs": 42,
+                    "type": 0,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step1": {
+                    "stepNameString": "uvgkduxgnps",
+                    "timeMins": 26,
+                    "timeSecs": 0,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step2": {
+                    "stepNameString": "firzqiuuri",
+                    "timeMins": 50,
+                    "timeSecs": 35,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step3": {
+                    "stepNameString": "zdqrwyawpdth",
+                    "timeMins": 16,
+                    "timeSecs": 56,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 0
+                },
+                "Step4": {
+                    "stepNameString": "ioqjyjtvc",
+                    "timeMins": 11,
+                    "timeSecs": 17,
+                    "type": 0,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step5": {
+                    "stepNameString": "dexynshshhmljz",
+                    "timeMins": 32,
+                    "timeSecs": 25,
+                    "type": 0,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step6": {
+                    "stepNameString": "syantwvpkfh",
+                    "timeMins": 18,
+                    "timeSecs": 24,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step7": {
+                    "stepNameString": "upvtilqbcnsr",
+                    "timeMins": 60,
+                    "timeSecs": 47,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step8": {
+                    "stepNameString": "ankdbno",
+                    "timeMins": 53,
+                    "timeSecs": 52,
+                    "type": 1,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step9": {
+                    "stepNameString": "wwxkixb",
+                    "timeMins": 47,
+                    "timeSecs": 1,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 0
+                }
+            }
+        },
+        "Process9": {
+            "processNameString": "ieivacfnndr",
+            "temp": 89,
+            "tempTolerance": 7,
+            "isTempControlled": 1,
+            "isPreferred": 0,
+            "filmType": 0,
+            "timeMins": 14,
+            "timeSecs": 48,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "ssoispmxxhtw",
+                    "timeMins": 1,
+                    "timeSecs": 13,
+                    "type": 0,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step1": {
+                    "stepNameString": "futkqgimebfmba",
+                    "timeMins": 57,
+                    "timeSecs": 33,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step2": {
+                    "stepNameString": "rtrfhlskegtnzvz",
+                    "timeMins": 34,
+                    "timeSecs": 5,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step3": {
+                    "stepNameString": "bchnrmhbegxkx",
+                    "timeMins": 19,
+                    "timeSecs": 59,
+                    "type": 0,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step4": {
+                    "stepNameString": "imsiufyn",
+                    "timeMins": 58,
+                    "timeSecs": 45,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step5": {
+                    "stepNameString": "ifsbjzzoxxijzus",
+                    "timeMins": 58,
+                    "timeSecs": 30,
+                    "type": 1,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step6": {
+                    "stepNameString": "vcvejjjikzyx",
+                    "timeMins": 23,
+                    "timeSecs": 37,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step7": {
+                    "stepNameString": "veflvuycyxfs",
+                    "timeMins": 56,
+                    "timeSecs": 22,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step8": {
+                    "stepNameString": "fgyocgr",
+                    "timeMins": 58,
+                    "timeSecs": 39,
+                    "type": 0,
+                    "source": 2,
+                    "discardAfterProc": 0
+                },
+                "Step9": {
+                    "stepNameString": "zdqspywkuja",
+                    "timeMins": 47,
+                    "timeSecs": 12,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 1
+                }
+            }
+        },
+        "Process10": {
+            "processNameString": "hqggjwrgftilqph",
+            "temp": 35,
+            "tempTolerance": 8,
+            "isTempControlled": 0,
+            "isPreferred": 1,
+            "filmType": 0,
+            "timeMins": 7,
+            "timeSecs": 28,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "nvsack",
+                    "timeMins": 33,
+                    "timeSecs": 4,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step1": {
+                    "stepNameString": "criko",
+                    "timeMins": 36,
+                    "timeSecs": 49,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 0
+                },
+                "Step2": {
+                    "stepNameString": "jkwyaospmnpxa",
+                    "timeMins": 3,
+                    "timeSecs": 29,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step3": {
+                    "stepNameString": "kacsxehaoe",
+                    "timeMins": 56,
+                    "timeSecs": 31,
+                    "type": 0,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step4": {
+                    "stepNameString": "uxjhpxzaqebfa",
+                    "timeMins": 39,
+                    "timeSecs": 25,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step5": {
+                    "stepNameString": "wkssb",
+                    "timeMins": 10,
+                    "timeSecs": 33,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step6": {
+                    "stepNameString": "yhlme",
+                    "timeMins": 54,
+                    "timeSecs": 18,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 0
+                },
+                "Step7": {
+                    "stepNameString": "abanycmsmg",
+                    "timeMins": 38,
+                    "timeSecs": 37,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step8": {
+                    "stepNameString": "myjcbs",
+                    "timeMins": 50,
+                    "timeSecs": 36,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 0
+                },
+                "Step9": {
+                    "stepNameString": "dxbmeubus",
+                    "timeMins": 48,
+                    "timeSecs": 31,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 1
+                }
+            }
+        },
+        "Process11": {
+            "processNameString": "pexoyoixlbau",
+            "temp": 9,
+            "tempTolerance": 3,
+            "isTempControlled": 1,
+            "isPreferred": 1,
+            "filmType": 0,
+            "timeMins": 51,
+            "timeSecs": 46,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "augnspzaymhczha",
+                    "timeMins": 37,
+                    "timeSecs": 56,
+                    "type": 2,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step1": {
+                    "stepNameString": "ijzfgdqzt",
+                    "timeMins": 25,
+                    "timeSecs": 11,
+                    "type": 1,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step2": {
+                    "stepNameString": "onayhgprafrktu",
+                    "timeMins": 8,
+                    "timeSecs": 48,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step3": {
+                    "stepNameString": "hjqut",
+                    "timeMins": 30,
+                    "timeSecs": 49,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step4": {
+                    "stepNameString": "lhkebub",
+                    "timeMins": 46,
+                    "timeSecs": 8,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step5": {
+                    "stepNameString": "ybasgvesob",
+                    "timeMins": 38,
+                    "timeSecs": 6,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step6": {
+                    "stepNameString": "ftmua",
+                    "timeMins": 12,
+                    "timeSecs": 50,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step7": {
+                    "stepNameString": "rpgdl",
+                    "timeMins": 5,
+                    "timeSecs": 36,
+                    "type": 1,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step8": {
+                    "stepNameString": "dgovt",
+                    "timeMins": 20,
+                    "timeSecs": 49,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step9": {
+                    "stepNameString": "wcmltzrwtrum",
+                    "timeMins": 13,
+                    "timeSecs": 29,
+                    "type": 1,
+                    "source": 2,
+                    "discardAfterProc": 1
+                }
+            }
+        },
+        "Process12": {
+            "processNameString": "loqoymijgddbi",
+            "temp": 30,
+            "tempTolerance": 2,
+            "isTempControlled": 0,
+            "isPreferred": 0,
+            "filmType": 1,
+            "timeMins": 56,
+            "timeSecs": 40,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "shamquupy",
+                    "timeMins": 35,
+                    "timeSecs": 47,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step1": {
+                    "stepNameString": "shpiekdjipknekg",
+                    "timeMins": 14,
+                    "timeSecs": 42,
+                    "type": 2,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step2": {
+                    "stepNameString": "dwxfs",
+                    "timeMins": 25,
+                    "timeSecs": 17,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step3": {
+                    "stepNameString": "isucdf",
+                    "timeMins": 59,
+                    "timeSecs": 9,
+                    "type": 2,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step4": {
+                    "stepNameString": "fhcsbcnecngnr",
+                    "timeMins": 31,
+                    "timeSecs": 39,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step5": {
+                    "stepNameString": "mnefhczr",
+                    "timeMins": 43,
+                    "timeSecs": 29,
+                    "type": 2,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step6": {
+                    "stepNameString": "jwcfsiwvpcz",
+                    "timeMins": 43,
+                    "timeSecs": 30,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step7": {
+                    "stepNameString": "meytnfinvunvocf",
+                    "timeMins": 6,
+                    "timeSecs": 56,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step8": {
+                    "stepNameString": "qwmkevoxolvxqzw",
+                    "timeMins": 34,
+                    "timeSecs": 4,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step9": {
+                    "stepNameString": "gkqzcjvvndc",
+                    "timeMins": 10,
+                    "timeSecs": 18,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 1
+                }
+            }
+        },
+        "Process13": {
+            "processNameString": "ysbgszudqkyk",
+            "temp": 45,
+            "tempTolerance": 10,
+            "isTempControlled": 1,
+            "isPreferred": 0,
+            "filmType": 1,
+            "timeMins": 22,
+            "timeSecs": 23,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "wcoofgxeoiuuj",
+                    "timeMins": 13,
+                    "timeSecs": 11,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step1": {
+                    "stepNameString": "pfvjsbltxbq",
+                    "timeMins": 54,
+                    "timeSecs": 24,
+                    "type": 1,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step2": {
+                    "stepNameString": "ozsaxycj",
+                    "timeMins": 24,
+                    "timeSecs": 31,
+                    "type": 0,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step3": {
+                    "stepNameString": "ellapjmdib",
+                    "timeMins": 42,
+                    "timeSecs": 36,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step4": {
+                    "stepNameString": "ajitkjimu",
+                    "timeMins": 30,
+                    "timeSecs": 47,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step5": {
+                    "stepNameString": "wdcmivrxhejz",
+                    "timeMins": 55,
+                    "timeSecs": 14,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step6": {
+                    "stepNameString": "btsbhlqhrztgg",
+                    "timeMins": 1,
+                    "timeSecs": 52,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step7": {
+                    "stepNameString": "smvobrany",
+                    "timeMins": 1,
+                    "timeSecs": 4,
+                    "type": 0,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                "Step8": {
+                    "stepNameString": "rtjjuatguopzwwf",
+                    "timeMins": 6,
+                    "timeSecs": 18,
+                    "type": 0,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step9": {
+                    "stepNameString": "uajdwnxhxzi",
+                    "timeMins": 44,
+                    "timeSecs": 39,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 1
+                }
+            }
+        },
+        "Process14": {
+            "processNameString": "ubdybbkymsbdy",
+            "temp": 56,
+            "tempTolerance": 3,
+            "isTempControlled": 0,
+            "isPreferred": 1,
+            "filmType": 1,
+            "timeMins": 57,
+            "timeSecs": 31,
+            "Steps": {
+                "Step0": {
+                    "stepNameString": "jicfrvzpmmor",
+                    "timeMins": 56,
+                    "timeSecs": 29,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step1": {
+                    "stepNameString": "xvmvsujibsj",
+                    "timeMins": 8,
+                    "timeSecs": 41,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step2": {
+                    "stepNameString": "vtxql",
+                    "timeMins": 10,
+                    "timeSecs": 4,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step3": {
+                    "stepNameString": "ygxcdl",
+                    "timeMins": 38,
+                    "timeSecs": 55,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step4": {
+                    "stepNameString": "goqoka",
+                    "timeMins": 43,
+                    "timeSecs": 26,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                "Step5": {
+                    "stepNameString": "lpzyfpppdk",
+                    "timeMins": 51,
+                    "timeSecs": 3,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                "Step6": {
+                    "stepNameString": "rokzxxlyqitltgh",
+                    "timeMins": 20,
+                    "timeSecs": 6,
+                    "type": 2,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                "Step7": {
+                    "stepNameString": "frnbf",
+                    "timeMins": 11,
+                    "timeSecs": 4,
+                    "type": 1,
+                    "source": 3,
+                    "discardAfterProc": 0
+                },
+                "Step8": {
+                    "stepNameString": "qkgeaigmmkg",
+                    "timeMins": 45,
+                    "timeSecs": 15,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 1
+                },
+                "Step9": {
+                    "stepNameString": "tynjazesxmd",
+                    "timeMins": 2,
+                    "timeSecs": 12,
+                    "type": 2,
+                    "source": 2,
+                    "discardAfterProc": 1
+                }
+            }
+        }
+    }
+}
