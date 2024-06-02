@@ -28,8 +28,8 @@ def generate_json():
         "Processes": {}
     }
 
-    # Generating 15 processes
-    for i in range(15):
+    # Generating 30 processes
+    for i in range(30):
         process_name_string = random_string(random.randint(5, 15))  # Random process name
         data["Processes"][f"Process{i}"] = {
             "processNameString": process_name_string,
@@ -43,8 +43,8 @@ def generate_json():
             "Steps": {}
         }
 
-        # Generating 10 steps for each process
-        for j in range(10):
+        # Generating 20 steps for each process
+        for j in range(20):
             step_name_string = random_string(random.randint(5, 15))  # Random step name
             data["Processes"][f"Process{i}"]["Steps"][f"Step{j}"] = {
                 "stepNameString": step_name_string,
@@ -60,4 +60,4 @@ def generate_json():
 if __name__ == "__main__":
     generated_json = generate_json()
     with open("FilMachine.json", "w") as json_file:
-        json.dump(generated_json, json_file, indent=4)
+        json.dump(generated_json, json_file, separators=(',', ':'))
