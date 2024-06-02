@@ -214,7 +214,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_add_state(newStep->step.stepDetails->stepDetailNamelTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_color_hex(WHITE), 0);
-                  newStep->step.stepDetails->stepNameString = "TBD";
+                  newStep->step.stepDetails->stepNameString = generateRandomCharArray(10);
                   lv_textarea_set_text(newStep->step.stepDetails->stepDetailNamelTextArea, newStep->step.stepDetails->stepNameString);
 
 

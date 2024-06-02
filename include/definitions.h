@@ -1266,6 +1266,7 @@ float convertCelsiusoToFahrenheit(uint32_t tempC);
 void updateProcessElement(processNode *process);
 void updateStepElement(processNode *referenceProcess, stepNode *step);
 uint32_t loadSDCardProcesses();
+char * generateRandomCharArray(int length);
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);

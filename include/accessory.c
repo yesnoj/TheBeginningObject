@@ -1105,25 +1105,32 @@ void updateStepElement(processNode *referenceProcess, stepNode *step){
       }
 }
 
-uint32_t loadSDCardProcesses(){
-  if(gui.page.processes.processElementsList.size > 0){
 
-     processList *processElementsList;
-     memset( &processElementsList, 0, sizeof( processElementsList ) );	
-     processElementsList = &(gui.page.processes.processElementsList);   
+uint32_t loadSDCardProcesses() {
+    if (gui.page.processes.processElementsList.size > 0) {
+        processNode *process = gui.page.processes.processElementsList.start;
 
-            processNode *process;
-            memset( &process, 0, sizeof( process ) );	
-            process = gui.page.processes.processElementsList.start;
+        while (process != NULL) {
+            processElementCreate(process);
+            process = process->next;
+        }
+        return gui.page.processes.processElementsList.size;
+    } else {
+        return 0;
+    }
+}
 
-            while(process != NULL){                
-                processElementCreate(process);
-                process = process->next;
-            }
-    return gui.page.processes.processElementsList.size;
+char* generateRandomCharArray(int length) {
+  char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  char *randomArray = new char[length + 1]; // Allocazione dinamica dell'array più uno per il terminatore di stringa
+
+  for (int i = 0; i < length; ++i) {
+    randomArray[i] = charset[random(0, sizeof(charset) - 1)];
   }
-  else
-    return 0;
+
+  randomArray[length] = '\0'; // Aggiungi il terminatore di stringa
+
+  return randomArray;
 }
 
 /*

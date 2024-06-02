@@ -224,13 +224,14 @@ if(existingProcess != NULL) {
             //lv_obj_set_style_border_color(newProcess->process.processDetails->processDetailNameContainer, lv_color_hex(GREEN_DARK), 0);
             lv_obj_set_style_border_opa(newProcess->process.processDetails->processDetailNameContainer, LV_OPA_TRANSP, 0);
 
-                  newProcess->process.processDetails->processDetailName = lv_label_create(newProcess->process.processDetails->processDetailNameContainer);         
-                  lv_label_set_text(newProcess->process.processDetails->processDetailName, "E6 six baths"); 
+                  newProcess->process.processDetails->processDetailName = lv_label_create(newProcess->process.processDetails->processDetailNameContainer);   
+                  newProcess->process.processDetails->processNameString = generateRandomCharArray(10);
+                  lv_label_set_text(newProcess->process.processDetails->processDetailName, newProcess->process.processDetails->processNameString); 
                   lv_obj_set_width(newProcess->process.processDetails->processDetailName, 300);
                   lv_obj_set_style_text_font(newProcess->process.processDetails->processDetailName, &lv_font_montserrat_30, 0);              
                   lv_obj_align(newProcess->process.processDetails->processDetailName, LV_ALIGN_TOP_LEFT, -10, -8);
                   lv_label_set_long_mode(newProcess->process.processDetails->processDetailName, LV_LABEL_LONG_SCROLL_CIRCULAR);
-                  newProcess->process.processDetails->processNameString = "E6 six baths";
+                 
 
             newProcess->process.processDetails->processDetailStepsLabel = lv_label_create(newProcess->process.processDetails->processDetailContainer);         
             lv_label_set_text(newProcess->process.processDetails->processDetailStepsLabel, processDetailStep_text); 
