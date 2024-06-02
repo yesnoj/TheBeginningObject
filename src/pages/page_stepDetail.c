@@ -25,7 +25,7 @@ void event_stepDetail(lv_event_t * e)
   lv_obj_t * objCont = (lv_obj_t *)lv_obj_get_parent(obj);
   lv_obj_t * mboxCont = (lv_obj_t *)lv_obj_get_parent(objCont);
   lv_obj_t * mboxParent = (lv_obj_t *)lv_obj_get_parent(mboxCont);
-  lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
+  processNode * data = (processNode *)lv_event_get_user_data(e);
  
 
  if(code == LV_EVENT_CLICKED){
@@ -44,6 +44,10 @@ void event_stepDetail(lv_event_t * e)
                     LV_LOG_USER("Step element creation failed, maximum entries reached" );
                 }
 
+      data->process.processDetails->somethingChanged = 1;
+      lv_obj_send_event(data->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
+      calcolateTotalTime(data);
+      updateStepElement(data, newStep);
       lv_msgbox_close(mboxCont);
       lv_obj_delete(mboxCont);
 
@@ -142,17 +146,12 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
       if(existingStep != NULL) {
           LV_LOG_USER("Step already exist with address 0x%p", currentNode);
           newStep = existingStep; // Usa il nodo già presente anziché allocarne uno nuovo
-
       } else {
           newStep = (stepNode*)allocateAndInitializeNode(STEP_NODE);
           LV_LOG_USER("New stepNode created at address 0x%p", newStep);
       }
-
+      
       tempStepNode = newStep;
-
-      //newStep->step.stepDetails->dropDownListStyle = malloc(sizeof(lv_style_t));
-      //lv_style_init(&newStep->step.stepDetails->dropDownListStyle);
-      //lv_style_set_text_font(&newStep->step.stepDetails->dropDownListStyle, &lv_font_montserrat_20);
 
       LV_LOG_USER("Step detail creation");
 
@@ -215,8 +214,8 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_add_state(newStep->step.stepDetails->stepDetailNamelTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_color_hex(WHITE), 0);
-                  newStep->step.stepDetails->stepNameString = "TI BI DI";
-
+                  newStep->step.stepDetails->stepNameString = "TBD";
+                  lv_textarea_set_text(newStep->step.stepDetails->stepDetailNamelTextArea, newStep->step.stepDetails->stepNameString);
 
 
             newStep->step.stepDetails->stepDurationContainer = lv_obj_create(newStep->step.stepDetails->stepDetailContainer);
@@ -242,7 +241,8 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailMinTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_text_align(newStep->step.stepDetails->stepDetailMinTextArea , LV_TEXT_ALIGN_CENTER, 0);
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailMinTextArea, lv_color_hex(WHITE), 0);
-                  //lv_obj_move_foreground(newStep->step.stepDetails->stepDetailMinTextArea);
+                  sprintf(formatted_string, "%d", newStep->step.stepDetails->timeMins);
+                  lv_textarea_set_text(newStep->step.stepDetails->stepDetailMinTextArea, formatted_string); 
 
 
                   newStep->step.stepDetails->stepDetailSecTextArea = lv_textarea_create(newStep->step.stepDetails->stepDurationContainer);
@@ -256,7 +256,8 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailSecTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_text_align(newStep->step.stepDetails->stepDetailSecTextArea , LV_TEXT_ALIGN_CENTER, 0);
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailSecTextArea, lv_color_hex(WHITE), 0);
-                  //lv_obj_move_foreground(newStep->step.stepDetails->stepDetailSecTextArea);
+                  sprintf(formatted_string, "%d", newStep->step.stepDetails->timeSecs);
+                  lv_textarea_set_text(newStep->step.stepDetails->stepDetailSecTextArea, formatted_string); 
 
     
 
@@ -284,7 +285,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_set_size(newStep->step.stepDetails->stepTypeDropDownList, 165, 50); 
                   lv_obj_add_event_cb(newStep->step.stepDetails->stepTypeDropDownList, event_stepDetail, LV_EVENT_VALUE_CHANGED, newStep->step.stepDetails->stepTypeDropDownList);
                   lv_obj_set_style_bg_color(lv_dropdown_get_list(newStep->step.stepDetails->stepTypeDropDownList), lv_palette_main(LV_PALETTE_GREEN), LV_PART_SELECTED | LV_STATE_CHECKED);
-
+                  lv_dropdown_set_selected(newStep->step.stepDetails->stepTypeDropDownList, newStep->step.stepDetails->type);
 
                   newStep->step.stepDetails->stepTypeHelpIcon = lv_label_create(newStep->step.stepDetails->stepTypeContainer);         
                   lv_label_set_text(newStep->step.stepDetails->stepTypeHelpIcon, chemical_icon); 
@@ -316,7 +317,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_set_size(newStep->step.stepDetails->stepSourceDropDownList, 83, 50); 
                   lv_obj_add_event_cb(newStep->step.stepDetails->stepSourceDropDownList, event_stepDetail, LV_EVENT_VALUE_CHANGED, newStep->step.stepDetails->stepSourceDropDownList);
                   lv_obj_set_style_bg_color(lv_dropdown_get_list(newStep->step.stepDetails->stepSourceDropDownList), lv_palette_main(LV_PALETTE_GREEN), LV_PART_SELECTED | LV_STATE_CHECKED); 
-
+                  lv_dropdown_set_selected(newStep->step.stepDetails->stepSourceDropDownList, newStep->step.stepDetails->source);
 
                   newStep->step.stepDetails->stepSourceTempLabel = lv_label_create(newStep->step.stepDetails->stepSourceContainer);         
                   lv_label_set_text(newStep->step.stepDetails->stepSourceTempLabel, stepDetailCurrentTemp_text); 
@@ -356,7 +357,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDiscardAfterSwitch, lv_palette_darken(LV_PALETTE_GREY, 3), LV_STATE_DEFAULT);
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDiscardAfterSwitch,  lv_palette_main(LV_PALETTE_GREEN), LV_PART_KNOB | LV_STATE_DEFAULT);
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDiscardAfterSwitch, lv_color_hex(GREEN_DARK) , LV_PART_INDICATOR | LV_STATE_CHECKED);
-
+                  lv_obj_add_state(newStep->step.stepDetails->stepDiscardAfterSwitch, newStep->step.stepDetails->discardAfterProc);
 
 
       newStep->step.stepDetails->stepSaveButton = lv_button_create(newStep->step.stepDetails->stepDetailContainer);

@@ -42,6 +42,8 @@ void event_Roller(lv_event_t * e)
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(tempProcessNode->process.processDetails->processTempTextArea,tempBuffer);
               tempProcessNode->process.processDetails->temp = rollerSelected;
+              tempProcessNode->process.processDetails->somethingChanged = 1;
+              lv_obj_send_event(tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);
@@ -54,6 +56,8 @@ void event_Roller(lv_event_t * e)
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(tempProcessNode->process.processDetails->processToleranceTextArea, tempBuffer);
               tempProcessNode->process.processDetails->tempTolerance = rollerSelected;
+              tempProcessNode->process.processDetails->somethingChanged = 1;
+              lv_obj_send_event(tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);

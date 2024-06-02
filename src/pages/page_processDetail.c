@@ -85,6 +85,7 @@ void event_processDetail(lv_event_t * e)
                   LV_LOG_USER("Process element creation failed, maximum entries reached" );
             }
         lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
+        updateProcessElement(newProcess);
         LV_LOG_USER("Pressed processSaveButton");
     }
 
@@ -174,17 +175,18 @@ if(existingProcess != NULL) {
 
 } else {
     newProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
+    newProcess->process.processDetails->somethingChanged = 0;
+    newProcess->process.processDetails->filmType = FILM_TYPE_NA; 
+    newProcess->process.processDetails->temp = 0;
 }
+  newProcess->process.processDetails->processesContainer = processContainer;
 
-tempProcessNode = newProcess;
+  tempProcessNode = newProcess;
 
 
   LV_LOG_USER("Processes available %d",gui.page.processes.processElementsList.size);
   LV_LOG_USER("Process address 0x%p, with n:%d steps",newProcess, newProcess->process.processDetails->stepElementsList.size); 
-
-  newProcess->process.processDetails->somethingChanged = 0;
-
-  newProcess->process.processDetails->processesContainer = processContainer;
+  
 
 
   newProcess->process.processDetails->processDetailParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
@@ -290,7 +292,7 @@ tempProcessNode = newProcess;
                           lv_obj_set_style_bg_color(newProcess->process.processDetails->processTempControlSwitch, lv_palette_darken(LV_PALETTE_GREY, 3), LV_STATE_DEFAULT);
                           lv_obj_set_style_bg_color(newProcess->process.processDetails->processTempControlSwitch,  lv_palette_main(LV_PALETTE_GREEN), LV_PART_KNOB | LV_STATE_DEFAULT);
                           lv_obj_set_style_bg_color(newProcess->process.processDetails->processTempControlSwitch, lv_color_hex(GREEN_DARK) , LV_PART_INDICATOR | LV_STATE_CHECKED);
-
+                          lv_obj_add_state(newProcess->process.processDetails->processTempControlSwitch, newProcess->process.processDetails->isTempControlled);
 
                  
                   newProcess->process.processDetails->processTempContainer = lv_obj_create(newProcess->process.processDetails->processInfoContainer);
@@ -317,10 +319,19 @@ tempProcessNode = newProcess;
                           lv_style_set_text_font(&newProcess->process.processDetails->textAreaStyle, &lv_font_montserrat_18);
                           lv_obj_add_style(newProcess->process.processDetails->processTempTextArea, &newProcess->process.processDetails->textAreaStyle, LV_PART_MAIN);
                           lv_obj_set_style_border_color(newProcess->process.processDetails->processTempTextArea, lv_color_hex(WHITE), 0);
+                           
 
-
-                          newProcess->process.processDetails->processTempUnitLabel = lv_label_create(newProcess->process.processDetails->processTempContainer);         
-                          lv_label_set_text(newProcess->process.processDetails->processTempUnitLabel, celsius_text); 
+                          newProcess->process.processDetails->processTempUnitLabel = lv_label_create(newProcess->process.processDetails->processTempContainer);  
+                          if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
+                              lv_label_set_text(newProcess->process.processDetails->processTempUnitLabel, celsius_text); 
+                              sprintf(formatted_string, "%d", newProcess->process.processDetails->temp);
+                              lv_textarea_set_text(newProcess->process.processDetails->processTempTextArea, formatted_string);
+                          } else{
+                              lv_label_set_text(newProcess->process.processDetails->processTempUnitLabel, fahrenheit_text);
+                              sprintf(formatted_string, "%d", convertCelsiusoToFahrenheit(newProcess->process.processDetails->temp));
+                              lv_textarea_set_text(newProcess->process.processDetails->processTempTextArea, formatted_string);
+                          }  
+                          
                           lv_obj_set_style_text_font(newProcess->process.processDetails->processTempUnitLabel, &lv_font_montserrat_20, 0);              
                           lv_obj_align(newProcess->process.processDetails->processTempUnitLabel, LV_ALIGN_LEFT_MID, 160, 0);
 
@@ -356,7 +367,16 @@ tempProcessNode = newProcess;
                           lv_label_set_text(newProcess->process.processDetails->processTempUnitLabel, celsius_text); 
                           lv_obj_set_style_text_font(newProcess->process.processDetails->processTempUnitLabel, &lv_font_montserrat_20, 0);              
                           lv_obj_align(newProcess->process.processDetails->processTempUnitLabel, LV_ALIGN_LEFT_MID, 160, 0);
-                          
+                          if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
+                              lv_label_set_text(newProcess->process.processDetails->processTempUnitLabel, celsius_text); 
+                              sprintf(formatted_string, "%d", newProcess->process.processDetails->tempTolerance);
+                              lv_textarea_set_text(newProcess->process.processDetails->processToleranceTextArea, formatted_string);
+                          } else{
+                              lv_label_set_text(newProcess->process.processDetails->processTempUnitLabel, fahrenheit_text);
+                              sprintf(formatted_string, "%d", convertCelsiusoToFahrenheit(newProcess->process.processDetails->tempTolerance));
+                              lv_textarea_set_text(newProcess->process.processDetails->processToleranceTextArea, formatted_string);
+                          }  
+
 
                   newProcess->process.processDetails->processTotalTimeContainer = lv_obj_create(newProcess->process.processDetails->processInfoContainer);
                   lv_obj_remove_flag(newProcess->process.processDetails->processTotalTimeContainer, LV_OBJ_FLAG_SCROLLABLE); 
@@ -399,15 +419,15 @@ tempProcessNode = newProcess;
                           lv_obj_align(newProcess->process.processDetails->processBnWLabel, LV_ALIGN_LEFT_MID, -5, 0);
                           lv_obj_add_flag(newProcess->process.processDetails->processBnWLabel, LV_OBJ_FLAG_CLICKABLE);
                           lv_obj_add_event_cb(newProcess->process.processDetails->processBnWLabel, event_processDetail, LV_EVENT_CLICKED, newProcess->process.processDetails->processBnWLabel);
-                          if(newProcess->process.processDetails->filmType = COLOR_FILM){
+                          if(newProcess->process.processDetails->filmType == COLOR_FILM){
                               lv_obj_set_style_text_color(newProcess->process.processDetails->processColorLabel, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
                               lv_obj_set_style_text_color(newProcess->process.processDetails->processBnWLabel, lv_color_hex(WHITE), LV_PART_MAIN);
                           }
-                          if(newProcess->process.processDetails->filmType = BLACK_AND_WHITE_FILM){
+                          if(newProcess->process.processDetails->filmType == BLACK_AND_WHITE_FILM){
                               lv_obj_set_style_text_color(newProcess->process.processDetails->processBnWLabel, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
                               lv_obj_set_style_text_color(newProcess->process.processDetails->processColorLabel, lv_color_hex(WHITE), LV_PART_MAIN);
                           }
-                          if(newProcess->process.processDetails->filmType = FILM_TYPE_NA){
+                          if(newProcess->process.processDetails->filmType == FILM_TYPE_NA){
                               lv_obj_set_style_text_color(newProcess->process.processDetails->processBnWLabel, lv_color_hex(WHITE), LV_PART_MAIN);
                               lv_obj_set_style_text_color(newProcess->process.processDetails->processColorLabel, lv_color_hex(WHITE), LV_PART_MAIN);
                           }

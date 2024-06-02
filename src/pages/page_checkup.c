@@ -172,7 +172,7 @@ void processTimer(lv_timer_t * timer)
         }
     }
 
-    processPercentage = calculate_percentage(minutesProcessElapsed, secondsProcessElapsed, referenceProcess->process.processDetails->timeMins, referenceProcess->process.processDetails->timeSecs);
+    processPercentage = calcolatePercentage(minutesProcessElapsed, secondsProcessElapsed, referenceProcess->process.processDetails->timeMins, referenceProcess->process.processDetails->timeSecs);
     LV_LOG_USER("Elapsed Time %dh:%dm:%ds, processPercentage %d stepPercentage %d", hoursProcessElapsed, minutesProcessElapsed, secondsProcessElapsed, processPercentage, stepPercentage); 
 
     // Convert the remaining process time to minutes and seconds
@@ -198,7 +198,7 @@ void processTimer(lv_timer_t * timer)
             lv_timer_delete(tempProcessNode->process.processDetails->checkup->timer);
         }
         else{              
-          stepPercentage = calculate_percentage(minutesStepElapsed, secondsStepElapsed, tempStepNode->step.stepDetails->timeMins, tempStepNode->step.stepDetails->timeSecs);
+          stepPercentage = calcolatePercentage(minutesStepElapsed, secondsStepElapsed, tempStepNode->step.stepDetails->timeMins, tempStepNode->step.stepDetails->timeSecs);
           lv_arc_set_value(referenceProcess->process.processDetails->checkup->stepArc, stepPercentage);
           lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepSourceValue, processSourceList[tempStepNode->step.stepDetails->source]);
           lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, tempStepNode->step.stepDetails->stepNameString); 

@@ -1261,7 +1261,11 @@ int SD_init();
 void initSD_I2C();
 
 void calcolateTotalTime(processNode *processNode);
-uint8_t calculate_percentage(uint32_t minutes, uint8_t seconds, uint32_t total_minutes, uint8_t total_seconds);
+uint8_t calcolatePercentage(uint32_t minutes, uint8_t seconds, uint32_t total_minutes, uint8_t total_seconds);
+float convertCelsiusoToFahrenheit(uint32_t tempC);
+void updateProcessElement(processNode *process);
+void updateStepElement(processNode *referenceProcess, stepNode *step);
+
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);

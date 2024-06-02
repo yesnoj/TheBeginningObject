@@ -1046,7 +1046,7 @@ void calcolateTotalTime(processNode *processNode){
 
 
 
-uint8_t calculate_percentage(uint32_t minutes, uint8_t seconds, uint32_t total_minutes, uint8_t total_seconds) {
+uint8_t calcolatePercentage(uint32_t minutes, uint8_t seconds, uint32_t total_minutes, uint8_t total_seconds) {
     // Calcola il tempo totale in secondi
     uint32_t total_time_seconds = total_minutes * 60 + total_seconds;
 
@@ -1065,6 +1065,72 @@ uint8_t calculate_percentage(uint32_t minutes, uint8_t seconds, uint32_t total_m
 
     return percentage;
 }
+
+
+void updateProcessElement(processNode *process){
+  processNode* existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), process, PROCESS_NODE);
+  
+  if(existingProcess != NULL) {
+      LV_LOG_USER("Updating process element in list");
+      //Update time
+      sprintf(formatted_string, "%dm%ds", process->process.processDetails->timeMins, process->process.processDetails->timeSecs);
+      lv_label_set_text(existingProcess->process.processTime, formatted_string); 
+      
+      //Update temp
+      lv_label_set_text_fmt(existingProcess->process.processTemp, "%d °C", process->process.processDetails->temp );
+ 
+      //Update preferred
+      if(process->process.processDetails->isPreferred == 1){
+            lv_obj_set_style_text_color(existingProcess->process.preferredIcon, lv_color_hex(RED), LV_PART_MAIN);
+      }
+      else{
+            lv_obj_set_style_text_color(existingProcess->process.preferredIcon, lv_color_hex(WHITE), LV_PART_MAIN);
+      }
+      
+      //Update name
+      lv_label_set_text(existingProcess->process.processName, process->process.processDetails->processNameString);
+
+      //Update film type
+      lv_label_set_text(existingProcess->process.processTypeIcon, process->process.processDetails->filmType == BLACK_AND_WHITE_FILM ? blackwhite_icon : colorpalette_icon);
+  } 
+}
+
+
+
+void updateStepElement(processNode *referenceProcess, stepNode *step){
+  stepNode* existingStep = (stepNode*)isNodeInList((void*)&(referenceProcess->process.processDetails->stepElementsList), step, STEP_NODE);
+
+      if(existingStep != NULL) {
+         LV_LOG_USER("Updating element element in list");
+         
+         //Update name
+         lv_label_set_text(existingStep->step.stepName, step->step.stepDetails->stepNameString);
+
+        //Update source
+         sprintf(formatted_string, "From:%s", processSourceList[step->step.stepDetails->source]);        
+         lv_label_set_text(existingStep->step.sourceLabel, formatted_string); 
+
+        //Update discard after icon
+         if(step->step.stepDetails->discardAfterProc){
+             lv_obj_set_style_text_color(existingStep->step.discardAfterIcon, lv_color_hex(WHITE), LV_PART_MAIN);
+           } else {
+             lv_obj_set_style_text_color(existingStep->step.discardAfterIcon, lv_color_hex(GREY), LV_PART_MAIN);
+           }
+
+          //Update type icon
+          if(step->step.stepDetails->type == CHEMISTRY)
+              lv_label_set_text(existingStep->step.stepTypeIcon, chemical_icon);
+          if(step->step.stepDetails->type == RINSE)
+              lv_label_set_text(existingStep->step.stepTypeIcon, rinse_icon);           
+          if(step->step.stepDetails->type == MULTI_RINSE)
+              lv_label_set_text(existingStep->step.stepTypeIcon, multiRinse_icon); 
+
+          //Update time
+          sprintf(formatted_string, "%dm%ds", step->step.stepDetails->timeMins, step->step.stepDetails->timeSecs);
+          lv_label_set_text(existingStep->step.stepTime, formatted_string); 
+      }
+}
+
 
 /*
 
