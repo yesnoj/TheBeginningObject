@@ -33,7 +33,7 @@ void event_processDetail(lv_event_t * e)
   if(code == LV_EVENT_CLICKED) {
     if(data == newProcess->process.processDetails->processDetailCloseButton){
         //newProcess->process.processDetails->stepElementsList.size = 0;
-        lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
+        //lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
         lv_msgbox_close(mboxCont);
         lv_obj_delete(mboxCont);
         LV_LOG_USER("Close Process Detail");
@@ -133,6 +133,19 @@ void event_processDetail(lv_event_t * e)
       }
   }
 
+   if(obj == newProcess->process.processDetails->processDetailNameTextArea){
+     LV_LOG_USER("Set Name");
+     if(code == LV_EVENT_FOCUSED || code == LV_EVENT_CLICKED) {
+        lv_obj_add_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+      }
+
+      if(code == LV_EVENT_DEFOCUSED) {
+        lv_obj_remove_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+      }
+    }
+
   if(code == LV_EVENT_FOCUSED) { 
       tempProcessNode = newProcess;
       if(data == newProcess->process.processDetails->processTempTextArea){
@@ -224,14 +237,20 @@ if(existingProcess != NULL) {
             //lv_obj_set_style_border_color(newProcess->process.processDetails->processDetailNameContainer, lv_color_hex(GREEN_DARK), 0);
             lv_obj_set_style_border_opa(newProcess->process.processDetails->processDetailNameContainer, LV_OPA_TRANSP, 0);
 
-                  newProcess->process.processDetails->processDetailName = lv_label_create(newProcess->process.processDetails->processDetailNameContainer);   
+
+                  newProcess->process.processDetails->processDetailNameTextArea = lv_textarea_create(newProcess->process.processDetails->processDetailNameContainer); 
+                  lv_textarea_set_one_line(newProcess->process.processDetails->processDetailNameTextArea, true);
+                  lv_textarea_set_placeholder_text(newProcess->process.processDetails->processDetailNameTextArea, processDetailPlaceHolder_text);
+                  lv_obj_set_width(newProcess->process.processDetails->processDetailNameTextArea, 280);
+                  lv_obj_set_style_text_font(newProcess->process.processDetails->processDetailNameTextArea, &lv_font_montserrat_30, 0);              
+                  lv_obj_align(newProcess->process.processDetails->processDetailNameTextArea, LV_ALIGN_TOP_LEFT, -20, -25);
+                  lv_obj_add_event_cb(newProcess->process.processDetails->processDetailNameTextArea, event_processDetail, LV_EVENT_FOCUSED, newProcess->process.processDetails->processDetailNameTextArea);
+                  lv_obj_add_event_cb(newProcess->process.processDetails->processDetailNameTextArea, event_processDetail, LV_EVENT_DEFOCUSED, newProcess->process.processDetails->processDetailNameTextArea);
+                  lv_obj_add_state(newProcess->process.processDetails->processDetailNameTextArea, LV_STATE_FOCUSED); 
+                  lv_obj_set_style_border_opa(newProcess->process.processDetails->processDetailNameTextArea, LV_OPA_TRANSP, 0);
                   newProcess->process.processDetails->processNameString = generateRandomCharArray(10);
-                  lv_label_set_text(newProcess->process.processDetails->processDetailName, newProcess->process.processDetails->processNameString); 
-                  lv_obj_set_width(newProcess->process.processDetails->processDetailName, 300);
-                  lv_obj_set_style_text_font(newProcess->process.processDetails->processDetailName, &lv_font_montserrat_30, 0);              
-                  lv_obj_align(newProcess->process.processDetails->processDetailName, LV_ALIGN_TOP_LEFT, -10, -8);
-                  lv_label_set_long_mode(newProcess->process.processDetails->processDetailName, LV_LABEL_LONG_SCROLL_CIRCULAR);
-                 
+                  lv_textarea_set_text(newProcess->process.processDetails->processDetailNameTextArea, newProcess->process.processDetails->processNameString);              
+     
 
             newProcess->process.processDetails->processDetailStepsLabel = lv_label_create(newProcess->process.processDetails->processDetailContainer);         
             lv_label_set_text(newProcess->process.processDetails->processDetailStepsLabel, processDetailStep_text); 

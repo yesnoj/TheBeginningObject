@@ -442,7 +442,7 @@ typedef struct sProcessDetail {
 	lv_obj_t			*processColorOrBnWContainer;
 	lv_obj_t			*processTotalTimeContainer;
 
-	lv_obj_t			*processDetailName;
+	lv_obj_t			*processDetailNameTextArea;
 	lv_obj_t			*processDetailStepsLabel;
 	lv_obj_t			*processDetailInfoLabel;
 	lv_obj_t			*processDetailCloseButtonLabel;
@@ -1015,6 +1015,8 @@ lv_obj_t * tempSensorTuneButton;
 #define processDetailTotalTime_text 		 		"Total time:"
 #define processDetailTempPlaceHolder_text 	 		"Tap"
 #define processDetailTempTolerance_text 	 		"Tolerance:"
+#define processDetailPlaceHolder_text 			   		"Enter name for new process"
+
 uint8_t isPreferred;
 
 lv_obj_t * processTempTextArea;
