@@ -77,9 +77,9 @@ void setup()
     initSD_I2C();
     homePage();
     
-    fakeObject = lv_obj_create(NULL);
+    fakeObjectForSave = lv_obj_create(NULL);
 
-    lv_obj_add_event_cb(fakeObject, eventSave, LV_EVENT_REFRESH, NULL);  
+    lv_obj_add_event_cb(fakeObjectForSave, eventSave, LV_EVENT_REFRESH, NULL);  
 
     //writeFile(SD, FILENAME_SAVE, "Hello, this is a test file\n");
     //writeJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);

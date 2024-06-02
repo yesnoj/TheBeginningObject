@@ -44,7 +44,7 @@ void event_filterMBox(lv_event_t * e){
           gui.element.filterPopup.isBnWFilter = 0;
           gui.element.filterPopup.preferredOnly = 0;
           gui.element.filterPopup.filterName = "";
-          lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
+          lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
         }
       }
   }
@@ -75,14 +75,14 @@ void event_filterMBox(lv_event_t * e){
           LV_LOG_USER("State bnw: %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
           gui.element.filterPopup.isBnWFilter = lv_obj_has_state(obj, LV_STATE_CHECKED);
           }
-        lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
+        lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
       }
     }
   if(obj == gui.element.filterPopup.mBoxOnlyPreferredSwitch){
     if(code == LV_EVENT_VALUE_CHANGED) {
         LV_LOG_USER("State preferred: %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
         gui.element.filterPopup.preferredOnly = lv_obj_has_state(obj, LV_STATE_CHECKED);  
-        lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
+        lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
       }
     }
 }

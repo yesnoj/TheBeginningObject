@@ -79,11 +79,12 @@ void event_processDetail(lv_event_t * e)
           if(addProcessElement(newProcess) != NULL){
              LV_LOG_USER("Process not present yet, let's create!");
              processElementCreate(newProcess);
-             lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
+             lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
           }    
             else{
                   LV_LOG_USER("Process element creation failed, maximum entries reached" );
             }
+        lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
         LV_LOG_USER("Pressed processSaveButton");
     }
 

@@ -916,8 +916,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
             currentProcess["isTempControlled"] = currentProcessNode->process.processDetails->isTempControlled;
             currentProcess["isPreferred"] = currentProcessNode->process.processDetails->isPreferred;
             currentProcess["filmType"] = currentProcessNode->process.processDetails->filmType;
-            currentProcess["timeSecs"] = currentProcessNode->process.processDetails->timeSecs;
             currentProcess["timeMins"] = currentProcessNode->process.processDetails->timeMins;
+            currentProcess["timeSecs"] = currentProcessNode->process.processDetails->timeSecs;
 
             LV_LOG_USER("--- PROCESS PARAMS ---");
             LV_LOG_USER("processNameString:%s",currentProcessNode->process.processDetails->processNameString);

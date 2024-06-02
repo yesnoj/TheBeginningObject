@@ -1161,7 +1161,7 @@ lv_obj_t * keyboard_textArea;
 processNode	* tempProcessNode;
 stepNode	  * tempStepNode;
 
-lv_obj_t    *fakeObject;
+lv_obj_t    *fakeObjectForSave;
 extern uint8_t initErrors;
 char formatted_string[20];
 
