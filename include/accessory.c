@@ -682,7 +682,6 @@ void writeJSONFile(fs::FS &fs, const char *path,const machineSettings &settings)
     return;
 }
 
-
 gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uint32_t enableLog) {
     if(initErrors == 0){
         File file = fs.open(filename);
@@ -706,19 +705,18 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
             gui.page.settings.settingsParams.isProcessAutostart        = machineSettings["isProcessAutostart"];
             gui.page.settings.settingsParams.drainFillOverlapSetpoint  = machineSettings["drainFillOverlapSetpoint"];
 
-          if(enableLog){
-            LV_LOG_USER("--- MACHINE PARAMS ---");
-            LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
-            LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
-            LV_LOG_USER("calibratedTemp:%d",gui.page.settings.settingsParams.calibratedTemp);
-            LV_LOG_USER("filmRotationSpeedSetpoint:%d",gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
-            LV_LOG_USER("rotationIntervalSetpoint:%d",gui.page.settings.settingsParams.rotationIntervalSetpoint);
-            LV_LOG_USER("randomSetpoint:%d",gui.page.settings.settingsParams.randomSetpoint);
-            LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
-            LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
-            LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
-          }
-
+            if(enableLog){
+                LV_LOG_USER("--- MACHINE PARAMS ---");
+                LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
+                LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
+                LV_LOG_USER("calibratedTemp:%d",gui.page.settings.settingsParams.calibratedTemp);
+                LV_LOG_USER("filmRotationSpeedSetpoint:%d",gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
+                LV_LOG_USER("rotationIntervalSetpoint:%d",gui.page.settings.settingsParams.rotationIntervalSetpoint);
+                LV_LOG_USER("randomSetpoint:%d",gui.page.settings.settingsParams.randomSetpoint);
+                LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
+                LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
+                LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
+            }
 
             JsonObject Filter = doc["Filter"];
             gui.element.filterPopup.filterName = Filter["filterName"];
@@ -726,118 +724,94 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
             gui.element.filterPopup.isBnWFilter = Filter["isBnWFilter"];
             gui.element.filterPopup.preferredOnly = Filter["preferredOnly"];
 
-          if(enableLog){
-            LV_LOG_USER("--- FILTER PARAMS ---");
-            LV_LOG_USER("filterName:%d",gui.element.filterPopup.filterName);
-            LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
-            LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
-            LV_LOG_USER("preferredOnly:%d",gui.element.filterPopup.preferredOnly);
-          }
+            if(enableLog){
+                LV_LOG_USER("--- FILTER PARAMS ---");
+                LV_LOG_USER("filterName:%d",gui.element.filterPopup.filterName);
+                LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
+                LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
+                LV_LOG_USER("preferredOnly:%d",gui.element.filterPopup.preferredOnly);
+            }
 
-
-            processList *processElementsList;
-            processElementsList = (processList *) malloc(sizeof(processList));          
-            memset( &processElementsList, 0, sizeof( processList ) );	
-            processElementsList = &(gui.page.processes.processElementsList);
-
-            processNode *nodeP = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+            processList *processElementsList = &(gui.page.processes.processElementsList);
+            processElementsList->start = NULL;
+            processElementsList->end = NULL;
+            processElementsList->size = 0;
 
             for (JsonPair Processe : doc["Processes"].as<JsonObject>()) {
-                const char* Processe_key = Processe.key().c_str();
+                processNode *nodeP = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
 
-                  if(processElementsList->start == NULL){
+                // Assign process details
+                nodeP->process.processDetails->processNameString = Processe.value()["processNameString"];
+                nodeP->process.processDetails->temp = Processe.value()["temp"];
+                nodeP->process.processDetails->tempTolerance = Processe.value()["tempTolerance"];
+                nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
+                nodeP->process.processDetails->isPreferred = Processe.value()["isPreferred"];
+                nodeP->process.processDetails->filmType = Processe.value()["filmType"];
+                nodeP->process.processDetails->timeMins = Processe.value()["timeMins"];
+                nodeP->process.processDetails->timeSecs = Processe.value()["timeSecs"];
 
-                    nodeP->process.processDetails->processNameString = Processe.value()["processNameString"];
-                    nodeP->process.processDetails->temp = Processe.value()["temp"];
-                    nodeP->process.processDetails->tempTolerance = Processe.value()["tempTolerance"];
-                    nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
-                    nodeP->process.processDetails->isPreferred = Processe.value()["isPreferred"];
-                    nodeP->process.processDetails->filmType = Processe.value()["filmType"];
-                    nodeP->process.processDetails->timeMins = Processe.value()["timeMins"];
-                    nodeP->process.processDetails->timeSecs = Processe.value()["timeSecs"];
+                if (processElementsList->start == NULL) {
                     processElementsList->start = nodeP;
                     nodeP->prev = NULL;
-                  }
-                  else{
-                    nodeP->process.processDetails->processNameString = Processe.value()["processNameString"];
-                    nodeP->process.processDetails->temp = Processe.value()["temp"];
-                    nodeP->process.processDetails->tempTolerance = Processe.value()["tempTolerance"];
-                    nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
-                    nodeP->process.processDetails->isPreferred = Processe.value()["isPreferred"];
-                    nodeP->process.processDetails->filmType = Processe.value()["filmType"];
-                    nodeP->process.processDetails->timeMins = Processe.value()["timeMins"];
-                    nodeP->process.processDetails->timeSecs = Processe.value()["timeSecs"];
+                } else {
                     processElementsList->end->next = nodeP;
                     nodeP->prev = processElementsList->end;
-                  }
+                }
+                processElementsList->end = nodeP;
+                processElementsList->end->next = NULL;
+                processElementsList->size++;
+
+                if(enableLog){
+                    LV_LOG_USER("--- PROCESS PARAMS ---");
+                    LV_LOG_USER("processNameString:%s",nodeP->process.processDetails->processNameString);
+                    LV_LOG_USER("temp:%d",nodeP->process.processDetails->temp);
+                    LV_LOG_USER("tempTolerance:%d",nodeP->process.processDetails->tempTolerance);
+                    LV_LOG_USER("isTempControlled:%d",nodeP->process.processDetails->isTempControlled);
+                    LV_LOG_USER("isPreferred:%d",nodeP->process.processDetails->isPreferred);
+                    LV_LOG_USER("filmType:%d",nodeP->process.processDetails->filmType);
+                    LV_LOG_USER("timeMins:%d",nodeP->process.processDetails->timeMins);
+                    LV_LOG_USER("timeSecs:%d",nodeP->process.processDetails->timeSecs);
+                }
+
+                stepList *stepElementsList = &(nodeP->process.processDetails->stepElementsList);
+                stepElementsList->start = NULL;
+                stepElementsList->end = NULL;
+                stepElementsList->size = 0;
+
+                for (JsonPair Processe_value_Step : Processe.value()["Steps"].as<JsonObject>()) {
+                    stepNode *nodeS = (stepNode*) allocateAndInitializeNode(STEP_NODE);
+
+                    // Assign step details
+                    nodeS->step.stepDetails->stepNameString = Processe_value_Step.value()["stepNameString"];
+                    nodeS->step.stepDetails->timeMins = Processe_value_Step.value()["timeMins"];
+                    nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
+                    nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];
+                    nodeS->step.stepDetails->source = Processe_value_Step.value()["source"];
+                    nodeS->step.stepDetails->discardAfterProc = Processe_value_Step.value()["discardAfterProc"];
+
+                    if (stepElementsList->start == NULL) {
+                        stepElementsList->start = nodeS;
+                        nodeS->prev = NULL;
+                    } else {
+                        stepElementsList->end->next = nodeS;
+                        nodeS->prev = stepElementsList->end;
+                    }
+                    stepElementsList->end = nodeS;
+                    stepElementsList->end->next = NULL;
+                    stepElementsList->size++;
 
                     if(enableLog){
-                        LV_LOG_USER("--- PROCESS PARAMS ---");
-                        LV_LOG_USER("processNameString:%s",nodeP->process.processDetails->processNameString);
-                        LV_LOG_USER("temp:%d",nodeP->process.processDetails->temp);
-                        LV_LOG_USER("tempTolerance:%d",nodeP->process.processDetails->tempTolerance);
-                        LV_LOG_USER("isTempControlled:%d",nodeP->process.processDetails->isTempControlled);
-                        LV_LOG_USER("isPreferred:%d",nodeP->process.processDetails->isPreferred);
-                        LV_LOG_USER("filmType:%d",nodeP->process.processDetails->filmType);
-                        LV_LOG_USER("timeMins:%d",nodeP->process.processDetails->timeMins);
-                        LV_LOG_USER("timeSecs:%d",nodeP->process.processDetails->timeSecs);
+                        LV_LOG_USER("--- STEP PARAMS ---");
+                        LV_LOG_USER("stepNameString:%s",nodeS->step.stepDetails->stepNameString);
+                        LV_LOG_USER("timeSecs:%d",nodeS->step.stepDetails->timeSecs);
+                        LV_LOG_USER("timeMins:%d",nodeS->step.stepDetails->timeMins);
+                        LV_LOG_USER("type:%d",nodeS->step.stepDetails->type);
+                        LV_LOG_USER("source:%d",nodeS->step.stepDetails->source);
+                        LV_LOG_USER("discardAfterProc:%d",nodeS->step.stepDetails->discardAfterProc);
                     }
-
-                    processElementsList->end = nodeP;
-                    processElementsList->end->next = NULL;
-                    processElementsList->size++;
-
-                    stepList *stepElementsList;
-                    stepElementsList = (stepList *) malloc(sizeof(stepList));
-                    memset( &stepElementsList, 0, sizeof( stepList ) );	
-                    stepElementsList = &(processElementsList->start->process.processDetails->stepElementsList);   
-
-                    stepNode *nodeS = (stepNode*) allocateAndInitializeNode(STEP_NODE);
-  
-                    for (JsonPair Processe_value_Step : Processe.value()["Steps"].as<JsonObject>()) {
-                        const char* Processe_value_Step_key = Processe_value_Step.key().c_str(); // "step1", "step2", "step3", ...
-
-                            if(stepElementsList->start == NULL)
-                            {
-                                nodeS->step.stepDetails->stepNameString = Processe_value_Step.value()["stepNameString"];
-                                nodeS->step.stepDetails->timeMins = Processe_value_Step.value()["timeMins"];
-                                nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
-                                nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];
-                                nodeS->step.stepDetails->source = Processe_value_Step.value()["source"];
-                                nodeS->step.stepDetails->discardAfterProc = Processe_value_Step.value()["discardAfterProc"];
-                                stepElementsList->start = nodeS;
-                                nodeS->prev = NULL;
-                            }
-                            else
-                            {
-                                nodeS->step.stepDetails->stepNameString = Processe_value_Step.value()["stepNameString"];
-                                nodeS->step.stepDetails->timeMins = Processe_value_Step.value()["timeMins"];
-                                nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
-                                nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];
-                                nodeS->step.stepDetails->source = Processe_value_Step.value()["source"];
-                                nodeS->step.stepDetails->discardAfterProc = Processe_value_Step.value()["discardAfterProc"];
-                                stepElementsList->end->next = nodeS;
-                                nodeS->prev = stepElementsList->end;
-                            }
-
-                            if(enableLog){
-                                LV_LOG_USER("--- STEP PARAMS ---");
-                                LV_LOG_USER("stepNameString:%s",nodeS->step.stepDetails->stepNameString);
-                                LV_LOG_USER("timeSecs:%d",nodeS->step.stepDetails->timeSecs);
-                                LV_LOG_USER("timeMins:%d",nodeS->step.stepDetails->timeMins);
-                                LV_LOG_USER("type:%d",nodeS->step.stepDetails->type);
-                                LV_LOG_USER("source:%d",nodeS->step.stepDetails->source);
-                                LV_LOG_USER("discardAfterProc:%d",nodeS->step.stepDetails->discardAfterProc);
-                              }
-                            stepElementsList->end = nodeS;    
-                            stepElementsList->end->next = NULL;
-                            stepElementsList->size++;
-
-                            stepElementsList->start = stepElementsList->end->next;
-                    }
-                    processElementsList->start = processElementsList->end->next;
-                  }
+                }
             }
+        }
         file.close();
         return gui;
     }
@@ -1131,6 +1105,26 @@ void updateStepElement(processNode *referenceProcess, stepNode *step){
       }
 }
 
+uint32_t loadSDCardProcesses(){
+  if(gui.page.processes.processElementsList.size > 0){
+
+     processList *processElementsList;
+     memset( &processElementsList, 0, sizeof( processElementsList ) );	
+     processElementsList = &(gui.page.processes.processElementsList);   
+
+            processNode *process;
+            memset( &process, 0, sizeof( process ) );	
+            process = gui.page.processes.processElementsList.start;
+
+            while(process != NULL){                
+                processElementCreate(process);
+                process = process->next;
+            }
+    return gui.page.processes.processElementsList.size;
+  }
+  else
+    return 0;
+}
 
 /*
 

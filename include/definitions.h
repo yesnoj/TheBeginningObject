@@ -1265,7 +1265,7 @@ uint8_t calcolatePercentage(uint32_t minutes, uint8_t seconds, uint32_t total_mi
 float convertCelsiusoToFahrenheit(uint32_t tempC);
 void updateProcessElement(processNode *process);
 void updateStepElement(processNode *referenceProcess, stepNode *step);
-
+uint32_t loadSDCardProcesses();
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);

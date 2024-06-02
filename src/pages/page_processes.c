@@ -127,6 +127,9 @@ static void initProcesses(void){
   lv_obj_align(gui.page.processes.sectionTitleLine, LV_ALIGN_CENTER, 0, - 103);
 
   //lv_obj_update_layout(gui.page.processes.processesSection);
+
+
+  
 }
 
 
@@ -134,6 +137,7 @@ void processes(void)
 {   
   if(gui.page.processes.processesSection == NULL){
     initProcesses();
+    loadSDCardProcesses();
   }
 
   lv_obj_clear_flag(gui.page.processes.processesSection, LV_OBJ_FLAG_HIDDEN);
