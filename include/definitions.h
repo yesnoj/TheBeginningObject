@@ -1155,7 +1155,6 @@ lv_obj_t * processDetailParent;
 
 lv_obj_t * keyBoardParent;
 lv_obj_t * keyboardFilter;
-lv_obj_t * keyboardStep;
 lv_obj_t * keyboardProcess;
 lv_obj_t * keyboard;
 lv_obj_t * keyboard_textArea;
@@ -1253,7 +1252,7 @@ void* allocateAndInitializeNode(NodeType_t type);
 
 void event_cb(lv_event_t * e);
 void event_checkbox_handler(lv_event_t * e);
-void kb_event_cb(lv_event_t* e);
+void event_keyboard(lv_event_t* e);
 
 void createQuestionMark(lv_obj_t * parent,lv_obj_t * element,lv_event_cb_t e, const int32_t x, const int32_t y);
 void createMessageBox(char *title, char *text, char *button1Text, char *button2Text);

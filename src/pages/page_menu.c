@@ -149,7 +149,7 @@ void menu(void){
           lv_obj_set_style_text_font(gui.page.menu.label, &lv_font_montserrat_18, 0);              
           lv_obj_align(gui.page.menu.label, LV_ALIGN_CENTER, 0, 29);
 
-  create_keyboard(keyboard);
+  
 }
 
 

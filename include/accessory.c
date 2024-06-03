@@ -99,7 +99,7 @@ void event_checkbox_handler(lv_event_t * e)
     }
 }
 
-void kb_event_cb(lv_event_t* e)
+void event_keyboard(lv_event_t* e)
  {
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
@@ -110,20 +110,35 @@ void kb_event_cb(lv_event_t* e)
   lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
    
 
-    if(obj == gui.element.filterPopup.mBoxNameTextArea){
-      if(code == LV_EVENT_FOCUSED || code == LV_EVENT_CLICKED) {
-          LV_LOG_USER("LV_EVENT_FOCUSED on gui.element.filterPopup.mBoxNameTextArea");
+    if(obj == gui.element.filterPopup.mBoxNameTextArea || obj == tempProcessNode->process.processDetails->processDetailNameTextArea){
+      if(code == LV_EVENT_FOCUSED) {
+          LV_LOG_USER("LV_EVENT_FOCUSED on filterPopup.mBoxNameTextArea/processDetailNameTextArea");
           lv_obj_set_user_data(obj,data);
           lv_obj_add_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
           lv_obj_remove_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
         }
 
         if(code == LV_EVENT_DEFOCUSED) {
-          LV_LOG_USER("LV_EVENT_DEFOCUSED on gui.element.filterPopup.mBoxNameTextArea");
+          LV_LOG_USER("LV_EVENT_DEFOCUSED on filterPopup.mBoxNameTextArea/processDetailNameTextArea");
           lv_obj_remove_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
           lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
         }
     }
+    if(obj == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
+      if(code == LV_EVENT_FOCUSED) {
+          LV_LOG_USER("LV_EVENT_FOCUSED on stepDetailNamelTextArea");
+          lv_obj_set_user_data(obj,data);
+          lv_obj_add_flag(godFatherCont, LV_OBJ_FLAG_HIDDEN);
+          lv_obj_remove_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+        }
+
+        if(code == LV_EVENT_DEFOCUSED) {
+          LV_LOG_USER("LV_EVENT_DEFOCUSED on stepDetailNamelTextArea");
+          lv_obj_remove_flag(godFatherCont, LV_OBJ_FLAG_HIDDEN);
+          lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+        }
+    }
+
     if (code == LV_EVENT_CANCEL) {
       /* 
             if(obj == gui.element.filterPopup.mBoxFilterPopupParent){
@@ -175,7 +190,7 @@ void create_keyboard(lv_obj_t * keyB)
     lv_obj_set_size(keyBoardParent, LV_PCT(100), LV_PCT(100));
 
     keyB = lv_keyboard_create(keyBoardParent);
-    lv_obj_add_event_cb(keyB, kb_event_cb, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(keyB, event_keyboard, LV_EVENT_ALL, NULL);
     lv_obj_add_flag(keyB, LV_OBJ_FLAG_EVENT_BUBBLE);
 
 
@@ -225,7 +240,7 @@ void create_keyboard(lv_obj_t * keyB, lv_obj_t * whoCallMe)
     
     
 
-    lv_obj_add_event_cb(keyB, kb_event_cb, LV_EVENT_ALL, whoCallMe);
+    lv_obj_add_event_cb(keyB, event_keyboard, LV_EVENT_ALL, whoCallMe);
 
     static const char * kb_map[] = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", " ", "\n",
                                     "A", "S", "D", "F", "G", "H", "J", "K", "L",  " ", "\n",
@@ -504,6 +519,7 @@ void init_globals( void ) {
   tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
   tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);  
  
+  create_keyboard(keyboard);
 }
 
 

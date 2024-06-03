@@ -145,7 +145,7 @@ void filterPopupCreate (void){
           lv_obj_align(gui.element.filterPopup.mBoxNameTextArea, LV_ALIGN_LEFT_MID, 65, 0);
           lv_obj_set_width(gui.element.filterPopup.mBoxNameTextArea, 215);
           //lv_obj_add_event_cb(gui.element.filterPopup.mBoxNameTextArea, event_filterMBox, LV_EVENT_ALL, gui.element.filterPopup.mBoxNameTextArea);
-          lv_obj_add_event_cb(gui.element.filterPopup.mBoxNameTextArea, kb_event_cb, LV_EVENT_ALL, gui.element.filterPopup.mBoxNameTextArea);
+          lv_obj_add_event_cb(gui.element.filterPopup.mBoxNameTextArea, event_keyboard, LV_EVENT_ALL, gui.element.filterPopup.mBoxNameTextArea);
           lv_obj_add_state(gui.element.filterPopup.mBoxNameTextArea, LV_STATE_FOCUSED); /*To be sure the cursor is visible*/
           lv_obj_set_style_bg_color(gui.element.filterPopup.mBoxNameTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
           lv_obj_set_style_border_color(gui.element.filterPopup.mBoxNameTextArea, lv_color_hex(WHITE), 0);

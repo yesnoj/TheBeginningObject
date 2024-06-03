@@ -60,19 +60,6 @@ void event_stepDetail(lv_event_t * e)
  }
 
 
- if(obj == newStep->step.stepDetails->stepDetailNamelTextArea){
-     LV_LOG_USER("Set Name");
-     if(code == LV_EVENT_FOCUSED || code == LV_EVENT_CLICKED) {
-        lv_obj_add_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_remove_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-      }
-
-      if(code == LV_EVENT_DEFOCUSED) {
-        lv_obj_remove_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-      }
-    }
-
   if(code == LV_EVENT_VALUE_CHANGED){
     if(obj == newStep->step.stepDetails->stepTypeDropDownList){
       if(lv_dropdown_get_selected(newStep->step.stepDetails->stepTypeDropDownList) == 0){
@@ -125,9 +112,6 @@ void event_stepDetail(lv_event_t * e)
         //list of all styles to be reset, so clean the memory.
         lv_style_reset(&newStep->step.stepDetails->style_mBoxStepPopupTitleLine);
         //lv_style_reset(&newStep->step.stepDetails->dropDownListStyle);
-        if(keyboardStep == NULL){
-          LV_LOG_USER("create_keyboard");
-           }
   }
 }
 
@@ -209,8 +193,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_textarea_set_placeholder_text(newStep->step.stepDetails->stepDetailNamelTextArea, stepDetailPlaceHolder_text);
                   lv_obj_align(newStep->step.stepDetails->stepDetailNamelTextArea, LV_ALIGN_LEFT_MID, 70, 0);
                   lv_obj_set_width(newStep->step.stepDetails->stepDetailNamelTextArea, 210);
-                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailNamelTextArea, event_stepDetail, LV_EVENT_FOCUSED, newStep->step.stepDetails->stepDetailNamelTextArea);
-                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailNamelTextArea, event_stepDetail, LV_EVENT_DEFOCUSED, newStep->step.stepDetails->stepDetailNamelTextArea);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailNamelTextArea, event_keyboard, LV_EVENT_ALL, newStep->step.stepDetails->stepDetailNamelTextArea);
                   lv_obj_add_state(newStep->step.stepDetails->stepDetailNamelTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_color_hex(WHITE), 0);
@@ -384,11 +367,6 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
             lv_label_set_text(newStep->step.stepDetails->stepCancelLabel, stepDetailCancel_text);
             lv_obj_set_style_text_font(newStep->step.stepDetails->stepCancelLabel, &lv_font_montserrat_22, 0);
             lv_obj_align(newStep->step.stepDetails->stepCancelLabel, LV_ALIGN_CENTER, 0, 0);
-
-if(keyboardStep == NULL){
-  LV_LOG_USER("create_keyboard");
-    //create_keyboard(keyboardStep, newStep->step.stepDetails->stepDetailParent);
-    }
   
 }
 
