@@ -60,4 +60,6 @@ def generate_json():
 if __name__ == "__main__":
     generated_json = generate_json()
     with open("FilMachine.json", "w") as json_file:
-        json.dump(generated_json, json_file, separators=(',', ':'))
+        json.dump(generated_json, json_file, separators=(',', ':')) #inline json format
+        # json.dump(generated_json, json_file, indent=4) #standard json format
+
