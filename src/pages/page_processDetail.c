@@ -232,7 +232,7 @@ if(existingProcess != NULL) {
                   lv_obj_set_width(newProcess->process.processDetails->processDetailNameTextArea, 280);
                   lv_obj_set_style_text_font(newProcess->process.processDetails->processDetailNameTextArea, &lv_font_montserrat_30, 0);              
                   lv_obj_align(newProcess->process.processDetails->processDetailNameTextArea, LV_ALIGN_TOP_LEFT, -20, -25);
-                  lv_obj_add_event_cb(newProcess->process.processDetails->processDetailNameTextArea, event_keyboard, LV_EVENT_ALL, newProcess->process.processDetails->processDetailNameTextArea);
+                  lv_obj_add_event_cb(newProcess->process.processDetails->processDetailNameTextArea, event_keyboard, LV_EVENT_ALL, newProcess->process.processDetails->processNameString);
                   lv_obj_add_state(newProcess->process.processDetails->processDetailNameTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_border_opa(newProcess->process.processDetails->processDetailNameTextArea, LV_OPA_TRANSP, 0);
                   //newProcess->process.processDetails->processNameString = generateRandomCharArray(10);

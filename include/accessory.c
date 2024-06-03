@@ -110,8 +110,10 @@ void event_keyboard(lv_event_t* e)
   lv_obj_t * mboxCont = (lv_obj_t *)lv_obj_get_parent(objCont);
   lv_obj_t * mboxParent = (lv_obj_t *)lv_obj_get_parent(mboxCont);
   lv_obj_t * godFatherCont = (lv_obj_t *)lv_obj_get_parent(mboxParent);
-  lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
-   
+  char * data = (char *)lv_event_get_user_data(e);
+  //size_t len;
+  //const char* tempText;
+
    if(code == LV_EVENT_CLICKED){ 
       if(obj == gui.element.filterPopup.mBoxNameTextArea){
           LV_LOG_USER("LV_EVENT_FOCUSED on filterPopup.mBoxNameTextArea");
@@ -173,25 +175,37 @@ void event_keyboard(lv_event_t* e)
     }
     if (code == LV_EVENT_READY) {
       LV_LOG_USER("LV_EVENT_READY PRESSED");
+      //len = strlen(lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea)) + 1; // +1 for the null terminator
+      //tempText = lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea);
+
             if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.element.filterPopup.mBoxNameTextArea){
               LV_LOG_USER("Press ok from filterPopup.mBoxFilterPopupParent");
               lv_textarea_set_text(gui.element.filterPopup.mBoxNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
               lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
-              gui.element.filterPopup.filterName = lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea);
+              //gui.element.filterPopup.filterName = (char*)malloc(len);
+              //if (gui.element.filterPopup.filterName != NULL) {
+                  //strcpy(gui.element.filterPopup.filterName, tempText);
+              //    }
               hideKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
             }
             if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempProcessNode->process.processDetails->processDetailNameTextArea){
               LV_LOG_USER("Press ok from processDetailNameTextArea");
               lv_textarea_set_text(tempProcessNode->process.processDetails->processDetailNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
               lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
-              tempProcessNode->process.processDetails->processNameString = lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea);
+              //data = (char*)malloc(len);
+              //if (data != NULL) {
+                  //strcpy(data, tempText);
+              //    }
               hideKeyboard(tempProcessNode->process.processDetails->processDetailParent);
             }
             if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
               LV_LOG_USER("Press ok from stepDetailNamelTextArea");
               lv_textarea_set_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
               lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
-              tempStepNode->step.stepDetails->stepNameString = lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea);
+              //data = (char*)malloc(len);
+              //if (data != NULL) {
+                  //strcpy(data, tempText);
+              //    }    
               hideKeyboard(tempStepNode->step.stepDetails->stepDetailParent);
             } 
       }
