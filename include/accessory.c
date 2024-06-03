@@ -1,3 +1,6 @@
+#include "core/lv_obj.h"
+#include "misc/lv_event.h"
+#include "lv_api_map_v8.h"
 /**
  * @file accessory.c
  *
@@ -109,89 +112,103 @@ void event_keyboard(lv_event_t* e)
   lv_obj_t * godFatherCont = (lv_obj_t *)lv_obj_get_parent(mboxParent);
   lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
    
-
-    if(obj == gui.element.filterPopup.mBoxNameTextArea || obj == tempProcessNode->process.processDetails->processDetailNameTextArea){
-      if(code == LV_EVENT_FOCUSED) {
-          LV_LOG_USER("LV_EVENT_FOCUSED on filterPopup.mBoxNameTextArea/processDetailNameTextArea");
-          lv_obj_set_user_data(obj,data);
-          lv_obj_add_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
-          lv_obj_remove_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-        }
-
-        if(code == LV_EVENT_DEFOCUSED) {
-          LV_LOG_USER("LV_EVENT_DEFOCUSED on filterPopup.mBoxNameTextArea/processDetailNameTextArea");
-          lv_obj_remove_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
-          lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-        }
-    }
-    if(obj == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
-      if(code == LV_EVENT_FOCUSED) {
-          LV_LOG_USER("LV_EVENT_FOCUSED on stepDetailNamelTextArea");
-          lv_obj_set_user_data(obj,data);
-          lv_obj_add_flag(godFatherCont, LV_OBJ_FLAG_HIDDEN);
-          lv_obj_remove_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-        }
-
-        if(code == LV_EVENT_DEFOCUSED) {
-          LV_LOG_USER("LV_EVENT_DEFOCUSED on stepDetailNamelTextArea");
-          lv_obj_remove_flag(godFatherCont, LV_OBJ_FLAG_HIDDEN);
-          lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-        }
-    }
-
-    if (code == LV_EVENT_CANCEL) {
-      /* 
-            if(obj == gui.element.filterPopup.mBoxFilterPopupParent){
-                LV_LOG_USER("Press cancel from gui.element.filterPopup.mBoxFilterPopupParent");
-                lv_textarea_set_text(keyboard_textArea, "");
-                lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-                lv_obj_remove_flag(gui.element.filterPopup.mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
-              }
-
-             if(obj == gui.element.step.stepDetails->stepDetailParent){
-                LV_LOG_USER("Press cancel from gui.element.step.stepDetails->stepDetailParent");
-                lv_textarea_set_text(keyboard_textArea, "");
-                lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-                lv_obj_remove_flag(gui.element.step.stepDetails->stepDetailParent, LV_OBJ_FLAG_HIDDEN);
-         }
-         */
-     }
-    if (code == LV_EVENT_READY) {
-            if(obj == gui.element.filterPopup.mBoxNameTextArea){
-              LV_LOG_USER("Press ok from gui.element.filterPopup.mBoxFilterPopupParent");
-              lv_obj_clear_state(gui.element.filterPopup.mBoxNameTextArea, LV_STATE_FOCUSED);
-              lv_textarea_set_text(gui.element.filterPopup.mBoxNameTextArea, lv_textarea_get_text(keyboard_textArea));
-              lv_textarea_set_text(keyboard_textArea, "");
-              lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-              lv_obj_remove_flag(gui.element.filterPopup.mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
-              LV_LOG_USER(lv_textarea_get_text(keyboard_textArea));
-            }
-            /*
-            if(obj == gui.element.step.stepDetails->stepDetailParent){
-              LV_LOG_USER("Press ok from gui.element.step.stepDetails->stepDetailParent");
-              lv_textarea_set_text(stepDetailNamelTextArea, lv_textarea_get_text(keyboard_textArea));
-              lv_textarea_set_text(keyboard_textArea, "");
-              lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-              lv_obj_remove_flag(gui.element.step.stepDetails->stepDetailParent, LV_OBJ_FLAG_HIDDEN);
-              LV_LOG_USER(lv_textarea_get_text(keyboard_textArea));
-            }
-            */
+   if(code == LV_EVENT_CLICKED){ 
+      if(obj == gui.element.filterPopup.mBoxNameTextArea){
+          LV_LOG_USER("LV_EVENT_FOCUSED on filterPopup.mBoxNameTextArea");
+          lv_obj_set_user_data(gui.element.keyboardPopup.keyboard,obj);
+          //lv_obj_add_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
+          //lv_obj_remove_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+          showKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
+          
       }
-      
+      if(obj == tempProcessNode->process.processDetails->processDetailNameTextArea){
+          LV_LOG_USER("LV_EVENT_FOCUSED on processDetailNameTextArea");
+          lv_obj_set_user_data(gui.element.keyboardPopup.keyboard,obj);
+          //lv_obj_add_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
+          //lv_obj_remove_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+          showKeyboard(tempProcessNode->process.processDetails->processDetailParent);
+      }
+      if(obj == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
+          LV_LOG_USER("LV_EVENT_FOCUSED on stepDetailNamelTextArea");
+          lv_obj_set_user_data(gui.element.keyboardPopup.keyboard,obj);
+          //lv_obj_add_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
+          //lv_obj_remove_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+          showKeyboard(tempStepNode->step.stepDetails->stepDetailParent);
+      }
+   }
+  
+  if(code == LV_EVENT_DEFOCUSED){
+      if(obj == gui.element.filterPopup.mBoxNameTextArea){
+          LV_LOG_USER("LV_EVENT_DEFOCUSED on filterPopup.mBoxNameTextArea");
+          hideKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
+      }
+      if(obj == tempProcessNode->process.processDetails->processDetailNameTextArea){
+          LV_LOG_USER("LV_EVENT_DEFOCUSED on processDetailNameTextArea");
+          hideKeyboard(tempProcessNode->process.processDetails->processDetailParent);
+      }
+      if(obj == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
+          LV_LOG_USER("LV_EVENT_DEFOCUSED on stepDetailNamelTextArea");
+          hideKeyboard(tempStepNode->step.stepDetails->stepDetailParent);
+      }
+   }
+    
+  if (code == LV_EVENT_CANCEL) {
+      //after the LV_EVENT_FOCUSED, the caller send it self to the keyboard as userData
+      LV_LOG_USER("LV_EVENT_CANCEL PRESSED");
+      if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.element.filterPopup.mBoxNameTextArea){
+          LV_LOG_USER("LV_EVENT_DEFOCUSED on filterPopup.mBoxNameTextArea");
+          lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
+          hideKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
+      }
+      if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempProcessNode->process.processDetails->processDetailNameTextArea){
+          LV_LOG_USER("LV_EVENT_DEFOCUSED on processDetailNameTextArea");
+          lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
+          hideKeyboard(tempProcessNode->process.processDetails->processDetailParent);
+      }
+      if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
+          LV_LOG_USER("LV_EVENT_DEFOCUSED on stepDetailNamelTextArea");
+          lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
+          hideKeyboard(tempStepNode->step.stepDetails->stepDetailParent);
+      }
+    }
+    if (code == LV_EVENT_READY) {
+      LV_LOG_USER("LV_EVENT_READY PRESSED");
+            if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.element.filterPopup.mBoxNameTextArea){
+              LV_LOG_USER("Press ok from filterPopup.mBoxFilterPopupParent");
+              lv_textarea_set_text(gui.element.filterPopup.mBoxNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
+              lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
+              gui.element.filterPopup.filterName = lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea);
+              hideKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
+            }
+            if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempProcessNode->process.processDetails->processDetailNameTextArea){
+              LV_LOG_USER("Press ok from processDetailNameTextArea");
+              lv_textarea_set_text(tempProcessNode->process.processDetails->processDetailNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
+              lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
+              tempProcessNode->process.processDetails->processNameString = lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea);
+              hideKeyboard(tempProcessNode->process.processDetails->processDetailParent);
+            }
+            if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
+              LV_LOG_USER("Press ok from stepDetailNamelTextArea");
+              lv_textarea_set_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
+              lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
+              tempStepNode->step.stepDetails->stepNameString = lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea);
+              hideKeyboard(tempStepNode->step.stepDetails->stepDetailParent);
+            } 
+      }
  }
 
 
 
-void create_keyboard(lv_obj_t * keyB)
+void create_keyboard()
 {   
-    keyBoardParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
-    lv_obj_class_init_obj(keyBoardParent);
-    lv_obj_remove_flag(keyBoardParent, LV_OBJ_FLAG_IGNORE_LAYOUT);
-    lv_obj_set_size(keyBoardParent, LV_PCT(100), LV_PCT(100));
+    gui.element.keyboardPopup.keyBoardParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
+    lv_obj_class_init_obj(gui.element.keyboardPopup.keyBoardParent);
+    lv_obj_remove_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_IGNORE_LAYOUT);
+    lv_obj_set_size(gui.element.keyboardPopup.keyBoardParent, LV_PCT(100), LV_PCT(100));
 
-    keyB = lv_keyboard_create(keyBoardParent);
-    lv_obj_add_event_cb(keyB, event_keyboard, LV_EVENT_ALL, NULL);
-    lv_obj_add_flag(keyB, LV_OBJ_FLAG_EVENT_BUBBLE);
+    gui.element.keyboardPopup.keyboard = lv_keyboard_create(gui.element.keyboardPopup.keyBoardParent);
+    lv_obj_add_event_cb(gui.element.keyboardPopup.keyboard, event_keyboard, LV_EVENT_ALL, NULL);
+    lv_obj_add_flag(gui.element.keyboardPopup.keyboard, LV_OBJ_FLAG_EVENT_BUBBLE);
 
 
     static const char * kb_map[] = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", " ", "\n",
@@ -209,21 +226,21 @@ void create_keyboard(lv_obj_t * keyB)
 
     /*Create a keyboard and add the new map as USER_1 mode*/
 
-    lv_keyboard_set_map(keyB, LV_KEYBOARD_MODE_USER_1, kb_map, kb_ctrl);
-    lv_keyboard_set_mode(keyB, LV_KEYBOARD_MODE_USER_1);
+    lv_keyboard_set_map(gui.element.keyboardPopup.keyboard, LV_KEYBOARD_MODE_USER_1, kb_map, kb_ctrl);
+    lv_keyboard_set_mode(gui.element.keyboardPopup.keyboard, LV_KEYBOARD_MODE_USER_1);
     
-    keyboard_textArea = lv_textarea_create(keyBoardParent);
-    lv_obj_align(keyboard_textArea, LV_ALIGN_TOP_MID, 0, 10);
-    //lv_obj_add_event_cb(keyboard_textArea, ta_event_cb, LV_EVENT_ALL, keyboard);
-    lv_textarea_set_placeholder_text(keyboard_textArea, keyboard_placeholder_text);
-    lv_obj_set_size(keyboard_textArea, lv_pct(90), 80);
-    lv_obj_add_state(keyboard_textArea, LV_STATE_FOCUSED);
-    lv_keyboard_set_textarea(keyB, keyboard_textArea);
+    gui.element.keyboardPopup.keyboardTextArea = lv_textarea_create(gui.element.keyboardPopup.keyBoardParent);
+    lv_obj_align(gui.element.keyboardPopup.keyboardTextArea, LV_ALIGN_TOP_MID, 0, 10);
+    //lv_obj_add_event_cb(gui.element.keyboardPopup.keyboardTextArea, ta_event_cb, LV_EVENT_ALL, keyboard);
+    lv_textarea_set_placeholder_text(gui.element.keyboardPopup.keyboardTextArea, keyboard_placeholder_text);
+    lv_obj_set_size(gui.element.keyboardPopup.keyboardTextArea, lv_pct(90), 80);
+    lv_obj_add_state(gui.element.keyboardPopup.keyboardTextArea, LV_STATE_FOCUSED);
+    lv_keyboard_set_textarea(gui.element.keyboardPopup.keyboard, gui.element.keyboardPopup.keyboardTextArea);
 
-    lv_obj_set_style_text_font(keyB, &lv_font_montserrat_26, 0);
-    lv_obj_set_style_text_font(keyboard_textArea, &lv_font_montserrat_30, 0);
+    lv_obj_set_style_text_font(gui.element.keyboardPopup.keyboard, &lv_font_montserrat_26, 0);
+    lv_obj_set_style_text_font(gui.element.keyboardPopup.keyboardTextArea, &lv_font_montserrat_30, 0);
     
-    lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
 }
 
 
@@ -519,9 +536,21 @@ void init_globals( void ) {
   tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
   tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);  
  
-  create_keyboard(keyboard);
+  create_keyboard();
 }
 
+//without the commented part, the keyboard will be shown OVER the caller
+void showKeyboard(lv_obj_t * whoCallMe){
+    //lv_obj_add_flag(whoCallMe, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_remove_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_move_foreground(gui.element.keyboardPopup.keyBoardParent);
+}
+
+void hideKeyboard(lv_obj_t * whoCallMe){
+    lv_obj_add_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_move_background(gui.element.keyboardPopup.keyBoardParent);
+    //lv_obj_remove_flag(whoCallMe, LV_OBJ_FLAG_HIDDEN);
+}
 
 void my_touchpad_read(lv_indev_t* dev, lv_indev_data_t* data) {
       uint16_t touchX, touchY;

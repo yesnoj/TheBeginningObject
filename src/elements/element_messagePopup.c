@@ -69,19 +69,6 @@ void event_messagePopup(lv_event_t *e)
                 lv_obj_delete(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
             }
-
-            if (gui.element.messagePopup.whoCallMe == processDetailParent)
-            {
-                LV_LOG_USER("Delete process from inside!");
-                lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
-                lv_msgbox_close(mboxCont);
-                lv_obj_delete(mboxCont);
-                gui.element.messagePopup.mBoxPopupParent = NULL;
-
-                lv_msgbox_close(processDetailParent);
-                lv_obj_delete(processDetailParent);
-                processDetailParent = NULL;
-            }
             if (gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopNowButton)
             {
                 LV_LOG_USER("Stop process NOW!");
@@ -111,7 +98,7 @@ void event_messagePopup(lv_event_t *e)
         if (obj == gui.element.messagePopup.mBoxPopupButton2)
         {
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton2");
-            if (gui.element.messagePopup.whoCallMe == tempProcessNode || gui.element.messagePopup.whoCallMe == processDetailParent || gui.element.messagePopup.whoCallMe == tempStepNode || gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopAfterButton || gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopNowButton)
+            if (gui.element.messagePopup.whoCallMe == tempProcessNode || gui.element.messagePopup.whoCallMe == tempStepNode || gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopAfterButton || gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopNowButton)
             {
                 LV_LOG_USER("Cancel delete element!");
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);

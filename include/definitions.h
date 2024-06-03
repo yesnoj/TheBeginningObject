@@ -775,9 +775,12 @@ struct sTools {
 	/* Params objects */
 };
 
-
-
-
+struct sKeyboardPopup {
+	/* LVGL objects */
+  lv_obj_t          *keyBoardParent;
+	lv_obj_t 			    *keyboard;
+	lv_obj_t			    *keyboardTextArea;
+};
 
 
 /*********************
@@ -787,6 +790,7 @@ struct sElements {
 	struct sFilterPopup			filterPopup;
 	struct sMessagePopup 		messagePopup;
 	struct sRollerPopup			rollerPopup;
+  struct sKeyboardPopup   keyboardPopup;
 };
 
 
@@ -808,10 +812,7 @@ struct sPages {
 struct gui_components {
 	struct sElements	element;
 	struct sPages		  page;
-	lv_obj_t 			    *keyboard;
-	lv_obj_t			    *keyboardTextArea;
 };
-
 
 
 /*********************
@@ -1148,17 +1149,6 @@ unsigned long actualMillis;
 // NEW OLD GUI APPROACH, NEED TO BE REMOVED...
 
 
-lv_obj_t * processElement;
-lv_obj_t * stepElement;
-lv_obj_t * processDetailParent;
-
-
-lv_obj_t * keyBoardParent;
-lv_obj_t * keyboardFilter;
-lv_obj_t * keyboardProcess;
-lv_obj_t * keyboard;
-lv_obj_t * keyboard_textArea;
-
 processNode	* tempProcessNode;
 stepNode	  * tempStepNode;
 
@@ -1256,7 +1246,9 @@ void event_keyboard(lv_event_t* e);
 
 void createQuestionMark(lv_obj_t * parent,lv_obj_t * element,lv_event_cb_t e, const int32_t x, const int32_t y);
 void createMessageBox(char *title, char *text, char *button1Text, char *button2Text);
-void create_keyboard(lv_obj_t * keyB);
+void create_keyboard();
+void showKeyboard(lv_obj_t * whoCallMe);
+void hideKeyboard(lv_obj_t * whoCallMe);
 char *createRollerValues( uint32_t maxVal, const char* extra_str );
 int SD_init();
 void initSD_I2C();

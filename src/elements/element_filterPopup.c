@@ -1,3 +1,4 @@
+#include "widgets/textarea/lv_textarea.h"
 /**
  * @file element_filter.c
  *
@@ -149,7 +150,7 @@ void filterPopupCreate (void){
           lv_obj_add_state(gui.element.filterPopup.mBoxNameTextArea, LV_STATE_FOCUSED); /*To be sure the cursor is visible*/
           lv_obj_set_style_bg_color(gui.element.filterPopup.mBoxNameTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
           lv_obj_set_style_border_color(gui.element.filterPopup.mBoxNameTextArea, lv_color_hex(WHITE), 0);
-
+          lv_textarea_set_max_length(gui.element.filterPopup.mBoxNameTextArea, MAX_PROC_NAME_LEN);
 
       //CHOOSE COLOR/B&W/Both
       gui.element.filterPopup.selectColorContainerRadioButton = lv_obj_create(gui.element.filterPopup.mBoxContainer);
@@ -241,5 +242,7 @@ void filterPopupCreate (void){
             lv_obj_align(gui.element.filterPopup.mBoxApplyFilterLabel, LV_ALIGN_CENTER, 0, 0);
   }
   //create_keyboard(keyboardFilter, gui.element.filterPopup.mBoxFilterPopupParent);
+
+
 }
 
