@@ -829,9 +829,10 @@ LV_IMG_DECLARE(splash_img);
 
 #define FILENAME_SAVE         "/FilMachine.json"
 
-#define MAX_PROC_NAME_LEN		  20
-#define MAX_PROC_ELEMENTS		  30
+#define MAX_PROC_NAME_LEN		  15
 #define MAX_STEP_ELEMENTS		  20
+#define MAX_PROC_ELEMENTS		  30
+
 
 /*********************
 * Button sizes
@@ -1016,7 +1017,7 @@ lv_obj_t * tempSensorTuneButton;
 #define processDetailTotalTime_text 		 		"Total time:"
 #define processDetailTempPlaceHolder_text 	 		"Tap"
 #define processDetailTempTolerance_text 	 		"Tolerance:"
-#define processDetailPlaceHolder_text 			   		"Enter name for new process"
+#define processDetailPlaceHolder_text 			   		"Enter name"
 
 uint8_t isPreferred;
 

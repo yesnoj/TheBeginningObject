@@ -31,9 +31,7 @@ void event_stepDetail(lv_event_t * e)
  if(code == LV_EVENT_CLICKED){
     if(obj == newStep->step.stepDetails->stepSaveButton){
       LV_LOG_USER("Pressed stepSaveButton");
-
-                // for testing
-          static char 			  	name[80];	// Test Code
+      newStep->step.stepDetails->stepNameString = lv_textarea_get_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea);
 
                 if(addStepElement(newStep, data) != NULL){
                     LV_LOG_USER("Step %p element created!Now process %p has n: %d steps",newStep,data, ((processNode *)data)->process.processDetails->stepElementsList.size);
@@ -193,13 +191,17 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_textarea_set_placeholder_text(newStep->step.stepDetails->stepDetailNamelTextArea, stepDetailPlaceHolder_text);
                   lv_obj_align(newStep->step.stepDetails->stepDetailNamelTextArea, LV_ALIGN_LEFT_MID, 70, 0);
                   lv_obj_set_width(newStep->step.stepDetails->stepDetailNamelTextArea, 210);
-                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailNamelTextArea, event_keyboard, LV_EVENT_ALL, newStep->step.stepDetails->stepNameString);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailNamelTextArea, event_keyboard, LV_EVENT_ALL, NULL);
                   lv_obj_add_state(newStep->step.stepDetails->stepDetailNamelTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_color_hex(WHITE), 0);
-                  //newStep->step.stepDetails->stepNameString = generateRandomCharArray(10);
-                  //lv_textarea_set_text(newStep->step.stepDetails->stepDetailNamelTextArea, newStep->step.stepDetails->stepNameString);
                   lv_textarea_set_max_length(newStep->step.stepDetails->stepDetailNamelTextArea, MAX_PROC_NAME_LEN);
+                  //newStep->step.stepDetails->stepNameString = generateRandomCharArray(10);
+                  if(newStep->step.stepDetails->stepNameString != NULL)
+                    lv_textarea_set_text(newStep->step.stepDetails->stepDetailNamelTextArea, newStep->step.stepDetails->stepNameString);
+                  else
+                    lv_textarea_set_text(newStep->step.stepDetails->stepDetailNamelTextArea,"");
+
 
 
             newStep->step.stepDetails->stepDurationContainer = lv_obj_create(newStep->step.stepDetails->stepDetailContainer);

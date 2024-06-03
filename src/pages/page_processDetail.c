@@ -73,6 +73,7 @@ void event_processDetail(lv_event_t * e)
     }
     if(data == newProcess->process.processDetails->processSaveButton && newProcess->process.processDetails->stepElementsList.size > 0){
           newProcess->process.processDetails->somethingChanged = 0;
+          newProcess->process.processDetails->processNameString = lv_textarea_get_text(tempProcessNode->process.processDetails->processDetailNameTextArea);
           lv_obj_clear_state(newProcess->process.processDetails->processRunButton, LV_STATE_DISABLED);
           lv_obj_add_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
 
@@ -176,6 +177,7 @@ if(existingProcess != NULL) {
 
 } else {
     newProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
+    newProcess->process.processDetails->processNameString = "";
     newProcess->process.processDetails->somethingChanged = 0;
     newProcess->process.processDetails->filmType = FILM_TYPE_NA; 
     newProcess->process.processDetails->temp = 0;
@@ -232,12 +234,15 @@ if(existingProcess != NULL) {
                   lv_obj_set_width(newProcess->process.processDetails->processDetailNameTextArea, 280);
                   lv_obj_set_style_text_font(newProcess->process.processDetails->processDetailNameTextArea, &lv_font_montserrat_30, 0);              
                   lv_obj_align(newProcess->process.processDetails->processDetailNameTextArea, LV_ALIGN_TOP_LEFT, -20, -25);
-                  lv_obj_add_event_cb(newProcess->process.processDetails->processDetailNameTextArea, event_keyboard, LV_EVENT_ALL, newProcess->process.processDetails->processNameString);
+                  lv_obj_add_event_cb(newProcess->process.processDetails->processDetailNameTextArea, event_keyboard, LV_EVENT_ALL, NULL);
                   lv_obj_add_state(newProcess->process.processDetails->processDetailNameTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_border_opa(newProcess->process.processDetails->processDetailNameTextArea, LV_OPA_TRANSP, 0);
-                  //newProcess->process.processDetails->processNameString = generateRandomCharArray(10);
-                  //lv_textarea_set_text(newProcess->process.processDetails->processDetailNameTextArea, newProcess->process.processDetails->processNameString);              
                   lv_textarea_set_max_length(newProcess->process.processDetails->processDetailNameTextArea, MAX_PROC_NAME_LEN);
+                  //newProcess->process.processDetails->processNameString = generateRandomCharArray(10);
+                  if(newProcess->process.processDetails->processNameString != NULL)
+                    lv_textarea_set_text(newProcess->process.processDetails->processDetailNameTextArea, newProcess->process.processDetails->processNameString); 
+                    else
+                      lv_textarea_set_text(newProcess->process.processDetails->processDetailNameTextArea,"");             
 
 
             newProcess->process.processDetails->processDetailStepsLabel = lv_label_create(newProcess->process.processDetails->processDetailContainer);         

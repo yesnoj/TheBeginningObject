@@ -110,31 +110,25 @@ void event_keyboard(lv_event_t* e)
   lv_obj_t * mboxCont = (lv_obj_t *)lv_obj_get_parent(objCont);
   lv_obj_t * mboxParent = (lv_obj_t *)lv_obj_get_parent(mboxCont);
   lv_obj_t * godFatherCont = (lv_obj_t *)lv_obj_get_parent(mboxParent);
-  char * data = (char *)lv_event_get_user_data(e);
-  //size_t len;
-  //const char* tempText;
+  const char * data = (const char*)lv_event_get_user_data(e);
 
    if(code == LV_EVENT_CLICKED){ 
       if(obj == gui.element.filterPopup.mBoxNameTextArea){
           LV_LOG_USER("LV_EVENT_FOCUSED on filterPopup.mBoxNameTextArea");
           lv_obj_set_user_data(gui.element.keyboardPopup.keyboard,obj);
-          //lv_obj_add_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
-          //lv_obj_remove_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+
           showKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
-          
       }
       if(obj == tempProcessNode->process.processDetails->processDetailNameTextArea){
           LV_LOG_USER("LV_EVENT_FOCUSED on processDetailNameTextArea");
           lv_obj_set_user_data(gui.element.keyboardPopup.keyboard,obj);
-          //lv_obj_add_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
-          //lv_obj_remove_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+
           showKeyboard(tempProcessNode->process.processDetails->processDetailParent);
       }
       if(obj == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
           LV_LOG_USER("LV_EVENT_FOCUSED on stepDetailNamelTextArea");
           lv_obj_set_user_data(gui.element.keyboardPopup.keyboard,obj);
-          //lv_obj_add_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
-          //lv_obj_remove_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+
           showKeyboard(tempStepNode->step.stepDetails->stepDetailParent);
       }
    }
@@ -159,53 +153,37 @@ void event_keyboard(lv_event_t* e)
       LV_LOG_USER("LV_EVENT_CANCEL PRESSED");
       if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.element.filterPopup.mBoxNameTextArea){
           LV_LOG_USER("LV_EVENT_DEFOCUSED on filterPopup.mBoxNameTextArea");
-          lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
           hideKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
       }
       if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempProcessNode->process.processDetails->processDetailNameTextArea){
           LV_LOG_USER("LV_EVENT_DEFOCUSED on processDetailNameTextArea");
-          lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
           hideKeyboard(tempProcessNode->process.processDetails->processDetailParent);
       }
       if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
           LV_LOG_USER("LV_EVENT_DEFOCUSED on stepDetailNamelTextArea");
-          lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
           hideKeyboard(tempStepNode->step.stepDetails->stepDetailParent);
       }
     }
     if (code == LV_EVENT_READY) {
       LV_LOG_USER("LV_EVENT_READY PRESSED");
-      //len = strlen(lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea)) + 1; // +1 for the null terminator
-      //tempText = lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea);
 
             if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.element.filterPopup.mBoxNameTextArea){
               LV_LOG_USER("Press ok from filterPopup.mBoxFilterPopupParent");
               lv_textarea_set_text(gui.element.filterPopup.mBoxNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
-              lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
-              //gui.element.filterPopup.filterName = (char*)malloc(len);
-              //if (gui.element.filterPopup.filterName != NULL) {
-                  //strcpy(gui.element.filterPopup.filterName, tempText);
-              //    }
+              gui.element.filterPopup.filterName = lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea);
+          
               hideKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
             }
             if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempProcessNode->process.processDetails->processDetailNameTextArea){
               LV_LOG_USER("Press ok from processDetailNameTextArea");
               lv_textarea_set_text(tempProcessNode->process.processDetails->processDetailNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
-              lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
-              //data = (char*)malloc(len);
-              //if (data != NULL) {
-                  //strcpy(data, tempText);
-              //    }
+
               hideKeyboard(tempProcessNode->process.processDetails->processDetailParent);
             }
             if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
               LV_LOG_USER("Press ok from stepDetailNamelTextArea");
               lv_textarea_set_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
-              lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
-              //data = (char*)malloc(len);
-              //if (data != NULL) {
-                  //strcpy(data, tempText);
-              //    }    
+
               hideKeyboard(tempStepNode->step.stepDetails->stepDetailParent);
             } 
       }
@@ -245,10 +223,10 @@ void create_keyboard()
     
     gui.element.keyboardPopup.keyboardTextArea = lv_textarea_create(gui.element.keyboardPopup.keyBoardParent);
     lv_obj_align(gui.element.keyboardPopup.keyboardTextArea, LV_ALIGN_TOP_MID, 0, 10);
-    //lv_obj_add_event_cb(gui.element.keyboardPopup.keyboardTextArea, ta_event_cb, LV_EVENT_ALL, keyboard);
     lv_textarea_set_placeholder_text(gui.element.keyboardPopup.keyboardTextArea, keyboard_placeholder_text);
     lv_obj_set_size(gui.element.keyboardPopup.keyboardTextArea, lv_pct(90), 80);
     lv_obj_add_state(gui.element.keyboardPopup.keyboardTextArea, LV_STATE_FOCUSED);
+    lv_textarea_set_max_length(gui.element.keyboardPopup.keyboardTextArea, MAX_PROC_NAME_LEN);
     lv_keyboard_set_textarea(gui.element.keyboardPopup.keyboard, gui.element.keyboardPopup.keyboardTextArea);
 
     lv_obj_set_style_text_font(gui.element.keyboardPopup.keyboard, &lv_font_montserrat_26, 0);
@@ -257,57 +235,6 @@ void create_keyboard()
     lv_obj_add_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
 }
 
-
-/*
-
-void create_keyboard(lv_obj_t * keyB, lv_obj_t * whoCallMe)
-{   
-    keyBoardParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
-    lv_obj_class_init_obj(keyBoardParent);
-    lv_obj_remove_flag(keyBoardParent, LV_OBJ_FLAG_IGNORE_LAYOUT);
-    lv_obj_set_size(keyBoardParent, LV_PCT(100), LV_PCT(100));
-
-    keyB = lv_keyboard_create(keyBoardParent);
-    
-    
-
-    lv_obj_add_event_cb(keyB, event_keyboard, LV_EVENT_ALL, whoCallMe);
-
-    static const char * kb_map[] = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", " ", "\n",
-                                    "A", "S", "D", "F", "G", "H", "J", "K", "L",  " ", "\n",
-                                    " "," ", "Z", "X", "C", "V", "B", "N", "M"," "," ","\n",
-                                    LV_SYMBOL_CLOSE, LV_SYMBOL_BACKSPACE,  " ", " ", LV_SYMBOL_OK, NULL
-                                   };
-
-
-    static const lv_buttonmatrix_ctrl_t kb_ctrl[] = {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, LV_BUTTONMATRIX_CTRL_HIDDEN,
-                                                     4, 4, 4, 4, 4, 4, 4, 4, 4, LV_BUTTONMATRIX_CTRL_HIDDEN,
-                                                     LV_BUTTONMATRIX_CTRL_HIDDEN, LV_BUTTONMATRIX_CTRL_HIDDEN, 4, 4, 4, 4, 4, 4, 4, LV_BUTTONMATRIX_CTRL_HIDDEN, LV_BUTTONMATRIX_CTRL_HIDDEN,
-                                                     2, 2 | 2, 6, LV_BUTTONMATRIX_CTRL_HIDDEN | 2, 2
-                                                    };
-
-
-
-    lv_keyboard_set_map(keyB, LV_KEYBOARD_MODE_USER_1, kb_map, kb_ctrl);
-    lv_keyboard_set_mode(keyB, LV_KEYBOARD_MODE_USER_1);
-
-    keyboard_textArea = lv_textarea_create(keyBoardParent);
-    lv_obj_align(keyboard_textArea, LV_ALIGN_TOP_MID, 0, 10);
-    //lv_obj_add_event_cb(keyboard_textArea, ta_event_cb, LV_EVENT_ALL, keyboard);
-    lv_textarea_set_placeholder_text(keyboard_textArea, keyboard_placeholder_text);
-    lv_obj_set_size(keyboard_textArea, lv_pct(90), 80);
-    lv_obj_add_state(keyboard_textArea, LV_STATE_FOCUSED);
-    lv_keyboard_set_textarea(keyB, keyboard_textArea);
-
-    lv_obj_set_style_text_font(keyB, &lv_font_montserrat_26, 0);
-    lv_obj_set_style_text_font(keyboard_textArea, &lv_font_montserrat_30, 0);
-    
-    //lv_obj_add_flag(keyboard_textArea, LV_OBJ_FLAG_HIDDEN);
-   // lv_obj_add_flag(keyboard, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-}
-
-*/
 
 lv_obj_t * create_text(lv_obj_t * parent, const char * icon, const char * txt)
 {
@@ -556,6 +483,7 @@ void init_globals( void ) {
 //without the commented part, the keyboard will be shown OVER the caller
 void showKeyboard(lv_obj_t * whoCallMe){
     //lv_obj_add_flag(whoCallMe, LV_OBJ_FLAG_HIDDEN);
+    lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
     lv_obj_remove_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_foreground(gui.element.keyboardPopup.keyBoardParent);
 }
@@ -563,6 +491,7 @@ void showKeyboard(lv_obj_t * whoCallMe){
 void hideKeyboard(lv_obj_t * whoCallMe){
     lv_obj_add_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_background(gui.element.keyboardPopup.keyBoardParent);
+    lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
     //lv_obj_remove_flag(whoCallMe, LV_OBJ_FLAG_HIDDEN);
 }
 
@@ -785,7 +714,7 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
 
             if(enableLog){
                 LV_LOG_USER("--- FILTER PARAMS ---");
-                LV_LOG_USER("filterName:%d",gui.element.filterPopup.filterName);
+                LV_LOG_USER("filterName:%s",gui.element.filterPopup.filterName);
                 LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
                 LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
                 LV_LOG_USER("preferredOnly:%d",gui.element.filterPopup.preferredOnly);
@@ -925,7 +854,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
         Filter["preferredOnly"] = gui.element.filterPopup.preferredOnly;
 
         LV_LOG_USER("--- FILTER PARAMS ---");
-        LV_LOG_USER("filterName:%d",gui.element.filterPopup.filterName);
+        LV_LOG_USER("filterName:%s",gui.element.filterPopup.filterName);
         LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
         LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
         LV_LOG_USER("preferredOnly:%d",gui.element.filterPopup.preferredOnly);

@@ -33,6 +33,7 @@ void event_filterMBox(lv_event_t * e){
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectColorRadioButton, LV_STATE_CHECKED);
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectBnWRadioButton, LV_STATE_CHECKED);
           lv_obj_remove_state(gui.element.filterPopup.mBoxOnlyPreferredSwitch, LV_STATE_CHECKED);
+          lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
         }
         if(obj == gui.element.filterPopup.mBoxResetFilterButton){
           LV_LOG_USER("Reset BUTTON");
@@ -49,22 +50,6 @@ void event_filterMBox(lv_event_t * e){
         }
       }
   }
-/*
-  if(obj == gui.element.filterPopup.mBoxNameTextArea){
-     if(code == LV_EVENT_FOCUSED || code == LV_EVENT_CLICKED) {
-        LV_LOG_USER("LV_EVENT_FOCUSED on gui.element.filterPopup.mBoxNameTextArea");
-        //lv_obj_set_user_data(keyboard,gui.element.filterPopup.mBoxFilterPopupParent);
-        lv_obj_add_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_remove_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-      }
-
-      if(code == LV_EVENT_DEFOCUSED) {
-        LV_LOG_USER("LV_EVENT_DEFOCUSED on gui.element.filterPopup.mBoxNameTextArea");
-        lv_obj_remove_flag(mboxParent, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-      }
-  }
-  */
 
   if(obj == gui.element.filterPopup.mBoxSelectColorRadioButton || obj == gui.element.filterPopup.mBoxSelectBnWRadioButton){
     if(code == LV_EVENT_VALUE_CHANGED) {
@@ -87,11 +72,6 @@ void event_filterMBox(lv_event_t * e){
       }
     }
 }
-
-
-
-       //     LV_LOG_USER("filterName:%d",gui.element.filterPopup.filterName);
-
 
 
 void filterPopupCreate (void){
@@ -145,8 +125,7 @@ void filterPopupCreate (void){
           lv_textarea_set_placeholder_text(gui.element.filterPopup.mBoxNameTextArea, filterPopupNamePlaceHolder_text);
           lv_obj_align(gui.element.filterPopup.mBoxNameTextArea, LV_ALIGN_LEFT_MID, 65, 0);
           lv_obj_set_width(gui.element.filterPopup.mBoxNameTextArea, 215);
-          //lv_obj_add_event_cb(gui.element.filterPopup.mBoxNameTextArea, event_filterMBox, LV_EVENT_ALL, gui.element.filterPopup.mBoxNameTextArea);
-          lv_obj_add_event_cb(gui.element.filterPopup.mBoxNameTextArea, event_keyboard, LV_EVENT_ALL, gui.element.filterPopup.filterName);
+          lv_obj_add_event_cb(gui.element.filterPopup.mBoxNameTextArea, event_keyboard, LV_EVENT_ALL, NULL);
           lv_obj_add_state(gui.element.filterPopup.mBoxNameTextArea, LV_STATE_FOCUSED); /*To be sure the cursor is visible*/
           lv_obj_set_style_bg_color(gui.element.filterPopup.mBoxNameTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
           lv_obj_set_style_border_color(gui.element.filterPopup.mBoxNameTextArea, lv_color_hex(WHITE), 0);
