@@ -827,6 +827,10 @@ LV_FONT_DECLARE(FilMachineFontIcons_100);
 
 LV_IMG_DECLARE(splash_img);
 
+#define TAB_PROCESSES 1
+#define TAB_SETTINGS  2
+#define TAB_TOOLS     3
+
 #define FILENAME_SAVE         "/FilMachine.json"
 
 #define MAX_PROC_NAME_LEN		  15
@@ -1072,7 +1076,9 @@ lv_obj_t * stepDetailNamelTextArea;
 #define messagePopupDetailTitle_text 				"Detail information"
 #define deleteButton_text 							"Delete"
 #define deletePopupTitle_text 						"Delete element"
+#define deleteAllProcessPopupTitle_text 						"Delete all process"
 #define deletePopupBody_text 						"Are you sure to delete the selected element?"
+#define deleteAllProcessPopupBody_text 						"Are you sure to delete all the process created?"
 #define warningPopupLowWaterTitle_text 		   		"The water level is too low!Temperature control has been suspended\nRefill the water bath immediately to correct resume the temperature control process"
 #define stopProcessPopupBody_text			   		"Stopping a process will ruin the film inside the tank and leave the chemistry inside!\nDo you want to stop the process now?"
 

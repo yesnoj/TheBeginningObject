@@ -94,6 +94,23 @@ void event_messagePopup(lv_event_t *e)
                 tempProcessNode->process.processDetails->checkup->stopAfter = 1;
                 lv_obj_add_state(tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED); 
             }
+            if (gui.element.messagePopup.whoCallMe == &gui)
+            {
+                lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
+                lv_msgbox_close(mboxCont);
+                lv_obj_delete(mboxCont);
+                gui.element.messagePopup.mBoxPopupParent = NULL;
+
+                if(gui.page.processes.processElementsList.size > 0){
+                  LV_LOG_USER("Delete ALL PROCESS!");
+                  gui.page.processes.processElementsList.start = NULL;
+                  lv_obj_clean(gui.page.processes.processesListContainer);
+                  lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
+                }else {
+                    LV_LOG_USER("Processes already empty");
+                }
+            }
+
         }
         if (obj == gui.element.messagePopup.mBoxPopupButton2)
         {
@@ -101,6 +118,13 @@ void event_messagePopup(lv_event_t *e)
             if (gui.element.messagePopup.whoCallMe == tempProcessNode || gui.element.messagePopup.whoCallMe == tempStepNode || gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopAfterButton || gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopNowButton)
             {
                 LV_LOG_USER("Cancel delete element!");
+                lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
+                lv_msgbox_close(mboxCont);
+                lv_obj_delete(mboxCont);
+                gui.element.messagePopup.mBoxPopupParent = NULL;
+            }
+            if(gui.element.messagePopup.whoCallMe == &gui){
+                LV_LOG_USER("Cancel delete all process!");
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
                 lv_obj_delete(mboxCont);

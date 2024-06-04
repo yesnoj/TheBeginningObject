@@ -1,3 +1,4 @@
+#include "misc/lv_event.h"
 /**
  * @file page_menu.c
  *
@@ -14,14 +15,15 @@ extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
-#define TAB_PROCESSES 1
-#define TAB_SETTINGS  2
-#define TAB_TOOLS     3
-
-
 void event_tab_switch(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);
+  
+  if(gui.page.menu.newSelection == TAB_PROCESSES && code == LV_EVENT_LONG_PRESSED){
+      LV_LOG_USER("POPUP DELETE ALL PROCESSES");
+      messagePopupCreate(deleteAllProcessPopupTitle_text,deleteAllProcessPopupBody_text, deleteButton_text, stepDetailCancel_text, &gui);
+  }
+
 
   if(code == LV_EVENT_CLICKED) {
     if(gui.page.menu.newTabSelected == NULL && gui.page.menu.oldTabSelected == NULL){
@@ -92,6 +94,7 @@ void menu(void){
     lv_obj_set_pos(gui.page.menu.processesTab, 5, 7);                            
     lv_obj_set_size(gui.page.menu.processesTab, 130, 97);   
     lv_obj_add_event_cb(gui.page.menu.processesTab, event_tab_switch, LV_EVENT_CLICKED, gui.page.menu.processesTab);
+    lv_obj_add_event_cb(gui.page.menu.processesTab, event_tab_switch, LV_EVENT_LONG_PRESSED, gui.page.menu.processesTab);
     lv_obj_set_style_border_color(gui.page.menu.processesTab, lv_color_hex(GREY), 0);
     lv_obj_set_style_border_opa(gui.page.menu.processesTab, LV_OPA_50, 0);
     lv_obj_remove_flag(gui.page.menu.processesTab, LV_OBJ_FLAG_SCROLLABLE);      

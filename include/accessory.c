@@ -110,7 +110,7 @@ void event_keyboard(lv_event_t* e)
   lv_obj_t * mboxCont = (lv_obj_t *)lv_obj_get_parent(objCont);
   lv_obj_t * mboxParent = (lv_obj_t *)lv_obj_get_parent(mboxCont);
   lv_obj_t * godFatherCont = (lv_obj_t *)lv_obj_get_parent(mboxParent);
-  const char * data = (const char*)lv_event_get_user_data(e);
+  lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
 
    if(code == LV_EVENT_CLICKED){ 
       if(obj == gui.element.filterPopup.mBoxNameTextArea){
@@ -171,7 +171,7 @@ void event_keyboard(lv_event_t* e)
               LV_LOG_USER("Press ok from filterPopup.mBoxFilterPopupParent");
               lv_textarea_set_text(gui.element.filterPopup.mBoxNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
               gui.element.filterPopup.filterName = lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea);
-          
+              
               hideKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
             }
             if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempProcessNode->process.processDetails->processDetailNameTextArea){

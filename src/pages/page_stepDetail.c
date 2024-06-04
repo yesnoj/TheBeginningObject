@@ -33,14 +33,14 @@ void event_stepDetail(lv_event_t * e)
       LV_LOG_USER("Pressed stepSaveButton");
       newStep->step.stepDetails->stepNameString = lv_textarea_get_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea);
 
-                if(addStepElement(newStep, data) != NULL){
-                    LV_LOG_USER("Step %p element created!Now process %p has n: %d steps",newStep,data, ((processNode *)data)->process.processDetails->stepElementsList.size);
-                    stepElementCreate(newStep , data , -1);
-                    //lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
-                }
-                else{
-                    LV_LOG_USER("Step element creation failed, maximum entries reached" );
-                }
+      if(addStepElement(newStep, data) != NULL){
+          LV_LOG_USER("Step %p element created!Now process %p has n: %d steps",newStep,data, ((processNode *)data)->process.processDetails->stepElementsList.size);
+          stepElementCreate(newStep , data , -1);
+          //lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
+      }
+      else{
+          LV_LOG_USER("Step element creation failed, maximum entries reached" );
+      }
 
       data->process.processDetails->somethingChanged = 1;
       lv_obj_send_event(data->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
