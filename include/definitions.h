@@ -7,6 +7,8 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+#include "FreeRTOS.h"
+#include "semphr.h"
 /*********************
 *LovyanGFX Parameters 
 *********************/
@@ -477,7 +479,7 @@ typedef struct sProcessDetail {
     uint8_t            isTempControlled;
     uint8_t            isPreferred;
     uint8_t            somethingChanged;
-    filmType_t           filmType;
+    filmType_t          filmType;
     uint8_t            timeMins;
     uint8_t            timeSecs;
 }sProcessDetail;
@@ -812,12 +814,18 @@ struct sPages {
 struct gui_components {
 	struct sElements	element;
 	struct sPages		  page;
+  QueueHandle_t			sysActionQ;
 };
 
 
 /*********************
 * GLOBAL DEFINES
 *********************/
+
+/*********************
+* System manager defines
+*********************/
+#define SAVE_PROCESS_CONFIG   0x0001
 
 LV_FONT_DECLARE(FilMachineFontIcons_15);
 LV_FONT_DECLARE(FilMachineFontIcons_20);
@@ -1159,7 +1167,6 @@ unsigned long actualMillis;
 processNode	* tempProcessNode;
 stepNode	  * tempStepNode;
 
-lv_obj_t    *fakeObjectForSave;
 extern uint8_t initErrors;
 char formatted_string[20];
 
@@ -1239,6 +1246,7 @@ void tools(void);
 
 
 // @file accessory.c
+uint8_t qSysAction( uint16_t msg );
 lv_obj_t * create_radiobutton(lv_obj_t * mBoxParent, const char * txt, const int32_t x, const int32_t y, const int32_t size, const lv_font_t * font, const lv_color_t borderColor, const lv_color_t bgColor);
 lv_obj_t * create_text(lv_obj_t * parent, const char * icon, const char * txt);
 lv_obj_t * create_slider(lv_obj_t * parent, const char * icon, const char * txt, int32_t min, int32_t max,int32_t val);
@@ -1273,7 +1281,7 @@ void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* 
 void my_touchpad_read(lv_indev_t* dev, lv_indev_data_t* data);
 
 //@file THeBeginningObject.ino
-void eventSave(lv_event_t * e);
+//void eventSave(lv_event_t * e);
 
 extern void (*rebootBoard)(void);
 #ifdef __cplusplus

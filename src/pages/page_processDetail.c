@@ -80,12 +80,12 @@ void event_processDetail(lv_event_t * e)
           if(addProcessElement(newProcess) != NULL){
              LV_LOG_USER("Process not present yet, let's create!");
              processElementCreate(newProcess);
-             lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
+             qSysAction( SAVE_PROCESS_CONFIG );
           }    
             else{
                   LV_LOG_USER("Process element creation failed, maximum entries reached" );
             }
-        lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
+          qSysAction( SAVE_PROCESS_CONFIG );
         updateProcessElement(newProcess);
         LV_LOG_USER("Pressed processSaveButton");
     }
@@ -326,7 +326,7 @@ if(existingProcess != NULL) {
                           lv_obj_align(newProcess->process.processDetails->processTempTextArea, LV_ALIGN_LEFT_MID, 100, 0);
                           lv_obj_set_width(newProcess->process.processDetails->processTempTextArea, 60);
                           lv_obj_add_event_cb(newProcess->process.processDetails->processTempTextArea, event_processDetail, LV_EVENT_ALL, newProcess->process.processDetails->processTempTextArea);
-                          lv_obj_add_state(newProcess->process.processDetails->processTempTextArea, LV_STATE_FOCUSED);
+//                          lv_obj_add_state(newProcess->process.processDetails->processTempTextArea, LV_STATE_FOCUSED);
                           lv_obj_set_style_bg_color(newProcess->process.processDetails->processTempTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                           lv_obj_set_style_text_align(newProcess->process.processDetails->processTempTextArea , LV_TEXT_ALIGN_CENTER, 0);
                           lv_style_set_text_font(&newProcess->process.processDetails->textAreaStyle, &lv_font_montserrat_18);
@@ -368,7 +368,7 @@ if(existingProcess != NULL) {
                           lv_obj_set_width(newProcess->process.processDetails->processToleranceTextArea, 60);
 
                           lv_obj_add_event_cb(newProcess->process.processDetails->processToleranceTextArea, event_processDetail, LV_EVENT_ALL, newProcess->process.processDetails->processToleranceTextArea);
-                          lv_obj_add_state(newProcess->process.processDetails->processToleranceTextArea, LV_STATE_FOCUSED);
+//                          lv_obj_add_state(newProcess->process.processDetails->processToleranceTextArea, LV_STATE_FOCUSED);
                           lv_obj_set_style_bg_color(newProcess->process.processDetails->processToleranceTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                           lv_obj_set_style_text_align(newProcess->process.processDetails->processToleranceTextArea , LV_TEXT_ALIGN_CENTER, 0);
                           lv_style_set_text_font(&newProcess->process.processDetails->textAreaStyle, &lv_font_montserrat_18);

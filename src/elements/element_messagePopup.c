@@ -105,7 +105,7 @@ void event_messagePopup(lv_event_t *e)
                   LV_LOG_USER("Delete ALL PROCESS!");
                   gui.page.processes.processElementsList.start = NULL;
                   lv_obj_clean(gui.page.processes.processesListContainer);
-                  lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
+                  qSysAction( SAVE_PROCESS_CONFIG );
                 }else {
                     LV_LOG_USER("Processes already empty");
                 }

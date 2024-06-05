@@ -33,7 +33,7 @@ void event_filterMBox(lv_event_t * e){
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectColorRadioButton, LV_STATE_CHECKED);
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectBnWRadioButton, LV_STATE_CHECKED);
           lv_obj_remove_state(gui.element.filterPopup.mBoxOnlyPreferredSwitch, LV_STATE_CHECKED);
-          lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
+          qSysAction( SAVE_PROCESS_CONFIG );
         }
         if(obj == gui.element.filterPopup.mBoxResetFilterButton){
           LV_LOG_USER("Reset BUTTON");
@@ -46,7 +46,7 @@ void event_filterMBox(lv_event_t * e){
           gui.element.filterPopup.isBnWFilter = 0;
           gui.element.filterPopup.preferredOnly = 0;
           gui.element.filterPopup.filterName = "";
-          lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
+          qSysAction( SAVE_PROCESS_CONFIG );
         }
       }
   }
@@ -61,14 +61,14 @@ void event_filterMBox(lv_event_t * e){
           LV_LOG_USER("State bnw: %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
           gui.element.filterPopup.isBnWFilter = lv_obj_has_state(obj, LV_STATE_CHECKED);
           }
-        lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
+          qSysAction( SAVE_PROCESS_CONFIG );
       }
     }
   if(obj == gui.element.filterPopup.mBoxOnlyPreferredSwitch){
     if(code == LV_EVENT_VALUE_CHANGED) {
         LV_LOG_USER("State preferred: %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
         gui.element.filterPopup.preferredOnly = lv_obj_has_state(obj, LV_STATE_CHECKED);  
-        lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
+        qSysAction( SAVE_PROCESS_CONFIG );
       }
     }
 }
