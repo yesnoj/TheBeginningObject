@@ -30,6 +30,12 @@ struct gui_components	gui;
 extern LGFX lcd;
 void (*rebootBoard)(void) = 0;
 
+/* Put a system request in the queue returns true if succesful false if queue is full */
+uint8_t qSysAction( uint16_t msg ) {
+  
+  return xQueueSend( gui.sysActionQ, &msg, 0 );
+}
+
 void event_cb(lv_event_t * e)
 {
   lv_event_code_t code = lv_event_get_code(e);

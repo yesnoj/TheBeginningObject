@@ -33,7 +33,7 @@ void event_Roller(lv_event_t * e)
               lv_msgbox_close(godFatherCont);
               lv_obj_delete(godFatherCont);
               gui.page.settings.settingsParams.calibratedTemp = rollerSelected;  
-              lv_obj_send_event(fakeObjectForSave, LV_EVENT_REFRESH, NULL);
+              qSysAction( SAVE_PROCESS_CONFIG );
               return;   
             }
             if((lv_obj_t *)data == tempProcessNode->process.processDetails->processTempTextArea){
