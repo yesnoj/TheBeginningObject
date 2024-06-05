@@ -30,7 +30,6 @@ void event_btn_start(lv_event_t * e)
 
 void homePage(void)
 {
-    init_globals();
 
     lv_obj_del(lv_screen_active());
 
@@ -64,13 +63,27 @@ void homePage(void)
           lv_obj_set_style_border_opa(gui.page.home.startButton, LV_OPA_TRANSP, 0);
 
           gui.page.home.errorButtonLabel = lv_label_create(gui.page.home.startButton);         
-          lv_label_set_text(gui.page.home.errorButtonLabel, sdCard_icon);
           lv_obj_set_style_text_font(gui.page.home.errorButtonLabel, &FilMachineFontIcons_100, 0);              
           lv_obj_align(gui.page.home.errorButtonLabel, LV_ALIGN_CENTER, 0, 0);
           
           gui.page.home.errorLabel = lv_label_create(gui.page.home.screen_home);
-          lv_obj_align(gui.page.home.errorLabel, LV_ALIGN_CENTER, 0 , 90);     
-          lv_label_set_text(gui.page.home.errorLabel, initError_text); 
+          lv_obj_align(gui.page.home.errorLabel, LV_ALIGN_CENTER, 0 , 90); 
+
+          if(initErrors == INIT_ERROR_SD)
+          {
+            lv_label_set_text(gui.page.home.errorButtonLabel, sdCard_icon);
+            lv_label_set_text(gui.page.home.errorLabel, initSDError_text);
+          }   
+          if(initErrors == INIT_ERROR_WIRE)
+          {
+            lv_label_set_text(gui.page.home.errorButtonLabel, alert_icon);
+            lv_label_set_text(gui.page.home.errorLabel, initWIREError_text);
+          }  
+          if(initErrors == INIT_ERROR_I2C)
+          {
+            lv_label_set_text(gui.page.home.errorButtonLabel, chip_icon);
+            lv_label_set_text(gui.page.home.errorLabel, initI2CError_text);
+          }  
           lv_obj_set_style_text_font(gui.page.home.errorLabel, &lv_font_montserrat_20, 0);              
           lv_obj_set_style_text_align(gui.page.home.errorLabel , LV_TEXT_ALIGN_CENTER, 0);
 

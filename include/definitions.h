@@ -7,11 +7,46 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+<<<<<<< Updated upstream
 #include "FreeRTOS.h"
 #include "semphr.h"
+=======
+#include <OneWire.h>
+
+// PINS/RELAY DEFINITIONS 
+
+//Digital input for relays
+#define RELAY_NUMBER    8
+
+#define WATER_RLY       0
+#define DEV_RLY         1
+#define STOP_RLY        2
+#define FIX_RLY         3
+#define WASTE_RLY       4
+#define PUMP_IN_RLY     5
+#define PUMP_OUT_RLY    6
+#define HEATER_RLY      7
+
+
+//MOTORS PIN
+#define MOTOR_PIN_NUMBER 3
+#define MAX_MOTOR_SPD 200 //need to be tested, but is max 255
+
+#define MOTOR_ENA_PIN  8
+#define MOTOR_IN1_PIN  9
+#define MOTOR_IN2_PIN  10
+
+
+//TEMPERATURE SENSOR PIN
+#define TEMPERATURE_CHEMICAL_PIN 11
+#define TEMPERATURE_BATH_PIN     12
+
+#define TEST_PIN 15
+>>>>>>> Stashed changes
 /*********************
 *LovyanGFX Parameters 
 *********************/
+
 
 /*Set to your screen resolution*/
 #define TFT_WIDTH   320
@@ -70,6 +105,13 @@
 
 #define LGFX_USE_V1
 #include <LovyanGFX.hpp>
+#include <Adafruit_MCP23X17.h>
+#include "Adafruit_SHT31.h"
+
+Adafruit_MCP23X17 mcp;
+Adafruit_SHT31 sensorTempBath     = Adafruit_SHT31();
+Adafruit_SHT31 sensorTempChemical = Adafruit_SHT31();
+
 
 class LGFX : public lgfx::LGFX_Device
 {
@@ -835,6 +877,7 @@ LV_FONT_DECLARE(FilMachineFontIcons_100);
 
 LV_IMG_DECLARE(splash_img);
 
+
 #define TAB_PROCESSES 1
 #define TAB_SETTINGS  2
 #define TAB_TOOLS     3
@@ -935,12 +978,18 @@ LV_IMG_DECLARE(splash_img);
 #define arrowStep_icon      "\xEF\x81\xA1"
 #define dotStep_icon        "\xEF\x86\x92"
 #define clock_icon          "\xEF\x80\x97"
-#define bomb_icon           "\xEF\x8B\x9B" //never used, to add into font.c file in case need to be used
-#define alert_icon          "\xEF\x81\xAA" //never used, to add into font.c file in case need to be used
+#define chip_icon           "\xEF\x8B\x9B"
+#define alert_icon          "\xEF\x81\xAA"
 #define sdCard_icon         "\xEF\x9F\x82"
 #define discardAfter_icon   "\xEF\x8B\xB5"
 
-#define initError_text "INITIALIZATION ERROR!\nSD-CARD MISSING!\nINSERT SD-CARD!\nTHEN CLICK ON ICON TO REBOOT!"
+#define INIT_ERROR_SD   1
+#define INIT_ERROR_WIRE 2
+#define INIT_ERROR_I2C  3
+
+#define initSDError_text "INITIALIZATION ERROR!\nSD-CARD FAILURE!\nFIX SD-CARD!\nTHEN CLICK ON ICON TO REBOOT!"
+#define initI2CError_text "INITIALIZATION ERROR!\nI2C MODULE FAILURE\nFIX IT!\nTHEN CLICK ON ICON TO REBOOT!"
+#define initWIREError_text "INITIALIZATION ERROR!\nINIT WIRE FAILURE\nFIX IT!\nTHEN CLICK ON ICON TO REBOOT!"
 
 /*********************
 * Process tab strings
@@ -1153,22 +1202,49 @@ lv_obj_t * checkupTankSizeTextArea;
 #define checkupChemistryLowVol_text 	"Low"
 #define checkupChemistryHighVol_text 	"High"
 
-//SPIClass SD_SPI;
-
 //Test long string
 #define testLongString "Cantami, o diva, del Pelìde Achille l'ira funesta che infiniti addusse lutti agli achei , molte anzi tempo all'orco generose travolse alme d'eroi, e di cani e d'augelli orrido pasto lor salme abbandonò (così di giove l'alto consiglio s'adempia ) , da quando primamente disgiunse aspra contesa il re de' prodi Atride e il divo Achille."
-
-unsigned long actualMillis;
-
-
-// NEW OLD GUI APPROACH, NEED TO BE REMOVED...
-
 
 processNode	* tempProcessNode;
 stepNode	  * tempStepNode;
 
 extern uint8_t initErrors;
 char formatted_string[20];
+
+//RELAY STUFF
+static const uint16_t developingRelays[RELAY_NUMBER] = {WATER_RLY,DEV_RLY,STOP_RLY,FIX_RLY,WASTE_RLY,PUMP_IN_RLY,PUMP_OUT_RLY,HEATER_RLY};
+
+//MOTOR STUFF
+static bool rotationFW = true;
+long motorIntervalTime;
+uint8_t motorIntervalRotation;
+static const uint8_t motorIntervalRotationDefault = 10;
+
+uint8_t motorSpeed;
+static const uint8_t motorSpeedDefault = 200;
+
+static const uint16_t MotorPins[MOTOR_PIN_NUMBER] = {MOTOR_ENA_PIN,MOTOR_IN1_PIN,MOTOR_IN2_PIN};
+
+//TEMPERATURE STUFF
+static uint16_t timerReadTemp = 5000;
+static long tempActualTime = 0;
+static long tempTempTime = 0;
+static int8_t tempValueCheck;
+static uint8_t tempSensorResolution = 10;
+static bool tempChemicalSensorAvailable = false;
+static bool tempBathSensorAvailable = false;
+static const float tempTolerance = 0.5;
+static bool firstTimeInTemp = true;
+
+static const uint8_t fahrenheitOffset = 32;
+static const float lowestTemp = 16.0;
+static const float stepTemp = 0.5;
+static const float initialTemp = 20.0;
+static float manualTemp = initialTemp;
+static float DevTemp;
+static float Temp_Bath;
+static float Temp_Chemical;
+static bool  tempReached = false;
 
 /*********************
 * ELEMENTS Function Prototypes
@@ -1265,8 +1341,9 @@ void create_keyboard();
 void showKeyboard(lv_obj_t * whoCallMe);
 void hideKeyboard(lv_obj_t * whoCallMe);
 char *createRollerValues( uint32_t maxVal, const char* extra_str );
-int SD_init();
-void initSD_I2C();
+uint8_t SD_init();
+void initSD_I2C_MCP23017();
+void initMCP23017Pins();
 
 void calcolateTotalTime(processNode *processNode);
 uint8_t calcolatePercentage(uint32_t minutes, uint8_t seconds, uint32_t total_minutes, uint8_t total_seconds);
@@ -1275,6 +1352,22 @@ void updateProcessElement(processNode *process);
 void updateStepElement(processNode *referenceProcess, stepNode *step);
 uint32_t loadSDCardProcesses();
 char * generateRandomCharArray(int length);
+
+void initializeRelayPins();
+void sendValueToRelay(uint16_t pumpFrom, uint16_t pumpDir); 
+void initializeMotorPins();
+void stopMotor(uint8_t pin1, uint8_t pin2);
+void runMotorFW(uint8_t pin1, uint8_t pin2);
+void runMotorRV(uint8_t pin1, uint8_t pin2);
+void setMotorSpeedFast(uint8_t pin,uint8_t spd);
+void setMotorSpeedUp(uint8_t pin, uint8_t spd);
+void setMotorSpeedDown(uint8_t pin, uint8_t spd);
+void enableMotor(uint8_t pin);
+void testPin(uint8_t pin);
+//float getTemperature(DeviceAddress sensor);
+void initializeTemperatureSensor();
+void printTemperature(float temp);
+//char* printAddressSensor(DeviceAddress deviceAddress);
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);

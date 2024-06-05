@@ -1,3 +1,4 @@
+#include <sys/_stdint.h>
 #include "core/lv_obj.h"
 #include "misc/lv_event.h"
 #include "lv_api_map_v8.h"
@@ -17,6 +18,7 @@
 #include <FS.h>
 #include <SPI.h>
 #include <Wire.h>
+
 /**********************
  *      MACROS
  **********************/
@@ -25,7 +27,7 @@
 #define GREATER_THAN_9 2
 #define GREATER_THAN_99 3
 
-struct gui_components	gui;
+struct gui_components   gui;
 
 extern LGFX lcd;
 void (*rebootBoard)(void) = 0;
@@ -54,26 +56,26 @@ void event_cb(lv_event_t * e)
 
 lv_obj_t * create_radiobutton(lv_obj_t * mBoxParent, const char * txt, const int32_t x, const int32_t y, const int32_t size, const lv_font_t * font, const lv_color_t borderColor, const lv_color_t bgColor)
 {
-	lv_obj_t * obj = (lv_obj_t *)lv_checkbox_create(mBoxParent);
+    lv_obj_t * obj = (lv_obj_t *)lv_checkbox_create(mBoxParent);
   lv_obj_add_flag(obj, LV_OBJ_FLAG_EVENT_BUBBLE);
-	lv_obj_set_style_text_font(obj, font, LV_PART_MAIN);
-	lv_checkbox_set_text(obj, txt);
-	lv_obj_align(obj, LV_ALIGN_RIGHT_MID, x, y);
+    lv_obj_set_style_text_font(obj, font, LV_PART_MAIN);
+    lv_checkbox_set_text(obj, txt);
+    lv_obj_align(obj, LV_ALIGN_RIGHT_MID, x, y);
 
 
-	lv_coord_t font_h = lv_font_get_line_height(font);
-	lv_coord_t pad = (size - font_h) / 2;
-	lv_obj_set_style_pad_left(obj, pad, LV_PART_INDICATOR);
-	lv_obj_set_style_pad_right(obj, pad, LV_PART_INDICATOR);
-	lv_obj_set_style_pad_top(obj, pad, LV_PART_INDICATOR);
-	lv_obj_set_style_pad_bottom(obj, pad, LV_PART_INDICATOR);
+    lv_coord_t font_h = lv_font_get_line_height(font);
+    lv_coord_t pad = (size - font_h) / 2;
+    lv_obj_set_style_pad_left(obj, pad, LV_PART_INDICATOR);
+    lv_obj_set_style_pad_right(obj, pad, LV_PART_INDICATOR);
+    lv_obj_set_style_pad_top(obj, pad, LV_PART_INDICATOR);
+    lv_obj_set_style_pad_bottom(obj, pad, LV_PART_INDICATOR);
 
   lv_obj_set_style_border_color(obj, borderColor, LV_PART_INDICATOR | LV_STATE_DEFAULT);
   lv_obj_set_style_border_color(obj, borderColor, LV_PART_INDICATOR | LV_STATE_CHECKED);
   lv_obj_set_style_bg_color(obj, bgColor, LV_PART_INDICATOR | LV_STATE_CHECKED);
 
-	lv_obj_update_layout(obj);
-	return obj;
+    lv_obj_update_layout(obj);
+    return obj;
 }
 
 void createMessageBox(lv_obj_t * messageBox,char *title, char *text, char *button1Text, char *button2Text)
@@ -460,7 +462,7 @@ void* isNodeInList(void* list, void* node, NodeType_t type) {
 
 void init_globals( void ) {
   // Initialise the main GUI structure to zero
-	memset(&gui, 0, sizeof(gui));		
+  memset(&gui, 0, sizeof(gui));       
   
   gui.page.processes.processElementsList.start = NULL;
   gui.page.processes.processElementsList.end   = NULL;
@@ -479,6 +481,12 @@ void init_globals( void ) {
   gui.element.rollerPopup.minutesOptions = createRollerValues(0,240,"");
   gui.element.rollerPopup.secondsOptions = createRollerValues(0,60,""); 
   gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(0,5,"0.");
+
+  gui.element.filterPopup.filterName = "";
+  gui.element.filterPopup.isColorFilter = FILM_TYPE_NA;
+  gui.element.filterPopup.isBnWFilter = FILM_TYPE_NA;
+  gui.element.filterPopup.isBnWFilter = 0;
+  gui.element.filterPopup.preferredOnly = 0;
 
   tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
   tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);  
@@ -536,7 +544,7 @@ void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* 
 }
 
 
-int SD_init()
+uint8_t SD_init()
 {
     if (!SD.begin(SD_CS))
     {
@@ -577,39 +585,69 @@ int SD_init()
     return 0;
 }
 
+void createFile(fs::FS &fs, const char *path)
+{
+    LV_LOG_USER("Checking for file: %s", path);
 
-void initSD_I2C(){
-  if (SD_init())
+    // Controlla se il file esiste
+    if (!fs.exists(path))
     {
-        initErrors += 1;
-        LV_LOG_USER("ERROR:   SD initErrors %d",initErrors);
+        LV_LOG_USER("File does not exist, creating file: %s", path);
+
+        // Crea il file se non esiste
+        File file = fs.open(path, FILE_WRITE);
+        if (!file)
+        {
+            LV_LOG_USER("Failed to create file");
+            return;
+        }
+        file.close(); // Chiudi subito dopo la creazione per assicurarti che il file esista
     }
     else
-        LV_LOG_USER("SD INIT OVER initErrors %d",initErrors);
-
-    //I2C init
-    Wire.begin(I2C_SDA, I2C_SCL);
-    Wire.beginTransmission(I2C_ADR);
-
-    if (Wire.endTransmission() == 0)
     {
-        LV_LOG_USER("I2C device found at address 0x%x! TOUCH INIT OVER",I2C_ADR);
+        LV_LOG_USER("File already exists: %s", path);
     }
-    else
-    {
-        initErrors += 1;
-        LV_LOG_USER("Unknown error at address 0x%x ERROR:   TOUCH",I2C_ADR);
-    }
-
-    lcd.setCursor(0, 64);
-    if (initErrors)
-    {
-
-        LV_LOG_USER("SOMETHING WRONG initErrors %d",initErrors);
-    }
-    else
-        LV_LOG_USER("ALL SUCCESS initErrors %d",initErrors);
 }
+
+void initSD_I2C_MCP23017() {
+  if (SD_init()) {
+    initErrors = INIT_ERROR_SD;
+    LV_LOG_USER("ERROR:   SD initErrors %d", initErrors);
+  } else{
+    createFile(SD, FILENAME_SAVE);
+    LV_LOG_USER("SD INIT OVER initErrors %d", initErrors);
+    }
+
+  //I2C init
+  Wire.begin(I2C_SDA, I2C_SCL);
+  Wire.beginTransmission(I2C_ADR);
+
+  if (Wire.endTransmission() == 0) {
+    LV_LOG_USER("I2C device found at address 0x%x! TOUCH INIT OVER", I2C_ADR);
+  } else {
+    initErrors = INIT_ERROR_WIRE;
+    LV_LOG_USER("Unknown error at address 0x%x ERROR:   TOUCH", I2C_ADR);
+  }
+
+
+  if (!mcp.begin_I2C()) {
+    LV_LOG_USER("MCP23017 init ERROR!");
+    initErrors = INIT_ERROR_I2C;
+  } else {
+      LV_LOG_USER("MCP23017 init OK!");
+      initializeRelayPins();
+      initializeMotorPins();
+      initializeTemperatureSensor();
+  }
+
+  if (initErrors) {
+
+    LV_LOG_USER("SOMETHING WRONG initErrors %d", initErrors);
+  } else{
+    LV_LOG_USER("ALL SUCCESS initErrors %d", initErrors);
+  }
+}
+
 
 
 machineSettings readJSONFile(fs::FS &fs, const char *filename, machineSettings &settings) {
@@ -868,11 +906,11 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
         JsonObject Processes = doc.createNestedObject("Processes");
         
         const processList *processElementsList;
-        memset( &processElementsList, 0, sizeof( processElementsList ) );	
+        memset( &processElementsList, 0, sizeof( processElementsList ) );   
         processElementsList = &(gui.page.processes.processElementsList);
 
         processNode *currentProcessNode;
-        memset( &currentProcessNode, 0, sizeof( currentProcessNode ) );	
+        memset( &currentProcessNode, 0, sizeof( currentProcessNode ) ); 
         currentProcessNode = processElementsList->start;
 
         while(currentProcessNode != NULL){
@@ -898,11 +936,11 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
             LV_LOG_USER("timeSecs:%d",currentProcessNode->process.processDetails->timeSecs);
 
             stepList *stepElementsList;
-            memset( &stepElementsList, 0, sizeof( stepElementsList ) );	
+            memset( &stepElementsList, 0, sizeof( stepElementsList ) ); 
             stepElementsList = &(currentProcessNode->process.processDetails->stepElementsList);   
 
             stepNode *currentStepNode;
-            memset( &currentStepNode, 0, sizeof( currentStepNode ) );	
+            memset( &currentStepNode, 0, sizeof( currentStepNode ) );   
             currentStepNode = stepElementsList->start;
 
             processCounter++;
@@ -987,11 +1025,11 @@ void calcolateTotalTime(processNode *processNode){
     uint8_t  secs = 0;
 
      stepList *stepElementsList;
-     memset( &stepElementsList, 0, sizeof( stepElementsList ) );	
+     memset( &stepElementsList, 0, sizeof( stepElementsList ) );    
      stepElementsList = &(processNode->process.processDetails->stepElementsList);   
 
             stepNode *stepNode;
-            memset( &stepNode, 0, sizeof( stepNode ) );	
+            memset( &stepNode, 0, sizeof( stepNode ) ); 
             stepNode = stepElementsList->start;
 
             while(stepNode != NULL){                
@@ -1127,6 +1165,126 @@ char* generateRandomCharArray(int length) {
   return randomArray;
 }
 
+void initializeRelayPins(){
+  for (uint8_t i = 0; i < RELAY_NUMBER ; i++) {
+        mcp.pinMode(developingRelays[i], OUTPUT);
+        mcp.digitalWrite(developingRelays[i], LOW);
+        LV_LOG_USER("Relay Initialization %d : %d", developingRelays[i],mcp.digitalRead(developingRelays[i]));
+        }
+  }
+
+
+void sendValueToRelay(uint16_t pumpFrom, uint16_t pumpDir){
+  
+  uint16_t relayPump[] = {pumpFrom,pumpDir};
+
+  //SET TO ON SELECTED RELAYS
+  if(pumpFrom > 0 && pumpDir > 0)  {
+      for (uint8_t j = 0; j < 2; j++){
+          mcp.digitalWrite(relayPump[j], HIGH);
+          LV_LOG_USER("Relay %d on : %d",relayPump[j],mcp.digitalRead(relayPump[j]));
+          }
+    }
+  else {//SET TO OFF ALL THE RELAY
+    for (uint8_t i = 0; i < RELAY_NUMBER; i++) {
+          mcp.digitalWrite(developingRelays[i] , LOW);
+          LV_LOG_USER("Relay %d off : %d",developingRelays[i],mcp.digitalRead(developingRelays[i]));
+    }
+  }
+}
+
+
+void initializeMotorPins(){
+  for (uint8_t i = 0; i < MOTOR_PIN_NUMBER; i++) {
+        mcp.pinMode(MotorPins[i] , OUTPUT);
+        mcp.digitalWrite(MotorPins[i] , LOW);
+        LV_LOG_USER("Motor Pin Initialization %d: %d",MotorPins[i],mcp.digitalRead(MotorPins[i]));
+        }
+
+  stopMotor(MOTOR_IN1_PIN,MOTOR_IN2_PIN);
+  enableMotor(MOTOR_ENA_PIN);
+}
+
+void stopMotor(uint8_t pin1, uint8_t pin2){
+  mcp.digitalWrite(pin1, LOW);
+  mcp.digitalWrite(pin2, LOW);
+  LV_LOG_USER("Run stopMotor");
+}
+
+void runMotorFW(uint8_t pin1, uint8_t pin2){
+  mcp.digitalWrite(pin1, HIGH);
+  mcp.digitalWrite(pin2, LOW);
+  LV_LOG_USER("Run runMotorFW");
+}
+
+void runMotorRV(uint8_t pin1, uint8_t pin2){
+  mcp.digitalWrite(pin1, LOW);
+  mcp.digitalWrite(pin2, HIGH);
+  LV_LOG_USER("Run runMotorRV");
+}
+
+void setMotorSpeedFast(uint8_t pin,uint8_t spd){//max 255
+  //analogWrite(pin, spd);
+  LV_LOG_USER("Set motor speed: %d",spd);
+}
+
+void setMotorSpeedUp(uint8_t pin, uint8_t spd){//max 255
+  for(int i = 0; i <= spd; i++){
+    //analogWrite(pin, i);
+    delay(10);
+  }
+  LV_LOG_USER("Increase speed to: %d",spd);
+}
+
+void setMotorSpeedDown(uint8_t pin, uint8_t spd){
+  for(int i = spd; i >= 0; --i){
+    //analogWrite(pin, i);
+    delay(10);
+  }
+  LV_LOG_USER("Decrease speed to: %d",spd);
+}
+
+void enableMotor(uint8_t pin){
+  mcp.digitalWrite(pin, HIGH);
+  LV_LOG_USER("Run enableMotor");
+}
+
+
+
+//++++++++++++++++ READ TEMPERATURE SENSOR METHODS ++++++++++++++++
+
+
+
+void initializeTemperatureSensor()
+{
+  if (!sensorTempBath.begin(TEMPERATURE_BATH_PIN)) {   // Indirizzo I2C del SHT30
+    LV_LOG_USER("Could not find a valid sensorTempBath sensor, check wiring!");
+  }
+  if (!sensorTempChemical.begin(TEMPERATURE_CHEMICAL_PIN)) {   // Indirizzo I2C del SHT30
+    LV_LOG_USER("Could not find a valid sensorTempBath sensor, check wiring!");
+  }
+}
+
+float getTemperature(Adafruit_SHT31 tempSensor){
+  float tempC = tempSensor.readTemperature();
+  float tempF = (tempC * 9.0 / 5.0) + 32.0;
+
+  if (!isnan(tempC)) {  // Controlla se la lettura è valida
+    LV_LOG_USER("Temp *C = %f | Temp *F = %f",tempC, tempF);
+  } else {
+    Serial.println("Failed to read temperature");
+  }
+}
+
+
+void testPin(uint8_t pin){
+    mcp.digitalWrite(pin, HIGH);
+    delay(500);
+    mcp.digitalWrite(pin, LOW);
+    delay(500);
+}
+
+
 /*
 
 void listDir(fs::FS &fs, const char *dirname, uint8_t levels)
@@ -1187,26 +1345,6 @@ void readFile(fs::FS &fs, const char *path)
     file.close();
 }
 
-void writeFile(fs::FS &fs, const char *path, const char *message)
-{
-    LV_LOG_USER("Writing file: %s", path);
-
-    File file = fs.open(path, FILE_WRITE);
-    if (!file)
-    {
-        LV_LOG_USER("Failed to open file for writing");
-        return;
-    }
-    if (file.print(message))
-    {
-        LV_LOG_USER("File written");
-    }
-    else
-    {
-        LV_LOG_USER("Write failed");
-    }
-    file.close();
-}
 
 void appendFile(fs::FS &fs, const char *path, const char *message)
 {

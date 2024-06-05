@@ -4,8 +4,6 @@
 
 #include <lvgl.h>
 #include <driver/i2c.h>
-#include <OneWire.h>
-#include <DallasTemperature.h>
 
 #include "SD.h"
 #include "SPI.h"
@@ -20,6 +18,10 @@ LGFX lcd;
 
 uint8_t initErrors = 0;
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 /*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/
 const unsigned int lvBufferSize = (TFT_HOR_RES * TFT_VER_RES * 2) / 10;
 void *lvBuffer1 = malloc(lvBufferSize);
@@ -58,7 +60,7 @@ void setup()
 {
     Serial.begin(115200);
 
-    LV_LOG_USER("Hello Arduino! V%d.%d.%d",lv_version_major(),lv_version_minor(),lv_version_patch());
+    LV_LOG_USER("Hello FilMachine!This software use LVGL V%d.%d.%d",lv_version_major(),lv_version_minor(),lv_version_patch());
 
     pinMode(LCD_CS, OUTPUT);
     pinMode(LCD_BLK, OUTPUT);
@@ -92,12 +94,10 @@ void setup()
     lvInput = lv_indev_create();
     lv_indev_set_type(lvInput, LV_INDEV_TYPE_POINTER);
     lv_indev_set_read_cb(lvInput, my_touchpad_read);
-
-
-    actualMillis = millis();
     
- 
-    initSD_I2C();
+    init_globals();
+
+    initSD_I2C_MCP23017();
     homePage();
 
     /* Create System message queue */
@@ -118,6 +118,11 @@ void setup()
 void loop()
 {
     lv_task_handler(); /* let the GUI do its work */
+<<<<<<< Updated upstream
     delay(5);
+=======
+
+    //testPin(WATER_RLY);
+>>>>>>> Stashed changes
 }
 
