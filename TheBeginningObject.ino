@@ -18,10 +18,6 @@ LGFX lcd;
 
 uint8_t initErrors = 0;
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 /*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/
 const unsigned int lvBufferSize = (TFT_HOR_RES * TFT_VER_RES * 2) / 10;
 void *lvBuffer1 = malloc(lvBufferSize);
@@ -118,11 +114,7 @@ void setup()
 void loop()
 {
     lv_task_handler(); /* let the GUI do its work */
-<<<<<<< Updated upstream
     delay(5);
-=======
-
     //testPin(WATER_RLY);
->>>>>>> Stashed changes
 }
 

@@ -7,10 +7,8 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
-<<<<<<< Updated upstream
 #include "FreeRTOS.h"
 #include "semphr.h"
-=======
 #include <OneWire.h>
 
 // PINS/RELAY DEFINITIONS 
@@ -42,7 +40,6 @@
 #define TEMPERATURE_BATH_PIN     12
 
 #define TEST_PIN 15
->>>>>>> Stashed changes
 /*********************
 *LovyanGFX Parameters 
 *********************/
