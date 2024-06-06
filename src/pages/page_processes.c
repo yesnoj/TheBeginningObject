@@ -36,6 +36,10 @@ void event_tabProcesses(lv_event_t * e)
         }
         else{
           lv_textarea_set_text(gui.element.filterPopup.mBoxNameTextArea, "");
+          if( gui.element.filterPopup.filterName != NULL ) {
+            free( gui.element.filterPopup.filterName );
+            gui.element.filterPopup.filterName = NULL;
+          }
           lv_obj_remove_state(gui.element.filterPopup.mBoxOnlyPreferredSwitch, LV_STATE_CHECKED);
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectColorRadioButton, LV_STATE_CHECKED);
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectBnWRadioButton, LV_STATE_CHECKED);

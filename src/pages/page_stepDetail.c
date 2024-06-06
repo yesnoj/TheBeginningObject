@@ -31,7 +31,17 @@ void event_stepDetail(lv_event_t * e)
  if(code == LV_EVENT_CLICKED){
     if(obj == newStep->step.stepDetails->stepSaveButton){
       LV_LOG_USER("Pressed stepSaveButton");
-      newStep->step.stepDetails->stepNameString = lv_textarea_get_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea);
+
+      /*If step name has changed update it */
+      if( newStep->step.stepDetails->stepNameString == NULL ) { 
+        newStep->step.stepDetails->stepNameString = malloc(strlen(lv_textarea_get_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea))+1);
+        strcpy(newStep->step.stepDetails->stepNameString, lv_textarea_get_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea));
+      } else if(strcmp(newStep->step.stepDetails->stepNameString, lv_textarea_get_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea))) {
+        /* If the name has been previously allocated and now is different free and reallocate*/
+        free(newStep->step.stepDetails->stepNameString);
+        newStep->step.stepDetails->stepNameString = malloc(strlen(lv_textarea_get_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea))+1);
+        strcpy(newStep->step.stepDetails->stepNameString, lv_textarea_get_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea));
+      }
 
       if(addStepElement(newStep, data) != NULL){
           LV_LOG_USER("Step %p element created!Now process %p has n: %d steps",newStep,data, ((processNode *)data)->process.processDetails->stepElementsList.size);

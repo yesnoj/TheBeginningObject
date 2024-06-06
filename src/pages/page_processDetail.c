@@ -73,13 +73,21 @@ void event_processDetail(lv_event_t * e)
     }
     if(data == newProcess->process.processDetails->processSaveButton && newProcess->process.processDetails->stepElementsList.size > 0){
           newProcess->process.processDetails->somethingChanged = 0;
-          newProcess->process.processDetails->processNameString = lv_textarea_get_text(tempProcessNode->process.processDetails->processDetailNameTextArea);
+          /* If name changed update it */
+          if( newProcess->process.processDetails->processNameString == NULL ) {
+            newProcess->process.processDetails->processNameString = malloc(strlen(lv_textarea_get_text(tempProcessNode->process.processDetails->processDetailNameTextArea))+1);
+            strcpy( newProcess->process.processDetails->processNameString, lv_textarea_get_text(tempProcessNode->process.processDetails->processDetailNameTextArea));
+           } else if(strcmp(newProcess->process.processDetails->processNameString, lv_textarea_get_text(tempProcessNode->process.processDetails->processDetailNameTextArea))) {
+            free(newProcess->process.processDetails->processNameString);  // If already allocated free first
+            newProcess->process.processDetails->processNameString = malloc(strlen(lv_textarea_get_text(tempProcessNode->process.processDetails->processDetailNameTextArea))+1);
+            strcpy( newProcess->process.processDetails->processNameString, lv_textarea_get_text(tempProcessNode->process.processDetails->processDetailNameTextArea));
+          }
           lv_obj_clear_state(newProcess->process.processDetails->processRunButton, LV_STATE_DISABLED);
           lv_obj_add_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
 
           if(addProcessElement(newProcess) != NULL){
              LV_LOG_USER("Process not present yet, let's create!");
-             processElementCreate(newProcess);
+             processElementCreate(newProcess, -1);
              qSysAction( SAVE_PROCESS_CONFIG );
           }    
             else{
@@ -177,10 +185,10 @@ if(existingProcess != NULL) {
 
 } else {
     newProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
-    newProcess->process.processDetails->processNameString = "";
-    newProcess->process.processDetails->somethingChanged = 0;
+//    newProcess->process.processDetails->processNameString = "";   // Non richiesto
+//    newProcess->process.processDetails->somethingChanged = 0;     // Non richiesto
     newProcess->process.processDetails->filmType = FILM_TYPE_NA; 
-    newProcess->process.processDetails->temp = 0;
+//    newProcess->process.processDetails->temp = 0;                 // Non richiesto
 }
   newProcess->process.processDetails->processesContainer = processContainer;
 

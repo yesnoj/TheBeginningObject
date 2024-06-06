@@ -17,7 +17,7 @@ extern struct gui_components gui;
 /******************************
 *  LINKED LIST IMPLEMENTATION
 ******************************/
-  processNode *addProcessElement(processNode	*processToAdd) {
+processNode *addProcessElement(processNode	*processToAdd) {
 
 	if( gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS || isNodeInList((void*)&(gui.page.processes.processElementsList), processToAdd, PROCESS_NODE) != NULL) return NULL;		// Put some limit on things!
   
@@ -72,8 +72,15 @@ bool deleteProcessElement( processNode	*processToDelete ) {
 			if( adjust_y_ptr->next ) container_y_prev = container_y_new;
 			adjust_y_ptr = adjust_y_ptr->next;
 		}
+	  if(processToDelete->process.processDetails->stepElementsList.size > 0) {   // If there are steps defined free them too
+
+       while(processToDelete->process.processDetails->stepElementsList.start != NULL) {
+
+            deleteStepElement( processToDelete->process.processDetails->stepElementsList.start, processToDelete );
+      }
+    }
 		lv_obj_delete_async( processToDelete->process.processElement );			// Delete all LVGL objects associated with entry
-		free( processToDelete );												// Free the list entry itself
+  	free( processToDelete );												// Free the list entry itself
 		gui.page.processes.processElementsList.size--;
 
     LV_LOG_USER("Processes available %d steps",gui.page.processes.processElementsList.size); 
@@ -163,7 +170,7 @@ void event_processElement(lv_event_t * e){
 }
 
 
-void processElementCreate(processNode *newProcess) {
+void processElementCreate(processNode *newProcess, int32_t tempSize) {
 	if(newProcess->process.processStyle.values_and_props == NULL ) {		/* Only initialise the style once! */
 		lv_style_init(&newProcess->process.processStyle);
 
@@ -175,10 +182,12 @@ void processElementCreate(processNode *newProcess) {
 		lv_style_set_border_side(&newProcess->process.processStyle, LV_BORDER_SIDE_BOTTOM | LV_BORDER_SIDE_RIGHT);
 		LV_LOG_USER("First call to processElementCreate style now initialised");
 	}
-
+  int32_t positionIndex;
+  if(tempSize == -1) positionIndex = gui.page.processes.processElementsList.size; // New entry add to the end of the list
+    else positionIndex = tempSize; // Use the index position passed into the function
   LV_LOG_USER("Process size :%d",gui.page.processes.processElementsList.size);
 	newProcess->process.processElement = lv_obj_create(gui.page.processes.processesListContainer);
-	newProcess->process.container_y = -10 + ((gui.page.processes.processElementsList.size - 1) * 70);
+	newProcess->process.container_y = -10 + ((positionIndex - 1) * 70);
 	lv_obj_set_pos(newProcess->process.processElement, -10, newProcess->process.container_y);
 	lv_obj_set_size(newProcess->process.processElement, 315, 70);
 	lv_obj_remove_flag(newProcess->process.processElement, LV_OBJ_FLAG_SCROLLABLE);

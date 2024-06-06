@@ -9,7 +9,7 @@
 
 #include "FreeRTOS.h"
 #include "semphr.h"
-#include <OneWire.h>
+//#include <OneWire.h>
 
 // PINS/RELAY DEFINITIONS 
 
@@ -329,7 +329,7 @@ typedef struct sStepDetail {
 	/* Params objects */
 
 	processNode       *referenceProcess;  // Use a pointer instead of an instance
-    const char              *stepNameString;
+    char              *stepNameString;
     uint8_t           timeMins;
     uint8_t           timeSecs;
     chemicalType_t       type;
@@ -510,15 +510,15 @@ typedef struct sProcessDetail {
 	lv_obj_t			*processToleranceTextArea;
 
 	/* Params objects */
-    stepList           stepElementsList;  /* Process steps list */
-	sCheckup		   *checkup;
-    const char         *processNameString;
+    stepList          stepElementsList;  /* Process steps list */
+	sCheckup		        *checkup;
+    char              *processNameString;
     uint32_t           temp;
     uint8_t            tempTolerance;
     uint8_t            isTempControlled;
     uint8_t            isPreferred;
     uint8_t            somethingChanged;
-    filmType_t          filmType;
+    filmType_t         filmType;
     uint8_t            timeMins;
     uint8_t            timeSecs;
 }sProcessDetail;
@@ -613,7 +613,7 @@ struct sFilterPopup {
 
   
 	/* Params objects */
-  const char          *filterName;
+  char                *filterName;
   uint8_t             isColorFilter;
   uint8_t             isBnWFilter;
   uint8_t             preferredOnly;
@@ -1099,17 +1099,17 @@ lv_obj_t * processToleranceTextArea;
 #define stepDetailCurrentTemp_text 			   		"Now:"
 
 
-static char* stepTypeList = "Chemistry\n"
+static const char* stepTypeList = "Chemistry\n"
 		                          "Rinse\n"
 		                          "MultiRinse";
 
-static char* stepSourceList = "C1\n"
+static const char* stepSourceList = "C1\n"
 		                            "C2\n"
 		                            "C3\n"
 		                            "WB";
 
-static char* processSourceList[4] = {"C1", "C2", "C3", "WB"};
-static char* processTempControlList[3] = {"Off", "Run", "Susp."};
+static const char* processSourceList[4] = {"C1", "C2", "C3", "WB"};
+static const char* processTempControlList[3] = {"Off", "Run", "Susp."};
                         
 uint8_t stepType;
 uint8_t stepSource;
@@ -1136,7 +1136,7 @@ lv_obj_t * stepDetailNamelTextArea;
 #define warningPopupLowWaterTitle_text 		   		"The water level is too low!Temperature control has been suspended\nRefill the water bath immediately to correct resume the temperature control process"
 #define stopProcessPopupBody_text			   		"Stopping a process will ruin the film inside the tank and leave the chemistry inside!\nDo you want to stop the process now?"
 
-static char *currentStep[3][11] = {"Filling", "Draining", "Processing"};
+static const char *currentStep[3][11] = {"Filling", "Draining", "Processing"};
 
 char rollerElementSelected [10];
 uint32_t rollerSelected;
@@ -1179,20 +1179,20 @@ char tempBuffer [10];
 #define checkupNo_text 					"No"
 #define checkupChecking_text 			"Checking..."
 
-static char * checkupTankSizesList = "Small\n"
+static const char * checkupTankSizesList = "Small\n"
                                    		   "Medium\n"
                                     	   "Large";
 
 
-//static char * checkupStepStatuses [3][14] = {"\xEF\x86\x92", "\xEF\x81\xA1", "\xEF\x80\x8C"};  
+//const char * checkupStepStatuses [3][14] = {"\xEF\x86\x92", "\xEF\x81\xA1", "\xEF\x80\x8C"};  
 
 static const char *checkupStepStatuses[] = { dotStep_icon, arrowStep_icon, checkStep_icon };
 
-static uint16_t tankFullSizes [3] = {500, 700, 1000}; 
-static uint16_t tankLowSizes  [3] = {250, 350, 550}; 
+static const uint16_t tankFullSizes [3] = {500, 700, 1000}; 
+static const uint16_t tankLowSizes  [3] = {250, 350, 550}; 
 
-static uint8_t tankFullFillDrainTimes [3] = {15, 19, 25}; 
-static uint8_t tankLowFillDrainTimes  [3] = {8, 11, 16}; 
+static const uint8_t tankFullFillDrainTimes [3] = {15, 19, 25}; 
+static const uint8_t tankLowFillDrainTimes  [3] = {8, 11, 16}; 
 
 lv_obj_t * checkupTankSizeTextArea;
 #define checkupTankSizePlaceHolder_text "Size"
@@ -1212,7 +1212,7 @@ char formatted_string[20];
 static const uint16_t developingRelays[RELAY_NUMBER] = {WATER_RLY,DEV_RLY,STOP_RLY,FIX_RLY,WASTE_RLY,PUMP_IN_RLY,PUMP_OUT_RLY,HEATER_RLY};
 
 //MOTOR STUFF
-static bool rotationFW = true;
+static const bool rotationFW = true;
 long motorIntervalTime;
 uint8_t motorIntervalRotation;
 static const uint8_t motorIntervalRotationDefault = 10;
@@ -1258,7 +1258,7 @@ void event_messagePopup(lv_event_t *e);
 
 // @file element_process.c
 void event_processElement(lv_event_t *e);
-void processElementCreate(processNode *newProcess);
+void processElementCreate(processNode *newProcess, int32_t tempSize);
 processNode *getProcElementEntryByObject( lv_obj_t *obj );
 
 // @file element_rollerPopup.c
@@ -1268,7 +1268,7 @@ void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *w
 // @file element_step.c
 void event_stepElement(lv_event_t *e);
 void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t tempSize);
-
+bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference );
 
 /*********************
 * PAGES Function Prototypes

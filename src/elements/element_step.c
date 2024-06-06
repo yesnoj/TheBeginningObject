@@ -50,10 +50,11 @@ bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference )
 	stepNode 	*adjust_y_ptr = NULL;
 	lv_coord_t		container_y_prev, container_y_new ;
 
-
 	if( stepToDelete ) {
-		adjust_y_ptr = stepToDelete->next;
-		container_y_prev = stepToDelete->step.container_y;
+    if(stepToDelete->step.stepElement != NULL ) {
+		  adjust_y_ptr = stepToDelete->next;
+		  container_y_prev = stepToDelete->step.container_y;
+    }
 		if( stepToDelete == processReference->process.processDetails->stepElementsList.start ) {
 			if( stepToDelete->next ) {
 				processReference->process.processDetails->stepElementsList.start = stepToDelete->next;
@@ -78,7 +79,7 @@ bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference )
 			if( adjust_y_ptr->next ) container_y_prev = container_y_new;
 			adjust_y_ptr = adjust_y_ptr->next;
 		}
-		lv_obj_delete_async( stepToDelete->step.stepElement );			// Delete all LVGL objects associated with entry
+		if( adjust_y_ptr ) lv_obj_delete_async( stepToDelete->step.stepElement );			// Delete all LVGL objects associated with entry
 		free( stepToDelete );												// Free the list entry itself
 		processReference->process.processDetails->stepElementsList.size--;
     lv_obj_send_event(processReference->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
