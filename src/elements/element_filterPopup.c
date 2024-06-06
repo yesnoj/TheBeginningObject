@@ -45,7 +45,10 @@ void event_filterMBox(lv_event_t * e){
           gui.element.filterPopup.isColorFilter = 0;
           gui.element.filterPopup.isBnWFilter = 0;
           gui.element.filterPopup.preferredOnly = 0;
-          gui.element.filterPopup.filterName = "";
+          if(gui.element.filterPopup.filterName != NULL ) {
+            free(gui.element.filterPopup.filterName);
+            gui.element.filterPopup.filterName = NULL;
+          }
           qSysAction( SAVE_PROCESS_CONFIG );
         }
       }

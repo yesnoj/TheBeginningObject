@@ -178,8 +178,11 @@ void event_keyboard(lv_event_t* e)
             if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.element.filterPopup.mBoxNameTextArea){
               LV_LOG_USER("Press ok from filterPopup.mBoxFilterPopupParent");
               lv_textarea_set_text(gui.element.filterPopup.mBoxNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
-              gui.element.filterPopup.filterName = lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea);
-              
+              if(strlen(lv_textarea_get_text(gui.element.filterPopup.mBoxNameTextArea)) > 0) {
+                if(gui.element.filterPopup.filterName != NULL ) free( gui.element.filterPopup.filterName );
+                gui.element.filterPopup.filterName = (char*)malloc(strlen(lv_textarea_get_text(gui.element.filterPopup.mBoxNameTextArea))+1);
+                strcpy(gui.element.filterPopup.filterName, lv_textarea_get_text(gui.element.filterPopup.mBoxNameTextArea));
+              }              
               hideKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
             }
             if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempProcessNode->process.processDetails->processDetailNameTextArea){
@@ -464,9 +467,9 @@ void init_globals( void ) {
   // Initialise the main GUI structure to zero
   memset(&gui, 0, sizeof(gui));       
   
-  gui.page.processes.processElementsList.start = NULL;
-  gui.page.processes.processElementsList.end   = NULL;
-  gui.page.processes.processElementsList.size  = 0;
+  //gui.page.processes.processElementsList.start = NULL;  // Not rquired memset above does this only need to set non-zero values ( NULL is also zero )
+  //gui.page.processes.processElementsList.end   = NULL;
+  //gui.page.processes.processElementsList.size  = 0;
 
   // We only need to initialise the non-zero values
   gui.element.filterPopup.titleLinePoints[1].x = 200;
@@ -482,11 +485,11 @@ void init_globals( void ) {
   gui.element.rollerPopup.secondsOptions = createRollerValues(0,60,""); 
   gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(0,5,"0.");
 
-  gui.element.filterPopup.filterName = "";
+  //gui.element.filterPopup.filterName = ""; // Not Required memset above does this
   gui.element.filterPopup.isColorFilter = FILM_TYPE_NA;
   gui.element.filterPopup.isBnWFilter = FILM_TYPE_NA;
-  gui.element.filterPopup.isBnWFilter = 0;
-  gui.element.filterPopup.preferredOnly = 0;
+  //gui.element.filterPopup.isBnWFilter = 0;
+  //gui.element.filterPopup.preferredOnly = 0;
 
   tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
   tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);  
@@ -628,8 +631,7 @@ void initSD_I2C_MCP23017() {
     initErrors = INIT_ERROR_WIRE;
     LV_LOG_USER("Unknown error at address 0x%x ERROR:   TOUCH", I2C_ADR);
   }
-
-
+#if 0
   if (!mcp.begin_I2C()) {
     LV_LOG_USER("MCP23017 init ERROR!");
     initErrors = INIT_ERROR_I2C;
@@ -639,7 +641,7 @@ void initSD_I2C_MCP23017() {
       initializeMotorPins();
       initializeTemperatureSensor();
   }
-
+#endif
   if (initErrors) {
 
     LV_LOG_USER("SOMETHING WRONG initErrors %d", initErrors);
@@ -714,7 +716,7 @@ void writeJSONFile(fs::FS &fs, const char *path,const machineSettings &settings)
     return;
 }
 
-gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uint32_t enableLog) {
+bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uint32_t enableLog) {
     if(initErrors == 0){
         File file = fs.open(filename);
         
@@ -751,7 +753,9 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
             }
 
             JsonObject Filter = doc["Filter"];
-            gui.element.filterPopup.filterName = Filter["filterName"];
+//            gui.element.filterPopup.filterName = Filter["filterName"];
+            gui.element.filterPopup.filterName = (char*)malloc( strlen(Filter["filterName"]) + 1);
+            strcpy( gui.element.filterPopup.filterName, Filter["filterName"] );                
             gui.element.filterPopup.isColorFilter = Filter["isColorFilter"];
             gui.element.filterPopup.isBnWFilter = Filter["isBnWFilter"];
             gui.element.filterPopup.preferredOnly = Filter["preferredOnly"];
@@ -773,7 +777,10 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                 processNode *nodeP = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
 
                 // Assign process details
-                nodeP->process.processDetails->processNameString = Processe.value()["processNameString"];
+//                const char *tpp = (const char*)Processe.value()["processNameString"];
+                nodeP->process.processDetails->processNameString = (char*)malloc( strlen(Processe.value()["processNameString"]) + 1);
+                strcpy( nodeP->process.processDetails->processNameString, Processe.value()["processNameString"] );                
+//                nodeP->process.processDetails->processNameString = Processe.value()["processNameString"];
                 nodeP->process.processDetails->temp = Processe.value()["temp"];
                 nodeP->process.processDetails->tempTolerance = Processe.value()["tempTolerance"];
                 nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
@@ -814,7 +821,10 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                     stepNode *nodeS = (stepNode*) allocateAndInitializeNode(STEP_NODE);
 
                     // Assign step details
-                    nodeS->step.stepDetails->stepNameString = Processe_value_Step.value()["stepNameString"];
+//                    char *tsp = (char*)Processe_value_Step.value()["stepNameString"];
+                    nodeS->step.stepDetails->stepNameString = (char*)malloc( strlen(Processe_value_Step.value()["stepNameString"]) + 1);
+                    strcpy(nodeS->step.stepDetails->stepNameString, Processe_value_Step.value()["stepNameString"]);
+//                    nodeS->step.stepDetails->stepNameString = Processe_value_Step.value()["stepNameString"];
                     nodeS->step.stepDetails->timeMins = Processe_value_Step.value()["timeMins"];
                     nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
                     nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];
@@ -845,8 +855,9 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
             }
         }
         file.close();
-        return gui;
+        return true;  // Loaded JSON
     }
+    return false; // JSON not loaded
 }
 
 
@@ -987,7 +998,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
         return;
 }
 
-// Funzione per scrivere su un file
+// Funzione per scrivere su un file (Function for writing to a file)
 void writeFile(fs::FS &fs, const char *path, const char *message) {
     LV_LOG_USER("Writing file: %s", path);
     File file = fs.open(path, FILE_WRITE);
@@ -1139,12 +1150,16 @@ void updateStepElement(processNode *referenceProcess, stepNode *step){
 
 
 uint32_t loadSDCardProcesses() {
+
+    int32_t tempSize = 1;
+
     if (gui.page.processes.processElementsList.size > 0) {
         processNode *process = gui.page.processes.processElementsList.start;
 
         while (process != NULL) {
-            processElementCreate(process);
+            processElementCreate(process, tempSize);
             process = process->next;
+            tempSize++;
         }
         return gui.page.processes.processElementsList.size;
     } else {
@@ -1271,8 +1286,10 @@ float getTemperature(Adafruit_SHT31 tempSensor){
 
   if (!isnan(tempC)) {  // Controlla se la lettura è valida
     LV_LOG_USER("Temp *C = %f | Temp *F = %f",tempC, tempF);
+    return tempC;
   } else {
     Serial.println("Failed to read temperature");
+    return -255; // A value to show it's broken!
   }
 }
 
