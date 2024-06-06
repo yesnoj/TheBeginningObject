@@ -1,3 +1,4 @@
+#include <sys/_stdint.h>
 #include "misc/lv_event.h"
 #include "core/lv_obj_event.h"
 /**
@@ -124,9 +125,70 @@ static bool deleteStepElementByObj( lv_obj_t *obj, processNode * processReferenc
 void event_stepElement(lv_event_t * e){
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
+  lv_indev_t * indev = lv_indev_active();
   lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
   stepNode	*currentNode = getStepElementEntryByObject(obj,data);
-  
+  lv_obj_t * screen = lv_event_get_current_target(e);
+  lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_active());
+
+ int8_t x,y;
+
+
+ if(indev == NULL)  return;
+   if(code == LV_EVENT_GESTURE) {    
+        switch(dir) {
+        case LV_DIR_LEFT:
+          if(((stepNode*)data)->step.swipedLeft == 0 && ((stepNode*)data)->step.swipedRight == 0){
+            LV_LOG_USER("Left gesture for edit");
+            x = lv_obj_get_x_aligned(obj) - 50;
+            y = lv_obj_get_y_aligned(obj);
+            lv_obj_set_pos(obj, x, y);
+            ((stepNode*)data)->step.swipedLeft = 1;
+            ((stepNode*)data)->step.swipedRight = 0;
+            break;
+          }
+          if(((stepNode*)data)->step.swipedLeft == 0 && ((stepNode*)data)->step.swipedRight == 1){
+            LV_LOG_USER("Left gesture to return");
+            x = lv_obj_get_x_aligned(obj) - 50;
+            y = lv_obj_get_y_aligned(obj);
+            lv_obj_set_pos(obj, x, y);
+            ((stepNode*)data)->step.swipedLeft = 0;
+            ((stepNode*)data)->step.swipedRight = 0;
+            break;
+          }
+          
+        case LV_DIR_RIGHT:
+           if(((stepNode*)data)->step.swipedLeft == 1 && ((stepNode*)data)->step.swipedRight == 0){
+              LV_LOG_USER("Right gesture to return");
+              x = lv_obj_get_x_aligned(obj) + 50;
+              y = lv_obj_get_y_aligned(obj);
+              lv_obj_set_pos(obj, x, y);
+              ((stepNode*)data)->step.swipedLeft = 0;
+              ((stepNode*)data)->step.swipedRight = 0;
+              break;
+             }
+           if(((stepNode*)data)->step.swipedLeft == 0 && ((stepNode*)data)->step.swipedRight == 0){
+              LV_LOG_USER("Right gesture for delete");
+              x = lv_obj_get_x_aligned(obj) + 50;
+              y = lv_obj_get_y_aligned(obj);
+              lv_obj_set_pos(obj, x, y);
+              ((stepNode*)data)->step.swipedRight = 1;
+              ((stepNode*)data)->step.swipedLeft = 0;
+              break;
+             }
+      }
+  }
+    
+    
+    if(code == LV_EVENT_PRESSING && code != LV_EVENT_LONG_PRESSED_REPEAT) {    
+        LV_LOG_USER("Drag event!");
+        lv_point_t vect;
+        lv_indev_get_vect(indev, &vect);
+
+        int32_t x = lv_obj_get_x_aligned(obj) + vect.x;
+        int32_t y = lv_obj_get_y_aligned(obj); //+ vect.y;
+        lv_obj_set_pos(obj, x, y);
+      }
 
   //if(obj == currentNode->step.stepElementSummary){
       if(code == LV_EVENT_SHORT_CLICKED) {    
@@ -177,7 +239,8 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
 		LV_LOG_USER("First call to processElementCreate style now initialised");
 	}
 
-
+  newStep->step.swipedLeft = 0;
+  newStep->step.swipedRight = 0;
   newStep->step.stepElement = lv_obj_create(processReference->process.processDetails->processStepsContainer);
   
   if(tempSize == -1){
@@ -201,8 +264,12 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
         lv_obj_set_size(newStep->step.stepElementSummary, 235, 66);
         lv_obj_align(newStep->step.stepElementSummary, LV_ALIGN_TOP_LEFT, -16, -16);
         lv_obj_remove_flag(newStep->step.stepElementSummary, LV_OBJ_FLAG_SCROLLABLE);  
-        lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_SHORT_CLICKED, processReference);  
-        lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_LONG_PRESSED_REPEAT, processReference);
+        //lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_SHORT_CLICKED, processReference);  
+        //lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_LONG_PRESSED_REPEAT, processReference);
+        //lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_PRESSING, processReference);
+        lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_GESTURE, newStep);
+        lv_obj_remove_flag(newStep->step.stepElementSummary, LV_OBJ_FLAG_GESTURE_BUBBLE);
+
         lv_obj_add_style(newStep->step.stepElementSummary, &newStep->step.stepStyle, 0);
 
                 newStep->step.stepTypeIcon = lv_label_create(newStep->step.stepElementSummary);

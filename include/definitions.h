@@ -11,6 +11,9 @@
 #include "semphr.h"
 //#include <OneWire.h>
 
+//Set to 1 to enable all errors (SD/I2C)
+#define ENABLE_BOOT_ERRORS 0
+
 // PINS/RELAY DEFINITIONS 
 
 //Digital input for relays
@@ -350,7 +353,8 @@ typedef struct singleStep { //GRAPHIC ELEMENT IN THE STEPS LIST
     lv_obj_t           *discardAfterIcon;
     lv_obj_t           *sourceLabel;
     lv_coord_t         container_y;
-
+    uint8_t            swipedLeft;
+    uint8_t            swipedRight;
     /* Params objects */
     sStepDetail 	  *stepDetails;
 } singleStep;
@@ -538,7 +542,9 @@ typedef struct singleProcess {
     lv_obj_t          *processTimeIcon;
     lv_obj_t          *processTypeIcon;
     lv_coord_t         container_y;
-
+    uint8_t            swipedLeft;
+    uint8_t            swipedRight;
+    
     sProcessDetail     *processDetails;  /* Process details, that includes all steps */
 } singleProcess;
 

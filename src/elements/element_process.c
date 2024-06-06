@@ -129,6 +129,10 @@ void event_processElement(lv_event_t * e){
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
   lv_obj_t * cont = (lv_obj_t *)lv_event_get_current_target(e);
   processNode	*currentNode = getProcElementEntryByObject(obj);
+  lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
+  lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_active());
+  
+   int8_t x,y;
 
  // if(obj == cont && cont != gui.element.process.processElementSummary && cont != gui.element.process.preferredIcon)
  //   return;
@@ -167,6 +171,32 @@ void event_processElement(lv_event_t * e){
    if(code == LV_EVENT_DELETE) {
         lv_style_reset(&currentNode->process.processStyle);
     }
+
+       if(code == LV_EVENT_GESTURE) {    
+        switch(dir) {
+        case LV_DIR_LEFT:
+          if(((processNode*)data)->process.swipedLeft == 0 && ((processNode*)data)->process.swipedRight == 1){
+            LV_LOG_USER("Left gesture to return");
+            x = lv_obj_get_x_aligned(obj) - 50;
+            y = lv_obj_get_y_aligned(obj);
+            lv_obj_set_pos(obj, x, y);
+            ((processNode*)data)->process.swipedLeft = 0;
+            ((processNode*)data)->process.swipedRight = 0;
+            break;
+          }
+          
+        case LV_DIR_RIGHT:
+           if(((processNode*)data)->process.swipedLeft == 0 && ((processNode*)data)->process.swipedRight == 0){
+              LV_LOG_USER("Right gesture for delete");
+              x = lv_obj_get_x_aligned(obj) + 50;
+              y = lv_obj_get_y_aligned(obj);
+              lv_obj_set_pos(obj, x, y);
+              ((processNode*)data)->process.swipedRight = 1;
+              ((processNode*)data)->process.swipedLeft = 0;
+              break;
+             }
+      }
+  }
 }
 
 
@@ -192,8 +222,10 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
 	lv_obj_set_size(newProcess->process.processElement, 315, 70);
 	lv_obj_remove_flag(newProcess->process.processElement, LV_OBJ_FLAG_SCROLLABLE);
 	lv_obj_set_style_border_opa(newProcess->process.processElement, LV_OPA_TRANSP, 0);
-
-	/*********************
+  lv_obj_add_event_cb(newProcess->process.processElement, event_processElement, LV_EVENT_GESTURE, newProcess);
+  lv_obj_remove_flag(newProcess->process.processElement, LV_OBJ_FLAG_GESTURE_BUBBLE);
+	
+  /*********************
 	*    PAGE ELEMENTS			
 	*********************/
         newProcess->process.processElementSummary = lv_obj_create(newProcess->process.processElement);
@@ -201,8 +233,9 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         lv_obj_set_size(newProcess->process.processElementSummary, 270, 66);
         lv_obj_align(newProcess->process.processElementSummary, LV_ALIGN_TOP_LEFT, -16, -16);
         lv_obj_remove_flag(newProcess->process.processElementSummary, LV_OBJ_FLAG_SCROLLABLE);
-        lv_obj_add_event_cb(newProcess->process.processElementSummary, event_processElement, LV_EVENT_SHORT_CLICKED, newProcess->process.processElementSummary);
-        lv_obj_add_event_cb(newProcess->process.processElementSummary, event_processElement, LV_EVENT_LONG_PRESSED_REPEAT, newProcess->process.processElementSummary);
+        //lv_obj_add_event_cb(newProcess->process.processElementSummary, event_processElement, LV_EVENT_SHORT_CLICKED, newProcess->process.processElementSummary);
+        //lv_obj_add_event_cb(newProcess->process.processElementSummary, event_processElement, LV_EVENT_LONG_PRESSED_REPEAT, newProcess->process.processElementSummary);
+
 
         lv_obj_add_style(newProcess->process.processElementSummary, &newProcess->process.processStyle, 0);
 
