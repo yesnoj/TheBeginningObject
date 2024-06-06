@@ -353,6 +353,10 @@ typedef struct singleStep { //GRAPHIC ELEMENT IN THE STEPS LIST
     lv_obj_t           *discardAfterIcon;
     lv_obj_t           *sourceLabel;
     lv_coord_t         container_y;
+    lv_obj_t          *deleteButton;
+    lv_obj_t          *deleteButtonLabel;
+    lv_obj_t          *editButton;
+    lv_obj_t          *editButtonLabel;
     uint8_t            swipedLeft;
     uint8_t            swipedRight;
     /* Params objects */
@@ -541,6 +545,8 @@ typedef struct singleProcess {
     lv_obj_t          *processTime;
     lv_obj_t          *processTimeIcon;
     lv_obj_t          *processTypeIcon;
+    lv_obj_t          *deleteButton;
+    lv_obj_t          *deleteButtonLabel;
     lv_coord_t         container_y;
     uint8_t            swipedLeft;
     uint8_t            swipedRight;
@@ -969,13 +975,13 @@ LV_IMG_DECLARE(splash_img);
 #define play_icon           "\xEF\x81\x8B"
 
 #define save_icon           "\xEF\x83\x87"
-#define trash_icon          "\xEF\x8B\xAD" //never used, to add into font.c file in case need to be used
+#define trash_icon          "\xEF\x8B\xAD"
 #define moveUp_icon         "\xEF\x81\xB7" //never used, to add into font.c file in case need to be used
 #define moveDown_icon       "\xEF\x81\xB8" //never used, to add into font.c file in case need to be used
 #define chemical_icon       "\xEF\x83\x83"
 #define rinse_icon          "\xEF\x81\x83"
 #define multiRinse_icon     "\xEF\x86\xB8"
-#define edit_icon           "\xEF\x81\x84" //never used, to add into font.c file in case need to be used
+#define edit_icon           "\xEF\x81\x84"
 #define copy_icon           "\xEF\x83\x85" //never used, to add into font.c file in case need to be used
 #define checkStep_icon      "\xEF\x80\x8C"
 #define arrowStep_icon      "\xEF\x81\xA1"

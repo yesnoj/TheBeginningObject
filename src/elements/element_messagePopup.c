@@ -39,7 +39,7 @@ void event_messagePopup(lv_event_t *e)
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton1");
             if (gui.element.messagePopup.whoCallMe == tempProcessNode)
             {
-                LV_LOG_USER("Delete process from long press!");
+                LV_LOG_USER("Delete process!");
 
                 if( !deleteProcessElement( gui.element.messagePopup.whoCallMe ) ) {
                   LV_LOG_USER("Delete process element instance at address 0x%p Failed!", gui.element.messagePopup.whoCallMe);
@@ -55,7 +55,7 @@ void event_messagePopup(lv_event_t *e)
 
             if (gui.element.messagePopup.whoCallMe == tempStepNode)
             {
-                LV_LOG_USER("Delete step from long Step press!");
+                LV_LOG_USER("Delete step!");
                 
                 if( !deleteStepElement( gui.element.messagePopup.whoCallMe , tempProcessNode) ) {
                   LV_LOG_USER("Delete step element instance at address 0x%p Failed!", gui.element.messagePopup.whoCallMe);

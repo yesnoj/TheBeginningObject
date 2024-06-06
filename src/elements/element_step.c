@@ -102,6 +102,8 @@ stepNode *getStepElementEntryByObject(lv_obj_t *obj, processNode * processRefere
     if( obj == currentNode->step.stepName ) break;
     if( obj == currentNode->step.stepTime ) break;
     if( obj == currentNode->step.stepTimeIcon ) break;
+    if( obj == currentNode->step.deleteButton ) break;
+    if( obj == currentNode->step.editButton) break;   
     if( obj == currentNode->step.stepTypeIcon ) break;
     if( obj == currentNode ) break;
 		currentNode = currentNode->next;
@@ -131,56 +133,69 @@ void event_stepElement(lv_event_t * e){
   lv_obj_t * screen = lv_event_get_current_target(e);
   lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_active());
 
- int8_t x,y;
+  int8_t x,y;
+
+ 	if( currentNode == NULL ) {
+		LV_LOG_USER("Bad object passed to eventProcessElement!");	/* This will stop a crash */
+		return;														/* if something is wrong */
+	}
 
 
  if(indev == NULL)  return;
+
+
    if(code == LV_EVENT_GESTURE) {    
         switch(dir) {
         case LV_DIR_LEFT:
-          if(((stepNode*)data)->step.swipedLeft == 0 && ((stepNode*)data)->step.swipedRight == 0){
+          if(currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0){
             LV_LOG_USER("Left gesture for edit");
             x = lv_obj_get_x_aligned(obj) - 50;
             y = lv_obj_get_y_aligned(obj);
             lv_obj_set_pos(obj, x, y);
-            ((stepNode*)data)->step.swipedLeft = 1;
-            ((stepNode*)data)->step.swipedRight = 0;
+            currentNode->step.swipedLeft = 1;
+            currentNode->step.swipedRight = 0;
+            lv_obj_remove_flag(currentNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
             break;
           }
-          if(((stepNode*)data)->step.swipedLeft == 0 && ((stepNode*)data)->step.swipedRight == 1){
+          if(currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 1){
             LV_LOG_USER("Left gesture to return");
             x = lv_obj_get_x_aligned(obj) - 50;
             y = lv_obj_get_y_aligned(obj);
             lv_obj_set_pos(obj, x, y);
-            ((stepNode*)data)->step.swipedLeft = 0;
-            ((stepNode*)data)->step.swipedRight = 0;
+            currentNode->step.swipedLeft = 0;
+            currentNode->step.swipedRight = 0;
+            lv_obj_add_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(currentNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
             break;
           }
           
         case LV_DIR_RIGHT:
-           if(((stepNode*)data)->step.swipedLeft == 1 && ((stepNode*)data)->step.swipedRight == 0){
+           if(currentNode->step.swipedLeft == 1 && currentNode->step.swipedRight == 0){
               LV_LOG_USER("Right gesture to return");
               x = lv_obj_get_x_aligned(obj) + 50;
               y = lv_obj_get_y_aligned(obj);
               lv_obj_set_pos(obj, x, y);
-              ((stepNode*)data)->step.swipedLeft = 0;
-              ((stepNode*)data)->step.swipedRight = 0;
+              currentNode->step.swipedLeft = 0;
+              currentNode->step.swipedRight = 0;
+              lv_obj_add_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
+              lv_obj_add_flag(currentNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
               break;
              }
-           if(((stepNode*)data)->step.swipedLeft == 0 && ((stepNode*)data)->step.swipedRight == 0){
+           if(currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0){
               LV_LOG_USER("Right gesture for delete");
               x = lv_obj_get_x_aligned(obj) + 50;
               y = lv_obj_get_y_aligned(obj);
               lv_obj_set_pos(obj, x, y);
-              ((stepNode*)data)->step.swipedRight = 1;
-              ((stepNode*)data)->step.swipedLeft = 0;
+              currentNode->step.swipedRight = 1;
+              currentNode->step.swipedLeft = 0;
+              lv_obj_remove_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
               break;
              }
       }
   }
     
     
-    if(code == LV_EVENT_PRESSING && code != LV_EVENT_LONG_PRESSED_REPEAT) {    
+    if(code == LV_EVENT_PRESSING) {    
         LV_LOG_USER("Drag event!");
         lv_point_t vect;
         lv_indev_get_vect(indev, &vect);
@@ -190,21 +205,22 @@ void event_stepElement(lv_event_t * e){
         lv_obj_set_pos(obj, x, y);
       }
 
-  //if(obj == currentNode->step.stepElementSummary){
-      if(code == LV_EVENT_SHORT_CLICKED) {    
-        LV_LOG_USER("Step Element Details address 0x%p",currentNode);
-        stepDetail(data, currentNode);
-        return;
+      if(code == LV_EVENT_CLICKED) {
+        if(obj == currentNode->step.editButton){
+          LV_LOG_USER("Step Element Details address 0x%p",currentNode);
+          stepDetail(data, currentNode);
+          return;
+        }
+        if(obj == currentNode->step.deleteButton){
+          if(gui.element.messagePopup.mBoxPopupParent == NULL){
+            LV_LOG_USER("Long press element address 0x%p",currentNode);
+            tempStepNode = currentNode;
+            messagePopupCreate(deletePopupTitle_text,deletePopupBody_text, deleteButton_text, stepDetailCancel_text, tempStepNode);
+            return;
+           }
+        }
       }
-      if(code == LV_EVENT_LONG_PRESSED_REPEAT) {    
-        if(gui.element.messagePopup.mBoxPopupParent == NULL){
-        LV_LOG_USER("Long press element address 0x%p",currentNode);
-        tempStepNode = currentNode;
-        messagePopupCreate(deletePopupTitle_text,deletePopupBody_text, deleteButton_text, stepDetailCancel_text, tempStepNode);
-        return;
-      }
-    }
- // }
+
   
   if(code == LV_EVENT_DELETE) {
        lv_style_reset(&currentNode->step.stepStyle);
@@ -252,23 +268,42 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
     newStep->step.container_y = -13 + ((tempSize) * 70);
   }
   lv_obj_set_pos(newStep->step.stepElement, -13, newStep->step.container_y);        
-  lv_obj_set_size(newStep->step.stepElement, 240, 70);
+  lv_obj_set_size(newStep->step.stepElement, 340, 70);
   lv_obj_remove_flag(newStep->step.stepElement, LV_OBJ_FLAG_SCROLLABLE); 
   lv_obj_set_style_border_opa(newStep->step.stepElement, LV_OPA_TRANSP, 0);
+  lv_obj_remove_flag(newStep->step.stepElement, LV_OBJ_FLAG_GESTURE_BUBBLE);
+  lv_obj_add_event_cb(newStep->step.stepElement, event_stepElement, LV_EVENT_GESTURE, processReference);
+  lv_obj_set_pos(newStep->step.stepElement,lv_obj_get_x_aligned(newStep->step.stepElement) - 50,lv_obj_get_y_aligned(newStep->step.stepElement));
 
   /*********************
   *    PAGE ELEMENTS
   *********************/
+
+
+        newStep->step.deleteButton = lv_obj_create(newStep->step.stepElement);
+        lv_obj_set_style_bg_color(newStep->step.deleteButton, lv_color_hex(RED_DARK), LV_PART_MAIN);
+        lv_obj_set_size(newStep->step.deleteButton, 50, 70);
+        lv_obj_align(newStep->step.deleteButton, LV_ALIGN_TOP_LEFT, -16, -18);
+        lv_obj_add_flag(newStep->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(newStep->step.deleteButton, LV_OBJ_FLAG_SCROLLABLE);
+        lv_obj_add_event_cb(newStep->step.deleteButton, event_stepElement, LV_EVENT_CLICKED, processReference);
+        lv_obj_add_flag(newStep->step.deleteButton, LV_OBJ_FLAG_CLICKABLE);
+
+                newStep->step.deleteButtonLabel = lv_label_create(newStep->step.deleteButton);         
+                lv_label_set_text(newStep->step.deleteButtonLabel, trash_icon); 
+                lv_obj_set_style_text_font(newStep->step.deleteButtonLabel, &FilMachineFontIcons_30, 0);              
+                lv_obj_align(newStep->step.deleteButtonLabel, LV_ALIGN_CENTER, 0, 0);
+
+
         newStep->step.stepElementSummary = lv_obj_create(newStep->step.stepElement);
         //lv_obj_set_style_border_color(newStep->step.stepElementSummary, lv_color_hex(LV_PALETTE_ORANGE), 0);
         lv_obj_set_size(newStep->step.stepElementSummary, 235, 66);
-        lv_obj_align(newStep->step.stepElementSummary, LV_ALIGN_TOP_LEFT, -16, -16);
+        lv_obj_align(newStep->step.stepElementSummary, LV_ALIGN_TOP_LEFT, 34, -16);
         lv_obj_remove_flag(newStep->step.stepElementSummary, LV_OBJ_FLAG_SCROLLABLE);  
         //lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_SHORT_CLICKED, processReference);  
         //lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_LONG_PRESSED_REPEAT, processReference);
         //lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_PRESSING, processReference);
-        lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_GESTURE, newStep);
-        lv_obj_remove_flag(newStep->step.stepElementSummary, LV_OBJ_FLAG_GESTURE_BUBBLE);
+
 
         lv_obj_add_style(newStep->step.stepElementSummary, &newStep->step.stepStyle, 0);
 
@@ -324,5 +359,18 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
                     lv_obj_set_style_text_color(newStep->step.discardAfterIcon, lv_color_hex(GREY), LV_PART_MAIN);
                   }
 
+        newStep->step.editButton = lv_obj_create(newStep->step.stepElement);
+        lv_obj_set_style_bg_color(newStep->step.editButton, lv_color_hex(LIGHT_BLUE_DARK), LV_PART_MAIN);
+        lv_obj_set_size(newStep->step.editButton, 50, 70);
+        lv_obj_align(newStep->step.editButton, LV_ALIGN_TOP_LEFT, 270, -18);
+        lv_obj_add_flag(newStep->step.editButton, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(newStep->step.editButton, LV_OBJ_FLAG_SCROLLABLE);
+        lv_obj_add_event_cb(newStep->step.editButton, event_stepElement, LV_EVENT_CLICKED, processReference);
+        lv_obj_add_flag(newStep->step.editButton, LV_OBJ_FLAG_CLICKABLE);
+
+                newStep->step.editButtonLabel = lv_label_create(newStep->step.editButton);         
+                lv_label_set_text(newStep->step.editButtonLabel, edit_icon); 
+                lv_obj_set_style_text_font(newStep->step.editButtonLabel, &FilMachineFontIcons_30, 0);              
+                lv_obj_align(newStep->step.editButtonLabel, LV_ALIGN_CENTER, 0, 0);
 }
 
