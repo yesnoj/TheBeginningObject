@@ -41,7 +41,6 @@ void sysMan( void *arg ) {
 	        LV_LOG_USER("Save JSON!");
           writeFullJSONFile(SD, FILENAME_SAVE,gui);
           break;
-
       // Add Further processor intensive tasks here to keep them out of the GUI execution path
 
       default:

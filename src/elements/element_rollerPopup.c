@@ -89,6 +89,7 @@ void event_Roller(lv_event_t * e)
             if(((processNode *)data)->process.processDetails->checkup->checkupTankSizeTextArea == tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
               LV_LOG_USER("SET BUTTON from checkupTankSizeTextArea value %d:",rollerSelected);
               
+              tempProcessNode->process.processDetails->checkup->tankSize = rollerSelected;
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea, tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);

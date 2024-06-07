@@ -428,6 +428,7 @@ typedef struct sCheckup{
 	lv_obj_t			*checkupTargetChemistryTempLabel;
 	lv_obj_t			*checkupTankIsPresentLabel;
 	lv_obj_t			*checkupFilmRotatingLabel;
+	lv_obj_t			*checkupProcessCompleteLabel;
 
 	lv_obj_t			*checkupTargetTempValue;
 	lv_obj_t			*checkupTargetWaterTempValue;
@@ -443,6 +444,7 @@ typedef struct sCheckup{
 	lv_obj_t			*checkupProcessTimeLeftValue;
 	lv_obj_t			*checkupStepNameValue;
 	lv_obj_t			*checkupStepKindValue;
+
 
 	lv_obj_t			*checkupWaterFillStatusIcon;
 	lv_obj_t			*checkupReachTempStatusIcon;
@@ -462,6 +464,7 @@ typedef struct sCheckup{
 	uint8_t 			isProcessing; // 0 or 1
 	uint8_t 			processStep;//0 or 1 or 2 or 3 or 4
 	uint32_t			activeVolume_index;
+	uint8_t 			tankSize;
 	uint8_t 			stopAfter;
 
 	uint8_t 			stepFillWaterStatus;
@@ -877,7 +880,7 @@ struct gui_components {
 /*********************
 * System manager defines
 *********************/
-#define SAVE_PROCESS_CONFIG   0x0001
+#define SAVE_PROCESS_CONFIG           0x0001
 
 LV_FONT_DECLARE(FilMachineFontIcons_15);
 LV_FONT_DECLARE(FilMachineFontIcons_20);
@@ -1147,7 +1150,8 @@ lv_obj_t * stepDetailNamelTextArea;
 #define deletePopupBody_text 						"Are you sure to delete the selected element?"
 #define deleteAllProcessPopupBody_text 						"Are you sure to delete all the process created?"
 #define warningPopupLowWaterTitle_text 		   		"The water level is too low!Temperature control has been suspended\nRefill the water bath immediately to correct resume the temperature control process"
-#define stopProcessPopupBody_text			   		"Stopping a process will ruin the film inside the tank and leave the chemistry inside!\nDo you want to stop the process now?"
+#define stopNowProcessPopupBody_text			   		"Stopping a process will ruin the film inside the tank and leave the chemistry inside!\nDo you want to stop the process now?"
+#define stopAfterProcessPopupBody_text			   		"Do you want to stop the process after this step is completed?"
 
 static const char *currentStep[3][11] = {"Filling", "Draining", "Processing"};
 
@@ -1191,6 +1195,8 @@ char tempBuffer [10];
 #define checkupYes_text 				"Yes"
 #define checkupNo_text 					"No"
 #define checkupChecking_text 			"Checking..."
+#define checkupProcessComplete_text 			"Process\nCOMPLETE!"
+#define checkupProcessStopped_text 			"Process\nSTOPPED!"
 
 static const char * checkupTankSizesList = "Small\n"
                                    		   "Medium\n"

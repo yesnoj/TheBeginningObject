@@ -1,3 +1,4 @@
+#include "misc/lv_event.h"
 #include <sys/_stdint.h>
 /**
  * @file page_checkup.c
@@ -53,20 +54,24 @@ void event_checkup(lv_event_t * e){
   lv_obj_t * act_cb = (lv_obj_t *)lv_event_get_target(e);
   lv_obj_t * old_cb = (lv_obj_t *)lv_obj_get_child(cont, *active_id);
 
+
   if(code == LV_EVENT_FOCUSED) {
       if(data == referenceProcess->process.processDetails->checkup->checkupTankSizeTextArea){
           LV_LOG_USER("Set Tank Size");
-          tempProcessNode = referenceProcess;
           rollerPopupCreate(checkupTankSizesList,checkupTankSize_text,referenceProcess, 0);
       }
   }
-
+  if(code == LV_EVENT_VALUE_CHANGED) {
+      if(data == referenceProcess->process.processDetails->checkup->checkupTankSizeTextArea){
+          LV_LOG_USER("Set New Tank Size %d", referenceProcess->process.processDetails->checkup->tankSize);
+      }
+  }
   if(act_cb == referenceProcess->process.processDetails->checkup->lowVolumeChemRadioButton || act_cb == referenceProcess->process.processDetails->checkup->highVolumeChemRadioButton){
    if(code == LV_EVENT_CLICKED) {
         lv_obj_remove_state(old_cb, LV_STATE_CHECKED);
         lv_obj_add_state(act_cb, LV_STATE_CHECKED); 
         *active_id = lv_obj_get_index(act_cb);
-        LV_LOG_USER("Selected chemistry volume radio buttons: %d", (int)referenceProcess->process.processDetails->checkup->activeVolume_index);
+        LV_LOG_USER("Selected chemistry volume radio buttons: %d", referenceProcess->process.processDetails->checkup->activeVolume_index);
    }
   }
 
@@ -122,13 +127,17 @@ void event_checkup(lv_event_t * e){
     }
     if(obj == referenceProcess->process.processDetails->checkup->checkupStopAfterButton){
         LV_LOG_USER("User pressed referenceProcess->process.processDetails->checkup->checkupStopAfterButton");
-        messagePopupCreate(warningPopupTitle_text,stopProcessPopupBody_text,checkupStop_text,stepDetailCancel_text, referenceProcess->process.processDetails->checkup->checkupStopAfterButton);
+        messagePopupCreate(warningPopupTitle_text,stopAfterProcessPopupBody_text,checkupStop_text,stepDetailCancel_text, referenceProcess->process.processDetails->checkup->checkupStopAfterButton);
     }
     if(obj == referenceProcess->process.processDetails->checkup->checkupStopNowButton){
         LV_LOG_USER("User pressed referenceProcess->process.processDetails->checkup->checkupStopNowButton");
-        messagePopupCreate(warningPopupTitle_text,stopProcessPopupBody_text,checkupStop_text,stepDetailCancel_text, referenceProcess->process.processDetails->checkup->checkupStopNowButton);
+        messagePopupCreate(warningPopupTitle_text,stopNowProcessPopupBody_text,checkupStop_text,stepDetailCancel_text, referenceProcess->process.processDetails->checkup->checkupStopNowButton);
     }
 
+  }
+
+  if(referenceProcess->process.processDetails->checkup->tankSize >0 && referenceProcess->process.processDetails->checkup->activeVolume_index > 0){
+    lv_obj_clear_state(referenceProcess->process.processDetails->checkup->checkupStartButton, LV_STATE_DISABLED);
   }
 }
 
@@ -193,9 +202,17 @@ void processTimer(lv_timer_t * timer)
 
 
     if(tempStepNode != NULL) { 
-        if(tempProcessNode->process.processDetails->checkup->stopAfter == 1 && remainingStepMins == 0 && remainingStepSecsOnly == 0){
-            lv_obj_clear_state(tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);
-            lv_timer_delete(tempProcessNode->process.processDetails->checkup->timer);
+        if(referenceProcess->process.processDetails->checkup->stopAfter == 1 && remainingStepMins == 0 && remainingStepSecsOnly == 0){
+            lv_obj_clear_state(referenceProcess->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);
+            lv_obj_add_state(referenceProcess->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);
+            lv_obj_add_state(referenceProcess->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED); 
+            
+            lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupProcessCompleteLabel, checkupProcessStopped_text);
+            lv_obj_remove_flag(referenceProcess->process.processDetails->checkup->checkupProcessCompleteLabel, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(referenceProcess->process.processDetails->checkup->checkupStepNameValue, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
+            lv_timer_delete(referenceProcess->process.processDetails->checkup->timer);
         }
         else{              
           stepPercentage = calcolatePercentage(minutesStepElapsed, secondsStepElapsed, tempStepNode->step.stepDetails->timeMins, tempStepNode->step.stepDetails->timeSecs);
@@ -215,7 +232,7 @@ void processTimer(lv_timer_t * timer)
         }
     }
     else{
-        lv_timer_delete(tempProcessNode->process.processDetails->checkup->timer);
+        lv_timer_delete(referenceProcess->process.processDetails->checkup->timer);
     }
 
     sprintf(formatted_string, "%dm%ds", remainingProcessMins, remainingProcessSecsOnly);
@@ -227,7 +244,16 @@ void processTimer(lv_timer_t * timer)
         secondsProcessElapsed++;
         secondsStepElapsed++;
         if(processPercentage == 100) {
-          lv_timer_delete(tempProcessNode->process.processDetails->checkup->timer);
+          lv_timer_delete(referenceProcess->process.processDetails->checkup->timer);
+          lv_obj_add_state(referenceProcess->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);
+          lv_obj_add_state(referenceProcess->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);   
+          lv_obj_clear_state(referenceProcess->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);  
+          
+          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupProcessCompleteLabel, checkupProcessComplete_text);
+          lv_obj_remove_flag(referenceProcess->process.processDetails->checkup->checkupProcessCompleteLabel, LV_OBJ_FLAG_HIDDEN);
+          lv_obj_add_flag(referenceProcess->process.processDetails->checkup->checkupStepNameValue, LV_OBJ_FLAG_HIDDEN);
+          lv_obj_add_flag(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
+          lv_obj_add_flag(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
         }
     }
 }
@@ -333,7 +359,8 @@ void checkup(processNode *processToCheckup)
   if(processToCheckup->process.processDetails->checkup->checkupParent == NULL){
     LV_LOG_USER("initCheckup");
 
-    referenceProcess = processToCheckup;
+
+    referenceProcess = tempProcessNode = processToCheckup;
     referenceProcess->process.processDetails->checkup = malloc(sizeof(sCheckup));
     referenceProcess->process.processDetails->checkup->isProcessing = 0;
     referenceProcess->process.processDetails->checkup->processStep = 0;
@@ -577,7 +604,6 @@ void checkup(processNode *processToCheckup)
                               lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupProcessReadyLabel, &lv_font_montserrat_22, 0);              
                               lv_obj_align(referenceProcess->process.processDetails->checkup->checkupProcessReadyLabel, LV_ALIGN_TOP_LEFT, -10, -8);
 
-
                               referenceProcess->process.processDetails->checkup->lowVolumeChemRadioButton = create_radiobutton(referenceProcess->process.processDetails->checkup->checkupSelectTankChemistryContainer, checkupChemistryLowVol_text, -105, 45, 27, &lv_font_montserrat_18, lv_color_hex(GREEN_DARK), lv_palette_main(LV_PALETTE_GREEN));
                               referenceProcess->process.processDetails->checkup->highVolumeChemRadioButton = create_radiobutton(referenceProcess->process.processDetails->checkup->checkupSelectTankChemistryContainer, checkupChemistryHighVol_text, -10, 45, 27, &lv_font_montserrat_18, lv_color_hex(GREEN_DARK), lv_palette_main(LV_PALETTE_GREEN));
 
@@ -621,7 +647,8 @@ void checkup(processNode *processToCheckup)
                                 lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStartButtonLabel, checkupStart_text); 
                                 lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupStartButtonLabel, &lv_font_montserrat_22, 0);              
                                 lv_obj_align(referenceProcess->process.processDetails->checkup->checkupStartButtonLabel, LV_ALIGN_CENTER, 0, 0);
-                 
+                                lv_obj_add_state(referenceProcess->process.processDetails->checkup->checkupStartButton, LV_STATE_DISABLED);
+
                       isStepStatus0created = 1;
                   }
 
@@ -805,7 +832,7 @@ void checkup(processNode *processToCheckup)
 
                   if(referenceProcess->process.processDetails->checkup->processStep == 4 && isStepStatus4created == 0){
                         referenceProcess->process.processDetails->checkup->timer = lv_timer_create(processTimer, 1000,  &referenceProcess);
-                        lv_obj_add_state(tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);
+                        lv_obj_add_state(referenceProcess->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);
 
                         lv_obj_clean(referenceProcess->process.processDetails->checkup->checkupStepContainer);
                         referenceProcess->process.processDetails->checkup->checkupProcessingContainer = lv_obj_create(referenceProcess->process.processDetails->checkup->checkupStepContainer);
@@ -815,15 +842,14 @@ void checkup(processNode *processToCheckup)
                         //lv_obj_set_style_border_color(referenceProcess->process.processDetails->checkup->checkupProcessingContainer, lv_palette_main(LV_PALETTE_GREEN), 0);
                         lv_obj_set_style_border_opa(referenceProcess->process.processDetails->checkup->checkupProcessingContainer, LV_OPA_TRANSP, 0);
                         
-
                                 referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue = lv_label_create(referenceProcess->process.processDetails->checkup->checkupProcessingContainer);         
                                 sprintf(formatted_string, "%dm%ds", referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->timeMins, referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->timeSecs);
-                                lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, formatted_string); //THIS NEED TO BE UPDATED AS THE TIME GOES ON!!
+                                lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, formatted_string);
                                 lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, &lv_font_montserrat_20, 0);              
                                 lv_obj_align(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, LV_ALIGN_CENTER, 0, 80);
 
                                 referenceProcess->process.processDetails->checkup->checkupStepNameValue = lv_label_create(referenceProcess->process.processDetails->checkup->checkupProcessingContainer);         
-                                lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepNameValue, referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString); //THIS NEED TO BE UPDATED AS THE TIME GOES ON!!
+                                lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepNameValue, referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString);
                                 lv_obj_set_style_text_align(referenceProcess->process.processDetails->checkup->checkupStepNameValue , LV_TEXT_ALIGN_CENTER, 0);
                                 lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupStepNameValue, &lv_font_montserrat_22, 0);              
                                 lv_obj_align(referenceProcess->process.processDetails->checkup->checkupStepNameValue, LV_ALIGN_CENTER, 0, -35);
@@ -837,7 +863,7 @@ void checkup(processNode *processToCheckup)
 
                                 referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue = lv_label_create(referenceProcess->process.processDetails->checkup->checkupProcessingContainer);         
                                 sprintf(formatted_string, "%dm%ds", referenceProcess->process.processDetails->timeMins, referenceProcess->process.processDetails->timeSecs);
-                                lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, formatted_string); //THIS NEED TO BE UPDATED AS THE TIME GOES ON!!
+                                lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, formatted_string);
                                 lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, &lv_font_montserrat_24, 0);              
                                 lv_obj_align(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_ALIGN_CENTER, 0, -60);
                               
@@ -852,6 +878,12 @@ void checkup(processNode *processToCheckup)
                                 lv_obj_remove_flag(referenceProcess->process.processDetails->checkup->processArc, LV_OBJ_FLAG_CLICKABLE);
                                 lv_obj_set_style_arc_color(referenceProcess->process.processDetails->checkup->processArc,lv_color_hex(GREEN) , LV_PART_INDICATOR);
                                 lv_obj_set_style_arc_color(referenceProcess->process.processDetails->checkup->processArc, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+
+                                referenceProcess->process.processDetails->checkup->checkupProcessCompleteLabel = lv_label_create(referenceProcess->process.processDetails->checkup->checkupProcessingContainer);         
+                                lv_obj_set_style_text_align(referenceProcess->process.processDetails->checkup->checkupProcessCompleteLabel , LV_TEXT_ALIGN_CENTER, 0);
+                                lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupProcessCompleteLabel, &lv_font_montserrat_22, 0);              
+                                lv_obj_align(referenceProcess->process.processDetails->checkup->checkupProcessCompleteLabel, LV_ALIGN_CENTER, 0, -10);
+                                lv_obj_add_flag(referenceProcess->process.processDetails->checkup->checkupProcessCompleteLabel, LV_OBJ_FLAG_HIDDEN);
 
                                 referenceProcess->process.processDetails->checkup->stepArc = lv_arc_create(referenceProcess->process.processDetails->checkup->checkupProcessingContainer);
                                 lv_obj_set_size(referenceProcess->process.processDetails->checkup->stepArc, 220, 220);
