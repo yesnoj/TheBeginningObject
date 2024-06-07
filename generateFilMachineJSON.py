@@ -2,6 +2,11 @@ import json
 import random
 import string
 
+# Definizione delle costanti
+MAX_PROC_NAME_LEN = 15
+MAX_STEP_ELEMENTS = 5
+MAX_PROC_ELEMENTS = 2
+
 def random_string(length):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for _ in range(length))
@@ -20,7 +25,7 @@ def generate_json():
             "drainFillOverlapSetpoint": 0
         },
         "Filter": {
-            "filterName": None,
+            "filterName": "",
             "isColorFilter": 0,
             "isBnWFilter": 0,
             "preferredOnly": 0
@@ -28,9 +33,9 @@ def generate_json():
         "Processes": {}
     }
 
-    # Generating 30 processes
-    for i in range(30):
-        process_name_string = random_string(random.randint(5, 15))  # Random process name
+    # Generazione dei processi
+    for i in range(MAX_STEP_ELEMENTS):
+        process_name_string = random_string(random.randint(5, MAX_PROC_NAME_LEN))  # Nome casuale del processo
         data["Processes"][f"Process{i}"] = {
             "processNameString": process_name_string,
             "temp": random.randint(0, 100),
@@ -38,28 +43,44 @@ def generate_json():
             "isTempControlled": random.randint(0, 1),
             "isPreferred": random.randint(0, 1),
             "filmType": random.randint(0, 1),
-            "timeMins": random.randint(0, 60),
-            "timeSecs": random.randint(0, 59),
+            "timeMins": 0,  # Placeholder, verrà calcolato più avanti
+            "timeSecs": 0,  # Placeholder, verrà calcolato più avanti
             "Steps": {}
         }
 
-        # Generating 20 steps for each process
-        for j in range(20):
-            step_name_string = random_string(random.randint(5, 15))  # Random step name
+        total_mins = 0
+        total_secs = 0
+
+        # Generazione degli step per ciascun processo
+        for j in range(MAX_PROC_ELEMENTS):
+            step_name_string = random_string(random.randint(5, MAX_PROC_NAME_LEN))  # Nome casuale dello step
+            step_mins = random.randint(0, 5)
+            step_secs = random.randint(0, 59)
+            total_mins += step_mins
+            total_secs += step_secs
+
+            # Conversione dei secondi totali in minuti e secondi
+            if total_secs >= 60:
+                total_mins += total_secs // 60
+                total_secs = total_secs % 60
+
             data["Processes"][f"Process{i}"]["Steps"][f"Step{j}"] = {
                 "stepNameString": step_name_string,
-                "timeMins": random.randint(0, 60),
-                "timeSecs": random.randint(0, 59),
+                "timeMins": step_mins,
+                "timeSecs": step_secs,
                 "type": random.randint(0, 2),
                 "source": random.randint(0, 3),
                 "discardAfterProc": random.randint(0, 1)
             }
+
+        # Impostazione dei valori totali di timeMins e timeSecs per il processo
+        data["Processes"][f"Process{i}"]["timeMins"] = total_mins
+        data["Processes"][f"Process{i}"]["timeSecs"] = total_secs
 
     return data
 
 if __name__ == "__main__":
     generated_json = generate_json()
     with open("FilMachine.json", "w") as json_file:
-        json.dump(generated_json, json_file, separators=(',', ':')) #inline json format
-        # json.dump(generated_json, json_file, indent=4) #standard json format
-
+         json.dump(generated_json, json_file, separators=(',', ':'))  # Formato JSON in linea
+        #json.dump(generated_json, json_file, indent=4)  # Formato JSON standard

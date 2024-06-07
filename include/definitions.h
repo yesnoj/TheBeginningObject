@@ -1,3 +1,4 @@
+#include <sys/_stdint.h>
 /**
  * @file definitions.h
  *
@@ -527,7 +528,7 @@ typedef struct sProcessDetail {
     uint8_t            isPreferred;
     uint8_t            somethingChanged;
     filmType_t         filmType;
-    uint8_t            timeMins;
+    uint32_t           timeMins;
     uint8_t            timeSecs;
 }sProcessDetail;
 
@@ -894,8 +895,8 @@ LV_IMG_DECLARE(splash_img);
 #define FILENAME_SAVE         "/FilMachine.json"
 
 #define MAX_PROC_NAME_LEN		  15
-#define MAX_STEP_ELEMENTS		  20
-#define MAX_PROC_ELEMENTS		  30
+#define MAX_STEP_ELEMENTS		  30
+#define MAX_PROC_ELEMENTS		  20
 
 
 /*********************
