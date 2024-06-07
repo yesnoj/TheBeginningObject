@@ -1,3 +1,4 @@
+#include "core/lv_obj.h"
 #include <sys/_stdint.h>
 #include "misc/lv_event.h"
 #include "core/lv_obj_event.h"
@@ -125,33 +126,62 @@ static bool deleteStepElementByObj( lv_obj_t *obj, processNode * processReferenc
 ******************************/
 
 void event_stepElement(lv_event_t * e){
+  int8_t x;
+
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
-  lv_indev_t * indev = lv_indev_active();
   lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
   stepNode	*currentNode = getStepElementEntryByObject(obj,data);
-  lv_obj_t * screen = lv_event_get_current_target(e);
-  lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_active());
 
-  int8_t x,y;
+  lv_indev_t * indev = lv_indev_active();
+  lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_active());
+      
+  if(indev == NULL)  
+    return;
 
  	if( currentNode == NULL ) {
-		LV_LOG_USER("Bad object passed to eventProcessElement!");	/* This will stop a crash */
-		return;														/* if something is wrong */
+		LV_LOG_USER("Bad object passed to eventProcessElement!");	
+		return;													
 	}
 
 
- if(indev == NULL)  return;
+    if(code == LV_EVENT_LONG_PRESSED_REPEAT) {    
+        LV_LOG_USER("Drag event!");
+      
+        lv_point_t vect;
+        lv_indev_get_vect(indev, &vect);
 
+        //Hide side buttons if the element need to be dragged
+          if(currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 1){
+            LV_LOG_USER("Left gesture to return");
+            x = lv_obj_get_x_aligned(obj) - 50;
+            lv_obj_set_pos(obj, x, lv_obj_get_y_aligned(obj));
+            currentNode->step.swipedLeft = 0;
+            currentNode->step.swipedRight = 0;
+            lv_obj_add_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(currentNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
+          }
 
-   if(code == LV_EVENT_GESTURE) {    
-        switch(dir) {
+           if(currentNode->step.swipedLeft == 1 && currentNode->step.swipedRight == 0){
+              LV_LOG_USER("Right gesture to return");
+              x = lv_obj_get_x_aligned(obj) + 50;
+              lv_obj_set_pos(obj, x, lv_obj_get_y_aligned(obj));
+              currentNode->step.swipedLeft = 0;
+              currentNode->step.swipedRight = 0;
+              lv_obj_add_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
+              lv_obj_add_flag(currentNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
+             }
+
+        lv_obj_set_pos(obj, lv_obj_get_x_aligned(obj), lv_obj_get_y_aligned(obj) + vect.y);    
+      }
+
+   if(code == LV_EVENT_GESTURE) { 
+      switch(dir) {
         case LV_DIR_LEFT:
           if(currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0){
             LV_LOG_USER("Left gesture for edit");
             x = lv_obj_get_x_aligned(obj) - 50;
-            y = lv_obj_get_y_aligned(obj);
-            lv_obj_set_pos(obj, x, y);
+            lv_obj_set_pos(obj, x, lv_obj_get_y_aligned(obj));
             currentNode->step.swipedLeft = 1;
             currentNode->step.swipedRight = 0;
             lv_obj_remove_flag(currentNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
@@ -160,8 +190,7 @@ void event_stepElement(lv_event_t * e){
           if(currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 1){
             LV_LOG_USER("Left gesture to return");
             x = lv_obj_get_x_aligned(obj) - 50;
-            y = lv_obj_get_y_aligned(obj);
-            lv_obj_set_pos(obj, x, y);
+            lv_obj_set_pos(obj, x, lv_obj_get_y_aligned(obj));
             currentNode->step.swipedLeft = 0;
             currentNode->step.swipedRight = 0;
             lv_obj_add_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
@@ -173,8 +202,7 @@ void event_stepElement(lv_event_t * e){
            if(currentNode->step.swipedLeft == 1 && currentNode->step.swipedRight == 0){
               LV_LOG_USER("Right gesture to return");
               x = lv_obj_get_x_aligned(obj) + 50;
-              y = lv_obj_get_y_aligned(obj);
-              lv_obj_set_pos(obj, x, y);
+              lv_obj_set_pos(obj, x, lv_obj_get_y_aligned(obj));
               currentNode->step.swipedLeft = 0;
               currentNode->step.swipedRight = 0;
               lv_obj_add_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
@@ -184,8 +212,7 @@ void event_stepElement(lv_event_t * e){
            if(currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0){
               LV_LOG_USER("Right gesture for delete");
               x = lv_obj_get_x_aligned(obj) + 50;
-              y = lv_obj_get_y_aligned(obj);
-              lv_obj_set_pos(obj, x, y);
+              lv_obj_set_pos(obj, x, lv_obj_get_y_aligned(obj));
               currentNode->step.swipedRight = 1;
               currentNode->step.swipedLeft = 0;
               lv_obj_remove_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
@@ -195,15 +222,7 @@ void event_stepElement(lv_event_t * e){
   }
     
     
-    if(code == LV_EVENT_PRESSING) {    
-        LV_LOG_USER("Drag event!");
-        lv_point_t vect;
-        lv_indev_get_vect(indev, &vect);
 
-        int32_t x = lv_obj_get_x_aligned(obj) + vect.x;
-        int32_t y = lv_obj_get_y_aligned(obj); //+ vect.y;
-        lv_obj_set_pos(obj, x, y);
-      }
 
       if(code == LV_EVENT_CLICKED) {
         if(obj == currentNode->step.editButton){
@@ -220,7 +239,6 @@ void event_stepElement(lv_event_t * e){
            }
         }
       }
-
   
   if(code == LV_EVENT_DELETE) {
        lv_style_reset(&currentNode->step.stepStyle);
@@ -314,10 +332,8 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
         lv_obj_align(newStep->step.stepElementSummary, LV_ALIGN_TOP_LEFT, 34, -16);
         lv_obj_remove_flag(newStep->step.stepElementSummary, LV_OBJ_FLAG_SCROLLABLE);  
         lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_LONG_PRESSED_REPEAT, processReference);
-
-
         lv_obj_add_style(newStep->step.stepElementSummary, &newStep->step.stepStyle, 0);
-
+                
                 newStep->step.stepTypeIcon = lv_label_create(newStep->step.stepElementSummary);
 
                 if(newStep->step.stepDetails->type == CHEMISTRY)

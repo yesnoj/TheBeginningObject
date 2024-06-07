@@ -57,7 +57,7 @@ void event_cb(lv_event_t * e)
 lv_obj_t * create_radiobutton(lv_obj_t * mBoxParent, const char * txt, const int32_t x, const int32_t y, const int32_t size, const lv_font_t * font, const lv_color_t borderColor, const lv_color_t bgColor)
 {
     lv_obj_t * obj = (lv_obj_t *)lv_checkbox_create(mBoxParent);
-  lv_obj_add_flag(obj, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_add_flag(obj, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_set_style_text_font(obj, font, LV_PART_MAIN);
     lv_checkbox_set_text(obj, txt);
     lv_obj_align(obj, LV_ALIGN_RIGHT_MID, x, y);
