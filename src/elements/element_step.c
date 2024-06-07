@@ -246,8 +246,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
 	if( newStep->step.stepStyle.values_and_props == NULL ) {		/* Only initialise the style once! */
 		lv_style_init(&newStep->step.stepStyle);
 
-    lv_style_set_bg_opa(&newStep->step.stepStyle, LV_OPA_60);
-    lv_style_set_bg_color(&newStep->step.stepStyle, lv_color_hex(WHITE));
+    lv_style_set_bg_color(&newStep->step.stepStyle, lv_color_hex(GREY));
     lv_style_set_border_color(&newStep->step.stepStyle, lv_color_hex(GREEN_DARK));
     lv_style_set_border_width(&newStep->step.stepStyle, 4);
     lv_style_set_border_opa(&newStep->step.stepStyle, LV_OPA_50);
@@ -282,7 +281,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
 
         newStep->step.deleteButton = lv_obj_create(newStep->step.stepElement);
         lv_obj_set_style_bg_color(newStep->step.deleteButton, lv_color_hex(RED_DARK), LV_PART_MAIN);
-        lv_obj_set_size(newStep->step.deleteButton, 50, 70);
+        lv_obj_set_size(newStep->step.deleteButton, 60, 70);
         lv_obj_align(newStep->step.deleteButton, LV_ALIGN_TOP_LEFT, -16, -18);
         lv_obj_add_flag(newStep->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
         lv_obj_remove_flag(newStep->step.deleteButton, LV_OBJ_FLAG_SCROLLABLE);
@@ -292,17 +291,29 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
                 newStep->step.deleteButtonLabel = lv_label_create(newStep->step.deleteButton);         
                 lv_label_set_text(newStep->step.deleteButtonLabel, trash_icon); 
                 lv_obj_set_style_text_font(newStep->step.deleteButtonLabel, &FilMachineFontIcons_30, 0);              
-                lv_obj_align(newStep->step.deleteButtonLabel, LV_ALIGN_CENTER, 0, 0);
+                lv_obj_align(newStep->step.deleteButtonLabel, LV_ALIGN_CENTER, -5 , 0);
 
+
+        newStep->step.editButton = lv_obj_create(newStep->step.stepElement);
+        lv_obj_set_style_bg_color(newStep->step.editButton, lv_color_hex(LIGHT_BLUE_DARK), LV_PART_MAIN);
+        lv_obj_set_size(newStep->step.editButton, 60, 70);
+        lv_obj_align(newStep->step.editButton, LV_ALIGN_TOP_LEFT, 260, -18);
+        lv_obj_add_flag(newStep->step.editButton, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(newStep->step.editButton, LV_OBJ_FLAG_SCROLLABLE);
+        lv_obj_add_event_cb(newStep->step.editButton, event_stepElement, LV_EVENT_CLICKED, processReference);
+        lv_obj_add_flag(newStep->step.editButton, LV_OBJ_FLAG_CLICKABLE);
+
+                newStep->step.editButtonLabel = lv_label_create(newStep->step.editButton);         
+                lv_label_set_text(newStep->step.editButtonLabel, edit_icon); 
+                lv_obj_set_style_text_font(newStep->step.editButtonLabel, &FilMachineFontIcons_30, 0);              
+                lv_obj_align(newStep->step.editButtonLabel, LV_ALIGN_CENTER, 5, 0);
 
         newStep->step.stepElementSummary = lv_obj_create(newStep->step.stepElement);
         //lv_obj_set_style_border_color(newStep->step.stepElementSummary, lv_color_hex(LV_PALETTE_ORANGE), 0);
         lv_obj_set_size(newStep->step.stepElementSummary, 235, 66);
         lv_obj_align(newStep->step.stepElementSummary, LV_ALIGN_TOP_LEFT, 34, -16);
         lv_obj_remove_flag(newStep->step.stepElementSummary, LV_OBJ_FLAG_SCROLLABLE);  
-        //lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_SHORT_CLICKED, processReference);  
-        //lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_LONG_PRESSED_REPEAT, processReference);
-        //lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_PRESSING, processReference);
+        lv_obj_add_event_cb(newStep->step.stepElementSummary, event_stepElement, LV_EVENT_LONG_PRESSED_REPEAT, processReference);
 
 
         lv_obj_add_style(newStep->step.stepElementSummary, &newStep->step.stepStyle, 0);
@@ -359,18 +370,6 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
                     lv_obj_set_style_text_color(newStep->step.discardAfterIcon, lv_color_hex(GREY), LV_PART_MAIN);
                   }
 
-        newStep->step.editButton = lv_obj_create(newStep->step.stepElement);
-        lv_obj_set_style_bg_color(newStep->step.editButton, lv_color_hex(LIGHT_BLUE_DARK), LV_PART_MAIN);
-        lv_obj_set_size(newStep->step.editButton, 50, 70);
-        lv_obj_align(newStep->step.editButton, LV_ALIGN_TOP_LEFT, 270, -18);
-        lv_obj_add_flag(newStep->step.editButton, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_remove_flag(newStep->step.editButton, LV_OBJ_FLAG_SCROLLABLE);
-        lv_obj_add_event_cb(newStep->step.editButton, event_stepElement, LV_EVENT_CLICKED, processReference);
-        lv_obj_add_flag(newStep->step.editButton, LV_OBJ_FLAG_CLICKABLE);
 
-                newStep->step.editButtonLabel = lv_label_create(newStep->step.editButton);         
-                lv_label_set_text(newStep->step.editButtonLabel, edit_icon); 
-                lv_obj_set_style_text_font(newStep->step.editButtonLabel, &FilMachineFontIcons_30, 0);              
-                lv_obj_align(newStep->step.editButtonLabel, LV_ALIGN_CENTER, 0, 0);
 }
 

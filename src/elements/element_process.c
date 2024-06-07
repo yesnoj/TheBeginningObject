@@ -212,8 +212,7 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
 	if(newProcess->process.processStyle.values_and_props == NULL ) {		/* Only initialise the style once! */
 		lv_style_init(&newProcess->process.processStyle);
 
-		lv_style_set_bg_opa(&newProcess->process.processStyle, LV_OPA_60);
-		lv_style_set_bg_color(&newProcess->process.processStyle, lv_color_hex(WHITE));
+		lv_style_set_bg_color(&newProcess->process.processStyle, lv_color_hex(GREY));
 		lv_style_set_border_color(&newProcess->process.processStyle, lv_color_hex(GREEN_DARK));
 		lv_style_set_border_width(&newProcess->process.processStyle, 4);
 		lv_style_set_border_opa(&newProcess->process.processStyle, LV_OPA_50);
@@ -245,7 +244,7 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
 	*********************/
         newProcess->process.deleteButton = lv_obj_create(newProcess->process.processElement);
         lv_obj_set_style_bg_color(newProcess->process.deleteButton, lv_color_hex(RED_DARK), LV_PART_MAIN);
-        lv_obj_set_size(newProcess->process.deleteButton, 50, 70);
+        lv_obj_set_size(newProcess->process.deleteButton, 60, 70);
         lv_obj_align(newProcess->process.deleteButton, LV_ALIGN_TOP_LEFT, -16, -18);
         lv_obj_add_flag(newProcess->process.deleteButton, LV_OBJ_FLAG_HIDDEN);
         lv_obj_remove_flag(newProcess->process.deleteButton, LV_OBJ_FLAG_SCROLLABLE);
@@ -255,7 +254,7 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
                 newProcess->process.deleteButtonLabel = lv_label_create(newProcess->process.deleteButton);         
                 lv_label_set_text(newProcess->process.deleteButtonLabel, trash_icon); 
                 lv_obj_set_style_text_font(newProcess->process.deleteButtonLabel, &FilMachineFontIcons_30, 0);              
-                lv_obj_align(newProcess->process.deleteButtonLabel, LV_ALIGN_CENTER, 0, 0);
+                lv_obj_align(newProcess->process.deleteButtonLabel, LV_ALIGN_CENTER, -5 , 0);
 
 
         newProcess->process.processElementSummary = lv_obj_create(newProcess->process.processElement);

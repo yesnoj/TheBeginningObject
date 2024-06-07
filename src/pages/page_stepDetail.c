@@ -1,3 +1,5 @@
+#include <sys/_stdint.h>
+#include "core/lv_obj_event.h"
 #include "misc/lv_event.h"
 /**
  * @file page_stepDetail.c
@@ -54,14 +56,35 @@ void event_stepDetail(lv_event_t * e)
 
       data->process.processDetails->somethingChanged = 1;
       lv_obj_send_event(data->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
+      
+      if(newStep->step.swipedLeft == 1 && newStep->step.swipedRight == 0){
+        uint32_t  x = lv_obj_get_x_aligned(newStep->step.stepElement) + 50;
+        uint32_t  y = lv_obj_get_y_aligned(newStep->step.stepElement);
+        lv_obj_set_pos(newStep->step.stepElement, x, y);
+        newStep->step.swipedLeft = 0;
+        newStep->step.swipedRight = 0;
+        lv_obj_add_flag(newStep->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(newStep->step.editButton, LV_OBJ_FLAG_HIDDEN);
+      }
       calcolateTotalTime(data);
       updateStepElement(data, newStep);
       lv_msgbox_close(mboxCont);
       lv_obj_delete(mboxCont);
-
+      
     }
     if(obj == newStep->step.stepDetails->stepCancelButton){
       LV_LOG_USER("Pressed newStep->step.stepDetails->stepCancelButton");
+      
+      if(newStep->step.swipedLeft == 1 && newStep->step.swipedRight == 0){
+        uint32_t  x = lv_obj_get_x_aligned(newStep->step.stepElement) + 50;
+        uint32_t  y = lv_obj_get_y_aligned(newStep->step.stepElement);
+        lv_obj_set_pos(newStep->step.stepElement, x, y);
+        newStep->step.swipedLeft = 0;
+        newStep->step.swipedRight = 0;
+        lv_obj_add_flag(newStep->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(newStep->step.editButton, LV_OBJ_FLAG_HIDDEN);
+      }
+
       lv_msgbox_close(mboxCont);
       lv_obj_delete(mboxCont);
     }
