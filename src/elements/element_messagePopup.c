@@ -45,6 +45,7 @@ void event_messagePopup(lv_event_t *e)
                   LV_LOG_USER("Delete process element instance at address 0x%p Failed!", gui.element.messagePopup.whoCallMe);
                 } else {
                   LV_LOG_USER("Delete process element instance at address 0x%p", gui.element.messagePopup.whoCallMe);
+                  qSysAction( SAVE_PROCESS_CONFIG );
                 }
 
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
@@ -62,6 +63,7 @@ void event_messagePopup(lv_event_t *e)
                 } else {
                   calcolateTotalTime(tempProcessNode);
                   LV_LOG_USER("Delete step element instance at address 0x%p", gui.element.messagePopup.whoCallMe);
+                  qSysAction( SAVE_PROCESS_CONFIG );
                 }
                 
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);

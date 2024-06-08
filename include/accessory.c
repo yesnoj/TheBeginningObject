@@ -178,10 +178,12 @@ void event_keyboard(lv_event_t* e)
             if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.element.filterPopup.mBoxNameTextArea){
               LV_LOG_USER("Press ok from filterPopup.mBoxFilterPopupParent");
               lv_textarea_set_text(gui.element.filterPopup.mBoxNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
-              if(strlen(lv_textarea_get_text(gui.element.filterPopup.mBoxNameTextArea)) > 0) {
-                if(gui.element.filterPopup.filterName != NULL ) free( gui.element.filterPopup.filterName );
-                gui.element.filterPopup.filterName = (char*)malloc(strlen(lv_textarea_get_text(gui.element.filterPopup.mBoxNameTextArea))+1);
-                strcpy(gui.element.filterPopup.filterName, lv_textarea_get_text(gui.element.filterPopup.mBoxNameTextArea));
+              if(strlen(lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea)) > 0) {
+                gui.element.filterPopup.filterName = NULL;
+                gui.element.filterPopup.filterName = (char *)malloc(sizeof(char) * (strlen(lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea)) + 1)); // Alloca memoria per la stringa, lunghezza_stringa è la lunghezza della stringa da assegnare
+
+                if(gui.element.filterPopup.filterName != NULL ) 
+                  strcpy(gui.element.filterPopup.filterName, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
               }              
               hideKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
             }
@@ -1299,6 +1301,97 @@ void testPin(uint8_t pin){
     delay(500);
     mcp.digitalWrite(pin, LOW);
     delay(500);
+}
+
+void toLowerCase(char *str) {
+    while (*str) {
+        *str = tolower((unsigned char)*str);
+        str++;
+    }
+}
+
+int caseInsensitiveStrstr(const char *haystack, const char *needle) {
+    size_t haystackLen = strlen(haystack);
+    size_t needleLen = strlen(needle);
+    
+    char haystackLower[haystackLen + 1];
+    char needleLower[needleLen + 1];
+    
+    strcpy(haystackLower, haystack);
+    strcpy(needleLower, needle);
+    
+    toLowerCase(haystackLower);
+    toLowerCase(needleLower);
+    
+    return strstr(haystackLower, needleLower) != NULL;
+}
+
+void filterAndDisplayProcesses(struct sProcesses *processesPage, const char *filterName, uint8_t isColorFilter, uint8_t isBnWFilter, uint8_t preferredOnly) {
+    processNode *currentNode = processesPage->processElementsList.start;
+    uint16_t displayedCount = 0;
+
+    // Nascondi tutti i processi inizialmente
+    while (currentNode != NULL) {
+        lv_obj_add_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
+        currentNode = currentNode->next;
+    }
+
+    currentNode = processesPage->processElementsList.start;
+    // Filtra e visualizza i processi
+    while (currentNode != NULL) {
+        uint8_t display = 1;
+
+        // Filtro per nome
+        if (filterName != NULL && strlen(filterName) > 0 && !caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, filterName)) {
+            display = 0;
+        }
+
+        // Filtro per tipo di film (colore o BnW)
+        if (isColorFilter && currentNode->process.processDetails->filmType != COLOR_FILM) {
+            display = 0;
+        }
+
+        if (isBnWFilter && currentNode->process.processDetails->filmType != BLACK_AND_WHITE_FILM) {
+            display = 0;
+        }
+
+        // Filtro per preferiti
+        if (preferredOnly && !currentNode->process.processDetails->isPreferred) {
+            display = 0;
+        }
+
+        // Visualizza il processo se passa tutti i filtri
+        if (display) {
+            lv_obj_clear_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
+            displayedCount++;
+        }
+
+        currentNode = currentNode->next;
+    }
+
+    // Riallinea gli elementi visibili
+    lv_obj_t *parent = processesPage->processesListContainer;  // Supponendo che i processi siano figli di un contenitore
+    lv_obj_update_layout(parent);  // Aggiorna il layout del contenitore per riallineare gli elementi visibili
+
+    // Aggiorna il conteggio dei processi visualizzati se necessario
+    // updateDisplayedProcessCount(displayedCount);
+}
+
+void removeFiltersAndDisplayAllProcesses(struct sProcesses *processesPage) {
+    processNode *currentNode = processesPage->processElementsList.start;
+
+    // Mostra tutti i processi
+    while (currentNode != NULL) {
+        lv_obj_clear_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
+        currentNode = currentNode->next;
+    }
+
+    // Riallinea gli elementi visibili
+    lv_obj_t *parent = processesPage->processesListContainer;  // Supponendo che i processi siano figli di un contenitore
+    lv_obj_update_layout(parent);  // Aggiorna il layout del contenitore per riallineare gli elementi visibili
+
+    // Aggiorna il conteggio dei processi visualizzati se necessario
+    // updateDisplayedProcessCount(totalCount);  // Supponendo che totalCount sia il numero totale di processi
 }
 
 

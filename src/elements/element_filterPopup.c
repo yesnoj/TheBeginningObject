@@ -1,3 +1,4 @@
+#include <sys/_stdint.h>
 #include "widgets/textarea/lv_textarea.h"
 /**
  * @file element_filter.c
@@ -12,6 +13,7 @@
 
 extern struct gui_components gui;
 uint8_t filterFilmType = 0;
+uint8_t resetPressed = 0;
 //ACCESSORY INCLUDES
 
 
@@ -28,26 +30,33 @@ void event_filterMBox(lv_event_t * e){
       if(code == LV_EVENT_CLICKED) {    
         if(obj == gui.element.filterPopup.mBoxApplyFilterButton){
           LV_LOG_USER("Apply BUTTON");        
-          lv_style_reset(&gui.element.filterPopup.style_mBoxTitleLine);
+          if(resetPressed == 0){
+            lv_obj_set_style_text_color(gui.page.processes.iconFilterLabel, lv_color_hex(GREEN), LV_PART_MAIN);
+            filterAndDisplayProcesses(&gui.page.processes, gui.element.filterPopup.filterName, gui.element.filterPopup.isColorFilter, gui.element.filterPopup.isBnWFilter, gui.element.filterPopup.preferredOnly);
+          }
+          else{
+            lv_obj_set_style_text_color(gui.page.processes.iconFilterLabel, lv_color_hex(WHITE), LV_PART_MAIN);
+            removeFiltersAndDisplayAllProcesses(&gui.page.processes);
+            resetPressed = 0;   
+          }
           lv_obj_add_flag(gui.element.filterPopup.mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
-          lv_obj_remove_state(gui.element.filterPopup.mBoxSelectColorRadioButton, LV_STATE_CHECKED);
-          lv_obj_remove_state(gui.element.filterPopup.mBoxSelectBnWRadioButton, LV_STATE_CHECKED);
-          lv_obj_remove_state(gui.element.filterPopup.mBoxOnlyPreferredSwitch, LV_STATE_CHECKED);
           qSysAction( SAVE_PROCESS_CONFIG );
         }
         if(obj == gui.element.filterPopup.mBoxResetFilterButton){
           LV_LOG_USER("Reset BUTTON");
+
           lv_textarea_set_text(gui.element.filterPopup.mBoxNameTextArea, "");
           lv_obj_remove_state(gui.element.filterPopup.mBoxOnlyPreferredSwitch, LV_STATE_CHECKED);
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectColorRadioButton, LV_STATE_CHECKED);
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectBnWRadioButton, LV_STATE_CHECKED);
-          
+          resetPressed = 1;
+                      
           gui.element.filterPopup.isColorFilter = 0;
           gui.element.filterPopup.isBnWFilter = 0;
           gui.element.filterPopup.preferredOnly = 0;
           if(gui.element.filterPopup.filterName != NULL ) {
-            free(gui.element.filterPopup.filterName);
-            gui.element.filterPopup.filterName = NULL;
+            //free(gui.element.filterPopup.filterName);
+            gui.element.filterPopup.filterName = "";
           }
           qSysAction( SAVE_PROCESS_CONFIG );
         }
@@ -64,14 +73,12 @@ void event_filterMBox(lv_event_t * e){
           LV_LOG_USER("State bnw: %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
           gui.element.filterPopup.isBnWFilter = lv_obj_has_state(obj, LV_STATE_CHECKED);
           }
-          qSysAction( SAVE_PROCESS_CONFIG );
       }
-    }
+    } 
   if(obj == gui.element.filterPopup.mBoxOnlyPreferredSwitch){
     if(code == LV_EVENT_VALUE_CHANGED) {
         LV_LOG_USER("State preferred: %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
         gui.element.filterPopup.preferredOnly = lv_obj_has_state(obj, LV_STATE_CHECKED);  
-        qSysAction( SAVE_PROCESS_CONFIG );
       }
     }
 }

@@ -33,17 +33,11 @@ void event_tabProcesses(lv_event_t * e)
         LV_LOG_USER("New Filter Creation popup");
         if(gui.element.filterPopup.mBoxFilterPopupParent == NULL){
           filterPopupCreate();
+          LV_LOG_USER("New Filter created!");
         }
         else{
-          lv_textarea_set_text(gui.element.filterPopup.mBoxNameTextArea, "");
-          if( gui.element.filterPopup.filterName != NULL ) {
-            free( gui.element.filterPopup.filterName );
-            gui.element.filterPopup.filterName = NULL;
-          }
-          lv_obj_remove_state(gui.element.filterPopup.mBoxOnlyPreferredSwitch, LV_STATE_CHECKED);
-          lv_obj_remove_state(gui.element.filterPopup.mBoxSelectColorRadioButton, LV_STATE_CHECKED);
-          lv_obj_remove_state(gui.element.filterPopup.mBoxSelectBnWRadioButton, LV_STATE_CHECKED);
-          lv_obj_remove_flag(gui.element.filterPopup.mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
+              LV_LOG_USER("Filter already created!");
+              lv_obj_remove_flag(gui.element.filterPopup.mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
           }
     }
   }
