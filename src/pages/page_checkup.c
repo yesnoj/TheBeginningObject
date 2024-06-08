@@ -218,8 +218,13 @@ void processTimer(lv_timer_t * timer)
           stepPercentage = calcolatePercentage(minutesStepElapsed, secondsStepElapsed, tempStepNode->step.stepDetails->timeMins, tempStepNode->step.stepDetails->timeSecs);
           lv_arc_set_value(referenceProcess->process.processDetails->checkup->stepArc, stepPercentage);
           lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepSourceValue, processSourceList[tempStepNode->step.stepDetails->source]);
-          if(tempStepNode->next != NULL)
-            lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, tempStepNode->next->step.stepDetails->stepNameString); 
+          
+          if(referenceProcess->process.processDetails->stepElementsList.size == 1)
+            lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString);
+          else
+            if(tempStepNode->next != NULL)
+              lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, tempStepNode->next->step.stepDetails->stepNameString); 
+                   
           lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepNameValue, tempStepNode->step.stepDetails->stepNameString);
 
           
