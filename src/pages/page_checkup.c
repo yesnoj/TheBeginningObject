@@ -218,7 +218,10 @@ void processTimer(lv_timer_t * timer)
           stepPercentage = calcolatePercentage(minutesStepElapsed, secondsStepElapsed, tempStepNode->step.stepDetails->timeMins, tempStepNode->step.stepDetails->timeSecs);
           lv_arc_set_value(referenceProcess->process.processDetails->checkup->stepArc, stepPercentage);
           lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepSourceValue, processSourceList[tempStepNode->step.stepDetails->source]);
-          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, tempStepNode->step.stepDetails->stepNameString); 
+          if(tempStepNode->next != NULL)
+            lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, tempStepNode->next->step.stepDetails->stepNameString); 
+          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepNameValue, tempStepNode->step.stepDetails->stepNameString);
+
           
           sprintf(formatted_string, "%dm%ds", remainingStepMins, remainingStepSecsOnly);
           lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, formatted_string);
@@ -550,7 +553,7 @@ void checkup(processNode *processToCheckup)
                           lv_obj_align(referenceProcess->process.processDetails->checkup->checkupNextStepLabel, LV_ALIGN_LEFT_MID, -15, 0);
 
                           referenceProcess->process.processDetails->checkup->checkupNextStepValue = lv_label_create(referenceProcess->process.processDetails->checkup->checkupNextStepContainer);         
-                          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString); //THIS NEED TO BE ALIGNED WITH THE ACTUAL STEP OF THE PROCESS!
+                          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, "");
                           lv_obj_set_width(referenceProcess->process.processDetails->checkup->checkupNextStepValue, 105);
                           lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupNextStepValue, &lv_font_montserrat_20, 0);              
                           lv_obj_align(referenceProcess->process.processDetails->checkup->checkupNextStepValue, LV_ALIGN_RIGHT_MID, 10, 0);

@@ -485,7 +485,7 @@ void init_globals( void ) {
   gui.element.rollerPopup.secondsOptions = createRollerValues(0,60,""); 
   gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(0,5,"0.");
 
-  //gui.element.filterPopup.filterName = ""; // Not Required memset above does this
+  gui.element.filterPopup.filterName = "";
   gui.element.filterPopup.isColorFilter = FILM_TYPE_NA;
   gui.element.filterPopup.isBnWFilter = FILM_TYPE_NA;
   //gui.element.filterPopup.isBnWFilter = 0;
