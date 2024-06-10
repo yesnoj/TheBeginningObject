@@ -33,12 +33,15 @@ void event_filterMBox(lv_event_t * e){
         if(obj == gui.element.filterPopup.mBoxApplyFilterButton){
           LV_LOG_USER("Apply BUTTON");        
           if(resetPressed == 0){
-            LV_LOG_USER("resetPressed %d", resetPressed);  
-            lv_obj_set_style_text_color(gui.page.processes.iconFilterLabel, lv_color_hex(GREEN), LV_PART_MAIN);
-            gui.page.processes.isFiltered = 1;
-            filterAndDisplayProcesses(gui.element.filterPopup.filterName, gui.element.filterPopup.isColorFilter, gui.element.filterPopup.isBnWFilter, gui.element.filterPopup.preferredOnly);
+            LV_LOG_USER("resetPressed %d", resetPressed);
+            if(strlen(gui.element.filterPopup.filterName) > 0 || gui.element.filterPopup.isColorFilter != 0 || gui.element.filterPopup.isBnWFilter != 0 || gui.element.filterPopup.preferredOnly != 0)
+            {
+              lv_obj_set_style_text_color(gui.page.processes.iconFilterLabel, lv_color_hex(GREEN), LV_PART_MAIN);
+              gui.page.processes.isFiltered = 1;
+              filterAndDisplayProcesses();
+            }
           }
-          else{
+          if(resetPressed == 1){
             LV_LOG_USER("resetPressed %d", resetPressed); 
             lv_obj_set_style_text_color(gui.page.processes.iconFilterLabel, lv_color_hex(WHITE), LV_PART_MAIN);
             gui.page.processes.isFiltered = 0;

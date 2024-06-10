@@ -488,10 +488,9 @@ void init_globals( void ) {
   gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(0,5,"0.");
 
   gui.element.filterPopup.filterName = "";
-  gui.element.filterPopup.isColorFilter = FILM_TYPE_NA;
-  gui.element.filterPopup.isBnWFilter = FILM_TYPE_NA;
-  //gui.element.filterPopup.isBnWFilter = 0;
-  //gui.element.filterPopup.preferredOnly = 0;
+  gui.element.filterPopup.isColorFilter = 0;
+  gui.element.filterPopup.isBnWFilter = 0;
+  gui.element.filterPopup.preferredOnly = 0;
   
   gui.page.processes.isFiltered = 0;
 
@@ -756,22 +755,6 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
                 LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
             }
 
-            JsonObject Filter = doc["Filter"];
-//            gui.element.filterPopup.filterName = Filter["filterName"];
-            gui.element.filterPopup.filterName = (char*)malloc( strlen(Filter["filterName"]) + 1);
-            strcpy( gui.element.filterPopup.filterName, Filter["filterName"] );                
-            gui.element.filterPopup.isColorFilter = Filter["isColorFilter"];
-            gui.element.filterPopup.isBnWFilter = Filter["isBnWFilter"];
-            gui.element.filterPopup.preferredOnly = Filter["preferredOnly"];
-
-            if(enableLog){
-                LV_LOG_USER("--- FILTER PARAMS ---");
-                LV_LOG_USER("filterName:%s",gui.element.filterPopup.filterName);
-                LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
-                LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
-                LV_LOG_USER("preferredOnly:%d",gui.element.filterPopup.preferredOnly);
-            }
-
             processList *processElementsList = &(gui.page.processes.processElementsList);
             processElementsList->start = NULL;
             processElementsList->end = NULL;
@@ -907,19 +890,6 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
         LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
       }
 
-        JsonObject Filter = doc.createNestedObject("Filter");
-        Filter["filterName"] = gui.element.filterPopup.filterName;
-        Filter["isColorFilter"] = gui.element.filterPopup.isColorFilter;
-        Filter["isBnWFilter"] = gui.element.filterPopup.isBnWFilter;
-        Filter["preferredOnly"] = gui.element.filterPopup.preferredOnly;
-
-      if(enableLog){
-        LV_LOG_USER("--- FILTER PARAMS ---");
-        LV_LOG_USER("filterName:%s",gui.element.filterPopup.filterName);
-        LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
-        LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
-        LV_LOG_USER("preferredOnly:%d",gui.element.filterPopup.preferredOnly);
-      }
 
         JsonObject Processes = doc.createNestedObject("Processes");
         
@@ -1339,15 +1309,14 @@ int caseInsensitiveStrstr(const char *haystack, const char *needle) {
 
 
 
-void filterAndDisplayProcesses(const char *filterName, uint8_t isColorFilter, uint8_t isBnWFilter, uint8_t preferredOnly) {
+void filterAndDisplayProcesses() {
     processNode *currentNode = gui.page.processes.processElementsList.start;
     int32_t displayedCount = 1;
-    
 
     if(gui.page.processes.isFiltered == 1)
         removeFiltersAndDisplayAllProcesses();
 
-    LV_LOG_USER("Filter %s, %d, %d, %d",filterName, isColorFilter, isBnWFilter, preferredOnly);
+    LV_LOG_USER("Filter %s, %d, %d, %d",gui.element.filterPopup.filterName, gui.element.filterPopup.isColorFilter, gui.element.filterPopup.isBnWFilter, gui.element.filterPopup.preferredOnly);
 
     // Nascondi tutti i processi inizialmente
     while (currentNode != NULL) {
@@ -1362,21 +1331,21 @@ void filterAndDisplayProcesses(const char *filterName, uint8_t isColorFilter, ui
         uint8_t display = 1;
 
         // Filtro per nome
-        if (filterName != NULL && strlen(filterName) > 0 && !caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, filterName)) {
+        if (gui.element.filterPopup.filterName != NULL && strlen(gui.element.filterPopup.filterName) > 0 && !caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, gui.element.filterPopup.filterName)) {
             display = 0;
         }
 
         // Filtro per tipo di film (colore o BnW)
-        if (isColorFilter && currentNode->process.processDetails->filmType != COLOR_FILM) {
+        if (gui.element.filterPopup.isColorFilter && currentNode->process.processDetails->filmType != COLOR_FILM) {
             display = 0;
         }
 
-        if (isBnWFilter && currentNode->process.processDetails->filmType != BLACK_AND_WHITE_FILM) {
+        if (gui.element.filterPopup.isBnWFilter && currentNode->process.processDetails->filmType != BLACK_AND_WHITE_FILM) {
             display = 0;
         }
 
         // Filtro per preferiti
-        if (preferredOnly && !currentNode->process.processDetails->isPreferred) {
+        if (gui.element.filterPopup.preferredOnly && !currentNode->process.processDetails->isPreferred) {
             display = 0;
         }
 
