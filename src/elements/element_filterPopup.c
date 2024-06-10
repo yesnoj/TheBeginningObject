@@ -66,7 +66,6 @@ void event_filterMBox(lv_event_t * e){
             //free(gui.element.filterPopup.filterName);
             gui.element.filterPopup.filterName = "";
           }
-          qSysAction( SAVE_PROCESS_CONFIG );
         }
       }
   }
@@ -88,6 +87,11 @@ void event_filterMBox(lv_event_t * e){
         LV_LOG_USER("State preferred: %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
         gui.element.filterPopup.preferredOnly = lv_obj_has_state(obj, LV_STATE_CHECKED);  
       }
+    }
+
+    if(code == LV_EVENT_VALUE_CHANGED) {
+      if(strlen(gui.element.filterPopup.filterName) == 0 && gui.element.filterPopup.isColorFilter == 0 && gui.element.filterPopup.isBnWFilter == 0 && gui.element.filterPopup.preferredOnly == 0)
+          resetPressed = 1;
     }
 }
 
