@@ -88,6 +88,9 @@ void event_processDetail(lv_event_t * e)
           if(addProcessElement(newProcess) != NULL){
              LV_LOG_USER("Process not present yet, let's create!");
              processElementCreate(newProcess, -1);
+             if(gui.page.processes.isFiltered == 1)
+                filterAndDisplayProcesses(gui.element.filterPopup.filterName, gui.element.filterPopup.isColorFilter, gui.element.filterPopup.isBnWFilter, gui.element.filterPopup.preferredOnly);
+             
              qSysAction( SAVE_PROCESS_CONFIG );
           }    
             else{

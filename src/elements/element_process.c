@@ -314,5 +314,6 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         }
         
         lv_obj_add_event_cb(newProcess->process.preferredIcon, event_processElement, LV_EVENT_CLICKED, newProcess->process.preferredIcon);
+      
 }
 
