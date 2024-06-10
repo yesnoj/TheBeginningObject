@@ -1337,18 +1337,20 @@ int caseInsensitiveStrstr(const char *haystack, const char *needle) {
 
 
 
-void filterAndDisplayProcesses(struct sProcesses *processesPage, const char *filterName, uint8_t isColorFilter, uint8_t isBnWFilter, uint8_t preferredOnly) {
-    processNode *currentNode = processesPage->processElementsList.start;
+void filterAndDisplayProcesses(const char *filterName, uint8_t isColorFilter, uint8_t isBnWFilter, uint8_t preferredOnly) {
+    processNode *currentNode = gui.page.processes.processElementsList.start;
     int32_t displayedCount = 1;
     
-    
+    LV_LOG_USER("Filter %s, %d, %d, %d",filterName, isColorFilter, isBnWFilter, preferredOnly);
+
     // Nascondi tutti i processi inizialmente
     while (currentNode != NULL) {
         lv_obj_add_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
         currentNode = currentNode->next;
     }
 
-    currentNode = processesPage->processElementsList.start;
+
+    currentNode = gui.page.processes.processElementsList.start;
     // Filtra e visualizza i processi
     while (currentNode != NULL) {
         uint8_t display = 1;
@@ -1374,14 +1376,17 @@ void filterAndDisplayProcesses(struct sProcesses *processesPage, const char *fil
 
         // Visualizza il processo se passa tutti i filtri
         if (display) {
-            lv_obj_clear_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_remove_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
         }
 
         currentNode = currentNode->next;
     }
 
-    currentNode = gui.page.processes.processElementsList.start;
+    lv_obj_update_layout(gui.page.processes.processesListContainer);
 
+    lv_obj_clean(gui.page.processes.processesListContainer);    
+
+    currentNode = gui.page.processes.processElementsList.start;
     while (currentNode != NULL) {
         if (!lv_obj_has_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN)) {
             processElementCreate(currentNode, displayedCount);
@@ -1390,39 +1395,30 @@ void filterAndDisplayProcesses(struct sProcesses *processesPage, const char *fil
         currentNode = currentNode->next;
     }
 
-    // Riallinea gli elementi visibili
-    lv_obj_update_layout(processesPage->processesListContainer);  // Aggiorna il layout del contenitore per riallineare gli elementi visibili
-    
-    // Aggiorna il conteggio dei processi visualizzati se necessario
-    // updateDisplayedProcessCount(displayedCount);
+    lv_obj_update_layout(gui.page.processes.processesListContainer);
 }
 
-void removeFiltersAndDisplayAllProcesses(struct sProcesses *processesPage) {
-    if (processesPage == NULL) {
-        Serial.println("processesPage is NULL");
-        return;
-    }
 
-    processNode *currentNode = processesPage->processElementsList.start;
+void removeFiltersAndDisplayAllProcesses() {
+
+    processNode *currentNode = gui.page.processes.processElementsList.start;
     if (currentNode == NULL) {
-        Serial.println("processElementsList.start is NULL");
+        LV_LOG_USER("processElementsList.start is NULL");
         return;
     }
 
-    int32_t displayedCount = 1;
-   
-    // Show all processes
+    int32_t displayedCount = 1;  // Initialize count
+
+    lv_obj_clean(gui.page.processes.processesListContainer);    
     while (currentNode != NULL) {
-        lv_obj_clear_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
         processElementCreate(currentNode, displayedCount);
         displayedCount++;
         currentNode = currentNode->next;
     }
 
-    // Update the layout of the container to realign visible elements
-    lv_obj_update_layout(processesPage->processesListContainer);
+    // Riallinea gli elementi visibili
+    lv_obj_update_layout(gui.page.processes.processesListContainer);
 }
-
 
 /*
 

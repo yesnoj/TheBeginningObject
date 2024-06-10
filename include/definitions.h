@@ -1392,8 +1392,8 @@ void printTemperature(float temp);
 
 void toLowerCase(char *str);
 int caseInsensitiveStrstr(const char *haystack, const char *needle);
-void filterAndDisplayProcesses(struct sProcesses *processesPage, const char *filterName, uint8_t isColorFilter, uint8_t isBnWFilter, uint8_t preferredOnly);
-void removeFiltersAndDisplayAllProcesses(struct sProcesses *processesPage);
+void filterAndDisplayProcesses(const char *filterName, uint8_t isColorFilter, uint8_t isBnWFilter, uint8_t preferredOnly);
+void removeFiltersAndDisplayAllProcesses();
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);
