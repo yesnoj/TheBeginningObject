@@ -714,7 +714,7 @@ struct sProcesses {
   lv_obj_t	        	*newProcessButton;
 
   /* Params objects */
-
+  uint8_t             isFiltered;
   processList           processElementsList;
 };
 

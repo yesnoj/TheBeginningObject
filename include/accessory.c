@@ -492,10 +492,12 @@ void init_globals( void ) {
   gui.element.filterPopup.isBnWFilter = FILM_TYPE_NA;
   //gui.element.filterPopup.isBnWFilter = 0;
   //gui.element.filterPopup.preferredOnly = 0;
+  
+  gui.page.processes.isFiltered = 0;
 
   tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
   tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);  
- 
+  
   create_keyboard();
 }
 
@@ -1341,6 +1343,10 @@ void filterAndDisplayProcesses(const char *filterName, uint8_t isColorFilter, ui
     processNode *currentNode = gui.page.processes.processElementsList.start;
     int32_t displayedCount = 1;
     
+
+    if(gui.page.processes.isFiltered == 1)
+        removeFiltersAndDisplayAllProcesses();
+
     LV_LOG_USER("Filter %s, %d, %d, %d",filterName, isColorFilter, isBnWFilter, preferredOnly);
 
     // Nascondi tutti i processi inizialmente
@@ -1400,7 +1406,6 @@ void filterAndDisplayProcesses(const char *filterName, uint8_t isColorFilter, ui
 
 
 void removeFiltersAndDisplayAllProcesses() {
-
     processNode *currentNode = gui.page.processes.processElementsList.start;
     if (currentNode == NULL) {
         LV_LOG_USER("processElementsList.start is NULL");

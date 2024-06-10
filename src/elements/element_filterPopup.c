@@ -35,12 +35,13 @@ void event_filterMBox(lv_event_t * e){
           if(resetPressed == 0){
             LV_LOG_USER("resetPressed %d", resetPressed);  
             lv_obj_set_style_text_color(gui.page.processes.iconFilterLabel, lv_color_hex(GREEN), LV_PART_MAIN);
-            //removeFiltersAndDisplayAllProcesses();
+            gui.page.processes.isFiltered = 1;
             filterAndDisplayProcesses(gui.element.filterPopup.filterName, gui.element.filterPopup.isColorFilter, gui.element.filterPopup.isBnWFilter, gui.element.filterPopup.preferredOnly);
           }
           else{
             LV_LOG_USER("resetPressed %d", resetPressed); 
             lv_obj_set_style_text_color(gui.page.processes.iconFilterLabel, lv_color_hex(WHITE), LV_PART_MAIN);
+            gui.page.processes.isFiltered = 0;
             removeFiltersAndDisplayAllProcesses();
             resetPressed = 0;   
           }
