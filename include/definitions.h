@@ -567,7 +567,7 @@ struct processNode {
 typedef struct processList { // Linked list of processes
     processNode       *start;  /* Start of list */
     processNode       *end;    /* End of list */
-    uint16_t           size;   /* Number of list entries currently */
+    int32_t           size;   /* Number of list entries currently */
 } processList;
 
 
@@ -714,6 +714,7 @@ struct sProcesses {
   lv_obj_t	        	*newProcessButton;
 
   /* Params objects */
+
   processList           processElementsList;
 };
 
@@ -1293,6 +1294,10 @@ bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference )
 * PAGES Function Prototypes
 *********************/
 void init_globals( void );
+
+
+// @file element_processes.c
+processNode *addProcessElement(processNode	*processToAdd);
 
 // @file page_checkup.c
 void event_checkup(lv_event_t *e);

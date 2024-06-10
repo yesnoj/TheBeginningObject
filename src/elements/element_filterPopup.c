@@ -17,6 +17,8 @@ uint8_t resetPressed = 0;
 //ACCESSORY INCLUDES
 
 
+
+
 void event_filterMBox(lv_event_t * e){
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
@@ -50,7 +52,6 @@ void event_filterMBox(lv_event_t * e){
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectColorRadioButton, LV_STATE_CHECKED);
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectBnWRadioButton, LV_STATE_CHECKED);
           resetPressed = 1;
-                      
           gui.element.filterPopup.isColorFilter = 0;
           gui.element.filterPopup.isBnWFilter = 0;
           gui.element.filterPopup.preferredOnly = 0;

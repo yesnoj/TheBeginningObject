@@ -718,7 +718,7 @@ void writeJSONFile(fs::FS &fs, const char *path,const machineSettings &settings)
     return;
 }
 
-bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uint32_t enableLog) {
+bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uint8_t enableLog) {
     if(initErrors == 0){
         File file = fs.open(filename);
         
@@ -863,7 +863,7 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
 }
 
 
-void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
+void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, uint8_t enableLog) {
     if(initErrors == 0){
         LV_LOG_USER("Writing file: %s", path);
         SD.remove(path);
@@ -891,7 +891,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
         machineSettings["isPersistentAlarm"]          = gui.page.settings.settingsParams.isPersistentAlarm;
         machineSettings["isProcessAutostart"]         = gui.page.settings.settingsParams.isProcessAutostart;
         machineSettings["drainFillOverlapSetpoint"]   = gui.page.settings.settingsParams.drainFillOverlapSetpoint;
-
+ 
+      if(enableLog){
         LV_LOG_USER("--- MACHINE PARAMS ---");
         LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
         LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
@@ -902,7 +903,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
         LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
         LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
         LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
-
+      }
 
         JsonObject Filter = doc.createNestedObject("Filter");
         Filter["filterName"] = gui.element.filterPopup.filterName;
@@ -910,11 +911,13 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
         Filter["isBnWFilter"] = gui.element.filterPopup.isBnWFilter;
         Filter["preferredOnly"] = gui.element.filterPopup.preferredOnly;
 
+      if(enableLog){
         LV_LOG_USER("--- FILTER PARAMS ---");
         LV_LOG_USER("filterName:%s",gui.element.filterPopup.filterName);
         LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
         LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
         LV_LOG_USER("preferredOnly:%d",gui.element.filterPopup.preferredOnly);
+      }
 
         JsonObject Processes = doc.createNestedObject("Processes");
         
@@ -938,6 +941,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
             currentProcess["timeMins"] = currentProcessNode->process.processDetails->timeMins;
             currentProcess["timeSecs"] = currentProcessNode->process.processDetails->timeSecs;
 
+
+          if(enableLog){
             LV_LOG_USER("--- PROCESS PARAMS ---");
             LV_LOG_USER("processNameString:%s",currentProcessNode->process.processDetails->processNameString);
             LV_LOG_USER("temp:%d",currentProcessNode->process.processDetails->temp);
@@ -947,6 +952,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
             LV_LOG_USER("filmType:%d",currentProcessNode->process.processDetails->filmType);
             LV_LOG_USER("timeMins:%d",currentProcessNode->process.processDetails->timeMins);
             LV_LOG_USER("timeSecs:%d",currentProcessNode->process.processDetails->timeSecs);
+          }
 
             stepList *stepElementsList;
             memset( &stepElementsList, 0, sizeof( stepElementsList ) ); 
@@ -969,7 +975,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
                 currentStep["type"] = currentStepNode->step.stepDetails->type;
                 currentStep["source"] = currentStepNode->step.stepDetails->source;
                 currentStep["discardAfterProc"] = currentStepNode->step.stepDetails->discardAfterProc;
-
+              
+              if(enableLog){
                 LV_LOG_USER("--- STEP PARAMS ---");
                 LV_LOG_USER("stepNameString:%s",currentStepNode->step.stepDetails->stepNameString);
                 LV_LOG_USER("timeMins:%d",currentStepNode->step.stepDetails->timeMins);
@@ -977,6 +984,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui) {
                 LV_LOG_USER("type:%d",currentStepNode->step.stepDetails->type);
                 LV_LOG_USER("source:%d",currentStepNode->step.stepDetails->source);
                 LV_LOG_USER("discardAfterProc:%d",currentStepNode->step.stepDetails->discardAfterProc);
+              }
 
                 currentStepNode = currentStepNode->next;
                 stepCounter++;
@@ -1326,10 +1334,14 @@ int caseInsensitiveStrstr(const char *haystack, const char *needle) {
     return strstr(haystackLower, needleLower) != NULL;
 }
 
+
+
+
 void filterAndDisplayProcesses(struct sProcesses *processesPage, const char *filterName, uint8_t isColorFilter, uint8_t isBnWFilter, uint8_t preferredOnly) {
     processNode *currentNode = processesPage->processElementsList.start;
-    uint16_t displayedCount = 0;
-
+    int32_t displayedCount = 1;
+    
+    
     // Nascondi tutti i processi inizialmente
     while (currentNode != NULL) {
         lv_obj_add_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
@@ -1363,35 +1375,52 @@ void filterAndDisplayProcesses(struct sProcesses *processesPage, const char *fil
         // Visualizza il processo se passa tutti i filtri
         if (display) {
             lv_obj_clear_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
-            displayedCount++;
         }
 
         currentNode = currentNode->next;
     }
 
-    // Riallinea gli elementi visibili
-    lv_obj_t *parent = processesPage->processesListContainer;  // Supponendo che i processi siano figli di un contenitore
-    lv_obj_update_layout(parent);  // Aggiorna il layout del contenitore per riallineare gli elementi visibili
+    currentNode = gui.page.processes.processElementsList.start;
 
+    while (currentNode != NULL) {
+        if (!lv_obj_has_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN)) {
+            processElementCreate(currentNode, displayedCount);
+            displayedCount++;
+        }
+        currentNode = currentNode->next;
+    }
+
+    // Riallinea gli elementi visibili
+    lv_obj_update_layout(processesPage->processesListContainer);  // Aggiorna il layout del contenitore per riallineare gli elementi visibili
+    
     // Aggiorna il conteggio dei processi visualizzati se necessario
     // updateDisplayedProcessCount(displayedCount);
 }
 
 void removeFiltersAndDisplayAllProcesses(struct sProcesses *processesPage) {
-    processNode *currentNode = processesPage->processElementsList.start;
+    if (processesPage == NULL) {
+        Serial.println("processesPage is NULL");
+        return;
+    }
 
-    // Mostra tutti i processi
+    processNode *currentNode = processesPage->processElementsList.start;
+    if (currentNode == NULL) {
+        Serial.println("processElementsList.start is NULL");
+        return;
+    }
+
+    int32_t displayedCount = 1;
+   
+    // Show all processes
     while (currentNode != NULL) {
         lv_obj_clear_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
+        processElementCreate(currentNode, displayedCount);
+        displayedCount++;
         currentNode = currentNode->next;
     }
 
-    // Riallinea gli elementi visibili
-    lv_obj_t *parent = processesPage->processesListContainer;  // Supponendo che i processi siano figli di un contenitore
-    lv_obj_update_layout(parent);  // Aggiorna il layout del contenitore per riallineare gli elementi visibili
-
-    // Aggiorna il conteggio dei processi visualizzati se necessario
-    // updateDisplayedProcessCount(totalCount);  // Supponendo che totalCount sia il numero totale di processi
+    // Update the layout of the container to realign visible elements
+    lv_obj_update_layout(processesPage->processesListContainer);
 }
 
 

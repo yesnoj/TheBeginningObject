@@ -1,3 +1,4 @@
+#include <sys/_stdint.h>
 #include "misc/lv_event.h"
 /**
  * @file element_process.c
@@ -20,7 +21,6 @@ static bool gesture_handled = false;
 *  LINKED LIST IMPLEMENTATION
 ******************************/
 processNode *addProcessElement(processNode	*processToAdd) {
-
 	if( gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS || isNodeInList((void*)&(gui.page.processes.processElementsList), processToAdd, PROCESS_NODE) != NULL) return NULL;		// Put some limit on things!
   
   LV_LOG_USER("Processes available %d first",gui.page.processes.processElementsList.size);
@@ -181,7 +181,6 @@ void event_processElement(lv_event_t * e) {
                 lv_obj_set_style_text_color(currentNode->process.preferredIcon, lv_color_hex(RED), LV_PART_MAIN);
                 currentNode->process.processDetails->isPreferred = 1;
             }
-            qSysAction( SAVE_PROCESS_CONFIG );
         }
 
         if (obj == currentNode->process.deleteButton) {
@@ -214,10 +213,14 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
 	}
   int32_t positionIndex;
   
-  if(tempSize == -1) positionIndex = gui.page.processes.processElementsList.size; // New entry add to the end of the list
-    else positionIndex = tempSize; // Use the index position passed into the function
-  LV_LOG_USER("Process size :%d",gui.page.processes.processElementsList.size);
- 
+ if(tempSize == -1) 
+        positionIndex = gui.page.processes.processElementsList.size; // New entry add to the end of the list
+      else 
+        positionIndex = tempSize; // Use the index position passed into the function
+      LV_LOG_USER("Process size :%d",gui.page.processes.processElementsList.size);
+
+
+
   newProcess->process.swipedLeft = 1;
   newProcess->process.swipedRight = 0;
 
