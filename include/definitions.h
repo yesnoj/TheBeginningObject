@@ -332,7 +332,7 @@ typedef struct sStepDetail {
 
 	/* Params objects */
 
-	processNode       *referenceProcess;  // Use a pointer instead of an instance
+//	  processNode       *referenceProcess;  // Use a pointer instead of an instance
     char              *stepNameString;
     uint8_t           timeMins;
     uint8_t           timeSecs;
@@ -444,7 +444,6 @@ typedef struct sCheckup{
 	lv_obj_t			*checkupProcessTimeLeftValue;
 	lv_obj_t			*checkupStepNameValue;
 	lv_obj_t			*checkupStepKindValue;
-
 
 	lv_obj_t			*checkupWaterFillStatusIcon;
 	lv_obj_t			*checkupReachTempStatusIcon;
@@ -871,8 +870,9 @@ struct gui_components {
 	struct sElements	element;
 	struct sPages		  page;
   QueueHandle_t			sysActionQ;
+  processNode       *tempProcessNode;
+  stepNode          *tempStepNode;
 };
-
 
 /*********************
 * GLOBAL DEFINES
@@ -1094,10 +1094,10 @@ lv_obj_t * tempSensorTuneButton;
 #define processDetailTempTolerance_text 	 		"Tolerance:"
 #define processDetailPlaceHolder_text 			   		"Enter name"
 
-uint8_t isPreferred;
+//uint8_t isPreferred;
 
-lv_obj_t * processTempTextArea;
-lv_obj_t * processToleranceTextArea;
+//lv_obj_t * processTempTextArea;
+//lv_obj_t * processToleranceTextArea;
 
 /*********************
 * Step detail strings/vars
@@ -1154,10 +1154,9 @@ lv_obj_t * stepDetailNamelTextArea;
 #define stopNowProcessPopupBody_text			   		"Stopping a process will ruin the film inside the tank and leave the chemistry inside!\nDo you want to stop the process now?"
 #define stopAfterProcessPopupBody_text			   		"Do you want to stop the process after this step is completed?"
 
-static const char *currentStep[3][11] = {"Filling", "Draining", "Processing"};
+static const char *currentStep[3] = {"Filling", "Draining", "Processing"};
 
 char rollerElementSelected [10];
-uint32_t rollerSelected;
 lv_obj_t * questionMark;
 lv_obj_t * roller;
 lv_style_t style_roller;
@@ -1222,8 +1221,8 @@ lv_obj_t * checkupTankSizeTextArea;
 //Test long string
 #define testLongString "Cantami, o diva, del Pelìde Achille l'ira funesta che infiniti addusse lutti agli achei , molte anzi tempo all'orco generose travolse alme d'eroi, e di cani e d'augelli orrido pasto lor salme abbandonò (così di giove l'alto consiglio s'adempia ) , da quando primamente disgiunse aspra contesa il re de' prodi Atride e il divo Achille."
 
-processNode	* tempProcessNode;
-stepNode	  * tempStepNode;
+//processNode	* tempProcessNode;
+//stepNode	  * tempStepNode;
 
 extern uint8_t initErrors;
 char formatted_string[20];
@@ -1279,7 +1278,9 @@ void event_messagePopup(lv_event_t *e);
 // @file element_process.c
 void event_processElement(lv_event_t *e);
 void processElementCreate(processNode *newProcess, int32_t tempSize);
+bool deleteProcessElement( processNode	*processToDelete );
 processNode *getProcElementEntryByObject( lv_obj_t *obj );
+processNode *addProcessElement(processNode	*processToAdd);
 
 // @file element_rollerPopup.c
 void event_Roller(lv_event_t *e);
@@ -1289,15 +1290,12 @@ void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *w
 void event_stepElement(lv_event_t *e);
 void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t tempSize);
 bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference );
+stepNode *addStepElement(stepNode * stepToAdd, processNode * processReference);
 
 /*********************
 * PAGES Function Prototypes
 *********************/
 void init_globals( void );
-
-
-// @file element_processes.c
-processNode *addProcessElement(processNode	*processToAdd);
 
 // @file page_checkup.c
 void event_checkup(lv_event_t *e);

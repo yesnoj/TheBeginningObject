@@ -10,11 +10,10 @@
 #include "../../include/definitions.h"
 
 extern struct gui_components gui;
-char formatted_string[20];
 
 //ACCESSORY INCLUDES
 
-processNode *newProcess;
+static processNode *newProcess;
 
 /******************************
   *    PROCESS EVENT
@@ -35,7 +34,7 @@ void event_processDetail(lv_event_t * e)
         //newProcess->process.processDetails->stepElementsList.size = 0;
         //lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
         lv_msgbox_close(mboxCont);
-        lv_obj_delete(mboxCont);
+//        lv_obj_delete(mboxCont);
         LV_LOG_USER("Close Process Detail");
     }
     if(data == newProcess->process.processDetails->processColorLabel){
@@ -69,18 +68,21 @@ void event_processDetail(lv_event_t * e)
           lv_obj_set_style_text_color(newProcess->process.processDetails->processPreferredLabel, lv_color_hex(WHITE), LV_PART_MAIN);
           newProcess->process.processDetails->isPreferred = 0;
         }
-        LV_LOG_USER("Process is preferred :%d",isPreferred);
+      //  LV_LOG_USER("Process is preferred :%d",isPreferred);
     }
     if(data == newProcess->process.processDetails->processSaveButton && newProcess->process.processDetails->stepElementsList.size > 0){
           newProcess->process.processDetails->somethingChanged = 0;
-          /* If name changed update it */
+          
           if( newProcess->process.processDetails->processNameString == NULL ) {
-            newProcess->process.processDetails->processNameString = malloc(strlen(lv_textarea_get_text(tempProcessNode->process.processDetails->processDetailNameTextArea))+1);
-            strcpy( newProcess->process.processDetails->processNameString, lv_textarea_get_text(tempProcessNode->process.processDetails->processDetailNameTextArea));
-           } else if(strcmp(newProcess->process.processDetails->processNameString, lv_textarea_get_text(tempProcessNode->process.processDetails->processDetailNameTextArea))) {
-            free(newProcess->process.processDetails->processNameString);  // If already allocated free first
-            newProcess->process.processDetails->processNameString = malloc(strlen(lv_textarea_get_text(tempProcessNode->process.processDetails->processDetailNameTextArea))+1);
-            strcpy( newProcess->process.processDetails->processNameString, lv_textarea_get_text(tempProcessNode->process.processDetails->processDetailNameTextArea));
+            if(strlen(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea)) > 0) {
+              newProcess->process.processDetails->processNameString = malloc(strlen(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea))+1);
+              strcpy( newProcess->process.processDetails->processNameString, lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea));
+            }
+           } else if(strcmp(newProcess->process.processDetails->processNameString, lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea))) {
+            /* If name changed update it */
+            free(newProcess->process.processDetails->processNameString);  // Already allocated free first
+            newProcess->process.processDetails->processNameString = malloc(strlen(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea))+1);
+            strcpy( newProcess->process.processDetails->processNameString, lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea));
           }
           lv_obj_clear_state(newProcess->process.processDetails->processRunButton, LV_STATE_DISABLED);
           lv_obj_add_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
@@ -104,7 +106,7 @@ void event_processDetail(lv_event_t * e)
     if(data == newProcess->process.processDetails->processRunButton){
         //newProcess->process.processDetails->stepElementsList.size = 0;
         lv_msgbox_close(mboxCont);
-        lv_obj_delete(mboxCont);
+//        lv_obj_delete(mboxCont);
         LV_LOG_USER("Pressed processRunButton");
         checkup(newProcess);
     }
@@ -147,7 +149,7 @@ void event_processDetail(lv_event_t * e)
 
 
   if(code == LV_EVENT_FOCUSED) { 
-      tempProcessNode = newProcess;
+      gui.tempProcessNode = newProcess;
       if(data == newProcess->process.processDetails->processTempTextArea){
           LV_LOG_USER("Set Temperature");
           rollerPopupCreate(gui.element.rollerPopup.tempCelsiusOptions,tuneTempPopupTitle_text,newProcess->process.processDetails->processTempTextArea, 0);
@@ -180,28 +182,26 @@ void processDetail(lv_obj_t * processContainer)
 /*********************
   *    PAGE HEADER
 *********************/
-  
-processNode* existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), processContainer, PROCESS_NODE);
-if(existingProcess != NULL) {
-    LV_LOG_USER("Process already present");
-    newProcess = existingProcess; // Usa il nodo già presente anziché allocarne uno nuovo
+  char formatted_string[20];
 
-} else {
-    newProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
-//    newProcess->process.processDetails->processNameString = "";   // Non richiesto
-//    newProcess->process.processDetails->somethingChanged = 0;     // Non richiesto
-    newProcess->process.processDetails->filmType = FILM_TYPE_NA; 
-//    newProcess->process.processDetails->temp = 0;                 // Non richiesto
-}
+  processNode* existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), gui.tempProcessNode, PROCESS_NODE);
+  if(existingProcess != NULL) {
+      LV_LOG_USER("Process already present");
+      newProcess = existingProcess; // Usa il nodo già presente anziché allocarne uno nuovo
+
+  } else {
+      newProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
+  //    newProcess->process.processDetails->processNameString = "";   // Non richiesto
+  //    newProcess->process.processDetails->somethingChanged = 0;     // Non richiesto
+      newProcess->process.processDetails->filmType = FILM_TYPE_NA; 
+  //    newProcess->process.processDetails->temp = 0;                 // Non richiesto
+      
+  }
   newProcess->process.processDetails->processesContainer = processContainer;
-
-  tempProcessNode = newProcess;
-
-
+  gui.tempProcessNode = newProcess;
+ 
   LV_LOG_USER("Processes available %d",gui.page.processes.processElementsList.size);
   LV_LOG_USER("Process address 0x%p, with n:%d steps",newProcess, newProcess->process.processDetails->stepElementsList.size); 
-  
-
 
   newProcess->process.processDetails->processDetailParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
   lv_obj_class_init_obj(newProcess->process.processDetails->processDetailParent);
@@ -250,10 +250,8 @@ if(existingProcess != NULL) {
                   lv_obj_set_style_border_opa(newProcess->process.processDetails->processDetailNameTextArea, LV_OPA_TRANSP, 0);
                   lv_textarea_set_max_length(newProcess->process.processDetails->processDetailNameTextArea, MAX_PROC_NAME_LEN);
                   //newProcess->process.processDetails->processNameString = generateRandomCharArray(10);
-                  if(newProcess->process.processDetails->processNameString != NULL)
-                    lv_textarea_set_text(newProcess->process.processDetails->processDetailNameTextArea, newProcess->process.processDetails->processNameString); 
-                    else
-                      lv_textarea_set_text(newProcess->process.processDetails->processDetailNameTextArea,"");             
+                  lv_textarea_set_text(newProcess->process.processDetails->processDetailNameTextArea, newProcess->process.processDetails->processNameString ? 
+                    newProcess->process.processDetails->processNameString : ""); 
 
 
             newProcess->process.processDetails->processDetailStepsLabel = lv_label_create(newProcess->process.processDetails->processDetailContainer);         
@@ -417,8 +415,9 @@ if(existingProcess != NULL) {
                           newProcess->process.processDetails->processTotalTimeValue = lv_label_create(newProcess->process.processDetails->processTotalTimeContainer);         
                           lv_obj_set_style_text_font(newProcess->process.processDetails->processTotalTimeValue, &lv_font_montserrat_20, 0);              
                           lv_obj_align(newProcess->process.processDetails->processTotalTimeValue, LV_ALIGN_LEFT_MID, 100, 0);   
-                          sprintf(formatted_string, "%dm%ds", newProcess->process.processDetails->timeMins, newProcess->process.processDetails->timeSecs);
-                          lv_label_set_text(newProcess->process.processDetails->processTotalTimeValue, formatted_string); 
+//                          sprintf(formatted_string, "%dm%ds", newProcess->process.processDetails->timeMins, newProcess->process.processDetails->timeSecs);
+                          lv_label_set_text_fmt(newProcess->process.processDetails->processTotalTimeValue, "%dm%ds", 
+                            newProcess->process.processDetails->timeMins, newProcess->process.processDetails->timeSecs); 
 
 
                   newProcess->process.processDetails->processColorOrBnWContainer = lv_obj_create(newProcess->process.processDetails->processInfoContainer);
@@ -503,7 +502,7 @@ if(existingProcess != NULL) {
               
               if(newProcess->process.processDetails->stepElementsList.size > 0){
                 stepNode *currentNode = newProcess->process.processDetails->stepElementsList.start;
-                uint8_t tempSize = 0;
+                uint8_t tempSize = 1;
                 while(currentNode != NULL){               
                   LV_LOG_USER("Adding to process with address 0x%p n:%d steps", newProcess,newProcess->process.processDetails->stepElementsList.size);
                   stepElementCreate(currentNode, newProcess, tempSize);

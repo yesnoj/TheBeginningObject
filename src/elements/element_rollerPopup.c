@@ -13,6 +13,7 @@ extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
+static uint32_t rollerSelected;
 
 void event_Roller(lv_event_t * e)
 {
@@ -31,73 +32,73 @@ void event_Roller(lv_event_t * e)
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);
-              lv_obj_delete(godFatherCont);
+              //lv_obj_delete(godFatherCont);
               gui.page.settings.settingsParams.calibratedTemp = rollerSelected;  
               qSysAction( SAVE_PROCESS_CONFIG );
               return;   
             }
-            if((lv_obj_t *)data == tempProcessNode->process.processDetails->processTempTextArea){
+            if((lv_obj_t *)data == gui.tempProcessNode->process.processDetails->processTempTextArea){
               LV_LOG_USER("SET BUTTON from processTempTextArea value %d:",rollerSelected);
               itoa(rollerSelected, tempBuffer, 10);
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
-              lv_textarea_set_text(tempProcessNode->process.processDetails->processTempTextArea,tempBuffer);
-              tempProcessNode->process.processDetails->temp = rollerSelected;
-              tempProcessNode->process.processDetails->somethingChanged = 1;
-              lv_obj_send_event(tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
+              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea,tempBuffer);
+              gui.tempProcessNode->process.processDetails->temp = rollerSelected;
+              gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+              lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);
-              lv_obj_delete(godFatherCont);
+              //lv_obj_delete(godFatherCont);
               return; 
             }
-            if((lv_obj_t *)data == tempProcessNode->process.processDetails->processToleranceTextArea){
+            if((lv_obj_t *)data == gui.tempProcessNode->process.processDetails->processToleranceTextArea){
               LV_LOG_USER("SET BUTTON from processToleranceTextArea value %d:",rollerSelected);
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
-              lv_textarea_set_text(tempProcessNode->process.processDetails->processToleranceTextArea, tempBuffer);
-              tempProcessNode->process.processDetails->tempTolerance = rollerSelected;
-              tempProcessNode->process.processDetails->somethingChanged = 1;
-              lv_obj_send_event(tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
+              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, tempBuffer);
+              gui.tempProcessNode->process.processDetails->tempTolerance = rollerSelected;
+              gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+              lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);
-              lv_obj_delete(godFatherCont);
+              //lv_obj_delete(godFatherCont);
               return; 
             }
-            if((lv_obj_t *)data == tempStepNode->step.stepDetails->stepDetailMinTextArea){
+            if((lv_obj_t *)data == gui.tempStepNode->step.stepDetails->stepDetailMinTextArea){
               LV_LOG_USER("SET BUTTON from stepDetailMinTextArea value %d:",rollerSelected - 1);
-              tempStepNode->step.stepDetails->timeMins = rollerSelected - 1;
+              gui.tempStepNode->step.stepDetails->timeMins = rollerSelected - 1;
 
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
-              lv_textarea_set_text(tempStepNode->step.stepDetails->stepDetailMinTextArea, tempBuffer);
+              lv_textarea_set_text(gui.tempStepNode->step.stepDetails->stepDetailMinTextArea, tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(gui.element.rollerPopup.mBoxRollerParent);
-              lv_obj_delete(gui.element.rollerPopup.mBoxRollerParent);
+              //lv_obj_delete(gui.element.rollerPopup.mBoxRollerParent);
               return; 
             }
-            if((lv_obj_t *)data == tempStepNode->step.stepDetails->stepDetailSecTextArea){
+            if((lv_obj_t *)data == gui.tempStepNode->step.stepDetails->stepDetailSecTextArea){
               LV_LOG_USER("SET BUTTON from stepDetailSecTextArea value %d:",rollerSelected - 1);
-              tempStepNode->step.stepDetails->timeSecs = rollerSelected - 1;
+              gui.tempStepNode->step.stepDetails->timeSecs = rollerSelected - 1;
 
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
-              lv_textarea_set_text(tempStepNode->step.stepDetails->stepDetailSecTextArea, tempBuffer);
+              lv_textarea_set_text(gui.tempStepNode->step.stepDetails->stepDetailSecTextArea, tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(gui.element.rollerPopup.mBoxRollerParent);
-              lv_obj_delete(gui.element.rollerPopup.mBoxRollerParent);
+              //lv_obj_delete(gui.element.rollerPopup.mBoxRollerParent);
               return; 
             }
-            if(((processNode *)data)->process.processDetails->checkup->checkupTankSizeTextArea == tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
+            if(((processNode *)data)->process.processDetails->checkup->checkupTankSizeTextArea == gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
               LV_LOG_USER("SET BUTTON from checkupTankSizeTextArea value %d:",rollerSelected);
               
-              tempProcessNode->process.processDetails->checkup->tankSize = rollerSelected;
+              gui.tempProcessNode->process.processDetails->checkup->tankSize = rollerSelected;
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
-              lv_textarea_set_text(tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea, tempBuffer);
+              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea, tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);
-              lv_obj_delete(godFatherCont);
+              //lv_obj_delete(godFatherCont);
               return; 
             }
-          rollerSelected = NULL;
+          rollerSelected = 0;
         }
         
     }

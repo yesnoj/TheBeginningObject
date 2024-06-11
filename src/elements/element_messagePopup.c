@@ -32,12 +32,12 @@ void event_messagePopup(lv_event_t *e)
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButtonClose");
             lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
             lv_msgbox_close(mboxCont);
-            lv_obj_delete(mboxCont);
+            //lv_obj_delete(mboxCont);
         }
         if (obj == gui.element.messagePopup.mBoxPopupButton1)
         {
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton1");
-            if (gui.element.messagePopup.whoCallMe == tempProcessNode)
+            if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode)
             {
                 LV_LOG_USER("Delete process!");
 
@@ -50,69 +50,69 @@ void event_messagePopup(lv_event_t *e)
 
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
-                lv_obj_delete(mboxCont);
+//                lv_obj_delete(mboxCont);  // Not required! Can cause crash!
                 gui.element.messagePopup.mBoxPopupParent = NULL;
             }
 
-            if (gui.element.messagePopup.whoCallMe == tempStepNode)
+            if (gui.element.messagePopup.whoCallMe == gui.tempStepNode)
             {
                 LV_LOG_USER("Delete step!");
                 
-                if( !deleteStepElement( gui.element.messagePopup.whoCallMe , tempProcessNode) ) {
+                if( !deleteStepElement( gui.element.messagePopup.whoCallMe , gui.tempProcessNode) ) {
                   LV_LOG_USER("Delete step element instance at address 0x%p Failed!", gui.element.messagePopup.whoCallMe);
                 } else {
-                  calcolateTotalTime(tempProcessNode);
+                  calcolateTotalTime(gui.tempProcessNode);
                   LV_LOG_USER("Delete step element instance at address 0x%p", gui.element.messagePopup.whoCallMe);
                   qSysAction( SAVE_PROCESS_CONFIG );
                 }
                 
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
-                lv_obj_delete(mboxCont);
+                //lv_obj_delete(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
             }
-            if (gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopNowButton)
+            if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton)
             {
                 LV_LOG_USER("Stop process NOW!");
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
-                lv_obj_delete(mboxCont);
+                //lv_obj_delete(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
                 
-                if(tempProcessNode->process.processDetails->checkup->stopAfter == 0){
-                    lv_timer_delete(tempProcessNode->process.processDetails->checkup->timer);
-                    lv_obj_add_state(tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);  
-                    lv_obj_add_state(tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);  
-                    lv_obj_clear_state(tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);  
+                if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == 0){
+                    lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->timer);
+                    lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);  
+                    lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);  
+                    lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);  
                   }
-                if(tempProcessNode->process.processDetails->checkup->stopAfter == 1){
-                    lv_obj_add_state(tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);  
-                    lv_obj_clear_state(tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);                   
+                if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == 1){
+                    lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);  
+                    lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);                   
                   }
 
-                  lv_label_set_text(tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel, checkupProcessStopped_text);
-                  lv_obj_remove_flag(tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel, LV_OBJ_FLAG_HIDDEN);
-                  lv_obj_add_flag(tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_OBJ_FLAG_HIDDEN);
-                  lv_obj_add_flag(tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
-                  lv_obj_add_flag(tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
+                  lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel, checkupProcessStopped_text);
+                  lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel, LV_OBJ_FLAG_HIDDEN);
+                  lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_OBJ_FLAG_HIDDEN);
+                  lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
+                  lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
             }
-            if (gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopAfterButton)
+            if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton)
             {
                 LV_LOG_USER("Stop process AFTER!");
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
-                lv_obj_delete(mboxCont);
+                //lv_obj_delete(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
 
-                tempProcessNode->process.processDetails->checkup->stopAfter = 1;
-                lv_obj_add_state(tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED); 
-                lv_obj_clear_state(tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);  
+                gui.tempProcessNode->process.processDetails->checkup->stopAfter = 1;
+                lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED); 
+                lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);  
             }
             if (gui.element.messagePopup.whoCallMe == &gui)
             {
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
-                lv_obj_delete(mboxCont);
+                //lv_obj_delete(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
 
                 if(gui.page.processes.processElementsList.size > 0){
@@ -130,19 +130,19 @@ void event_messagePopup(lv_event_t *e)
         if (obj == gui.element.messagePopup.mBoxPopupButton2)
         {
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton2");
-            if (gui.element.messagePopup.whoCallMe == tempProcessNode || gui.element.messagePopup.whoCallMe == tempStepNode || gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopAfterButton || gui.element.messagePopup.whoCallMe == tempProcessNode->process.processDetails->checkup->checkupStopNowButton)
+            if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode || gui.element.messagePopup.whoCallMe == gui.tempStepNode || gui.element.messagePopup.whoCallMe == gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton || gui.element.messagePopup.whoCallMe == gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton)
             {
                 LV_LOG_USER("Cancel delete element!");
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
-                lv_obj_delete(mboxCont);
+//                lv_obj_delete(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
             }
             if(gui.element.messagePopup.whoCallMe == &gui){
                 LV_LOG_USER("Cancel delete all process!");
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
-                lv_obj_delete(mboxCont);
+//                lv_obj_delete(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
             }
         }

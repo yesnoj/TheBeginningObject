@@ -21,6 +21,7 @@ static bool gesture_handled = false;
 *  LINKED LIST IMPLEMENTATION
 ******************************/
 processNode *addProcessElement(processNode	*processToAdd) {
+
 	if( gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS || isNodeInList((void*)&(gui.page.processes.processElementsList), processToAdd, PROCESS_NODE) != NULL) return NULL;		// Put some limit on things!
   
   LV_LOG_USER("Processes available %d first",gui.page.processes.processElementsList.size);
@@ -45,7 +46,6 @@ bool deleteProcessElement( processNode	*processToDelete ) {
 
 	processNode 	*adjust_y_ptr = NULL;
 	lv_coord_t		container_y_prev, container_y_new ;
-
 
 	if( processToDelete ) {
 		adjust_y_ptr = processToDelete->next;
@@ -82,41 +82,46 @@ bool deleteProcessElement( processNode	*processToDelete ) {
       }
     }
 		lv_obj_delete_async( processToDelete->process.processElement );			// Delete all LVGL objects associated with entry
-  	free( processToDelete );												// Free the list entry itself
+  	free( processToDelete );												                    // Free the list entry itself
 		gui.page.processes.processElementsList.size--;
 
-    LV_LOG_USER("Processes available %d steps",gui.page.processes.processElementsList.size); 
+    LV_LOG_USER("Processes available %d",gui.page.processes.processElementsList.size); 
 		return true;
 	}
 	return false;
 }
 
 processNode* getProcElementEntryByObject(lv_obj_t* obj) {
+
     processNode* currentNode = gui.page.processes.processElementsList.start;
 
-    while (currentNode) {
+    while( currentNode !=  NULL ) {
         // Check all objects if any match, return element pointer, not styles!
-        if (obj == currentNode->process.processElement || 
+        if( obj == currentNode->process.processElement || 
             obj == currentNode->process.preferredIcon || 
             obj == currentNode->process.processElementSummary || 
             obj == currentNode->process.processName || 
             obj == currentNode->process.processTemp || 
             obj == currentNode->process.processTempIcon || 
+            obj == currentNode->process.processTime || 
+            obj == currentNode->process.processTimeIcon || 
+            obj == currentNode->process.processTypeIcon ||
             obj == currentNode->process.deleteButton ||
-            obj == currentNode->process.processTypeIcon) {
-            return currentNode;
+            obj == currentNode->process.deleteButtonLabel ) {
+           break;
         }
         currentNode = currentNode->next;
     }
-    return NULL; // Return nullptr if no matching processNode is found
+    return currentNode;   // Will Return NULL if no matching processNode is found
 }
 
 static bool deleteProcessElementByObj( lv_obj_t *obj ) {
 
-	processList	*proc_ptr  = getProcElementEntryByObject( obj );
+	processNode	*proc_ptr  = getProcElementEntryByObject( obj );
 
 	return deleteProcessElement( proc_ptr );
 }
+
 
 
 
@@ -185,15 +190,16 @@ void event_processElement(lv_event_t * e) {
 
         if (obj == currentNode->process.deleteButton) {
             if (gui.element.messagePopup.mBoxPopupParent == NULL) {
-                LV_LOG_USER("Process Element Long Press for popup delete");
-                tempProcessNode = currentNode;
+                LV_LOG_USER("Process Element click for popup delete");
+                gui.tempProcessNode = currentNode;
                 messagePopupCreate(deletePopupTitle_text, deletePopupBody_text, deleteButton_text, stepDetailCancel_text, currentNode);
             }
         }
 
         if (obj == currentNode->process.processElementSummary && currentNode->process.swipedRight == 0 && currentNode->process.swipedLeft == 1) {
-            LV_LOG_USER("Process Element Details address 0x%p", currentNode);
-            processDetail(currentNode);
+            LV_LOG_USER("Process Element Details address %p", currentNode);
+            gui.tempProcessNode = currentNode;
+            processDetail(currentNode->process.processDetails->processesContainer); // currentNode
         }
     } else if (code == LV_EVENT_DELETE) {
         lv_style_reset(&currentNode->process.processStyle);
@@ -213,14 +219,10 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
 	}
   int32_t positionIndex;
   
- if(tempSize == -1) 
-        positionIndex = gui.page.processes.processElementsList.size; // New entry add to the end of the list
-      else 
-        positionIndex = tempSize; // Use the index position passed into the function
-      LV_LOG_USER("Process size :%d",gui.page.processes.processElementsList.size);
-
-
-
+  if(tempSize == -1) positionIndex = gui.page.processes.processElementsList.size; // New entry add to the end of the list
+    else positionIndex = tempSize; // Use the index position passed into the function
+  LV_LOG_USER("Process size :%d",gui.page.processes.processElementsList.size);
+ 
   newProcess->process.swipedLeft = 1;
   newProcess->process.swipedRight = 0;
 
@@ -261,7 +263,8 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         lv_obj_add_style(newProcess->process.processElementSummary, &newProcess->process.processStyle, 0);
 
         newProcess->process.processName = lv_label_create(newProcess->process.processElementSummary);
-        lv_label_set_text(newProcess->process.processName, newProcess->process.processDetails->processNameString);
+        lv_label_set_text(newProcess->process.processName, newProcess->process.processDetails->processNameString ? 
+          newProcess->process.processDetails->processNameString :"");
         lv_obj_set_style_text_font(newProcess->process.processName, &lv_font_montserrat_22, 0);
         lv_label_set_long_mode(newProcess->process.processName, LV_LABEL_LONG_SCROLL_CIRCULAR);
         lv_obj_set_width(newProcess->process.processName, 220);
@@ -287,8 +290,9 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         lv_obj_align(newProcess->process.processTimeIcon, LV_ALIGN_LEFT_MID, 65, 17);
 
         newProcess->process.processTime = lv_label_create(newProcess->process.processElementSummary);    
-        sprintf(formatted_string, "%dm%ds", newProcess->process.processDetails->timeMins, newProcess->process.processDetails->timeSecs);
-        lv_label_set_text(newProcess->process.processTime, formatted_string); 
+//        sprintf(formatted_string, "%dm%ds", newProcess->process.processDetails->timeMins, newProcess->process.processDetails->timeSecs);
+        lv_label_set_text_fmt(newProcess->process.processTime, "%dm%ds", newProcess->process.processDetails->timeMins, 
+          newProcess->process.processDetails->timeSecs); 
         lv_obj_set_style_text_font(newProcess->process.processTime, &lv_font_montserrat_18, 0);              
         lv_obj_align(newProcess->process.processTime, LV_ALIGN_LEFT_MID, 87, 17);
 
@@ -314,6 +318,5 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         }
         
         lv_obj_add_event_cb(newProcess->process.preferredIcon, event_processElement, LV_EVENT_CLICKED, newProcess->process.preferredIcon);
-      
 }
 

@@ -18,7 +18,7 @@ extern struct gui_components gui;
 
 /* STEP DETAIL VARIABLES*/
 
-stepNode *newStep;
+static stepNode *newStep;
 
 void event_stepDetail(lv_event_t * e)
 {
@@ -36,13 +36,15 @@ void event_stepDetail(lv_event_t * e)
 
       /*If step name has changed update it */
       if( newStep->step.stepDetails->stepNameString == NULL ) { 
-        newStep->step.stepDetails->stepNameString = malloc(strlen(lv_textarea_get_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea))+1);
-        strcpy(newStep->step.stepDetails->stepNameString, lv_textarea_get_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea));
-      } else if(strcmp(newStep->step.stepDetails->stepNameString, lv_textarea_get_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea))) {
+        if(strlen(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea)) > 0 ) {
+          newStep->step.stepDetails->stepNameString = malloc(strlen(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea))+1);
+          strcpy(newStep->step.stepDetails->stepNameString, lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea));
+        }
+      } else if(strcmp(newStep->step.stepDetails->stepNameString, lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea))) {
         /* If the name has been previously allocated and now is different free and reallocate*/
         free(newStep->step.stepDetails->stepNameString);
-        newStep->step.stepDetails->stepNameString = malloc(strlen(lv_textarea_get_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea))+1);
-        strcpy(newStep->step.stepDetails->stepNameString, lv_textarea_get_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea));
+        newStep->step.stepDetails->stepNameString = malloc(strlen(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea))+1);
+        strcpy(newStep->step.stepDetails->stepNameString, lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea));
       }
 
       if(addStepElement(newStep, data) != NULL){
@@ -69,7 +71,7 @@ void event_stepDetail(lv_event_t * e)
       calcolateTotalTime(data);
       updateStepElement(data, newStep);
       lv_msgbox_close(mboxCont);
-      lv_obj_delete(mboxCont);
+//      lv_obj_delete(mboxCont);
       
     }
     if(obj == newStep->step.stepDetails->stepCancelButton){
@@ -86,7 +88,7 @@ void event_stepDetail(lv_event_t * e)
       }
 
       lv_msgbox_close(mboxCont);
-      lv_obj_delete(mboxCont);
+//      lv_obj_delete(mboxCont);
     }
  }
 
@@ -126,12 +128,12 @@ void event_stepDetail(lv_event_t * e)
   }
 
     if(code == LV_EVENT_FOCUSED) {
-      tempStepNode = newStep;
-        if(data == newStep->step.stepDetails->stepDetailMinTextArea){
+        gui.tempStepNode = newStep;
+        if((lv_obj_t*)data == newStep->step.stepDetails->stepDetailMinTextArea){
             LV_LOG_USER("Set minutes");
             rollerPopupCreate(gui.element.rollerPopup.minutesOptions, setMinutesPopupTitle_text, newStep->step.stepDetails->stepDetailMinTextArea, 0);
         }
-        if(data == newStep->step.stepDetails->stepDetailSecTextArea){
+        if((lv_obj_t*)data == newStep->step.stepDetails->stepDetailSecTextArea){
             LV_LOG_USER("Set seconds");
             rollerPopupCreate(gui.element.rollerPopup.secondsOptions, setSecondsPopupTitle_text, newStep->step.stepDetails->stepDetailSecTextArea, 0);
         }
@@ -156,6 +158,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
   *    PAGE ELEMENTS
 *********************/
 
+      char formatted_string[20];
 
       stepNode* existingStep = (stepNode*)isNodeInList((void*)&(referenceNode->process.processDetails->stepElementsList), currentNode, STEP_NODE);
       if(existingStep != NULL) {
@@ -166,7 +169,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
           LV_LOG_USER("New stepNode created at address 0x%p", newStep);
       }
       
-      tempStepNode = newStep;
+      gui.tempStepNode = newStep;
 
       LV_LOG_USER("Step detail creation");
 
@@ -230,10 +233,8 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_color_hex(WHITE), 0);
                   lv_textarea_set_max_length(newStep->step.stepDetails->stepDetailNamelTextArea, MAX_PROC_NAME_LEN);
                   //newStep->step.stepDetails->stepNameString = generateRandomCharArray(10);
-                  if(newStep->step.stepDetails->stepNameString != NULL)
-                    lv_textarea_set_text(newStep->step.stepDetails->stepDetailNamelTextArea, newStep->step.stepDetails->stepNameString);
-                  else
-                    lv_textarea_set_text(newStep->step.stepDetails->stepDetailNamelTextArea,"");
+                  lv_textarea_set_text(newStep->step.stepDetails->stepDetailNamelTextArea, newStep->step.stepDetails->stepNameString ?
+                    newStep->step.stepDetails->stepNameString : "");
 
 
 
