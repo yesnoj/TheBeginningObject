@@ -33,12 +33,17 @@ void event_filterMBox(lv_event_t * e){
         if(obj == gui.element.filterPopup.mBoxApplyFilterButton){
           LV_LOG_USER("Apply BUTTON");        
           if(resetPressed == 0){
-            LV_LOG_USER("resetPressed %d", resetPressed);  
-            lv_obj_set_style_text_color(gui.page.processes.iconFilterLabel, lv_color_hex(GREEN), LV_PART_MAIN);
-            gui.page.processes.isFiltered = 1;
-            filterAndDisplayProcesses(gui.element.filterPopup.filterName, gui.element.filterPopup.isColorFilter, gui.element.filterPopup.isBnWFilter, gui.element.filterPopup.preferredOnly);
+            LV_LOG_USER("resetPressed %d", resetPressed);
+            bool isFilterName = false;
+            if(gui.element.filterPopup.filterName) if(strlen(gui.element.filterPopup.filterName) > 0) isFilterName = true;
+            if( isFilterName || gui.element.filterPopup.isColorFilter != 0 || gui.element.filterPopup.isBnWFilter != 0 || gui.element.filterPopup.preferredOnly != 0)
+            {
+              lv_obj_set_style_text_color(gui.page.processes.iconFilterLabel, lv_color_hex(GREEN), LV_PART_MAIN);
+              gui.page.processes.isFiltered = 1;
+              filterAndDisplayProcesses();
+            }
           }
-          else{
+          if(resetPressed == 1){
             LV_LOG_USER("resetPressed %d", resetPressed); 
             lv_obj_set_style_text_color(gui.page.processes.iconFilterLabel, lv_color_hex(WHITE), LV_PART_MAIN);
             gui.page.processes.isFiltered = 0;
@@ -63,7 +68,6 @@ void event_filterMBox(lv_event_t * e){
             free(gui.element.filterPopup.filterName);
             gui.element.filterPopup.filterName = NULL;
           }
-          qSysAction( SAVE_PROCESS_CONFIG );
         }
       }
   }
@@ -85,6 +89,11 @@ void event_filterMBox(lv_event_t * e){
         LV_LOG_USER("State preferred: %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
         gui.element.filterPopup.preferredOnly = lv_obj_has_state(obj, LV_STATE_CHECKED);  
       }
+    }
+
+    if(code == LV_EVENT_VALUE_CHANGED) {
+      if(gui.element.filterPopup.filterName == NULL && gui.element.filterPopup.isColorFilter == 0 && gui.element.filterPopup.isBnWFilter == 0 && gui.element.filterPopup.preferredOnly == 0)
+          resetPressed = 1;
     }
 }
 

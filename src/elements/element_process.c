@@ -186,6 +186,9 @@ void event_processElement(lv_event_t * e) {
                 lv_obj_set_style_text_color(currentNode->process.preferredIcon, lv_color_hex(RED), LV_PART_MAIN);
                 currentNode->process.processDetails->isPreferred = 1;
             }
+
+          if(gui.page.processes.isFiltered == 1)
+            filterAndDisplayProcesses();
         }
 
         if (obj == currentNode->process.deleteButton) {

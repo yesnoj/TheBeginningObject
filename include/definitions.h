@@ -1390,7 +1390,7 @@ void printTemperature(float temp);
 
 void toLowerCase(char *str);
 int caseInsensitiveStrstr(const char *haystack, const char *needle);
-void filterAndDisplayProcesses(const char *filterName, uint8_t isColorFilter, uint8_t isBnWFilter, uint8_t preferredOnly);
+void filterAndDisplayProcesses();
 void removeFiltersAndDisplayAllProcesses();
 
 //@file initDisplay.c

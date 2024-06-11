@@ -90,16 +90,15 @@ void event_processDetail(lv_event_t * e)
           if(addProcessElement(newProcess) != NULL){
              LV_LOG_USER("Process not present yet, let's create!");
              processElementCreate(newProcess, -1);
-             if(gui.page.processes.isFiltered == 1)
-                filterAndDisplayProcesses(gui.element.filterPopup.filterName, gui.element.filterPopup.isColorFilter, gui.element.filterPopup.isBnWFilter, gui.element.filterPopup.preferredOnly);
-             
-             qSysAction( SAVE_PROCESS_CONFIG );
+
           }    
             else{
                   LV_LOG_USER("Process element creation failed, maximum entries reached" );
             }
           qSysAction( SAVE_PROCESS_CONFIG );
         updateProcessElement(newProcess);
+        if(gui.page.processes.isFiltered == 1)
+            filterAndDisplayProcesses();
         LV_LOG_USER("Pressed processSaveButton");
     }
 
@@ -193,10 +192,11 @@ void processDetail(lv_obj_t * processContainer)
       newProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
   //    newProcess->process.processDetails->processNameString = "";   // Non richiesto
   //    newProcess->process.processDetails->somethingChanged = 0;     // Non richiesto
-      newProcess->process.processDetails->filmType = FILM_TYPE_NA; 
+      newProcess->process.processDetails->filmType = BLACK_AND_WHITE_FILM; 
   //    newProcess->process.processDetails->temp = 0;                 // Non richiesto
       
   }
+
   newProcess->process.processDetails->processesContainer = processContainer;
   gui.tempProcessNode = newProcess;
  
@@ -446,11 +446,11 @@ void processDetail(lv_obj_t * processContainer)
                               lv_obj_set_style_text_color(newProcess->process.processDetails->processColorLabel, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
                               lv_obj_set_style_text_color(newProcess->process.processDetails->processBnWLabel, lv_color_hex(WHITE), LV_PART_MAIN);
                           }
-                          if(newProcess->process.processDetails->filmType == BLACK_AND_WHITE_FILM){
+                          else if(newProcess->process.processDetails->filmType == BLACK_AND_WHITE_FILM){
                               lv_obj_set_style_text_color(newProcess->process.processDetails->processBnWLabel, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
                               lv_obj_set_style_text_color(newProcess->process.processDetails->processColorLabel, lv_color_hex(WHITE), LV_PART_MAIN);
                           }
-                          if(newProcess->process.processDetails->filmType == FILM_TYPE_NA){
+                          else if(newProcess->process.processDetails->filmType == FILM_TYPE_NA){
                               lv_obj_set_style_text_color(newProcess->process.processDetails->processBnWLabel, lv_color_hex(WHITE), LV_PART_MAIN);
                               lv_obj_set_style_text_color(newProcess->process.processDetails->processColorLabel, lv_color_hex(WHITE), LV_PART_MAIN);
                           }
