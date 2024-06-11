@@ -491,15 +491,15 @@ void init_globals( void ) {
   gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(0,5,"0.");
 
   //gui.element.filterPopup.filterName = ""; // Not Required this will set this to some constant pointer which is not good...
-  //gui.element.filterPopup.isColorFilter = FILM_TYPE_NA;
+  //gui.element.filterPopup.isColorFilter = FILM_TYPE_NA;   // This breaks filtering not needed
   //gui.element.filterPopup.isBnWFilter = FILM_TYPE_NA;
   //gui.element.filterPopup.isBnWFilter = 0;
   //gui.element.filterPopup.preferredOnly = 0;
   
   //gui.page.processes.isFiltered = 0; // Not Required memset takes care of this also
 
-  //gui.tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-  //gui.tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);  
+  gui.tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+  gui.tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);  
   
   create_keyboard();
 }
@@ -1322,10 +1322,12 @@ int caseInsensitiveStrstr(const char *haystack, const char *needle) {
 void filterAndDisplayProcesses( void ) {
     processNode *currentNode = gui.page.processes.processElementsList.start;
     
+    /* This Code will break things!  This is corrupting the main procesElementList needs to be copied before changing it*/
     processList *processFilteredElementsList = &(gui.page.processes.processFilteredElementsList);
     processFilteredElementsList->start = NULL;
     processFilteredElementsList->end = NULL;
     processFilteredElementsList->size = 0;
+    /* End of breaking code */
 
     int32_t displayedCount = 1;
 
