@@ -185,13 +185,13 @@ void processDetail(lv_obj_t * processContainer)
 *********************/
   char formatted_string[20];
 
-  processNode* existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), gui.tempProcessNode, PROCESS_NODE);
+  processNode* existingProcess;
 
   if(gui.page.processes.isFiltered == 1){
-    existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processFilteredElementsList), processContainer, PROCESS_NODE);
+    existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processFilteredElementsList), gui.tempProcessNode, PROCESS_NODE);
     }
   else{
-    existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), processContainer, PROCESS_NODE);
+    existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), gui.tempProcessNode, PROCESS_NODE);
     }
 
 if(existingProcess != NULL) {
