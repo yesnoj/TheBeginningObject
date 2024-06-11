@@ -39,7 +39,7 @@ void sysMan( void *arg ) {
 
 			case SAVE_PROCESS_CONFIG:
 	        LV_LOG_USER("Save JSON!");
-          writeFullJSONFile(SD, FILENAME_SAVE,gui, 0);
+          writeFullJSONFile(SD, FILENAME_SAVE,gui, false);
           break;
       // Add Further processor intensive tasks here to keep them out of the GUI execution path
 
@@ -107,7 +107,7 @@ void setup()
     //readJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
     
     //writeFullJSONFile(SD, FILENAME_SAVE,gui);
-    readFULLJSONFile(SD, FILENAME_SAVE,gui, 0);
+    readFULLJSONFile(SD, FILENAME_SAVE,gui, false);
 }
 
 void loop()

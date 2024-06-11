@@ -491,15 +491,15 @@ void init_globals( void ) {
   gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(0,5,"0.");
 
   //gui.element.filterPopup.filterName = ""; // Not Required this will set this to some constant pointer which is not good...
-  gui.element.filterPopup.isColorFilter = FILM_TYPE_NA;
-  gui.element.filterPopup.isBnWFilter = FILM_TYPE_NA;
+  //gui.element.filterPopup.isColorFilter = FILM_TYPE_NA;
+  //gui.element.filterPopup.isBnWFilter = FILM_TYPE_NA;
   //gui.element.filterPopup.isBnWFilter = 0;
   //gui.element.filterPopup.preferredOnly = 0;
   
   //gui.page.processes.isFiltered = 0; // Not Required memset takes care of this also
 
-  gui.tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-  gui.tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);  
+  //gui.tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+  //gui.tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);  
   
   create_keyboard();
 }
@@ -813,10 +813,10 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
                     stepNode *nodeS = (stepNode*) allocateAndInitializeNode(STEP_NODE);
 
                     // Assign step details
-                    if( strlen(Processe_value_Step.value()["stepNameString"]) > 0 ) {
+                    if( strlen( Processe_value_Step.value()["stepNameString"] ) > 0 ) {
                       nodeS->step.stepDetails->stepNameString = (char*)malloc( strlen(Processe_value_Step.value()["stepNameString"]) + 1);
                       strcpy(nodeS->step.stepDetails->stepNameString, Processe_value_Step.value()["stepNameString"]);
-                    } nodeS->step.stepDetails->stepNameString = NULL;
+                    } else nodeS->step.stepDetails->stepNameString = NULL;
                     nodeS->step.stepDetails->timeMins = Processe_value_Step.value()["timeMins"];
                     nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
                     nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];
@@ -898,19 +898,19 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
 
         JsonObject Processes = doc.createNestedObject("Processes");
         
-        const processList *processElementsList;
-        memset( &processElementsList, 0, sizeof( processElementsList ) );   
-        processElementsList = &(gui.page.processes.processElementsList);
+//        const processList *processElementsList;
+//        memset( &processElementsList, 0, sizeof( processElementsList ) );   
+//        processElementsList = &(gui.page.processes.processElementsList);
 
-        processNode *currentProcessNode;
-        memset( &currentProcessNode, 0, sizeof( currentProcessNode ) ); 
-        currentProcessNode = processElementsList->start;
+//        processNode *currentProcessNode;
+//        memset( &currentProcessNode, 0, sizeof( currentProcessNode ) ); 
+        processNode *currentProcessNode = gui.page.processes.processElementsList.start;
 
         while(currentProcessNode != NULL){
             snprintf(processName, sizeof(processName), "Process%d", processCounter);
             JsonObject currentProcess = Processes.createNestedObject(processName);
-            currentProcess["processNameString"] = currentProcessNode->process.processDetails->processNameString ?
-              currentProcessNode->process.processDetails->processNameString : "";
+            currentProcess["processNameString"] = (currentProcessNode->process.processDetails->processNameString ?
+              currentProcessNode->process.processDetails->processNameString : "");
             currentProcess["temp"] = currentProcessNode->process.processDetails->temp;
             currentProcess["tempTolerance"] = currentProcessNode->process.processDetails->tempTolerance;
             currentProcess["isTempControlled"] = currentProcessNode->process.processDetails->isTempControlled;
@@ -933,13 +933,13 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
             LV_LOG_USER("timeSecs:%d",currentProcessNode->process.processDetails->timeSecs);
           }
 
-            stepList *stepElementsList;
-            memset( &stepElementsList, 0, sizeof( stepElementsList ) ); 
-            stepElementsList = &(currentProcessNode->process.processDetails->stepElementsList);   
+//            stepList *stepElementsList;
+//            memset( &stepElementsList, 0, sizeof( stepElementsList ) ); 
+//            stepElementsList = &(currentProcessNode->process.processDetails->stepElementsList);   
 
-            stepNode *currentStepNode;
-            memset( &currentStepNode, 0, sizeof( currentStepNode ) );   
-            currentStepNode = stepElementsList->start;
+//            stepNode *currentStepNode;
+//            memset( &currentStepNode, 0, sizeof( currentStepNode ) );   
+            stepNode *currentStepNode = currentProcessNode->process.processDetails->stepElementsList.start;
 
             processCounter++;
             stepCounter = 0;
@@ -948,8 +948,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
             while(currentStepNode != NULL){                
                 snprintf(stepName, sizeof(stepName), "Step%d", stepCounter);
                 JsonObject currentStep = currentProcessSteps.createNestedObject(stepName);
-                currentStep["stepNameString"] = currentStepNode->step.stepDetails->stepNameString ?
-                  currentStepNode->step.stepDetails->stepNameString : "";
+                currentStep["stepNameString"] = (currentStepNode->step.stepDetails->stepNameString ?
+                  currentStepNode->step.stepDetails->stepNameString : "");
                 currentStep["timeMins"] = currentStepNode->step.stepDetails->timeMins;
                 currentStep["timeSecs"] = currentStepNode->step.stepDetails->timeSecs;
                 currentStep["type"] = currentStepNode->step.stepDetails->type;
@@ -958,8 +958,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
               
               if(enableLog){
                 LV_LOG_USER("--- STEP PARAMS ---");
-                LV_LOG_USER("stepNameString:%s",currentStepNode->step.stepDetails->stepNameString ? 
-                  currentStepNode->step.stepDetails->stepNameString : "");
+                LV_LOG_USER("stepNameString:%s",(currentStepNode->step.stepDetails->stepNameString ? 
+                  currentStepNode->step.stepDetails->stepNameString : ""));
                 LV_LOG_USER("timeMins:%d",currentStepNode->step.stepDetails->timeMins);
                 LV_LOG_USER("timeSecs:%d",currentStepNode->step.stepDetails->timeSecs);
                 LV_LOG_USER("type:%d",currentStepNode->step.stepDetails->type);
@@ -1319,8 +1319,7 @@ int caseInsensitiveStrstr(const char *haystack, const char *needle) {
     return strstr(haystackLower, needleLower) != NULL;
 }
 
-
-void filterAndDisplayProcesses() {
+void filterAndDisplayProcesses( void ) {
     processNode *currentNode = gui.page.processes.processElementsList.start;
     
     processList *processFilteredElementsList = &(gui.page.processes.processFilteredElementsList);
@@ -1332,7 +1331,7 @@ void filterAndDisplayProcesses() {
 
     // Debugging info
     LV_LOG_USER("Filter %s, %d, %d, %d", 
-                gui.element.filterPopup.filterName, 
+                gui.element.filterPopup.filterName ? gui.element.filterPopup.filterName : "", 
                 gui.element.filterPopup.isColorFilter, 
                 gui.element.filterPopup.isBnWFilter, 
                 gui.element.filterPopup.preferredOnly);
@@ -1340,11 +1339,13 @@ void filterAndDisplayProcesses() {
     // Filter and add processes to filtered list
     while (currentNode != NULL) {
         uint8_t display = 0;
-
         // Filter by name
-        if (gui.element.filterPopup.filterName != NULL && strlen(gui.element.filterPopup.filterName) > 0 && 
-            caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, gui.element.filterPopup.filterName)) {
-            display = 1;
+        if (gui.element.filterPopup.filterName != NULL) {
+          if (strlen(gui.element.filterPopup.filterName) > 0 ) { 
+            if ( caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, gui.element.filterPopup.filterName)) {
+              display = 1;
+            }
+          }
         }
 
         // Filter by film type (color or BnW)

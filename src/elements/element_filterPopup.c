@@ -12,8 +12,8 @@
 
 
 extern struct gui_components gui;
-uint8_t filterFilmType = 0;
-uint8_t resetPressed = 0;
+//uint8_t filterFilmType = 0;
+static uint8_t resetPressed = 0;
 //ACCESSORY INCLUDES
 
 
