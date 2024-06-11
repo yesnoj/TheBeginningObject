@@ -51,7 +51,6 @@ void event_filterMBox(lv_event_t * e){
             resetPressed = 0;   
           }
           lv_obj_add_flag(gui.element.filterPopup.mBoxFilterPopupParent, LV_OBJ_FLAG_HIDDEN);
-          qSysAction( SAVE_PROCESS_CONFIG );
         }
         if(obj == gui.element.filterPopup.mBoxResetFilterButton){
           LV_LOG_USER("Reset BUTTON");

@@ -4,8 +4,8 @@ import string
 
 # Definizione delle costanti
 MAX_PROC_NAME_LEN = 15
-MAX_STEP_ELEMENTS = 5
-MAX_PROC_ELEMENTS = 2
+MAX_STEP_ELEMENTS = 30
+MAX_PROC_ELEMENTS = 20
 
 def random_string(length):
     letters = string.ascii_lowercase
@@ -23,12 +23,6 @@ def generate_json():
             "isPersistentAlarm": 0,
             "isProcessAutostart": 0,
             "drainFillOverlapSetpoint": 0
-        },
-        "Filter": {
-            "filterName": "",
-            "isColorFilter": 0,
-            "isBnWFilter": 0,
-            "preferredOnly": 0
         },
         "Processes": {}
     }

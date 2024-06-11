@@ -1354,8 +1354,75 @@ int caseInsensitiveStrstr(const char *haystack, const char *needle) {
 }
 
 
+void filterAndDisplayProcesses() {
+    processNode *currentNode = gui.page.processes.processElementsList.start;
+    
+    processList *processFilteredElementsList = &(gui.page.processes.processFilteredElementsList);
+    processFilteredElementsList->start = NULL;
+    processFilteredElementsList->end = NULL;
+    processFilteredElementsList->size = 0;
 
+    int32_t displayedCount = 1;
 
+    // Debugging info
+    LV_LOG_USER("Filter %s, %d, %d, %d", 
+                gui.element.filterPopup.filterName, 
+                gui.element.filterPopup.isColorFilter, 
+                gui.element.filterPopup.isBnWFilter, 
+                gui.element.filterPopup.preferredOnly);
+
+    // Filter and add processes to filtered list
+    while (currentNode != NULL) {
+        uint8_t display = 0;
+
+        // Filter by name
+        if (gui.element.filterPopup.filterName != NULL && strlen(gui.element.filterPopup.filterName) > 0 && 
+            caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, gui.element.filterPopup.filterName)) {
+            display = 1;
+        }
+
+        // Filter by film type (color or BnW)
+        if (gui.element.filterPopup.isColorFilter && currentNode->process.processDetails->filmType == COLOR_FILM) {
+            display = 1;
+        }
+
+        if (gui.element.filterPopup.isBnWFilter && currentNode->process.processDetails->filmType == BLACK_AND_WHITE_FILM) {
+            display = 1;
+        }
+
+        // Filter by preferred status
+        if (gui.element.filterPopup.preferredOnly && currentNode->process.processDetails->isPreferred) {
+            display = 1;
+        }
+
+        // Add process to filtered list if it matches the filter criteria
+        if (display) {
+            LV_LOG_USER("Filtered");
+            addProcessElement(currentNode, processFilteredElementsList);
+        }
+
+        currentNode = currentNode->next;
+    }
+
+    // Update layout for the list container
+    lv_obj_update_layout(gui.page.processes.processesListContainer);
+
+    // Clean the container to prepare for displaying filtered processes
+    lv_obj_clean(gui.page.processes.processesListContainer);
+
+    // Display filtered processes
+    currentNode = processFilteredElementsList->start;
+    while (currentNode != NULL) {
+        processElementCreate(currentNode, displayedCount);
+        displayedCount++;
+        currentNode = currentNode->next;
+    }
+
+    // Update layout again after adding filtered elements
+    lv_obj_update_layout(gui.page.processes.processesListContainer);
+}
+
+/*
 void filterAndDisplayProcesses() {
     processNode *currentNode = gui.page.processes.processElementsList.start;
     int32_t displayedCount = 1;
@@ -1422,7 +1489,7 @@ void filterAndDisplayProcesses() {
 
     lv_obj_update_layout(gui.page.processes.processesListContainer);
 }
-
+*/
 
 void removeFiltersAndDisplayAllProcesses() {
     processNode *currentNode = gui.page.processes.processElementsList.start;

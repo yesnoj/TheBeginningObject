@@ -714,6 +714,7 @@ struct sProcesses {
 
   /* Params objects */
   uint8_t             isFiltered;
+  processList           processFilteredElementsList;
   processList           processElementsList;
 };
 
@@ -1297,6 +1298,13 @@ stepNode *addStepElement(stepNode * stepToAdd, processNode * processReference);
 *********************/
 void init_globals( void );
 
+<<<<<<< Updated upstream
+=======
+
+// @file element_processes.c
+processNode *addProcessElement(processNode	*processToAdd, processList *processElementsList);
+
+>>>>>>> Stashed changes
 // @file page_checkup.c
 void event_checkup(lv_event_t *e);
 void checkup(processNode *referenceProcess);
