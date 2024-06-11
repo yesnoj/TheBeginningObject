@@ -759,24 +759,6 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
                 LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
             }
 
-            JsonObject Filter = doc["Filter"];
-//            gui.element.filterPopup.filterName = Filter["filterName"];
-            if( strlen(Filter["filterName"]) > 0 ) { 
-              gui.element.filterPopup.filterName = (char*)malloc( strlen(Filter["filterName"]) + 1);
-              strcpy( gui.element.filterPopup.filterName, Filter["filterName"] );
-            } else  gui.element.filterPopup.filterName = NULL;               
-            gui.element.filterPopup.isColorFilter = Filter["isColorFilter"];
-            gui.element.filterPopup.isBnWFilter = Filter["isBnWFilter"];
-            gui.element.filterPopup.preferredOnly = Filter["preferredOnly"];
-
-            if(enableLog){
-                LV_LOG_USER("--- FILTER PARAMS ---");
-                LV_LOG_USER("filterName:%s", gui.element.filterPopup.filterName ? gui.element.filterPopup.filterName : "");
-                LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
-                LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
-                LV_LOG_USER("preferredOnly:%d",gui.element.filterPopup.preferredOnly);
-            }
-
             processList *processElementsList = &(gui.page.processes.processElementsList);
             processElementsList->start = NULL;
             processElementsList->end = NULL;
@@ -911,22 +893,6 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
         LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
         LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
         LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
-      }
-
-
-        JsonObject Filter = doc.createNestedObject("Filter");
-        if( gui.element.filterPopup.filterName != NULL ) Filter["filterName"] = gui.element.filterPopup.filterName;
-        else Filter["filterName"] = "";
-        Filter["isColorFilter"] = gui.element.filterPopup.isColorFilter;
-        Filter["isBnWFilter"] = gui.element.filterPopup.isBnWFilter;
-        Filter["preferredOnly"] = gui.element.filterPopup.preferredOnly;
-
-      if(enableLog){
-        LV_LOG_USER("--- FILTER PARAMS ---");
-        if( gui.element.filterPopup.filterName != NULL ) LV_LOG_USER("filterName:%s",gui.element.filterPopup.filterName);
-        LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
-        LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
-        LV_LOG_USER("preferredOnly:%d",gui.element.filterPopup.preferredOnly);
       }
 
 

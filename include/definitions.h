@@ -1281,7 +1281,7 @@ void event_processElement(lv_event_t *e);
 void processElementCreate(processNode *newProcess, int32_t tempSize);
 bool deleteProcessElement( processNode	*processToDelete );
 processNode *getProcElementEntryByObject( lv_obj_t *obj );
-processNode *addProcessElement(processNode	*processToAdd);
+processNode *addProcessElement(processNode	*processToAdd, processList *processElementsList);
 
 // @file element_rollerPopup.c
 void event_Roller(lv_event_t *e);
@@ -1298,13 +1298,7 @@ stepNode *addStepElement(stepNode * stepToAdd, processNode * processReference);
 *********************/
 void init_globals( void );
 
-<<<<<<< Updated upstream
-=======
 
-// @file element_processes.c
-processNode *addProcessElement(processNode	*processToAdd, processList *processElementsList);
-
->>>>>>> Stashed changes
 // @file page_checkup.c
 void event_checkup(lv_event_t *e);
 void checkup(processNode *referenceProcess);

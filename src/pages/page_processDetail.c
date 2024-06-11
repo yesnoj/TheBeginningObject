@@ -13,12 +13,9 @@ extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
-<<<<<<< Updated upstream
 static processNode *newProcess;
-=======
-processNode *newProcess;
 processNode *existingProcess;
->>>>>>> Stashed changes
+
 
 /******************************
   *    PROCESS EVENT
@@ -186,36 +183,25 @@ void processDetail(lv_obj_t * processContainer)
 /*********************
   *    PAGE HEADER
 *********************/
-<<<<<<< Updated upstream
   char formatted_string[20];
 
   processNode* existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), gui.tempProcessNode, PROCESS_NODE);
-  if(existingProcess != NULL) {
-      LV_LOG_USER("Process already present");
-      newProcess = existingProcess; // Usa il nodo già presente anziché allocarne uno nuovo
 
-  } else {
-      newProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
-  //    newProcess->process.processDetails->processNameString = "";   // Non richiesto
-  //    newProcess->process.processDetails->somethingChanged = 0;     // Non richiesto
-      newProcess->process.processDetails->filmType = BLACK_AND_WHITE_FILM; 
-  //    newProcess->process.processDetails->temp = 0;                 // Non richiesto
-      
-  }
-=======
-
-
-if(gui.page.processes.isFiltered == 1){
-  existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processFilteredElementsList), processContainer, PROCESS_NODE);
-  }
-else{
-  existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), processContainer, PROCESS_NODE);
-  }
+  if(gui.page.processes.isFiltered == 1){
+    existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processFilteredElementsList), processContainer, PROCESS_NODE);
+    }
+  else{
+    existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), processContainer, PROCESS_NODE);
+    }
 
 if(existingProcess != NULL) {
     LV_LOG_USER("Process already present");
     newProcess = existingProcess; // Usa il nodo già presente anziché allocarne uno nuovo
->>>>>>> Stashed changes
+
+  } else {
+      newProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
+      newProcess->process.processDetails->filmType = BLACK_AND_WHITE_FILM; 
+  }
 
   newProcess->process.processDetails->processesContainer = processContainer;
   gui.tempProcessNode = newProcess;

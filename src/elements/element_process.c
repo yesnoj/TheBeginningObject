@@ -20,15 +20,10 @@ static bool gesture_handled = false;
 /******************************
 *  LINKED LIST IMPLEMENTATION
 ******************************/
-<<<<<<< Updated upstream
-processNode *addProcessElement(processNode	*processToAdd) {
 
-	if( gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS || isNodeInList((void*)&(gui.page.processes.processElementsList), processToAdd, PROCESS_NODE) != NULL) return NULL;		// Put some limit on things!
-=======
 processNode *addProcessElement(processNode	*processToAdd, processList *processElementsList) {
 	if( processElementsList->size == MAX_PROC_ELEMENTS || isNodeInList((void*)&(processElementsList), processToAdd, PROCESS_NODE) != NULL) return NULL;		// Put some limit on things!
->>>>>>> Stashed changes
-  
+
   LV_LOG_USER("Processes available %d first",processElementsList->size);
       if( processElementsList->start == NULL) {					/* Deals with the first entry */
         processElementsList->start = processToAdd;
@@ -227,12 +222,6 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
 	}
   int32_t positionIndex;
   
-<<<<<<< Updated upstream
-  if(tempSize == -1) positionIndex = gui.page.processes.processElementsList.size; // New entry add to the end of the list
-    else positionIndex = tempSize; // Use the index position passed into the function
-  LV_LOG_USER("Process size :%d",gui.page.processes.processElementsList.size);
- 
-=======
  if(gui.page.processes.isFiltered == 0){
   if(tempSize == -1) 
           positionIndex = gui.page.processes.processElementsList.size; // New entry add to the end of the list
@@ -248,7 +237,6 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         LV_LOG_USER("Process size :%d",gui.page.processes.processFilteredElementsList.size);
  }
 
->>>>>>> Stashed changes
   newProcess->process.swipedLeft = 1;
   newProcess->process.swipedRight = 0;
 
