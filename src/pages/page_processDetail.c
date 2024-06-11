@@ -13,7 +13,12 @@ extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
 
+<<<<<<< Updated upstream
 static processNode *newProcess;
+=======
+processNode *newProcess;
+processNode *existingProcess;
+>>>>>>> Stashed changes
 
 /******************************
   *    PROCESS EVENT
@@ -87,15 +92,15 @@ void event_processDetail(lv_event_t * e)
           lv_obj_clear_state(newProcess->process.processDetails->processRunButton, LV_STATE_DISABLED);
           lv_obj_add_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
 
-          if(addProcessElement(newProcess) != NULL){
+          if(addProcessElement(newProcess, &(gui.page.processes.processElementsList)) != NULL){
              LV_LOG_USER("Process not present yet, let's create!");
              processElementCreate(newProcess, -1);
-
+             qSysAction( SAVE_PROCESS_CONFIG );
           }    
             else{
                   LV_LOG_USER("Process element creation failed, maximum entries reached" );
             }
-          qSysAction( SAVE_PROCESS_CONFIG );
+          
         updateProcessElement(newProcess);
         if(gui.page.processes.isFiltered == 1)
             filterAndDisplayProcesses();
@@ -181,6 +186,7 @@ void processDetail(lv_obj_t * processContainer)
 /*********************
   *    PAGE HEADER
 *********************/
+<<<<<<< Updated upstream
   char formatted_string[20];
 
   processNode* existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), gui.tempProcessNode, PROCESS_NODE);
@@ -196,6 +202,20 @@ void processDetail(lv_obj_t * processContainer)
   //    newProcess->process.processDetails->temp = 0;                 // Non richiesto
       
   }
+=======
+
+
+if(gui.page.processes.isFiltered == 1){
+  existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processFilteredElementsList), processContainer, PROCESS_NODE);
+  }
+else{
+  existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), processContainer, PROCESS_NODE);
+  }
+
+if(existingProcess != NULL) {
+    LV_LOG_USER("Process already present");
+    newProcess = existingProcess; // Usa il nodo già presente anziché allocarne uno nuovo
+>>>>>>> Stashed changes
 
   newProcess->process.processDetails->processesContainer = processContainer;
   gui.tempProcessNode = newProcess;
