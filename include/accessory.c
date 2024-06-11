@@ -48,7 +48,7 @@ void event_cb(lv_event_t * e)
     //const char *label = lv_msgbox_get_active_btn(mbox);
     //LV_UNUSED(label);
     lv_msgbox_close(mboxCont);
-    lv_obj_delete(mboxCont);
+    //lv_obj_delete(mboxCont);
     //LV_LOG_USER("Button %s clicked", lv_label_get(label));
 }
 
@@ -127,17 +127,17 @@ void event_keyboard(lv_event_t* e)
 
           showKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
       }
-      if(obj == tempProcessNode->process.processDetails->processDetailNameTextArea){
+      if(obj == gui.tempProcessNode->process.processDetails->processDetailNameTextArea){
           LV_LOG_USER("LV_EVENT_FOCUSED on processDetailNameTextArea");
           lv_obj_set_user_data(gui.element.keyboardPopup.keyboard,obj);
 
-          showKeyboard(tempProcessNode->process.processDetails->processDetailParent);
+          showKeyboard(gui.tempProcessNode->process.processDetails->processDetailParent);
       }
-      if(obj == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
+      if(obj == gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea){
           LV_LOG_USER("LV_EVENT_FOCUSED on stepDetailNamelTextArea");
           lv_obj_set_user_data(gui.element.keyboardPopup.keyboard,obj);
 
-          showKeyboard(tempStepNode->step.stepDetails->stepDetailParent);
+          showKeyboard(gui.tempStepNode->step.stepDetails->stepDetailParent);
       }
    }
   
@@ -146,13 +146,13 @@ void event_keyboard(lv_event_t* e)
           LV_LOG_USER("LV_EVENT_DEFOCUSED on filterPopup.mBoxNameTextArea");
           hideKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
       }
-      if(obj == tempProcessNode->process.processDetails->processDetailNameTextArea){
+      if(obj == gui.tempProcessNode->process.processDetails->processDetailNameTextArea){
           LV_LOG_USER("LV_EVENT_DEFOCUSED on processDetailNameTextArea");
-          hideKeyboard(tempProcessNode->process.processDetails->processDetailParent);
+          hideKeyboard(gui.tempProcessNode->process.processDetails->processDetailParent);
       }
-      if(obj == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
+      if(obj == gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea){
           LV_LOG_USER("LV_EVENT_DEFOCUSED on stepDetailNamelTextArea");
-          hideKeyboard(tempStepNode->step.stepDetails->stepDetailParent);
+          hideKeyboard(gui.tempStepNode->step.stepDetails->stepDetailParent);
       }
    }
     
@@ -163,13 +163,13 @@ void event_keyboard(lv_event_t* e)
           LV_LOG_USER("LV_EVENT_DEFOCUSED on filterPopup.mBoxNameTextArea");
           hideKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
       }
-      if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempProcessNode->process.processDetails->processDetailNameTextArea){
+      if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.tempProcessNode->process.processDetails->processDetailNameTextArea){
           LV_LOG_USER("LV_EVENT_DEFOCUSED on processDetailNameTextArea");
-          hideKeyboard(tempProcessNode->process.processDetails->processDetailParent);
+          hideKeyboard(gui.tempProcessNode->process.processDetails->processDetailParent);
       }
-      if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
+      if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea){
           LV_LOG_USER("LV_EVENT_DEFOCUSED on stepDetailNamelTextArea");
-          hideKeyboard(tempStepNode->step.stepDetails->stepDetailParent);
+          hideKeyboard(gui.tempStepNode->step.stepDetails->stepDetailParent);
       }
     }
     if (code == LV_EVENT_READY) {
@@ -179,25 +179,28 @@ void event_keyboard(lv_event_t* e)
               LV_LOG_USER("Press ok from filterPopup.mBoxFilterPopupParent");
               lv_textarea_set_text(gui.element.filterPopup.mBoxNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
               if(strlen(lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea)) > 0) {
-                gui.element.filterPopup.filterName = NULL;
+              	if(gui.element.filterPopup.filterName != NULL ) free( gui.element.filterPopup.filterName );
                 gui.element.filterPopup.filterName = (char *)malloc(sizeof(char) * (strlen(lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea)) + 1)); // Alloca memoria per la stringa, lunghezza_stringa è la lunghezza della stringa da assegnare
 
                 if(gui.element.filterPopup.filterName != NULL ) 
                   strcpy(gui.element.filterPopup.filterName, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
-              }              
+              } else if(gui.element.filterPopup.filterName != NULL ) {
+                free( gui.element.filterPopup.filterName );
+                gui.element.filterPopup.filterName = NULL;
+              }             
               hideKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
             }
-            if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempProcessNode->process.processDetails->processDetailNameTextArea){
+            if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.tempProcessNode->process.processDetails->processDetailNameTextArea){
               LV_LOG_USER("Press ok from processDetailNameTextArea");
-              lv_textarea_set_text(tempProcessNode->process.processDetails->processDetailNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
+              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
 
-              hideKeyboard(tempProcessNode->process.processDetails->processDetailParent);
+              hideKeyboard(gui.tempProcessNode->process.processDetails->processDetailParent);
             }
-            if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == tempStepNode->step.stepDetails->stepDetailNamelTextArea){
+            if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea){
               LV_LOG_USER("Press ok from stepDetailNamelTextArea");
-              lv_textarea_set_text(tempStepNode->step.stepDetails->stepDetailNamelTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
+              lv_textarea_set_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
 
-              hideKeyboard(tempStepNode->step.stepDetails->stepDetailParent);
+              hideKeyboard(gui.tempStepNode->step.stepDetails->stepDetailParent);
             } 
       }
  }
@@ -487,15 +490,16 @@ void init_globals( void ) {
   gui.element.rollerPopup.secondsOptions = createRollerValues(0,60,""); 
   gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(0,5,"0.");
 
-  gui.element.filterPopup.filterName = "";
-  gui.element.filterPopup.isColorFilter = 0;
-  gui.element.filterPopup.isBnWFilter = 0;
-  gui.element.filterPopup.preferredOnly = 0;
+  //gui.element.filterPopup.filterName = ""; // Not Required this will set this to some constant pointer which is not good...
+  gui.element.filterPopup.isColorFilter = FILM_TYPE_NA;
+  gui.element.filterPopup.isBnWFilter = FILM_TYPE_NA;
+  //gui.element.filterPopup.isBnWFilter = 0;
+  //gui.element.filterPopup.preferredOnly = 0;
   
-  gui.page.processes.isFiltered = 0;
+  //gui.page.processes.isFiltered = 0; // Not Required memset takes care of this also
 
-  tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-  tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);  
+  gui.tempProcessNode = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+  gui.tempStepNode = (stepNode*) allocateAndInitializeNode(STEP_NODE);  
   
   create_keyboard();
 }
@@ -755,6 +759,24 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
                 LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
             }
 
+            JsonObject Filter = doc["Filter"];
+//            gui.element.filterPopup.filterName = Filter["filterName"];
+            if( strlen(Filter["filterName"]) > 0 ) { 
+              gui.element.filterPopup.filterName = (char*)malloc( strlen(Filter["filterName"]) + 1);
+              strcpy( gui.element.filterPopup.filterName, Filter["filterName"] );
+            } else  gui.element.filterPopup.filterName = NULL;               
+            gui.element.filterPopup.isColorFilter = Filter["isColorFilter"];
+            gui.element.filterPopup.isBnWFilter = Filter["isBnWFilter"];
+            gui.element.filterPopup.preferredOnly = Filter["preferredOnly"];
+
+            if(enableLog){
+                LV_LOG_USER("--- FILTER PARAMS ---");
+                LV_LOG_USER("filterName:%s", gui.element.filterPopup.filterName ? gui.element.filterPopup.filterName : "");
+                LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
+                LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
+                LV_LOG_USER("preferredOnly:%d",gui.element.filterPopup.preferredOnly);
+            }
+
             processList *processElementsList = &(gui.page.processes.processElementsList);
             processElementsList->start = NULL;
             processElementsList->end = NULL;
@@ -764,10 +786,10 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
                 processNode *nodeP = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
 
                 // Assign process details
-//                const char *tpp = (const char*)Processe.value()["processNameString"];
-                nodeP->process.processDetails->processNameString = (char*)malloc( strlen(Processe.value()["processNameString"]) + 1);
-                strcpy( nodeP->process.processDetails->processNameString, Processe.value()["processNameString"] );                
-//                nodeP->process.processDetails->processNameString = Processe.value()["processNameString"];
+                if( strlen(Processe.value()["processNameString"]) > 0 ) {
+                  nodeP->process.processDetails->processNameString = (char*)malloc( strlen(Processe.value()["processNameString"]) + 1);
+                  strcpy( nodeP->process.processDetails->processNameString, Processe.value()["processNameString"] );                
+                } else nodeP->process.processDetails->processNameString = NULL;
                 nodeP->process.processDetails->temp = Processe.value()["temp"];
                 nodeP->process.processDetails->tempTolerance = Processe.value()["tempTolerance"];
                 nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
@@ -789,7 +811,8 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
 
                 if(enableLog){
                     LV_LOG_USER("--- PROCESS PARAMS ---");
-                    LV_LOG_USER("processNameString:%s",nodeP->process.processDetails->processNameString);
+                    LV_LOG_USER("processNameString:%s",nodeP->process.processDetails->processNameString ? 
+                      nodeP->process.processDetails->processNameString : "");
                     LV_LOG_USER("temp:%d",nodeP->process.processDetails->temp);
                     LV_LOG_USER("tempTolerance:%d",nodeP->process.processDetails->tempTolerance);
                     LV_LOG_USER("isTempControlled:%d",nodeP->process.processDetails->isTempControlled);
@@ -808,10 +831,10 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
                     stepNode *nodeS = (stepNode*) allocateAndInitializeNode(STEP_NODE);
 
                     // Assign step details
-//                    char *tsp = (char*)Processe_value_Step.value()["stepNameString"];
-                    nodeS->step.stepDetails->stepNameString = (char*)malloc( strlen(Processe_value_Step.value()["stepNameString"]) + 1);
-                    strcpy(nodeS->step.stepDetails->stepNameString, Processe_value_Step.value()["stepNameString"]);
-//                    nodeS->step.stepDetails->stepNameString = Processe_value_Step.value()["stepNameString"];
+                    if( strlen(Processe_value_Step.value()["stepNameString"]) > 0 ) {
+                      nodeS->step.stepDetails->stepNameString = (char*)malloc( strlen(Processe_value_Step.value()["stepNameString"]) + 1);
+                      strcpy(nodeS->step.stepDetails->stepNameString, Processe_value_Step.value()["stepNameString"]);
+                    } nodeS->step.stepDetails->stepNameString = NULL;
                     nodeS->step.stepDetails->timeMins = Processe_value_Step.value()["timeMins"];
                     nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
                     nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];
@@ -831,7 +854,7 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
 
                     if(enableLog){
                         LV_LOG_USER("--- STEP PARAMS ---");
-                        LV_LOG_USER("stepNameString:%s",nodeS->step.stepDetails->stepNameString);
+                        LV_LOG_USER("stepNameString:%s",nodeS->step.stepDetails->stepNameString ? nodeS->step.stepDetails->stepNameString : "");
                         LV_LOG_USER("timeSecs:%d",nodeS->step.stepDetails->timeSecs);
                         LV_LOG_USER("timeMins:%d",nodeS->step.stepDetails->timeMins);
                         LV_LOG_USER("type:%d",nodeS->step.stepDetails->type);
@@ -891,6 +914,22 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
       }
 
 
+        JsonObject Filter = doc.createNestedObject("Filter");
+        if( gui.element.filterPopup.filterName != NULL ) Filter["filterName"] = gui.element.filterPopup.filterName;
+        else Filter["filterName"] = "";
+        Filter["isColorFilter"] = gui.element.filterPopup.isColorFilter;
+        Filter["isBnWFilter"] = gui.element.filterPopup.isBnWFilter;
+        Filter["preferredOnly"] = gui.element.filterPopup.preferredOnly;
+
+      if(enableLog){
+        LV_LOG_USER("--- FILTER PARAMS ---");
+        if( gui.element.filterPopup.filterName != NULL ) LV_LOG_USER("filterName:%s",gui.element.filterPopup.filterName);
+        LV_LOG_USER("isColorFilter:%d",gui.element.filterPopup.isColorFilter);
+        LV_LOG_USER("isBnWFilter:%d",gui.element.filterPopup.isBnWFilter);
+        LV_LOG_USER("preferredOnly:%d",gui.element.filterPopup.preferredOnly);
+      }
+
+
         JsonObject Processes = doc.createNestedObject("Processes");
         
         const processList *processElementsList;
@@ -904,7 +943,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
         while(currentProcessNode != NULL){
             snprintf(processName, sizeof(processName), "Process%d", processCounter);
             JsonObject currentProcess = Processes.createNestedObject(processName);
-            currentProcess["processNameString"] = currentProcessNode->process.processDetails->processNameString;
+            currentProcess["processNameString"] = currentProcessNode->process.processDetails->processNameString ?
+              currentProcessNode->process.processDetails->processNameString : "";
             currentProcess["temp"] = currentProcessNode->process.processDetails->temp;
             currentProcess["tempTolerance"] = currentProcessNode->process.processDetails->tempTolerance;
             currentProcess["isTempControlled"] = currentProcessNode->process.processDetails->isTempControlled;
@@ -916,7 +956,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
 
           if(enableLog){
             LV_LOG_USER("--- PROCESS PARAMS ---");
-            LV_LOG_USER("processNameString:%s",currentProcessNode->process.processDetails->processNameString);
+            LV_LOG_USER("processNameString:%s",currentProcessNode->process.processDetails->processNameString ? 
+              currentProcessNode->process.processDetails->processNameString : "");
             LV_LOG_USER("temp:%d",currentProcessNode->process.processDetails->temp);
             LV_LOG_USER("tempTolerance:%d",currentProcessNode->process.processDetails->tempTolerance);
             LV_LOG_USER("isTempControlled:%d",currentProcessNode->process.processDetails->isTempControlled);
@@ -941,7 +982,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
             while(currentStepNode != NULL){                
                 snprintf(stepName, sizeof(stepName), "Step%d", stepCounter);
                 JsonObject currentStep = currentProcessSteps.createNestedObject(stepName);
-                currentStep["stepNameString"] = currentStepNode->step.stepDetails->stepNameString;
+                currentStep["stepNameString"] = currentStepNode->step.stepDetails->stepNameString ?
+                  currentStepNode->step.stepDetails->stepNameString : "";
                 currentStep["timeMins"] = currentStepNode->step.stepDetails->timeMins;
                 currentStep["timeSecs"] = currentStepNode->step.stepDetails->timeSecs;
                 currentStep["type"] = currentStepNode->step.stepDetails->type;
@@ -950,7 +992,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
               
               if(enableLog){
                 LV_LOG_USER("--- STEP PARAMS ---");
-                LV_LOG_USER("stepNameString:%s",currentStepNode->step.stepDetails->stepNameString);
+                LV_LOG_USER("stepNameString:%s",currentStepNode->step.stepDetails->stepNameString ? 
+                  currentStepNode->step.stepDetails->stepNameString : "");
                 LV_LOG_USER("timeMins:%d",currentStepNode->step.stepDetails->timeMins);
                 LV_LOG_USER("timeSecs:%d",currentStepNode->step.stepDetails->timeSecs);
                 LV_LOG_USER("type:%d",currentStepNode->step.stepDetails->type);
@@ -1038,8 +1081,9 @@ void calcolateTotalTime(processNode *processNode){
     processNode->process.processDetails->timeMins = mins;
     processNode->process.processDetails->timeSecs = secs;
 
-    sprintf(formatted_string, "%dm%ds", processNode->process.processDetails->timeMins, processNode->process.processDetails->timeSecs);
-    lv_label_set_text(processNode->process.processDetails->processTotalTimeValue, formatted_string); 
+//    sprintf(formatted_string, "%dm%ds", processNode->process.processDetails->timeMins, processNode->process.processDetails->timeSecs);
+    lv_label_set_text_fmt(processNode->process.processDetails->processTotalTimeValue, "%dm%ds", processNode->process.processDetails->timeMins, 
+      processNode->process.processDetails->timeSecs); 
     LV_LOG_USER("Process %p has a total tilme of %dmin:%dsec", processNode, mins, secs);
 }
 
@@ -1072,8 +1116,9 @@ void updateProcessElement(processNode *process){
   if(existingProcess != NULL) {
       LV_LOG_USER("Updating process element in list");
       //Update time
-      sprintf(formatted_string, "%dm%ds", process->process.processDetails->timeMins, process->process.processDetails->timeSecs);
-      lv_label_set_text(existingProcess->process.processTime, formatted_string); 
+//      sprintf(formatted_string, "%dm%ds", process->process.processDetails->timeMins, process->process.processDetails->timeSecs);
+      lv_label_set_text_fmt(existingProcess->process.processTime, "%dm%ds", process->process.processDetails->timeMins, 
+        process->process.processDetails->timeSecs); 
       
       //Update temp
       lv_label_set_text_fmt(existingProcess->process.processTemp, "%d °C", process->process.processDetails->temp );
@@ -1087,7 +1132,8 @@ void updateProcessElement(processNode *process){
       }
       
       //Update name
-      lv_label_set_text(existingProcess->process.processName, process->process.processDetails->processNameString);
+      lv_label_set_text(existingProcess->process.processName, process->process.processDetails->processNameString ? 
+        process->process.processDetails->processNameString : "");
 
       //Update film type
       lv_label_set_text(existingProcess->process.processTypeIcon, process->process.processDetails->filmType == BLACK_AND_WHITE_FILM ? blackwhite_icon : colorpalette_icon);
@@ -1103,11 +1149,11 @@ void updateStepElement(processNode *referenceProcess, stepNode *step){
          LV_LOG_USER("Updating element element in list");
          
          //Update name
-         lv_label_set_text(existingStep->step.stepName, step->step.stepDetails->stepNameString);
+         lv_label_set_text(existingStep->step.stepName, step->step.stepDetails->stepNameString ? step->step.stepDetails->stepNameString :"");
 
         //Update source
-         sprintf(formatted_string, "From:%s", processSourceList[step->step.stepDetails->source]);        
-         lv_label_set_text(existingStep->step.sourceLabel, formatted_string); 
+//         sprintf(formatted_string, "From:%s", processSourceList[step->step.stepDetails->source]);        
+         lv_label_set_text_fmt(existingStep->step.sourceLabel, "From:%s", processSourceList[step->step.stepDetails->source]); 
 
         //Update discard after icon
          if(step->step.stepDetails->discardAfterProc){
@@ -1125,8 +1171,8 @@ void updateStepElement(processNode *referenceProcess, stepNode *step){
               lv_label_set_text(existingStep->step.stepTypeIcon, multiRinse_icon); 
 
           //Update time
-          sprintf(formatted_string, "%dm%ds", step->step.stepDetails->timeMins, step->step.stepDetails->timeSecs);
-          lv_label_set_text(existingStep->step.stepTime, formatted_string); 
+//          sprintf(formatted_string, "%dm%ds", step->step.stepDetails->timeMins, step->step.stepDetails->timeSecs);
+          lv_label_set_text_fmt(existingStep->step.stepTime, "%dm%ds", step->step.stepDetails->timeMins, step->step.stepDetails->timeSecs); 
       }
 }
 
@@ -1291,6 +1337,7 @@ void toLowerCase(char *str) {
 }
 
 int caseInsensitiveStrstr(const char *haystack, const char *needle) {
+
     size_t haystackLen = strlen(haystack);
     size_t needleLen = strlen(needle);
     
@@ -1316,7 +1363,8 @@ void filterAndDisplayProcesses() {
     if(gui.page.processes.isFiltered == 1)
         removeFiltersAndDisplayAllProcesses();
 
-    LV_LOG_USER("Filter %s, %d, %d, %d",gui.element.filterPopup.filterName, gui.element.filterPopup.isColorFilter, gui.element.filterPopup.isBnWFilter, gui.element.filterPopup.preferredOnly);
+    LV_LOG_USER("Filter %s, %d, %d, %d",gui.element.filterPopup.filterName ? 
+      gui.element.filterPopup.filterName : "", gui.element.filterPopup.isColorFilter, gui.element.filterPopup.isBnWFilter, gui.element.filterPopup.preferredOnly);
 
     // Nascondi tutti i processi inizialmente
     while (currentNode != NULL) {
@@ -1331,8 +1379,10 @@ void filterAndDisplayProcesses() {
         uint8_t display = 1;
 
         // Filtro per nome
-        if (gui.element.filterPopup.filterName != NULL && strlen(gui.element.filterPopup.filterName) > 0 && !caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, gui.element.filterPopup.filterName)) {
+        if((currentNode->process.processDetails->processNameString != NULL) && (gui.element.filterPopup.filterName != NULL)) {
+          if(strlen(gui.element.filterPopup.filterName) > 0 && !caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, gui.element.filterPopup.filterName)) {
             display = 0;
+          }
         }
 
         // Filtro per tipo di film (colore o BnW)

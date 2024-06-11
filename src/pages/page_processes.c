@@ -45,6 +45,7 @@ void event_tabProcesses(lv_event_t * e)
   
   if(obj == gui.page.processes.newProcessButton){
     if(code == LV_EVENT_CLICKED) {
+      gui.tempProcessNode = NULL;
       processDetail(gui.page.processes.processesListContainer);
       LV_LOG_USER("New Process Creation popup");
     }

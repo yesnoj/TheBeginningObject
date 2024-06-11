@@ -81,43 +81,48 @@ bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference )
 			if( adjust_y_ptr->next ) container_y_prev = container_y_new;
 			adjust_y_ptr = adjust_y_ptr->next;
 		}
-		if( adjust_y_ptr ) 
-      lv_obj_delete_async( stepToDelete->step.stepElement );			// Delete all LVGL objects associated with entry
-		
-    free( stepToDelete );												// Free the list entry itself
-		processReference->process.processDetails->stepElementsList.size--;
-    lv_obj_send_event(processReference->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
+		/* Only delete all LVGL objects associated with entry if called from process detail screen */
+    if(stepToDelete->step.stepElement) lv_obj_delete_async( stepToDelete->step.stepElement );
+	  /* Free the allocated memory for the list entry*/
+    free( stepToDelete );	
+		processReference->process.processDetails->stepElementsList.size--;  // Update list size
+    lv_obj_send_event(processReference->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL); // Refresh Screen and states
 
-    LV_LOG_USER("Process address 0x%p, with n:%d steps",processReference, processReference->process.processDetails->stepElementsList.size); 
+    LV_LOG_USER("Process address %p, with n:%d steps",processReference, processReference->process.processDetails->stepElementsList.size); 
 
 		return true;
 	}
 	return false;
 }
 
-stepNode *getStepElementEntryByObject(lv_obj_t *obj, processNode * processReference) {
+stepNode *getStepElementEntryByObject(lv_obj_t *obj, processNode *processReference) {
   
 	stepNode	*currentNode  = processReference->process.processDetails->stepElementsList.start;
 
-	while( currentNode  ) {
-		if( obj == currentNode->step.stepElement ) break;				// Check all objects if any match return element pointer, not styles! 
-    if( obj == currentNode->step.stepElementSummary ) break;
-    if( obj == currentNode->step.stepName ) break;
-    if( obj == currentNode->step.stepTime ) break;
-    if( obj == currentNode->step.stepTimeIcon ) break;
-    if( obj == currentNode->step.deleteButton ) break;
-    if( obj == currentNode->step.editButton) break;   
-    if( obj == currentNode->step.stepTypeIcon ) break;
-    if( obj == currentNode ) break;
+	while( currentNode != NULL ) {
+		if( obj == currentNode->step.stepElement ||				// Check all objects if any match return element pointer, not styles! 
+        obj == currentNode->step.stepElementSummary ||
+        obj == currentNode->step.stepName ||
+        obj == currentNode->step.stepTime ||
+        obj == currentNode->step.stepTimeIcon ||
+        obj == currentNode->step.stepTypeIcon ||
+        obj == currentNode->step.discardAfterIcon ||
+        obj == currentNode->step.sourceLabel ||
+        obj == currentNode->step.deleteButton ||
+        obj == currentNode->step.deleteButtonLabel ||
+        obj == currentNode->step.editButton ||   
+        obj == currentNode->step.editButtonLabel ||
+        obj == (lv_obj_t*)currentNode ) {
+           break;
+    }
 		currentNode = currentNode->next;
 	}
-  
-	return currentNode;
+  return currentNode;   // Will Return NULL if no matching stepNode is found
 }
 
 static bool deleteStepElementByObj( lv_obj_t *obj, processNode * processReference ) {
 
-	stepList	*step_ptr  = getStepElementEntryByObject(obj,processReference);
+	stepNode	*step_ptr  = getStepElementEntryByObject(obj,processReference);
 
 	return deleteStepElement(step_ptr,processReference);
 }
@@ -132,7 +137,7 @@ void event_stepElement(lv_event_t * e){
 
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
-  lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
+  processNode *data = (processNode*)lv_event_get_user_data(e);
   stepNode	*currentNode = getStepElementEntryByObject(obj,data);
 
   lv_indev_t * indev = lv_indev_active();
@@ -145,7 +150,6 @@ void event_stepElement(lv_event_t * e){
 		LV_LOG_USER("Bad object passed to eventProcessElement!");	
 		return;													
 	}
-
 
     if(code == LV_EVENT_LONG_PRESSED_REPEAT) {    
         LV_LOG_USER("Drag event!");
@@ -228,15 +232,15 @@ void event_stepElement(lv_event_t * e){
 
       if(code == LV_EVENT_CLICKED) {
         if(obj == currentNode->step.editButton){
-          LV_LOG_USER("Step Element Details address 0x%p",currentNode);
+          LV_LOG_USER("Click Edit button step address 0x%p",currentNode);
           stepDetail(data, currentNode);
           return;
         }
         if(obj == currentNode->step.deleteButton){
           if(gui.element.messagePopup.mBoxPopupParent == NULL){
-            LV_LOG_USER("Long press element address 0x%p",currentNode);
-            tempStepNode = currentNode;
-            messagePopupCreate(deletePopupTitle_text,deletePopupBody_text, deleteButton_text, stepDetailCancel_text, tempStepNode);
+            LV_LOG_USER("Click Delete button step address %p",currentNode);
+            gui.tempStepNode = currentNode;
+            messagePopupCreate(deletePopupTitle_text,deletePopupBody_text, deleteButton_text, stepDetailCancel_text, gui.tempStepNode);
             return;
            }
         }
@@ -256,7 +260,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
   LV_LOG_USER("Step Creation");
 
 
-  tempProcessNode = processReference;
+  gui.tempProcessNode = processReference;
   
   calcolateTotalTime(processReference);
   
@@ -284,7 +288,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
   }
   else{
 		LV_LOG_USER("Previous Step");
-    newStep->step.container_y = -13 + ((tempSize) * 70);
+    newStep->step.container_y = -13 + ((tempSize-1) * 70);
   }
   lv_obj_set_pos(newStep->step.stepElement, -13, newStep->step.container_y);        
   lv_obj_set_size(newStep->step.stepElement, 340, 70);
@@ -350,7 +354,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
 
 
                 newStep->step.stepName = lv_label_create(newStep->step.stepElementSummary);         
-                lv_label_set_text(newStep->step.stepName, newStep->step.stepDetails->stepNameString); 
+                lv_label_set_text(newStep->step.stepName, newStep->step.stepDetails->stepNameString ? newStep->step.stepDetails->stepNameString : ""); 
                 lv_obj_set_style_text_font(newStep->step.stepName, &lv_font_montserrat_22, 0);      
                 lv_label_set_long_mode(newStep->step.stepName, LV_LABEL_LONG_SCROLL_CIRCULAR);
                 lv_obj_set_width(newStep->step.stepName, 175);        
@@ -364,14 +368,14 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
                 lv_obj_align(newStep->step.stepTimeIcon, LV_ALIGN_LEFT_MID, -10, 17);
                 
                 newStep->step.stepTime = lv_label_create(newStep->step.stepElementSummary);    
-                sprintf(formatted_string, "%dm%ds", newStep->step.stepDetails->timeMins, newStep->step.stepDetails->timeSecs);
-                lv_label_set_text(newStep->step.stepTime, formatted_string); 
+//                sprintf(formatted_string, "%dm%ds", newStep->step.stepDetails->timeMins, newStep->step.stepDetails->timeSecs);
+                lv_label_set_text_fmt(newStep->step.stepTime, "%dm%ds", newStep->step.stepDetails->timeMins, newStep->step.stepDetails->timeSecs); 
                 lv_obj_set_style_text_font(newStep->step.stepTime, &lv_font_montserrat_18, 0);              
                 lv_obj_align(newStep->step.stepTime, LV_ALIGN_LEFT_MID, 12, 17);
 
                 newStep->step.sourceLabel = lv_label_create(newStep->step.stepElementSummary); 
-                sprintf(formatted_string, "From:%s", processSourceList[newStep->step.stepDetails->source]);        
-                lv_label_set_text(newStep->step.sourceLabel, formatted_string); 
+//                sprintf(formatted_string, "From:%s", processSourceList[newStep->step.stepDetails->source]);        
+                lv_label_set_text_fmt(newStep->step.sourceLabel, "From:%s", processSourceList[newStep->step.stepDetails->source]); 
                 lv_obj_set_style_text_font(newStep->step.sourceLabel, &lv_font_montserrat_18, 0);      
                 lv_obj_set_width(newStep->step.sourceLabel, 120);        
                 lv_obj_align(newStep->step.sourceLabel, LV_ALIGN_LEFT_MID, 85, 17);

@@ -36,9 +36,21 @@ uint8_t secondsStepLeft = 0;
 uint8_t stepPercentage = 0;
 uint8_t processPercentage = 0;
 
-processNode *referenceProcess;
+static processNode *referenceProcess;
 
+static void exitCheckup(){
+    isProcessingStatus0created = 0;
+    isProcessingStatus1created = 0;
+    isStepStatus0created = 0;
+    isStepStatus1created = 0;
+    isStepStatus2created = 0;
+    isStepStatus3created = 0;
+    isStepStatus4created = 0;
 
+    lv_obj_delete(referenceProcess->process.processDetails->checkup->checkupContainer); // was referenceProcess->process.processDetails->checkup
+    //list of all styles to be reset, so clean the memory.
+    //lv_style_reset(&referenceProcess->process.processDetails->checkup->textAreaStyleCheckup);
+}
 
 void event_checkup(lv_event_t * e){
   lv_event_code_t code = lv_event_get_code(e);
@@ -53,7 +65,6 @@ void event_checkup(lv_event_t * e){
   uint32_t * active_id = (uint32_t *)lv_event_get_user_data(e);
   lv_obj_t * act_cb = (lv_obj_t *)lv_event_get_target(e);
   lv_obj_t * old_cb = (lv_obj_t *)lv_obj_get_child(cont, *active_id);
-
 
   if(code == LV_EVENT_FOCUSED) {
       if(data == referenceProcess->process.processDetails->checkup->checkupTankSizeTextArea){
@@ -71,7 +82,7 @@ void event_checkup(lv_event_t * e){
         lv_obj_remove_state(old_cb, LV_STATE_CHECKED);
         lv_obj_add_state(act_cb, LV_STATE_CHECKED); 
         *active_id = lv_obj_get_index(act_cb);
-        LV_LOG_USER("Selected chemistry volume radio buttons: %d", referenceProcess->process.processDetails->checkup->activeVolume_index);
+        LV_LOG_USER("Selected chemistry volume radio buttons: %d", (int)referenceProcess->process.processDetails->checkup->activeVolume_index);
    }
   }
 
@@ -122,7 +133,7 @@ void event_checkup(lv_event_t * e){
     if(obj == referenceProcess->process.processDetails->checkup->checkupCloseButton){
         LV_LOG_USER("User pressed referenceProcess->process.processDetails->checkup->checkupCloseButtonLabel");
         lv_msgbox_close(mboxCont);
-        lv_obj_delete(mboxCont);
+        //lv_obj_delete(mboxCont);
         exitCheckup();
     }
     if(obj == referenceProcess->process.processDetails->checkup->checkupStopAfterButton){
@@ -139,21 +150,6 @@ void event_checkup(lv_event_t * e){
   if(referenceProcess->process.processDetails->checkup->tankSize >0 && referenceProcess->process.processDetails->checkup->activeVolume_index > 0){
     lv_obj_clear_state(referenceProcess->process.processDetails->checkup->checkupStartButton, LV_STATE_DISABLED);
   }
-}
-
-
-void exitCheckup(){
-    isProcessingStatus0created = 0;
-    isProcessingStatus1created = 0;
-    isStepStatus0created = 0;
-    isStepStatus1created = 0;
-    isStepStatus2created = 0;
-    isStepStatus3created = 0;
-    isStepStatus4created = 0;
-
-    lv_obj_delete(referenceProcess->process.processDetails->checkup);
-    //list of all styles to be reset, so clean the memory.
-    //lv_style_reset(&referenceProcess->process.processDetails->checkup->textAreaStyleCheckup);
 }
 
 
@@ -193,7 +189,7 @@ void processTimer(lv_timer_t * timer)
     uint8_t remainingProcessSecsOnly = remainingProcessSecs % 60;
 
     // Convert the remaining step time to minutes and seconds
-    uint8_t totalStepSecs = tempStepNode->step.stepDetails->timeMins * 60 + tempStepNode->step.stepDetails->timeSecs;
+    uint8_t totalStepSecs = gui.tempStepNode->step.stepDetails->timeMins * 60 + gui.tempStepNode->step.stepDetails->timeSecs;
     uint8_t elapsedStepSecs = minutesStepElapsed * 60 + secondsStepElapsed;
     uint8_t remainingStepSecs = totalStepSecs - elapsedStepSecs;
 
@@ -201,7 +197,7 @@ void processTimer(lv_timer_t * timer)
     uint8_t remainingStepSecsOnly = remainingStepSecs % 60;
 
 
-    if(tempStepNode != NULL) { 
+    if(gui.tempStepNode != NULL) { 
         if(referenceProcess->process.processDetails->checkup->stopAfter == 1 && remainingStepMins == 0 && remainingStepSecsOnly == 0){
             lv_obj_clear_state(referenceProcess->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);
             lv_obj_add_state(referenceProcess->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);
@@ -215,27 +211,32 @@ void processTimer(lv_timer_t * timer)
             lv_timer_delete(referenceProcess->process.processDetails->checkup->timer);
         }
         else{              
-          stepPercentage = calcolatePercentage(minutesStepElapsed, secondsStepElapsed, tempStepNode->step.stepDetails->timeMins, tempStepNode->step.stepDetails->timeSecs);
+          stepPercentage = calcolatePercentage(minutesStepElapsed, secondsStepElapsed, gui.tempStepNode->step.stepDetails->timeMins, gui.tempStepNode->step.stepDetails->timeSecs);
           lv_arc_set_value(referenceProcess->process.processDetails->checkup->stepArc, stepPercentage);
-          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepSourceValue, processSourceList[tempStepNode->step.stepDetails->source]);
+          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepSourceValue, processSourceList[gui.tempStepNode->step.stepDetails->source]);
           
           if(referenceProcess->process.processDetails->stepElementsList.size == 1)
-            lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString);
+            lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, 
+              referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString ? 
+                referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString : "");
           else
-            if(tempStepNode->next != NULL)
-              lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, tempStepNode->next->step.stepDetails->stepNameString); 
+            if(gui.tempStepNode->next != NULL)
+              lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupNextStepValue, gui.tempStepNode->next->step.stepDetails->stepNameString ? 
+                gui.tempStepNode->next->step.stepDetails->stepNameString : ""); 
                    
-          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepNameValue, tempStepNode->step.stepDetails->stepNameString);
+          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepNameValue, gui.tempStepNode->step.stepDetails->stepNameString ?
+            gui.tempStepNode->step.stepDetails->stepNameString : "");
 
           
-          sprintf(formatted_string, "%dm%ds", remainingStepMins, remainingStepSecsOnly);
-          lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, formatted_string);
+//          sprintf(formatted_string, "%dm%ds", remainingStepMins, remainingStepSecsOnly);
+          lv_label_set_text_fmt(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, "%dm%ds", remainingStepMins,
+            remainingStepSecsOnly);
           
           if(stepPercentage == 100) {
               stepPercentage = 0;
               minutesStepElapsed = 0;
               secondsStepElapsed = 0;
-              tempStepNode = tempStepNode->next;
+              gui.tempStepNode = gui.tempStepNode->next;
           }
         }
     }
@@ -243,8 +244,9 @@ void processTimer(lv_timer_t * timer)
         lv_timer_delete(referenceProcess->process.processDetails->checkup->timer);
     }
 
-    sprintf(formatted_string, "%dm%ds", remainingProcessMins, remainingProcessSecsOnly);
-    lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, formatted_string);
+//    sprintf(formatted_string, "%dm%ds", remainingProcessMins, remainingProcessSecsOnly);
+    lv_label_set_text_fmt(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, "%dm%ds", remainingProcessMins,
+      remainingProcessSecsOnly);
 
     lv_arc_set_value(referenceProcess->process.processDetails->checkup->processArc, processPercentage);
 
@@ -270,7 +272,7 @@ void initCheckup()
 {  
       LV_LOG_USER("Final checks, current on referenceProcess->process.processDetails->checkup->processStep :%d",referenceProcess->process.processDetails->checkup->processStep);
       
-      tempStepNode = referenceProcess->process.processDetails->stepElementsList.start;
+      gui.tempStepNode = referenceProcess->process.processDetails->stepElementsList.start;
       
       referenceProcess->process.processDetails->checkup->checkupParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
       lv_obj_class_init_obj(referenceProcess->process.processDetails->checkup->checkupParent);
@@ -320,7 +322,8 @@ void initCheckup()
             lv_obj_set_style_border_opa(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer, LV_OPA_TRANSP, 0);
 
                   referenceProcess->process.processDetails->checkup->checkupProcessNameValue = lv_label_create(referenceProcess->process.processDetails->checkup->checkupProcessNameContainer);         
-                  lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupProcessNameValue, referenceProcess->process.processDetails->processNameString); 
+                  lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupProcessNameValue, referenceProcess->process.processDetails->processNameString ? 
+                    referenceProcess->process.processDetails->processNameString : ""); 
                   lv_obj_set_width(referenceProcess->process.processDetails->checkup->checkupProcessNameValue, 300);
                   lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupProcessNameValue, &lv_font_montserrat_30, 0);              
                   lv_obj_align(referenceProcess->process.processDetails->checkup->checkupProcessNameValue, LV_ALIGN_TOP_LEFT, -10, -8);
@@ -352,7 +355,7 @@ void checkup(processNode *processToCheckup)
           LV_LOG_USER("Process already present");
           referenceProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
           referenceProcess = existingProcess; // Usa il nodo già presente anziché allocarne uno nuovo
-          tempProcessNode = processToCheckup;
+          gui.tempProcessNode = processToCheckup;
       } else {
           LV_LOG_USER("Process not present?!?!?");
       }
@@ -360,7 +363,7 @@ void checkup(processNode *processToCheckup)
 
       //referenceProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
       //referenceProcess = processToCheckup;
-      //tempProcessNode = processToCheckup;
+      //gui.tempProcessNode = processToCheckup;
 */
 
 
@@ -368,7 +371,7 @@ void checkup(processNode *processToCheckup)
     LV_LOG_USER("initCheckup");
 
 
-    referenceProcess = tempProcessNode = processToCheckup;
+    referenceProcess = gui.tempProcessNode = processToCheckup;
     referenceProcess->process.processDetails->checkup = malloc(sizeof(sCheckup));
     referenceProcess->process.processDetails->checkup->isProcessing = 0;
     referenceProcess->process.processDetails->checkup->processStep = 0;
@@ -380,8 +383,8 @@ void checkup(processNode *processToCheckup)
     referenceProcess->process.processDetails->checkup->stopAfter  = 0;
 
     LV_LOG_USER("isProcessing %d", referenceProcess->process.processDetails->checkup->isProcessing);
-    if(referenceProcess->process.processDetails->checkup->isProcessing == NULL)
-        LV_LOG_USER("isProcessing NULL");
+    if(referenceProcess->process.processDetails->checkup->isProcessing == 0)
+        LV_LOG_USER("isProcessing False");
 
     initCheckup();
   }
@@ -611,6 +614,7 @@ void checkup(processNode *processToCheckup)
                               lv_obj_set_width(referenceProcess->process.processDetails->checkup->checkupProcessReadyLabel, 230);
                               lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupProcessReadyLabel, &lv_font_montserrat_22, 0);              
                               lv_obj_align(referenceProcess->process.processDetails->checkup->checkupProcessReadyLabel, LV_ALIGN_TOP_LEFT, -10, -8);
+
 
                               referenceProcess->process.processDetails->checkup->lowVolumeChemRadioButton = create_radiobutton(referenceProcess->process.processDetails->checkup->checkupSelectTankChemistryContainer, checkupChemistryLowVol_text, -105, 45, 27, &lv_font_montserrat_18, lv_color_hex(GREEN_DARK), lv_palette_main(LV_PALETTE_GREEN));
                               referenceProcess->process.processDetails->checkup->highVolumeChemRadioButton = create_radiobutton(referenceProcess->process.processDetails->checkup->checkupSelectTankChemistryContainer, checkupChemistryHighVol_text, -10, 45, 27, &lv_font_montserrat_18, lv_color_hex(GREEN_DARK), lv_palette_main(LV_PALETTE_GREEN));
@@ -851,13 +855,16 @@ void checkup(processNode *processToCheckup)
                         lv_obj_set_style_border_opa(referenceProcess->process.processDetails->checkup->checkupProcessingContainer, LV_OPA_TRANSP, 0);
                         
                                 referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue = lv_label_create(referenceProcess->process.processDetails->checkup->checkupProcessingContainer);         
-                                sprintf(formatted_string, "%dm%ds", referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->timeMins, referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->timeSecs);
-                                lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, formatted_string);
+//                                sprintf(formatted_string, "%dm%ds", referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->timeMins, referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->timeSecs);
+                                lv_label_set_text_fmt(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, "%dm%ds", 
+                                  referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->timeMins, 
+                                    referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->timeSecs); //THIS NEED TO BE UPDATED AS THE TIME GOES ON!!
                                 lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, &lv_font_montserrat_20, 0);              
                                 lv_obj_align(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, LV_ALIGN_CENTER, 0, 80);
 
                                 referenceProcess->process.processDetails->checkup->checkupStepNameValue = lv_label_create(referenceProcess->process.processDetails->checkup->checkupProcessingContainer);         
-                                lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepNameValue, referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString);
+                                lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepNameValue, referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString ?
+                                  referenceProcess->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString : "");
                                 lv_obj_set_style_text_align(referenceProcess->process.processDetails->checkup->checkupStepNameValue , LV_TEXT_ALIGN_CENTER, 0);
                                 lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupStepNameValue, &lv_font_montserrat_22, 0);              
                                 lv_obj_align(referenceProcess->process.processDetails->checkup->checkupStepNameValue, LV_ALIGN_CENTER, 0, -35);
@@ -865,13 +872,14 @@ void checkup(processNode *processToCheckup)
                                 lv_label_set_long_mode(referenceProcess->process.processDetails->checkup->checkupStepNameValue, LV_LABEL_LONG_SCROLL_CIRCULAR);
 
                                 referenceProcess->process.processDetails->checkup->checkupStepKindValue = lv_label_create(referenceProcess->process.processDetails->checkup->checkupProcessingContainer);         
-                                lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepKindValue, &currentStep[1][0]); 
+                                lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupStepKindValue, currentStep[1]); 
                                 lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupStepKindValue, &lv_font_montserrat_20, 0);              
                                 lv_obj_align(referenceProcess->process.processDetails->checkup->checkupStepKindValue, LV_ALIGN_CENTER, 0, 10);
 
                                 referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue = lv_label_create(referenceProcess->process.processDetails->checkup->checkupProcessingContainer);         
-                                sprintf(formatted_string, "%dm%ds", referenceProcess->process.processDetails->timeMins, referenceProcess->process.processDetails->timeSecs);
-                                lv_label_set_text(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, formatted_string);
+//                                sprintf(formatted_string, "%dm%ds", referenceProcess->process.processDetails->timeMins, referenceProcess->process.processDetails->timeSecs);
+                                lv_label_set_text_fmt(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, "%dm%ds", 
+                                  referenceProcess->process.processDetails->timeMins, referenceProcess->process.processDetails->timeSecs); //THIS NEED TO BE UPDATED AS THE TIME GOES ON!!
                                 lv_obj_set_style_text_font(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, &lv_font_montserrat_24, 0);              
                                 lv_obj_align(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_ALIGN_CENTER, 0, -60);
                               
