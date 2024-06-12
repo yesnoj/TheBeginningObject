@@ -196,7 +196,8 @@ if(existingProcess != NULL) {
     
   } else {
       newProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
-      newProcess->process.processDetails->filmType = BLACK_AND_WHITE_FILM; 
+      newProcess->process.processDetails->filmType = BLACK_AND_WHITE_FILM;
+      newProcess->process.isFiltered = false;  
   }
 
   newProcess->process.processDetails->processesContainer = processContainer;

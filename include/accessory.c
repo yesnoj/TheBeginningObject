@@ -1384,13 +1384,12 @@ void filterAndDisplayProcesses(void) {
 }
 */
 
-
 void filterAndDisplayProcesses() {
     processNode *currentNode = gui.page.processes.processElementsList.start;
     int32_t displayedCount = 1;
 
-    //if(gui.page.processes.isFiltered == 1)
-      //  removeFiltersAndDisplayAllProcesses();
+    if (gui.page.processes.isFiltered == 1)
+        removeFiltersAndDisplayAllProcesses();
 
     // Debugging info
     LV_LOG_USER("Filter %s, %d, %d, %d", 
@@ -1399,54 +1398,51 @@ void filterAndDisplayProcesses() {
                 gui.element.filterPopup.isBnWFilter, 
                 gui.element.filterPopup.preferredOnly);
 
-    // Nascondi tutti i processi inizialmente
-   // while (currentNode != NULL) {
-   //     lv_obj_add_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
-   //     currentNode = currentNode->next;
-   // }
-
-
-    //currentNode = gui.page.processes.processElementsList.start;
-    // Filtra e visualizza i processi
     while (currentNode != NULL) {
-        //uint8_t display = 0;
+        bool isFiltered = true;
 
-        // Filtro per nome
-        if (gui.element.filterPopup.filterName != NULL && strlen(gui.element.filterPopup.filterName) > 0 && 
-            caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, gui.element.filterPopup.filterName)) {
-               lv_obj_remove_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
-        }
-        else 
-          if (gui.element.filterPopup.isColorFilter && currentNode->process.processDetails->filmType == COLOR_FILM) {
-           lv_obj_remove_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
-        }
-          else if (gui.element.filterPopup.isBnWFilter && currentNode->process.processDetails->filmType == BLACK_AND_WHITE_FILM) {
-            lv_obj_remove_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
-          }
-            else if (gui.element.filterPopup.preferredOnly && currentNode->process.processDetails->isPreferred) {
-              lv_obj_remove_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
+        // Check name filter
+        if (gui.element.filterPopup.filterName != NULL && strlen(gui.element.filterPopup.filterName) > 0) {
+            if (!caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, gui.element.filterPopup.filterName)) {
+                isFiltered = false;
             }
-              else{
-                lv_obj_add_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
-               }
+        }
 
+        // Check film type filter (Color or BnW)
+        if (gui.element.filterPopup.isColorFilter) {
+            if (currentNode->process.processDetails->filmType != COLOR_FILM) {
+                isFiltered = false;
+            }
+        } else if (gui.element.filterPopup.isBnWFilter) {
+            if (currentNode->process.processDetails->filmType != BLACK_AND_WHITE_FILM) {
+                isFiltered = false;
+            }
+        }
+
+        // Check preferred status filter
+        if (gui.element.filterPopup.preferredOnly) {
+            if (!currentNode->process.processDetails->isPreferred) {
+                isFiltered = false;
+            }
+        }
+
+        currentNode->process.isFiltered = isFiltered;
         currentNode = currentNode->next;
     }
 
+    lv_obj_clean(gui.page.processes.processesListContainer);   
     lv_obj_update_layout(gui.page.processes.processesListContainer);
 
-    lv_obj_clean(gui.page.processes.processesListContainer);    
-
     currentNode = gui.page.processes.processElementsList.start;
-    while (currentNode != NULL) {
-        if (!lv_obj_has_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN)) {
+    while (currentNode != NULL) { 
+        if (currentNode->process.isFiltered == true) {
             processElementCreate(currentNode, displayedCount);
             displayedCount++;
         }
         currentNode = currentNode->next;
     }
 
-    lv_obj_update_layout(gui.page.processes.processesListContainer);
+    gui.page.processes.isFiltered = 1;
 }
 
 
