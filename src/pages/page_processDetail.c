@@ -117,9 +117,6 @@ void event_processDetail(lv_event_t * e)
     }
   }
 
-  if(code == LV_EVENT_LONG_PRESSED_REPEAT){
-    //TBD
-  }
 
   if(code == LV_EVENT_REFRESH){
     if(obj == newProcess->process.processDetails->processSaveButton){

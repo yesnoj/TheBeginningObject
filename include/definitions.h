@@ -1394,6 +1394,7 @@ void toLowerCase(char *str);
 int caseInsensitiveStrstr(const char *haystack, const char *needle);
 void filterAndDisplayProcesses( void );
 void removeFiltersAndDisplayAllProcesses( void );
+void emptyList(void *list, NodeType_t type);
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);

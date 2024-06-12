@@ -107,7 +107,7 @@ void setup()
     //readJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
     
     //writeFullJSONFile(SD, FILENAME_SAVE,gui);
-    readFULLJSONFile(SD, FILENAME_SAVE,gui, false);
+    readFULLJSONFile(SD, FILENAME_SAVE, gui, false);
 }
 
 void loop()

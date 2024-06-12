@@ -28,7 +28,7 @@ def generate_json():
     }
 
     # Generazione dei processi
-    for i in range(MAX_STEP_ELEMENTS):
+    for i in range(MAX_PROC_ELEMENTS):
         process_name_string = random_string(random.randint(5, MAX_PROC_NAME_LEN))  # Nome casuale del processo
         data["Processes"][f"Process{i}"] = {
             "processNameString": process_name_string,
@@ -46,7 +46,7 @@ def generate_json():
         total_secs = 0
 
         # Generazione degli step per ciascun processo
-        for j in range(MAX_PROC_ELEMENTS):
+        for j in range(MAX_STEP_ELEMENTS):
             step_name_string = random_string(random.randint(5, MAX_PROC_NAME_LEN))  # Nome casuale dello step
             step_mins = random.randint(0, 5)
             step_secs = random.randint(0, 59)

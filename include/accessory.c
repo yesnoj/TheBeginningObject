@@ -1319,16 +1319,13 @@ int caseInsensitiveStrstr(const char *haystack, const char *needle) {
     return strstr(haystackLower, needleLower) != NULL;
 }
 
-void filterAndDisplayProcesses( void ) {
+void filterAndDisplayProcesses(void) {
     processNode *currentNode = gui.page.processes.processElementsList.start;
-    
-    /* This Code will break things!  This is corrupting the main procesElementList needs to be copied before changing it*/
-    processList *processFilteredElementsList = &(gui.page.processes.processFilteredElementsList);
-    processFilteredElementsList->start = NULL;
-    processFilteredElementsList->end = NULL;
-    processFilteredElementsList->size = 0;
-    /* End of breaking code */
 
+    // Svuota la lista filtrata prima di aggiungere nuovi elementi filtrati
+    processList *processFilteredElementsList = &(gui.page.processes.processFilteredElementsList);
+    emptyList(processFilteredElementsList, PROCESS_NODE);
+    int32_t analyzedProcess = 0;
     int32_t displayedCount = 1;
 
     // Debugging info
@@ -1339,15 +1336,14 @@ void filterAndDisplayProcesses( void ) {
                 gui.element.filterPopup.preferredOnly);
 
     // Filter and add processes to filtered list
+    uint8_t filterMatchCount = 0;
     while (currentNode != NULL) {
         uint8_t display = 0;
+        analyzedProcess++;
         // Filter by name
-        if (gui.element.filterPopup.filterName != NULL) {
-          if (strlen(gui.element.filterPopup.filterName) > 0 ) { 
-            if ( caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, gui.element.filterPopup.filterName)) {
-              display = 1;
-            }
-          }
+        if (gui.element.filterPopup.filterName != NULL && strlen(gui.element.filterPopup.filterName) > 0 && 
+            caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, gui.element.filterPopup.filterName)) {
+            display = 1;
         }
 
         // Filter by film type (color or BnW)
@@ -1366,20 +1362,20 @@ void filterAndDisplayProcesses( void ) {
 
         // Add process to filtered list if it matches the filter criteria
         if (display) {
-            LV_LOG_USER("Filtered");
+            LV_LOG_USER("Filtered process: %s", currentNode->process.processDetails->processNameString);
             addProcessElement(currentNode, processFilteredElementsList);
+            filterMatchCount++;
         }
 
         currentNode = currentNode->next;
     }
 
-    // Update layout for the list container
-    lv_obj_update_layout(gui.page.processes.processesListContainer);
+    LV_LOG_USER("Total processes filtered: %d , processed %d", filterMatchCount, analyzedProcess);
 
-    // Clean the container to prepare for displaying filtered processes
+    // Pulisci il contenitore per prepararlo alla visualizzazione dei processi filtrati
     lv_obj_clean(gui.page.processes.processesListContainer);
 
-    // Display filtered processes
+    // Visualizza i processi filtrati
     currentNode = processFilteredElementsList->start;
     while (currentNode != NULL) {
         processElementCreate(currentNode, displayedCount);
@@ -1387,7 +1383,7 @@ void filterAndDisplayProcesses( void ) {
         currentNode = currentNode->next;
     }
 
-    // Update layout again after adding filtered elements
+    // Aggiorna il layout dopo aver aggiunto gli elementi filtrati
     lv_obj_update_layout(gui.page.processes.processesListContainer);
 }
 
@@ -1469,15 +1465,59 @@ void removeFiltersAndDisplayAllProcesses() {
 
     int32_t displayedCount = 1;  // Initialize count
 
-    lv_obj_clean(gui.page.processes.processesListContainer);    
+    // Pulizia del contenitore della lista dei processi per prepararlo alla visualizzazione di tutti i processi
+    lv_obj_clean(gui.page.processes.processesListContainer);
+    lv_obj_update_layout(gui.page.processes.processesListContainer);
+    // Itera attraverso tutti i nodi dei processi e li visualizza
     while (currentNode != NULL) {
+        LV_LOG_USER("Process %d created",displayedCount);
         processElementCreate(currentNode, displayedCount);
-        displayedCount++;
         currentNode = currentNode->next;
+        displayedCount++;
     }
 
-    // Riallinea gli elementi visibili
+    // Aggiorna il layout del contenitore per riallineare gli elementi visibili
     lv_obj_update_layout(gui.page.processes.processesListContainer);
+}
+
+
+
+
+void emptyList(void *list, NodeType_t type) {
+    if (list == NULL) {
+        return;
+    }
+
+    // Determina il tipo di lista e imposta i puntatori generici di conseguenza
+    if (type == PROCESS_NODE) {  // processList
+        processList *plist = (processList *)list;
+        processNode *currentNode = plist->start;
+
+        while (currentNode != NULL) {
+            processNode *nextNode = currentNode->next;
+            free(currentNode);
+            currentNode = nextNode;
+        }
+
+        // Reimposta le proprietà della lista
+        plist->start = NULL;
+        plist->end = NULL;
+        plist->size = 0;
+    } else if (type == STEP_NODE) {  // stepList
+        stepList *slist = (stepList *)list;
+        stepNode *currentNode = slist->start;
+
+        while (currentNode != NULL) {
+            stepNode *nextNode = currentNode->next;
+            free(currentNode);
+            currentNode = nextNode;
+        }
+
+        // Reimposta le proprietà della lista
+        slist->start = NULL;
+        slist->end = NULL;
+        slist->size = 0;
+    }
 }
 
 /*

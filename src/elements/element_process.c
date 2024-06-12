@@ -178,7 +178,6 @@ void event_processElement(lv_event_t * e) {
         }
 
         if (obj == currentNode->process.preferredIcon) {
-            LV_LOG_USER("Process is preferred : %d", currentNode->process.processDetails->isPreferred);
             if (lv_color_eq(lv_obj_get_style_text_color(currentNode->process.preferredIcon, LV_PART_MAIN), lv_color_hex(RED))) {
                 lv_obj_set_style_text_color(currentNode->process.preferredIcon, lv_color_hex(WHITE), LV_PART_MAIN);
                 currentNode->process.processDetails->isPreferred = 0;
@@ -186,7 +185,7 @@ void event_processElement(lv_event_t * e) {
                 lv_obj_set_style_text_color(currentNode->process.preferredIcon, lv_color_hex(RED), LV_PART_MAIN);
                 currentNode->process.processDetails->isPreferred = 1;
             }
-
+          LV_LOG_USER("Process is preferred : %d", currentNode->process.processDetails->isPreferred);
           if(gui.page.processes.isFiltered == 1)
             filterAndDisplayProcesses();
         }
