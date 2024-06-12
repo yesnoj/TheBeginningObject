@@ -119,6 +119,7 @@ void event_processDetail(lv_event_t * e)
 
 
   if(code == LV_EVENT_REFRESH){
+    gui.tempProcessNode = newProcess;
     if(obj == newProcess->process.processDetails->processSaveButton){
         if(newProcess->process.processDetails->stepElementsList.size > 0){
               lv_obj_clear_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
@@ -137,6 +138,7 @@ void event_processDetail(lv_event_t * e)
   }
 
   if(code == LV_EVENT_VALUE_CHANGED) {
+      gui.tempProcessNode = newProcess;
       if(data == newProcess->process.processDetails->processTempControlSwitch){
           LV_LOG_USER("Temperature controlled : %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
           newProcess->process.processDetails->somethingChanged = 1;

@@ -199,7 +199,7 @@ void event_keyboard(lv_event_t* e)
             if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea){
               LV_LOG_USER("Press ok from stepDetailNamelTextArea");
               lv_textarea_set_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
-
+              lv_obj_send_event(gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
               hideKeyboard(gui.tempStepNode->step.stepDetails->stepDetailParent);
             } 
       }

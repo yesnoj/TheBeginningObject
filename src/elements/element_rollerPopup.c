@@ -73,6 +73,7 @@ void event_Roller(lv_event_t * e)
               lv_textarea_set_text(gui.tempStepNode->step.stepDetails->stepDetailMinTextArea, tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(gui.element.rollerPopup.mBoxRollerParent);
+              lv_obj_send_event(gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
               //lv_obj_delete(gui.element.rollerPopup.mBoxRollerParent);
               return; 
             }
@@ -85,6 +86,7 @@ void event_Roller(lv_event_t * e)
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(gui.element.rollerPopup.mBoxRollerParent);
               //lv_obj_delete(gui.element.rollerPopup.mBoxRollerParent);
+              lv_obj_send_event(gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
               return; 
             }
             if(((processNode *)data)->process.processDetails->checkup->checkupTankSizeTextArea == gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){

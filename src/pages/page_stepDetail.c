@@ -91,8 +91,8 @@ void event_stepDetail(lv_event_t * e)
 //      lv_obj_delete(mboxCont);
     }
  }
-
-
+  
+ 
   if(code == LV_EVENT_VALUE_CHANGED){
     if(obj == newStep->step.stepDetails->stepTypeDropDownList){
       if(lv_dropdown_get_selected(newStep->step.stepDetails->stepTypeDropDownList) == 0){
@@ -138,7 +138,16 @@ void event_stepDetail(lv_event_t * e)
             rollerPopupCreate(gui.element.rollerPopup.secondsOptions, setSecondsPopupTitle_text, newStep->step.stepDetails->stepDetailSecTextArea, 0);
         }
     }
-
+  
+  if(code == LV_EVENT_REFRESH){
+    gui.tempStepNode = newStep;
+    if(strlen(lv_textarea_get_text(newStep->step.stepDetails->stepDetailNamelTextArea)) > 0 && (atoi(lv_textarea_get_text(newStep->step.stepDetails->stepDetailSecTextArea)) > 0 || atoi(lv_textarea_get_text(newStep->step.stepDetails->stepDetailMinTextArea)) > 0 )) {
+        lv_obj_clear_state(newStep->step.stepDetails->stepSaveButton, LV_STATE_DISABLED);
+    }
+    else{
+      lv_obj_add_state(newStep->step.stepDetails->stepSaveButton, LV_STATE_DISABLED);
+    }
+  }
 
   if(code == LV_EVENT_DELETE) {
        LV_LOG_USER("Delete Styles");
@@ -386,7 +395,8 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
       lv_obj_set_size(newStep->step.stepDetails->stepSaveButton, BUTTON_PROCESS_WIDTH, BUTTON_PROCESS_HEIGHT);
       lv_obj_align(newStep->step.stepDetails->stepSaveButton, LV_ALIGN_BOTTOM_LEFT, 10 , 10);
       lv_obj_add_event_cb(newStep->step.stepDetails->stepSaveButton, event_stepDetail, LV_EVENT_CLICKED, referenceNode);
-      lv_obj_add_event_cb(newStep->step.stepDetails->stepSaveButton, event_stepDetail, LV_EVENT_DELETE, NULL);
+      lv_obj_add_event_cb(newStep->step.stepDetails->stepSaveButton, event_stepDetail, LV_EVENT_REFRESH, NULL);
+      lv_obj_add_state(newStep->step.stepDetails->stepSaveButton, LV_STATE_DISABLED);
       lv_obj_set_style_bg_color(newStep->step.stepDetails->stepSaveButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
 
           newStep->step.stepDetails->stepSaveLabel = lv_label_create(newStep->step.stepDetails->stepSaveButton);
@@ -399,7 +409,6 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
       lv_obj_set_size(newStep->step.stepDetails->stepCancelButton, BUTTON_PROCESS_WIDTH, BUTTON_PROCESS_HEIGHT);
       lv_obj_align(newStep->step.stepDetails->stepCancelButton, LV_ALIGN_BOTTOM_RIGHT, - 10 , 10);
       lv_obj_add_event_cb(newStep->step.stepDetails->stepCancelButton, event_stepDetail, LV_EVENT_CLICKED, newStep->step.stepDetails->stepCancelButton);
-      lv_obj_add_event_cb(newStep->step.stepDetails->stepCancelButton, event_stepDetail, LV_EVENT_DELETE, NULL);
       lv_obj_set_style_bg_color(newStep->step.stepDetails->stepCancelButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
 
             newStep->step.stepDetails->stepCancelLabel = lv_label_create(newStep->step.stepDetails->stepCancelButton);
