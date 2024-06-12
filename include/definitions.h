@@ -553,7 +553,8 @@ typedef struct singleProcess {
     lv_coord_t         container_y;
     uint8_t            swipedLeft;
     uint8_t            swipedRight;
-    
+    uint8_t             isFiltered;
+
     sProcessDetail     *processDetails;  /* Process details, that includes all steps */
 } singleProcess;
 
@@ -711,10 +712,8 @@ struct sProcesses {
 
   lv_obj_t	        	*processFilterButton;
   lv_obj_t	        	*newProcessButton;
-
-  /* Params objects */
   uint8_t             isFiltered;
-  processList           processFilteredElementsList;
+  /* Params objects */
   processList           processElementsList;
 };
 
@@ -1281,7 +1280,7 @@ void event_processElement(lv_event_t *e);
 void processElementCreate(processNode *newProcess, int32_t tempSize);
 bool deleteProcessElement( processNode	*processToDelete );
 processNode *getProcElementEntryByObject( lv_obj_t *obj );
-processNode *addProcessElement(processNode	*processToAdd, processList *processElementsList);
+processNode *addProcessElement(processNode	*processToAdd);
 
 // @file element_rollerPopup.c
 void event_Roller(lv_event_t *e);

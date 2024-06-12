@@ -116,9 +116,10 @@ void event_messagePopup(lv_event_t *e)
                 gui.element.messagePopup.mBoxPopupParent = NULL;
 
                 //if(gui.page.processes.processElementsList.size > 0){
-                  LV_LOG_USER("Delete ALL PROCESS!");
-                  gui.page.processes.processElementsList.start = NULL;
-                  gui.page.processes.processElementsList.size = 0;
+                  LV_LOG_USER("Delete ALL PROCESS!"); 
+                  emptyList(&(gui.page.processes.processElementsList), PROCESS_NODE);
+                  //gui.page.processes.processElementsList.start = NULL;
+                  //gui.page.processes.processElementsList.size = 0;
                   lv_obj_clean(gui.page.processes.processesListContainer);
                   qSysAction( SAVE_PROCESS_CONFIG );
                // }else {

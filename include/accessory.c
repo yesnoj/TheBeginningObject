@@ -723,7 +723,7 @@ void writeJSONFile(fs::FS &fs, const char *path,const machineSettings &settings)
     return;
 }
 
-bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uint8_t enableLog) {
+gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uint32_t enableLog) {
     if(initErrors == 0){
         File file = fs.open(filename);
         
@@ -759,6 +759,7 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
                 LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
             }
 
+
             processList *processElementsList = &(gui.page.processes.processElementsList);
             processElementsList->start = NULL;
             processElementsList->end = NULL;
@@ -768,10 +769,8 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
                 processNode *nodeP = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
 
                 // Assign process details
-                if( strlen(Processe.value()["processNameString"]) > 0 ) {
-                  nodeP->process.processDetails->processNameString = (char*)malloc( strlen(Processe.value()["processNameString"]) + 1);
-                  strcpy( nodeP->process.processDetails->processNameString, Processe.value()["processNameString"] );                
-                } else nodeP->process.processDetails->processNameString = NULL;
+                nodeP->process.processDetails->processNameString = (char*)malloc( strlen(Processe.value()["processNameString"]) + 1);   
+                  strcpy( nodeP->process.processDetails->processNameString, Processe.value()["processNameString"] );
                 nodeP->process.processDetails->temp = Processe.value()["temp"];
                 nodeP->process.processDetails->tempTolerance = Processe.value()["tempTolerance"];
                 nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
@@ -793,8 +792,7 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
 
                 if(enableLog){
                     LV_LOG_USER("--- PROCESS PARAMS ---");
-                    LV_LOG_USER("processNameString:%s",nodeP->process.processDetails->processNameString ? 
-                      nodeP->process.processDetails->processNameString : "");
+                    LV_LOG_USER("processNameString:%s",nodeP->process.processDetails->processNameString);
                     LV_LOG_USER("temp:%d",nodeP->process.processDetails->temp);
                     LV_LOG_USER("tempTolerance:%d",nodeP->process.processDetails->tempTolerance);
                     LV_LOG_USER("isTempControlled:%d",nodeP->process.processDetails->isTempControlled);
@@ -813,10 +811,8 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
                     stepNode *nodeS = (stepNode*) allocateAndInitializeNode(STEP_NODE);
 
                     // Assign step details
-                    if( strlen( Processe_value_Step.value()["stepNameString"] ) > 0 ) {
-                      nodeS->step.stepDetails->stepNameString = (char*)malloc( strlen(Processe_value_Step.value()["stepNameString"]) + 1);
+                    nodeS->step.stepDetails->stepNameString = (char*)malloc( strlen(Processe_value_Step.value()["stepNameString"]) + 1);
                       strcpy(nodeS->step.stepDetails->stepNameString, Processe_value_Step.value()["stepNameString"]);
-                    } else nodeS->step.stepDetails->stepNameString = NULL;
                     nodeS->step.stepDetails->timeMins = Processe_value_Step.value()["timeMins"];
                     nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
                     nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];
@@ -836,7 +832,7 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
 
                     if(enableLog){
                         LV_LOG_USER("--- STEP PARAMS ---");
-                        LV_LOG_USER("stepNameString:%s",nodeS->step.stepDetails->stepNameString ? nodeS->step.stepDetails->stepNameString : "");
+                        LV_LOG_USER("stepNameString:%s",nodeS->step.stepDetails->stepNameString);
                         LV_LOG_USER("timeSecs:%d",nodeS->step.stepDetails->timeSecs);
                         LV_LOG_USER("timeMins:%d",nodeS->step.stepDetails->timeMins);
                         LV_LOG_USER("type:%d",nodeS->step.stepDetails->type);
@@ -847,9 +843,8 @@ bool readFULLJSONFile(fs::FS &fs, const char *filename, gui_components &gui, uin
             }
         }
         file.close();
-        return true;  // Loaded JSON
+        return gui;
     }
-    return false; // JSON not loaded
 }
 
 
@@ -1319,6 +1314,7 @@ int caseInsensitiveStrstr(const char *haystack, const char *needle) {
     return strstr(haystackLower, needleLower) != NULL;
 }
 
+/*
 void filterAndDisplayProcesses(void) {
     processNode *currentNode = gui.page.processes.processElementsList.start;
 
@@ -1386,55 +1382,53 @@ void filterAndDisplayProcesses(void) {
     // Aggiorna il layout dopo aver aggiunto gli elementi filtrati
     lv_obj_update_layout(gui.page.processes.processesListContainer);
 }
+*/
 
-/*
+
 void filterAndDisplayProcesses() {
     processNode *currentNode = gui.page.processes.processElementsList.start;
     int32_t displayedCount = 1;
 
-    if(gui.page.processes.isFiltered == 1)
-        removeFiltersAndDisplayAllProcesses();
+    //if(gui.page.processes.isFiltered == 1)
+      //  removeFiltersAndDisplayAllProcesses();
 
-    LV_LOG_USER("Filter %s, %d, %d, %d",gui.element.filterPopup.filterName ? 
-      gui.element.filterPopup.filterName : "", gui.element.filterPopup.isColorFilter, gui.element.filterPopup.isBnWFilter, gui.element.filterPopup.preferredOnly);
+    // Debugging info
+    LV_LOG_USER("Filter %s, %d, %d, %d", 
+                gui.element.filterPopup.filterName ? gui.element.filterPopup.filterName : "", 
+                gui.element.filterPopup.isColorFilter, 
+                gui.element.filterPopup.isBnWFilter, 
+                gui.element.filterPopup.preferredOnly);
 
     // Nascondi tutti i processi inizialmente
-    while (currentNode != NULL) {
-        lv_obj_add_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
-        currentNode = currentNode->next;
-    }
+   // while (currentNode != NULL) {
+   //     lv_obj_add_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
+   //     currentNode = currentNode->next;
+   // }
 
 
-    currentNode = gui.page.processes.processElementsList.start;
+    //currentNode = gui.page.processes.processElementsList.start;
     // Filtra e visualizza i processi
     while (currentNode != NULL) {
-        uint8_t display = 1;
+        //uint8_t display = 0;
 
         // Filtro per nome
-        if((currentNode->process.processDetails->processNameString != NULL) && (gui.element.filterPopup.filterName != NULL)) {
-          if(strlen(gui.element.filterPopup.filterName) > 0 && !caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, gui.element.filterPopup.filterName)) {
-            display = 0;
-          }
+        if (gui.element.filterPopup.filterName != NULL && strlen(gui.element.filterPopup.filterName) > 0 && 
+            caseInsensitiveStrstr(currentNode->process.processDetails->processNameString, gui.element.filterPopup.filterName)) {
+               lv_obj_remove_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
         }
-
-        // Filtro per tipo di film (colore o BnW)
-        if (gui.element.filterPopup.isColorFilter && currentNode->process.processDetails->filmType != COLOR_FILM) {
-            display = 0;
+        else 
+          if (gui.element.filterPopup.isColorFilter && currentNode->process.processDetails->filmType == COLOR_FILM) {
+           lv_obj_remove_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
         }
-
-        if (gui.element.filterPopup.isBnWFilter && currentNode->process.processDetails->filmType != BLACK_AND_WHITE_FILM) {
-            display = 0;
-        }
-
-        // Filtro per preferiti
-        if (gui.element.filterPopup.preferredOnly && !currentNode->process.processDetails->isPreferred) {
-            display = 0;
-        }
-
-        // Visualizza il processo se passa tutti i filtri
-        if (display) {
+          else if (gui.element.filterPopup.isBnWFilter && currentNode->process.processDetails->filmType == BLACK_AND_WHITE_FILM) {
             lv_obj_remove_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
-        }
+          }
+            else if (gui.element.filterPopup.preferredOnly && currentNode->process.processDetails->isPreferred) {
+              lv_obj_remove_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
+            }
+              else{
+                lv_obj_add_flag(currentNode->process.processElement, LV_OBJ_FLAG_HIDDEN);
+               }
 
         currentNode = currentNode->next;
     }
@@ -1454,7 +1448,7 @@ void filterAndDisplayProcesses() {
 
     lv_obj_update_layout(gui.page.processes.processesListContainer);
 }
-*/
+
 
 void removeFiltersAndDisplayAllProcesses() {
     processNode *currentNode = gui.page.processes.processElementsList.start;

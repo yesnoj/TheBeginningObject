@@ -4,8 +4,8 @@ import string
 
 # Definizione delle costanti
 MAX_PROC_NAME_LEN = 15
-MAX_STEP_ELEMENTS = 30
-MAX_PROC_ELEMENTS = 20
+MAX_STEP_ELEMENTS = 15
+MAX_PROC_ELEMENTS = 10
 
 def random_string(length):
     letters = string.ascii_lowercase
@@ -76,5 +76,5 @@ def generate_json():
 if __name__ == "__main__":
     generated_json = generate_json()
     with open("FilMachine.json", "w") as json_file:
-         json.dump(generated_json, json_file, separators=(',', ':'))  # Formato JSON in linea
-        #json.dump(generated_json, json_file, indent=4)  # Formato JSON standard
+        json.dump(generated_json, json_file, separators=(',', ':'))  # Formato JSON in linea
+        #json.dump(generated_json, json_file, indent=4)  # Formato JSON standard, ESP32 doesn't like it!
