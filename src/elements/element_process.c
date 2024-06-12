@@ -188,6 +188,7 @@ void event_processElement(lv_event_t * e) {
           LV_LOG_USER("Process is preferred : %d", currentNode->process.processDetails->isPreferred);
           if(gui.page.processes.isFiltered == 1)
             filterAndDisplayProcesses();
+            qSysAction( SAVE_PROCESS_CONFIG );
         }
 
         if (obj == currentNode->process.deleteButton) {
@@ -269,7 +270,7 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
 
         newProcess->process.processName = lv_label_create(newProcess->process.processElementSummary);
         lv_label_set_text(newProcess->process.processName, newProcess->process.processDetails->processNameString ? 
-          newProcess->process.processDetails->processNameString :"");
+        newProcess->process.processDetails->processNameString : "");
         lv_obj_set_style_text_font(newProcess->process.processName, &lv_font_montserrat_22, 0);
         lv_label_set_long_mode(newProcess->process.processName, LV_LABEL_LONG_SCROLL_CIRCULAR);
         lv_obj_set_width(newProcess->process.processName, 220);

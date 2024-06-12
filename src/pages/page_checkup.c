@@ -209,6 +209,10 @@ void processTimer(lv_timer_t * timer)
             lv_obj_add_flag(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
             lv_timer_delete(referenceProcess->process.processDetails->checkup->timer);
+
+            gui.page.tools.machineStats.stoppedProcesses ++;
+            lv_label_set_text_fmt(gui.page.tools.toolStatStoppedProcessesValue, "%d", gui.page.tools.machineStats.stoppedProcesses);
+            qSysAction( SAVE_PROCESS_CONFIG );
         }
         else{              
           stepPercentage = calcolatePercentage(minutesStepElapsed, secondsStepElapsed, gui.tempStepNode->step.stepDetails->timeMins, gui.tempStepNode->step.stepDetails->timeSecs);
@@ -242,6 +246,10 @@ void processTimer(lv_timer_t * timer)
     }
     else{
         lv_timer_delete(referenceProcess->process.processDetails->checkup->timer);
+        
+        gui.page.tools.machineStats.stoppedProcesses ++;
+        lv_label_set_text_fmt(gui.page.tools.toolStatStoppedProcessesValue, "%d", gui.page.tools.machineStats.stoppedProcesses);
+        qSysAction( SAVE_PROCESS_CONFIG );
     }
 
 //    sprintf(formatted_string, "%dm%ds", remainingProcessMins, remainingProcessSecsOnly);
@@ -264,6 +272,12 @@ void processTimer(lv_timer_t * timer)
           lv_obj_add_flag(referenceProcess->process.processDetails->checkup->checkupStepNameValue, LV_OBJ_FLAG_HIDDEN);
           lv_obj_add_flag(referenceProcess->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
           lv_obj_add_flag(referenceProcess->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
+          
+          gui.page.tools.machineStats.completedProcesses++;
+          gui.page.tools.machineStats.totalMins += referenceProcess->process.processDetails->timeMins;
+          lv_label_set_text_fmt(gui.page.tools.toolStatTotalTimeValue, "%d", gui.page.tools.machineStats.totalMins);
+          lv_label_set_text_fmt(gui.page.tools.toolStatCompletedProcessesValue, "%d", gui.page.tools.machineStats.completedProcesses);
+          qSysAction( SAVE_PROCESS_CONFIG );
         }
     }
 }

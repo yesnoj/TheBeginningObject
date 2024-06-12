@@ -23,6 +23,8 @@ const unsigned int lvBufferSize = (TFT_HOR_RES * TFT_VER_RES * 2) / 10;
 void *lvBuffer1 = malloc(lvBufferSize);
 void *lvBuffer2 = malloc(lvBufferSize);
 
+
+
 #define LVGL_TICK_PERIOD_MS    1
 static void increase_lvgl_tick( void *arg ) {
   lv_tick_inc(LVGL_TICK_PERIOD_MS);

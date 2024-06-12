@@ -3,9 +3,9 @@ import random
 import string
 
 # Definizione delle costanti
-MAX_PROC_NAME_LEN = 15
-MAX_STEP_ELEMENTS = 15
-MAX_PROC_ELEMENTS = 10
+MAX_PROC_NAME_LEN = 20  
+MAX_STEP_ELEMENTS = 10  #MAX 10 PROCESS
+MAX_PROC_ELEMENTS = 30  #MAX 30 PROCESS
 
 def random_string(length):
     letters = string.ascii_lowercase
@@ -23,6 +23,12 @@ def generate_json():
             "isPersistentAlarm": 0,
             "isProcessAutostart": 0,
             "drainFillOverlapSetpoint": 0
+        },
+        "machineStats": {
+            "completedProcesses": random.randint(0, 100),
+            "totalMins": random.randint(0, 100),
+            "completedCleanCycle": random.randint(0, 100),
+            "stoppedProcesses": random.randint(0, 100),
         },
         "Processes": {}
     }

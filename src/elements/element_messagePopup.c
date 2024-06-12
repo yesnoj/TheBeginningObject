@@ -117,10 +117,12 @@ void event_messagePopup(lv_event_t *e)
 
                 //if(gui.page.processes.processElementsList.size > 0){
                   LV_LOG_USER("Delete ALL PROCESS!"); 
-                  emptyList(&(gui.page.processes.processElementsList), PROCESS_NODE);
+                  lv_obj_clean(gui.page.processes.processesListContainer);
+                  processList *processElementsList = &(gui.page.processes.processElementsList);
+                  emptyList((void *)processElementsList, PROCESS_NODE);                     
                   //gui.page.processes.processElementsList.start = NULL;
                   //gui.page.processes.processElementsList.size = 0;
-                  lv_obj_clean(gui.page.processes.processesListContainer);
+                  
                   qSysAction( SAVE_PROCESS_CONFIG );
                // }else {
                 //    LV_LOG_USER("Processes already empty");

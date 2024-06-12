@@ -26,7 +26,10 @@ void event_toolsElement(lv_event_t * e){
  
   if(obj == gui.page.tools.toolsCleaningIcon){
       if(code == LV_EVENT_CLICKED) {    
-           LV_LOG_USER("PRESSED gui.page.tools.toolsCleaningButton");
+          LV_LOG_USER("PRESSED gui.page.tools.toolsCleaningButton");
+          gui.page.tools.machineStats.completedCleanCycle ++;
+          lv_label_set_text_fmt(gui.page.tools.toolStatCompleteCycleValue, "%d", gui.page.tools.machineStats.completedCleanCycle);
+          qSysAction( SAVE_PROCESS_CONFIG );
       }
   }
   if(obj == gui.page.tools.toolsDrainingIcon){
@@ -239,8 +242,8 @@ static void initTools(void){
       lv_obj_set_style_text_font(gui.page.tools.toolStatCompletedProcessesLabel, &lv_font_montserrat_20, 0);              
       lv_obj_align(gui.page.tools.toolStatCompletedProcessesLabel, LV_ALIGN_LEFT_MID, -5, 0);
 
-      gui.page.tools.toolStatCompletedProcessesValue = lv_label_create(gui.page.tools.toolsStatCompleteProcessesContainer);         
-      lv_label_set_text(gui.page.tools.toolStatCompletedProcessesValue, "2"); 
+      gui.page.tools.toolStatCompletedProcessesValue = lv_label_create(gui.page.tools.toolsStatCompleteProcessesContainer);     
+      lv_label_set_text_fmt(gui.page.tools.toolStatCompletedProcessesValue, "%d", gui.page.tools.machineStats.completedProcesses);
       lv_obj_set_style_text_font(gui.page.tools.toolStatCompletedProcessesValue, &lv_font_montserrat_20, 0);              
       lv_obj_align(gui.page.tools.toolStatCompletedProcessesValue, LV_ALIGN_RIGHT_MID, -5, 0);
      
@@ -258,8 +261,8 @@ static void initTools(void){
       lv_obj_set_style_text_font(gui.page.tools.toolStatTotalTimeLabel, &lv_font_montserrat_20, 0);              
       lv_obj_align(gui.page.tools.toolStatTotalTimeLabel, LV_ALIGN_LEFT_MID, -5, 0);
 
-      gui.page.tools.toolStatTotalTimeValue = lv_label_create(gui.page.tools.toolsStatTotalTimeContainer);         
-      lv_label_set_text(gui.page.tools.toolStatTotalTimeValue, "2"); 
+      gui.page.tools.toolStatTotalTimeValue = lv_label_create(gui.page.tools.toolsStatTotalTimeContainer);
+      lv_label_set_text_fmt(gui.page.tools.toolStatTotalTimeValue, "%d", gui.page.tools.machineStats.totalMins);
       lv_obj_set_style_text_font(gui.page.tools.toolStatTotalTimeValue, &lv_font_montserrat_20, 0);              
       lv_obj_align(gui.page.tools.toolStatTotalTimeValue, LV_ALIGN_RIGHT_MID, -5, 0);
 
@@ -277,8 +280,8 @@ static void initTools(void){
       lv_obj_set_style_text_font(gui.page.tools.toolStatCompleteCycleLabel, &lv_font_montserrat_20, 0);              
       lv_obj_align(gui.page.tools.toolStatCompleteCycleLabel, LV_ALIGN_LEFT_MID, -5, 0);
 
-      gui.page.tools.toolStatCompleteCycleValue = lv_label_create(gui.page.tools.toolsStatCompleteCycleContainer);         
-      lv_label_set_text(gui.page.tools.toolStatCompleteCycleValue, "2"); 
+      gui.page.tools.toolStatCompleteCycleValue = lv_label_create(gui.page.tools.toolsStatCompleteCycleContainer);    
+      lv_label_set_text_fmt(gui.page.tools.toolStatCompleteCycleValue, "%d", gui.page.tools.machineStats.completedCleanCycle);
       lv_obj_set_style_text_font(gui.page.tools.toolStatCompleteCycleValue, &lv_font_montserrat_20, 0);              
       lv_obj_align(gui.page.tools.toolStatCompleteCycleValue, LV_ALIGN_RIGHT_MID, -5, 0);
 
@@ -296,8 +299,8 @@ static void initTools(void){
       lv_obj_set_style_text_font(gui.page.tools.toolStatStoppedProcessesLabel, &lv_font_montserrat_20, 0);              
       lv_obj_align(gui.page.tools.toolStatStoppedProcessesLabel, LV_ALIGN_LEFT_MID, -5, 0);
 
-      gui.page.tools.toolStatStoppedProcessesValue = lv_label_create(gui.page.tools.toolsStatStoppedProcessesContainer);         
-      lv_label_set_text(gui.page.tools.toolStatStoppedProcessesValue, "2"); 
+      gui.page.tools.toolStatStoppedProcessesValue = lv_label_create(gui.page.tools.toolsStatStoppedProcessesContainer);    
+      lv_label_set_text_fmt(gui.page.tools.toolStatStoppedProcessesValue, "%d", gui.page.tools.machineStats.stoppedProcesses);
       lv_obj_set_style_text_font(gui.page.tools.toolStatStoppedProcessesValue, &lv_font_montserrat_20, 0);              
       lv_obj_align(gui.page.tools.toolStatStoppedProcessesValue, LV_ALIGN_RIGHT_MID, -5, 0);
 

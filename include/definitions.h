@@ -279,6 +279,13 @@ struct machineSettings {
   uint8_t 	        	drainFillOverlapSetpoint;
 };
 
+struct machineStatistics {
+  uint32_t 	          completedProcesses;
+  uint64_t 	          totalMins;
+  uint32_t 	          completedCleanCycle;
+  uint32_t 	          stoppedProcesses;
+};
+
 
 /*********************
 * ELEMENTS STRUCTS
@@ -771,7 +778,7 @@ struct sSettings {
 
 
   /* Params objects */
-  struct machineSettings settingsParams;
+  struct machineSettings   settingsParams;
 };
 
 
@@ -830,6 +837,7 @@ struct sTools {
 	lv_obj_t 	        	*toolCreditButtonLabel;
 
 	/* Params objects */
+  struct machineStatistics machineStats;
 };
 
 struct sKeyboardPopup {
@@ -898,9 +906,9 @@ LV_IMG_DECLARE(splash_img);
 
 #define FILENAME_SAVE         "/FilMachine.json"
 
-#define MAX_PROC_NAME_LEN		  15
-#define MAX_STEP_ELEMENTS		  30
-#define MAX_PROC_ELEMENTS		  20
+#define MAX_PROC_NAME_LEN		  20
+#define MAX_STEP_ELEMENTS		  10
+#define MAX_PROC_ELEMENTS		  30
 
 
 /*********************

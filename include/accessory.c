@@ -384,23 +384,27 @@ void myLongEvent(lv_event_t * e, uint32_t howLongInMs)
 
 void* allocateAndInitializeNode(NodeType_t type) {
     void *node = NULL;
-    
-    // Initialize and allocate according the node type
+
+    // Initialize and allocate according to the node type
     switch (type) {
         case STEP_NODE:
             node = malloc(sizeof(stepNode));
             if (node != NULL) {
                 memset(node, 0, sizeof(stepNode));
                 stepNode* step = (stepNode*)node;
-                step->step.stepDetails = (sStepDetail *) malloc(sizeof(sStepDetail));
+                step->step.stepDetails = (sStepDetail *)malloc(sizeof(sStepDetail));
                 if (step->step.stepDetails == NULL) {
-                //    // Handle memory allocation failure
-                   free(step->step.stepDetails);  // Clean up previously allocated memory
+                    // Handle memory allocation failure
+                    free(step);
+                    return NULL;
                 }
                 memset(step->step.stepDetails, 0, sizeof(sStepDetail));
-             }
-        break;
-        
+            } else {
+                // Handle memory allocation failure
+                return NULL;
+            }
+            break;
+
         case PROCESS_NODE:
             node = malloc(sizeof(processNode));
             if (node != NULL) {
@@ -413,7 +417,7 @@ void* allocateAndInitializeNode(NodeType_t type) {
                     return NULL;
                 }
                 memset(process->process.processDetails, 0, sizeof(sProcessDetail));
-                
+
                 process->process.processDetails->checkup = (sCheckup *)malloc(sizeof(sCheckup));
                 if (process->process.processDetails->checkup == NULL) {
                     // Handle memory allocation failure
@@ -422,12 +426,19 @@ void* allocateAndInitializeNode(NodeType_t type) {
                     return NULL;
                 }
                 memset(process->process.processDetails->checkup, 0, sizeof(sCheckup));
+            } else {
+                // Handle memory allocation failure
+                return NULL;
             }
             break;
+
+        default:
+            // Handle invalid node type
+            return NULL;
     }
+
     return node;
 }
-
 
 void* isNodeInList(void* list, void* node, NodeType_t type) {
     if (list == NULL || node == NULL) {
@@ -759,6 +770,19 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                 LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
             }
 
+            JsonObject machineStats = doc["machineStats"];
+            gui.page.tools.machineStats.completedProcesses   = machineStats["completedProcesses"];                 
+            gui.page.tools.machineStats.totalMins            = machineStats["totalMins"];                
+            gui.page.tools.machineStats.completedCleanCycle  = machineStats["completedCleanCycle"];
+            gui.page.tools.machineStats.stoppedProcesses     = machineStats["stoppedProcesses"];
+
+            if(enableLog){
+                LV_LOG_USER("--- MACHINE STATISTICS ---");
+                LV_LOG_USER("completedProcesses:%d",gui.page.tools.machineStats.completedProcesses);
+                LV_LOG_USER("totalMins:%d",gui.page.tools.machineStats.totalMins);
+                LV_LOG_USER("completedCleanCycle:%d",gui.page.tools.machineStats.completedCleanCycle);
+                LV_LOG_USER("stoppedProcesses:%d",gui.page.tools.machineStats.stoppedProcesses);
+            }
 
             processList *processElementsList = &(gui.page.processes.processElementsList);
             processElementsList->start = NULL;
@@ -767,10 +791,20 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
 
             for (JsonPair Processe : doc["Processes"].as<JsonObject>()) {
                 processNode *nodeP = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
+                if (nodeP == NULL) {
+                    LV_LOG_USER("Failed to allocate memory for process node");
+                    continue;
+                }
 
                 // Assign process details
-                nodeP->process.processDetails->processNameString = (char*)malloc( strlen(Processe.value()["processNameString"]) + 1);   
-                  strcpy( nodeP->process.processDetails->processNameString, Processe.value()["processNameString"] );
+                nodeP->process.processDetails = (sProcessDetail *)malloc(sizeof(sProcessDetail));
+                if (nodeP->process.processDetails == NULL) {
+                    LV_LOG_USER("Failed to allocate memory for process details");
+                    free(nodeP);
+                    continue;
+                }
+
+                nodeP->process.processDetails->processNameString = strdup(Processe.value()["processNameString"]);
                 nodeP->process.processDetails->temp = Processe.value()["temp"];
                 nodeP->process.processDetails->tempTolerance = Processe.value()["tempTolerance"];
                 nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
@@ -809,13 +843,23 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
 
                 for (JsonPair Processe_value_Step : Processe.value()["Steps"].as<JsonObject>()) {
                     stepNode *nodeS = (stepNode*) allocateAndInitializeNode(STEP_NODE);
+                    if (nodeS == NULL) {
+                        LV_LOG_USER("Failed to allocate memory for step node");
+                        continue;
+                    }
 
                     // Assign step details
-                    nodeS->step.stepDetails->stepNameString = (char*)malloc( strlen(Processe_value_Step.value()["stepNameString"]) + 1);
-                      strcpy(nodeS->step.stepDetails->stepNameString, Processe_value_Step.value()["stepNameString"]);
+                    nodeS->step.stepDetails = (sStepDetail *)malloc(sizeof(sStepDetail));
+                    if (nodeS->step.stepDetails == NULL) {
+                        LV_LOG_USER("Failed to allocate memory for step details");
+                        free(nodeS);
+                        continue;
+                    }
+
+                    nodeS->step.stepDetails->stepNameString = strdup(Processe_value_Step.value()["stepNameString"]);
                     nodeS->step.stepDetails->timeMins = Processe_value_Step.value()["timeMins"];
                     nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
-                    nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];
+                    nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];      
                     nodeS->step.stepDetails->source = Processe_value_Step.value()["source"];
                     nodeS->step.stepDetails->discardAfterProc = Processe_value_Step.value()["discardAfterProc"];
 
@@ -847,7 +891,6 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
     }
 }
 
-
 void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, uint8_t enableLog) {
     if(initErrors == 0){
         LV_LOG_USER("Writing file: %s", path);
@@ -864,7 +907,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
             //return;
         }
 
-        StaticJsonDocument<65536> doc;
+        StaticJsonDocument<49152> doc;
         JsonObject machineSettings = doc.createNestedObject("machineSettings");
 
         machineSettings["tempUnit"]                   = gui.page.settings.settingsParams.tempUnit;
@@ -888,6 +931,21 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
         LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
         LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
         LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
+      }
+
+      JsonObject machineStats = doc.createNestedObject("machineStats");
+
+       machineStats["completedProcesses"]    = gui.page.tools.machineStats.completedProcesses;
+       machineStats["totalMins"]             = gui.page.tools.machineStats.totalMins;
+       machineStats["completedCleanCycle"]   = gui.page.tools.machineStats.completedCleanCycle;
+       machineStats["stoppedProcesses"]      = gui.page.tools.machineStats.stoppedProcesses;
+
+      if(enableLog){
+          LV_LOG_USER("--- MACHINE STATISTICS ---");
+          LV_LOG_USER("completedProcesses:%d",gui.page.tools.machineStats.completedProcesses);
+          LV_LOG_USER("totalMins:%d",gui.page.tools.machineStats.totalMins);
+          LV_LOG_USER("completedCleanCycle:%d",gui.page.tools.machineStats.completedCleanCycle);
+          LV_LOG_USER("stoppedProcesses:%d",gui.page.tools.machineStats.stoppedProcesses);
       }
 
 
@@ -1485,7 +1543,7 @@ void emptyList(void *list, NodeType_t type) {
 
         while (currentNode != NULL) {
             processNode *nextNode = currentNode->next;
-            free(currentNode);
+            //free(currentNode); //CAUSE CRASH!!
             currentNode = nextNode;
         }
 
@@ -1499,7 +1557,7 @@ void emptyList(void *list, NodeType_t type) {
 
         while (currentNode != NULL) {
             stepNode *nextNode = currentNode->next;
-            free(currentNode);
+            //free(currentNode); //CAUSE CRASH!!
             currentNode = nextNode;
         }
 
