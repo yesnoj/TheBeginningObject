@@ -135,6 +135,7 @@ void event_checkup(lv_event_t * e){
         lv_msgbox_close(mboxCont);
         //lv_obj_delete(mboxCont);
         exitCheckup();
+        return;
     }
     if(obj == gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton){
         LV_LOG_USER("User pressed gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton");

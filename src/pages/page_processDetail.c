@@ -80,14 +80,16 @@ void event_processDetail(lv_event_t * e)
           lv_obj_clear_state(newProcess->process.processDetails->processRunButton, LV_STATE_DISABLED);
           lv_obj_add_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
 
-          if(addProcessElement(newProcess) != NULL){
-             LV_LOG_USER("Process not present yet, let's create!");
+          if(isNodeInList((void*)&(gui.page.processes.processElementsList), newProcess, PROCESS_NODE) == NULL ) { 
+            LV_LOG_USER("Process not in list");
+            if(addProcessElement(newProcess) != NULL){
+             LV_LOG_USER("Create GUI entry");
              processElementCreate(newProcess, -1);
-             qSysAction( SAVE_PROCESS_CONFIG );
-          }    
-            else{
-                  LV_LOG_USER("Process element creation failed, maximum entries reached" );
-            }
+            } else LV_LOG_USER("Process list is full");
+          } else{
+            LV_LOG_USER("Process element exists so edited" );
+          }
+          qSysAction( SAVE_PROCESS_CONFIG );
           
         updateProcessElement(newProcess);
         if(gui.page.processes.isFiltered == 1)

@@ -22,7 +22,7 @@ static bool gesture_handled = false;
 ******************************/
 
 processNode *addProcessElement(processNode	*processToAdd) {
-	if(gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS || isNodeInList((void*)&(gui.page.processes.processElementsList), processToAdd, PROCESS_NODE) != NULL) return NULL;		// Put some limit on things!
+	if( gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS ) return NULL;		// Put some limit on things!
 
   LV_LOG_USER("Processes available %d first",gui.page.processes.processElementsList.size);
       if( gui.page.processes.processElementsList.start == NULL) {					/* Deals with the first entry */

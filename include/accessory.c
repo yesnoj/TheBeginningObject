@@ -738,8 +738,8 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
     if(initErrors == 0){
         File file = fs.open(filename);
         
-        DynamicJsonDocument doc(65536);
-
+//        DynamicJsonDocument doc(56 * 1024);
+        JsonDocument doc;
         // Deserialize the JSON document
         DeserializationError error = deserializeJson(doc, file);
         if (error) {
@@ -903,11 +903,13 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
         File file = fs.open(path, FILE_WRITE);
         if (!file) {
             LV_LOG_USER("Failed to open file for writing");
-            rebootBoard();
-            //return;
+ //           rebootBoard();
+            return;
         }
 
-        StaticJsonDocument<65536> doc;
+//        StaticJsonDocument<56 * 1024> doc;
+//        DynamicJsonDocument doc(56 * 1024);
+        JsonDocument doc;
         JsonObject machineSettings = doc.createNestedObject("machineSettings");
 
         machineSettings["tempUnit"]                   = gui.page.settings.settingsParams.tempUnit;
@@ -951,18 +953,13 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
 
         JsonObject Processes = doc.createNestedObject("Processes");
         
-//        const processList *processElementsList;
-//        memset( &processElementsList, 0, sizeof( processElementsList ) );   
-//        processElementsList = &(gui.page.processes.processElementsList);
-
-//        processNode *currentProcessNode;
-//        memset( &currentProcessNode, 0, sizeof( currentProcessNode ) ); 
         processNode *currentProcessNode = gui.page.processes.processElementsList.start;
 
         while(currentProcessNode != NULL){
             snprintf(processName, sizeof(processName), "Process%d", processCounter);
             JsonObject currentProcess = Processes.createNestedObject(processName);
-            currentProcess["processNameString"] = currentProcessNode->process.processDetails->processNameString;
+            const char* tp = currentProcessNode->process.processDetails->processNameString;
+            currentProcess["processNameString"] = tp;
             currentProcess["temp"] = currentProcessNode->process.processDetails->temp;
             currentProcess["tempTolerance"] = currentProcessNode->process.processDetails->tempTolerance;
             currentProcess["isTempControlled"] = currentProcessNode->process.processDetails->isTempControlled;
@@ -984,12 +981,6 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
             LV_LOG_USER("timeSecs:%d",currentProcessNode->process.processDetails->timeSecs);
           }
 
-//            stepList *stepElementsList;
-//            memset( &stepElementsList, 0, sizeof( stepElementsList ) ); 
-//            stepElementsList = &(currentProcessNode->process.processDetails->stepElementsList);   
-
-//            stepNode *currentStepNode;
-//            memset( &currentStepNode, 0, sizeof( currentStepNode ) );   
             stepNode *currentStepNode = currentProcessNode->process.processDetails->stepElementsList.start;
 
             processCounter++;
@@ -999,7 +990,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
             while(currentStepNode != NULL){                
                 snprintf(stepName, sizeof(stepName), "Step%d", stepCounter);
                 JsonObject currentStep = currentProcessSteps.createNestedObject(stepName);
-                currentStep["stepNameString"] = currentStepNode->step.stepDetails->stepNameString;
+                const char* tp = currentStepNode->step.stepDetails->stepNameString;
+                currentStep["stepNameString"] = tp;
                 currentStep["timeMins"] = currentStepNode->step.stepDetails->timeMins;
                 currentStep["timeSecs"] = currentStepNode->step.stepDetails->timeSecs;
                 currentStep["type"] = currentStepNode->step.stepDetails->type;
@@ -1032,7 +1024,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
         } else {
             LV_LOG_USER("Write failed");
         }
-        file.close();
+//        file.close();
     }
     else
         return;
