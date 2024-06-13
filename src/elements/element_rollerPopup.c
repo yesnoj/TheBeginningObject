@@ -89,7 +89,7 @@ void event_Roller(lv_event_t * e)
               lv_obj_send_event(gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
               return; 
             }
-            if(((processNode *)data)->process.processDetails->checkup->checkupTankSizeTextArea == gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
+            if((lv_obj_t*)data == gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
               LV_LOG_USER("SET BUTTON from checkupTankSizeTextArea value %d:",rollerSelected);
               
               gui.tempProcessNode->process.processDetails->checkup->tankSize = rollerSelected;
@@ -181,7 +181,8 @@ void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *w
   lv_obj_set_width(gui.element.rollerPopup.roller, 140);
   lv_obj_set_height(gui.element.rollerPopup.roller, 100);
   lv_obj_align(gui.element.rollerPopup.roller, LV_ALIGN_CENTER, 0, -30);
-  lv_obj_add_event_cb(gui.element.rollerPopup.roller, event_Roller, LV_EVENT_ALL, NULL);
+  lv_obj_add_event_cb(gui.element.rollerPopup.roller, event_Roller, LV_EVENT_CLICKED, NULL);
+  lv_obj_add_event_cb(gui.element.rollerPopup.roller, event_Roller, LV_EVENT_VALUE_CHANGED, NULL);
   lv_obj_add_style(gui.element.rollerPopup.roller, &gui.element.rollerPopup.style_roller, LV_PART_SELECTED);  
   lv_roller_set_selected(gui.element.rollerPopup.roller, 0, LV_ANIM_OFF);   
   lv_obj_set_style_border_color(gui.element.rollerPopup.roller, lv_color_hex(WHITE), LV_PART_MAIN);

@@ -738,8 +738,8 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
     if(initErrors == 0){
         File file = fs.open(filename);
         
-        DynamicJsonDocument doc(49152);
-
+//        DynamicJsonDocument doc(56 * 1024);
+        JsonDocument doc;
         // Deserialize the JSON document
         DeserializationError error = deserializeJson(doc, file);
         if (error) {
@@ -795,7 +795,7 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                     LV_LOG_USER("Failed to allocate memory for process node");
                     continue;
                 }
-
+#if 0         /* Don't do this! It's already done in allocateAndInitializeNode funciton call above!!! */
                 // Assign process details
                 nodeP->process.processDetails = (sProcessDetail *)malloc(sizeof(sProcessDetail));
                 if (nodeP->process.processDetails == NULL) {
@@ -803,8 +803,8 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                     free(nodeP);
                     continue;
                 }
-
-                nodeP->process.processDetails->processNameString = strdup(Processe.value()["processNameString"]);
+#endif
+                strcpy( nodeP->process.processDetails->processNameString, Processe.value()["processNameString"]);
                 nodeP->process.processDetails->temp = Processe.value()["temp"];
                 nodeP->process.processDetails->tempTolerance = Processe.value()["tempTolerance"];
                 nodeP->process.processDetails->isTempControlled = Processe.value()["isTempControlled"];
@@ -856,7 +856,7 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                         continue;
                     }
 
-                    nodeS->step.stepDetails->stepNameString = strdup(Processe_value_Step.value()["stepNameString"]);
+                    strcpy( nodeS->step.stepDetails->stepNameString, Processe_value_Step.value()["stepNameString"]);
                     nodeS->step.stepDetails->timeMins = Processe_value_Step.value()["timeMins"];
                     nodeS->step.stepDetails->timeSecs = Processe_value_Step.value()["timeSecs"];
                     nodeS->step.stepDetails->type = Processe_value_Step.value()["type"];      
@@ -903,11 +903,13 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
         File file = fs.open(path, FILE_WRITE);
         if (!file) {
             LV_LOG_USER("Failed to open file for writing");
-            rebootBoard();
-            //return;
+ //           rebootBoard();
+            return;
         }
 
-        StaticJsonDocument<49152> doc;
+//        StaticJsonDocument<56 * 1024> doc;
+//        DynamicJsonDocument doc(56 * 1024);
+        JsonDocument doc;
         JsonObject machineSettings = doc.createNestedObject("machineSettings");
 
         machineSettings["tempUnit"]                   = gui.page.settings.settingsParams.tempUnit;
@@ -951,19 +953,13 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
 
         JsonObject Processes = doc.createNestedObject("Processes");
         
-//        const processList *processElementsList;
-//        memset( &processElementsList, 0, sizeof( processElementsList ) );   
-//        processElementsList = &(gui.page.processes.processElementsList);
-
-//        processNode *currentProcessNode;
-//        memset( &currentProcessNode, 0, sizeof( currentProcessNode ) ); 
         processNode *currentProcessNode = gui.page.processes.processElementsList.start;
 
         while(currentProcessNode != NULL){
             snprintf(processName, sizeof(processName), "Process%d", processCounter);
             JsonObject currentProcess = Processes.createNestedObject(processName);
-            currentProcess["processNameString"] = (currentProcessNode->process.processDetails->processNameString ?
-              currentProcessNode->process.processDetails->processNameString : "");
+            const char* tp = currentProcessNode->process.processDetails->processNameString;
+            currentProcess["processNameString"] = tp;
             currentProcess["temp"] = currentProcessNode->process.processDetails->temp;
             currentProcess["tempTolerance"] = currentProcessNode->process.processDetails->tempTolerance;
             currentProcess["isTempControlled"] = currentProcessNode->process.processDetails->isTempControlled;
@@ -975,8 +971,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
 
           if(enableLog){
             LV_LOG_USER("--- PROCESS PARAMS ---");
-            LV_LOG_USER("processNameString:%s",currentProcessNode->process.processDetails->processNameString ? 
-              currentProcessNode->process.processDetails->processNameString : "");
+            LV_LOG_USER("processNameString:%s",currentProcessNode->process.processDetails->processNameString);
             LV_LOG_USER("temp:%d",currentProcessNode->process.processDetails->temp);
             LV_LOG_USER("tempTolerance:%d",currentProcessNode->process.processDetails->tempTolerance);
             LV_LOG_USER("isTempControlled:%d",currentProcessNode->process.processDetails->isTempControlled);
@@ -986,12 +981,6 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
             LV_LOG_USER("timeSecs:%d",currentProcessNode->process.processDetails->timeSecs);
           }
 
-//            stepList *stepElementsList;
-//            memset( &stepElementsList, 0, sizeof( stepElementsList ) ); 
-//            stepElementsList = &(currentProcessNode->process.processDetails->stepElementsList);   
-
-//            stepNode *currentStepNode;
-//            memset( &currentStepNode, 0, sizeof( currentStepNode ) );   
             stepNode *currentStepNode = currentProcessNode->process.processDetails->stepElementsList.start;
 
             processCounter++;
@@ -1001,8 +990,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
             while(currentStepNode != NULL){                
                 snprintf(stepName, sizeof(stepName), "Step%d", stepCounter);
                 JsonObject currentStep = currentProcessSteps.createNestedObject(stepName);
-                currentStep["stepNameString"] = (currentStepNode->step.stepDetails->stepNameString ?
-                  currentStepNode->step.stepDetails->stepNameString : "");
+                const char* tp = currentStepNode->step.stepDetails->stepNameString;
+                currentStep["stepNameString"] = tp;
                 currentStep["timeMins"] = currentStepNode->step.stepDetails->timeMins;
                 currentStep["timeSecs"] = currentStepNode->step.stepDetails->timeSecs;
                 currentStep["type"] = currentStepNode->step.stepDetails->type;
@@ -1011,8 +1000,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
               
               if(enableLog){
                 LV_LOG_USER("--- STEP PARAMS ---");
-                LV_LOG_USER("stepNameString:%s",(currentStepNode->step.stepDetails->stepNameString ? 
-                  currentStepNode->step.stepDetails->stepNameString : ""));
+                LV_LOG_USER("stepNameString:%s",currentStepNode->step.stepDetails->stepNameString);
                 LV_LOG_USER("timeMins:%d",currentStepNode->step.stepDetails->timeMins);
                 LV_LOG_USER("timeSecs:%d",currentStepNode->step.stepDetails->timeSecs);
                 LV_LOG_USER("type:%d",currentStepNode->step.stepDetails->type);
@@ -1036,7 +1024,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
         } else {
             LV_LOG_USER("Write failed");
         }
-        file.close();
+//        file.close();
     }
     else
         return;
@@ -1151,8 +1139,7 @@ void updateProcessElement(processNode *process){
       }
       
       //Update name
-      lv_label_set_text(existingProcess->process.processName, process->process.processDetails->processNameString ? 
-        process->process.processDetails->processNameString : "");
+      lv_label_set_text(existingProcess->process.processName, process->process.processDetails->processNameString);
 
       //Update film type
       lv_label_set_text(existingProcess->process.processTypeIcon, process->process.processDetails->filmType == BLACK_AND_WHITE_FILM ? blackwhite_icon : colorpalette_icon);
@@ -1168,7 +1155,7 @@ void updateStepElement(processNode *referenceProcess, stepNode *step){
          LV_LOG_USER("Updating element element in list");
          
          //Update name
-         lv_label_set_text(existingStep->step.stepName, step->step.stepDetails->stepNameString ? step->step.stepDetails->stepNameString :"");
+         lv_label_set_text(existingStep->step.stepName, step->step.stepDetails->stepNameString);
 
         //Update source
 //         sprintf(formatted_string, "From:%s", processSourceList[step->step.stepDetails->source]);        

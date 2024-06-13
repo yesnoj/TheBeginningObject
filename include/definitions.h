@@ -290,6 +290,7 @@ struct machineStatistics {
 /*********************
 * ELEMENTS STRUCTS
 *********************/
+#define MAX_PROC_NAME_LEN		  20
 typedef struct processNode processNode;  // Forward declaration
 //typedef struct sProcessDetail sProcessDetail;  // Forward declaration
 //typedef struct sCheckup sCheckup;  // Forward declaration
@@ -340,12 +341,12 @@ typedef struct sStepDetail {
 	/* Params objects */
 
 //	  processNode       *referenceProcess;  // Use a pointer instead of an instance
-    char              *stepNameString;
-    uint8_t           timeMins;
-    uint8_t           timeSecs;
-    chemicalType_t       type;
-    chemicalSource_t     source;
-    uint8_t            discardAfterProc;
+    char                stepNameString[MAX_PROC_NAME_LEN];
+    uint8_t             timeMins;
+    uint8_t             timeSecs;
+    chemicalType_t      type;
+    chemicalSource_t    source;
+    uint8_t             discardAfterProc;
 } sStepDetail;
 
 
@@ -529,16 +530,16 @@ typedef struct sProcessDetail {
 
 	/* Params objects */
     stepList          stepElementsList;  /* Process steps list */
-	sCheckup		        *checkup;
-    char              *processNameString;
-    uint32_t           temp;
-    uint8_t            tempTolerance;
-    uint8_t            isTempControlled;
-    uint8_t            isPreferred;
-    uint8_t            somethingChanged;
-    filmType_t         filmType;
-    uint32_t           timeMins;
-    uint8_t            timeSecs;
+	  sCheckup		      *checkup;
+    char              processNameString[MAX_PROC_NAME_LEN];
+    uint32_t          temp;
+    uint8_t           tempTolerance;
+    uint8_t           isTempControlled;
+    uint8_t           isPreferred;
+    uint8_t           somethingChanged;
+    filmType_t        filmType;
+    uint32_t          timeMins;
+    uint8_t           timeSecs;
 }sProcessDetail;
 
 
@@ -906,7 +907,6 @@ LV_IMG_DECLARE(splash_img);
 
 #define FILENAME_SAVE         "/FilMachine.json"
 
-#define MAX_PROC_NAME_LEN		  20
 #define MAX_STEP_ELEMENTS		  10
 #define MAX_PROC_ELEMENTS		  30
 
@@ -1221,7 +1221,7 @@ static const uint16_t tankLowSizes  [3] = {250, 350, 550};
 static const uint8_t tankFullFillDrainTimes [3] = {15, 19, 25}; 
 static const uint8_t tankLowFillDrainTimes  [3] = {8, 11, 16}; 
 
-lv_obj_t * checkupTankSizeTextArea;
+//lv_obj_t * checkupTankSizeTextArea;
 #define checkupTankSizePlaceHolder_text "Size"
 #define checkupChemistryLowVol_text 	"Low"
 #define checkupChemistryHighVol_text 	"High"

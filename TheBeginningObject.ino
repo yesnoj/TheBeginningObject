@@ -30,13 +30,15 @@ static void increase_lvgl_tick( void *arg ) {
   lv_tick_inc(LVGL_TICK_PERIOD_MS);
 }
 
+#define MEM_MSG_DISPLAY_TIME  10000
 void sysMan( void *arg ) {
 
   uint16_t  msg;
 		
 	while(1) {  // This is a task which runs for ever
 		
-		if( xQueueReceive( gui.sysActionQ, &msg, portMAX_DELAY ) ) {
+    /* This will time out after MEM_MSG_DISPLAY_TIME and print memory then wait again */
+		if( xQueueReceive( gui.sysActionQ, &msg, pdMS_TO_TICKS(MEM_MSG_DISPLAY_TIME) ) ) { 
 			switch(msg) {
 
 			case SAVE_PROCESS_CONFIG:
@@ -49,6 +51,14 @@ void sysMan( void *arg ) {
           LV_LOG_USER( "Unknown System Manager Request!");
           break;
       }
+    } else {
+      LV_LOG_USER("\nFree Heap: %u bytes\n"
+        "  MALLOC_CAP_SPIRAM    %7zu bytes\n"
+        "  MALLOC_CAP_INTERNAL  %7zu bytes\n",
+        xPortGetFreeHeapSize(),
+        heap_caps_get_free_size(MALLOC_CAP_SPIRAM),
+        heap_caps_get_free_size(MALLOC_CAP_INTERNAL)
+      );
     }
 	}
 }
@@ -57,7 +67,7 @@ void setup()
 {
     Serial.begin(115200);
 
-    LV_LOG_USER("Hello FilMachine!This software use LVGL V%d.%d.%d",lv_version_major(),lv_version_minor(),lv_version_patch());
+    LV_LOG_USER("Hello FilMachine! - This software uses LVGL V%d.%d.%d",lv_version_major(),lv_version_minor(),lv_version_patch());
 
     pinMode(LCD_CS, OUTPUT);
     pinMode(LCD_BLK, OUTPUT);

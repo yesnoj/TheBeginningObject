@@ -13,28 +13,28 @@
 
 extern struct gui_components gui;
 
-uint8_t isProcessingStatus0created = 0;
-uint8_t isProcessingStatus1created = 0;
-uint8_t isStepStatus0created = 0;
-uint8_t isStepStatus1created = 0;
-uint8_t isStepStatus2created = 0;
-uint8_t isStepStatus3created = 0;
-uint8_t isStepStatus4created = 0;
+static uint8_t isProcessingStatus0created = 0;
+static uint8_t isProcessingStatus1created = 0;
+static uint8_t isStepStatus0created = 0;
+static uint8_t isStepStatus1created = 0;
+static uint8_t isStepStatus2created = 0;
+static uint8_t isStepStatus3created = 0;
+static uint8_t isStepStatus4created = 0;
 
-uint32_t minutesProcessElapsed = 0;
-uint8_t secondsProcessElapsed = 1;
-uint8_t hoursProcessElapsed = 0;
+static uint32_t minutesProcessElapsed = 0;
+static uint8_t secondsProcessElapsed = 1;
+static uint8_t hoursProcessElapsed = 0;
 
-uint32_t minutesStepElapsed = 0;
-uint8_t secondsStepElapsed = 1;
+static uint32_t minutesStepElapsed = 0;
+static uint8_t secondsStepElapsed = 1;
 
-uint32_t minutesProcessLeft = 0;
-uint8_t secondsProcessLeft = 0;
-uint32_t minutesStepLeft = 0;
-uint8_t secondsStepLeft = 0;
+static uint32_t minutesProcessLeft = 0;
+static uint8_t secondsProcessLeft = 0;
+static uint32_t minutesStepLeft = 0;
+static uint8_t secondsStepLeft = 0;
 
-uint8_t stepPercentage = 0;
-uint8_t processPercentage = 0;
+static uint8_t stepPercentage = 0;
+static uint8_t processPercentage = 0;
 
 static void exitCheckup(){
     isProcessingStatus0created = 0;
@@ -67,7 +67,8 @@ void event_checkup(lv_event_t * e){
   if(code == LV_EVENT_FOCUSED) {
       if(data == gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
           LV_LOG_USER("Set Tank Size");
-          rollerPopupCreate(checkupTankSizesList,checkupTankSize_text,referenceProcess, 0);
+          rollerPopupCreate(checkupTankSizesList,checkupTankSize_text,data, 
+              gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea); //referenceProcess
       }
   }
   if(code == LV_EVENT_VALUE_CHANGED) {
@@ -93,7 +94,7 @@ void event_checkup(lv_event_t * e){
         gui.tempProcessNode->process.processDetails->checkup->stepFillWaterStatus = 1;
         gui.tempProcessNode->process.processDetails->checkup->stepReachTempStatus = 0;
         gui.tempProcessNode->process.processDetails->checkup->stepCheckFilmStatus = 0;
-        checkup(referenceProcess);
+        checkup(gui.tempProcessNode);
       }
 
       if(data == gui.tempProcessNode->process.processDetails->checkup->checkupFilmRotatingContainer){
@@ -103,10 +104,11 @@ void event_checkup(lv_event_t * e){
         gui.tempProcessNode->process.processDetails->checkup->stepFillWaterStatus = 2;
         gui.tempProcessNode->process.processDetails->checkup->stepReachTempStatus = 2;
         gui.tempProcessNode->process.processDetails->checkup->stepCheckFilmStatus = 2;
-        checkup(referenceProcess);
+        checkup(gui.tempProcessNode);
       }
   }
     if(obj == gui.tempProcessNode->process.processDetails->checkup->checkupSkipButton){
+
       if(data == gui.tempProcessNode->process.processDetails->checkup->checkupFillWaterContainer){
         LV_LOG_USER("User pressed gui.tempProcessNode->process.processDetails->checkup->checkupSkipButton on Step 1");
         gui.tempProcessNode->process.processDetails->checkup->isProcessing = 0;
@@ -114,7 +116,7 @@ void event_checkup(lv_event_t * e){
         gui.tempProcessNode->process.processDetails->checkup->stepFillWaterStatus = 2;
         gui.tempProcessNode->process.processDetails->checkup->stepReachTempStatus = 1;
         gui.tempProcessNode->process.processDetails->checkup->stepCheckFilmStatus = 0;
-        checkup(referenceProcess);
+        checkup(gui.tempProcessNode);
       }
       if(data == gui.tempProcessNode->process.processDetails->checkup->checkupTargetWaterTempContainer){
         LV_LOG_USER("User pressed gui.tempProcessNode->process.processDetails->checkup->checkupSkipButton on Step 2");
@@ -123,7 +125,7 @@ void event_checkup(lv_event_t * e){
         gui.tempProcessNode->process.processDetails->checkup->stepFillWaterStatus = 2;
         gui.tempProcessNode->process.processDetails->checkup->stepReachTempStatus = 2;
         gui.tempProcessNode->process.processDetails->checkup->stepCheckFilmStatus = 1;
-        checkup(referenceProcess);
+        checkup(gui.tempProcessNode);
       
       }
     }
@@ -133,6 +135,7 @@ void event_checkup(lv_event_t * e){
         lv_msgbox_close(mboxCont);
         //lv_obj_delete(mboxCont);
         exitCheckup();
+        return;
     }
     if(obj == gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton){
         LV_LOG_USER("User pressed gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton");
@@ -145,8 +148,10 @@ void event_checkup(lv_event_t * e){
 
   }
 
-  if(gui.tempProcessNode->process.processDetails->checkup->tankSize >0 && gui.tempProcessNode->process.processDetails->checkup->activeVolume_index > 0){
-    lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupStartButton, LV_STATE_DISABLED);
+  if(gui.tempProcessNode->process.processDetails->checkup->tankSize >0 
+    && gui.tempProcessNode->process.processDetails->checkup->activeVolume_index > 0 && 
+      gui.tempProcessNode->process.processDetails->checkup->processStep < 1){
+        lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupStartButton, LV_STATE_DISABLED);
   }
 }
 
@@ -220,15 +225,12 @@ void processTimer(lv_timer_t * timer)
           
           if(gui.tempProcessNode->process.processDetails->stepElementsList.size == 1)
             lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupNextStepValue, 
-              gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString ? 
-                gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString : "");
+              gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString);
           else
             if(gui.tempStepNode->next != NULL)
-              lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupNextStepValue, gui.tempStepNode->next->step.stepDetails->stepNameString ? 
-                gui.tempStepNode->next->step.stepDetails->stepNameString : ""); 
+              lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupNextStepValue, gui.tempStepNode->next->step.stepDetails->stepNameString); 
                    
-          lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, gui.tempStepNode->step.stepDetails->stepNameString ?
-            gui.tempStepNode->step.stepDetails->stepNameString : "");
+          lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, gui.tempStepNode->step.stepDetails->stepNameString);
 
           
 //          sprintf(formatted_string, "%dm%ds", remainingStepMins, remainingStepSecsOnly);
@@ -336,8 +338,7 @@ void initCheckup()
             lv_obj_set_style_border_opa(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameContainer, LV_OPA_TRANSP, 0);
 
                   gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameContainer);         
-                  lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameValue, gui.tempProcessNode->process.processDetails->processNameString ? 
-                    gui.tempProcessNode->process.processDetails->processNameString : ""); 
+                  lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameValue, gui.tempProcessNode->process.processDetails->processNameString); 
                   lv_obj_set_width(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameValue, 300);
                   lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameValue, &lv_font_montserrat_30, 0);              
                   lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameValue, LV_ALIGN_TOP_LEFT, -10, -8);
@@ -385,7 +386,7 @@ void checkup(processNode *processToCheckup)
     LV_LOG_USER("initCheckup");
 
     gui.tempProcessNode = processToCheckup;
-    gui.tempProcessNode->process.processDetails->checkup = malloc(sizeof(sCheckup));
+//    gui.tempProcessNode->process.processDetails->checkup = malloc(sizeof(sCheckup));
     gui.tempProcessNode->process.processDetails->checkup->isProcessing = 0;
     gui.tempProcessNode->process.processDetails->checkup->processStep = 0;
 
@@ -856,7 +857,7 @@ void checkup(processNode *processToCheckup)
                   }
 
                   if(gui.tempProcessNode->process.processDetails->checkup->processStep == 4 && isStepStatus4created == 0){
-                        gui.tempProcessNode->process.processDetails->checkup->timer = lv_timer_create(processTimer, 1000,  &referenceProcess);
+                        gui.tempProcessNode->process.processDetails->checkup->timer = lv_timer_create(processTimer, 1000,  gui.tempProcessNode); //&referenceProcess
                         lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);
 
                         lv_obj_clean(gui.tempProcessNode->process.processDetails->checkup->checkupStepContainer);
@@ -876,8 +877,7 @@ void checkup(processNode *processToCheckup)
                                 lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, LV_ALIGN_CENTER, 0, 80);
 
                                 gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
-                                lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString ?
-                                  gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString : "");
+                                lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString);
                                 lv_obj_set_style_text_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue , LV_TEXT_ALIGN_CENTER, 0);
                                 lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, &lv_font_montserrat_22, 0);              
                                 lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_ALIGN_CENTER, 0, -35);

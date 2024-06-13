@@ -22,7 +22,7 @@ static bool gesture_handled = false;
 ******************************/
 
 processNode *addProcessElement(processNode	*processToAdd) {
-	if(gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS || isNodeInList((void*)&(gui.page.processes.processElementsList), processToAdd, PROCESS_NODE) != NULL) return NULL;		// Put some limit on things!
+	if( gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS ) return NULL;		// Put some limit on things!
 
   LV_LOG_USER("Processes available %d first",gui.page.processes.processElementsList.size);
       if( gui.page.processes.processElementsList.start == NULL) {					/* Deals with the first entry */
@@ -269,8 +269,7 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         lv_obj_add_style(newProcess->process.processElementSummary, &newProcess->process.processStyle, 0);
 
         newProcess->process.processName = lv_label_create(newProcess->process.processElementSummary);
-        lv_label_set_text(newProcess->process.processName, newProcess->process.processDetails->processNameString ? 
-        newProcess->process.processDetails->processNameString : "");
+        lv_label_set_text(newProcess->process.processName, newProcess->process.processDetails->processNameString);
         lv_obj_set_style_text_font(newProcess->process.processName, &lv_font_montserrat_22, 0);
         lv_label_set_long_mode(newProcess->process.processName, LV_LABEL_LONG_SCROLL_CIRCULAR);
         lv_obj_set_width(newProcess->process.processName, 220);
