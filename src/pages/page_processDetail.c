@@ -76,17 +76,7 @@ void event_processDetail(lv_event_t * e)
     if(data == newProcess->process.processDetails->processSaveButton && newProcess->process.processDetails->stepElementsList.size > 0){
           newProcess->process.processDetails->somethingChanged = 0;
           
-          if( newProcess->process.processDetails->processNameString == NULL ) {
-            if(strlen(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea)) > 0) {
-              newProcess->process.processDetails->processNameString = malloc(strlen(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea))+1);
-              strcpy( newProcess->process.processDetails->processNameString, lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea));
-            }
-           } else if(strcmp(newProcess->process.processDetails->processNameString, lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea))) {
-            /* If name changed update it */
-            free(newProcess->process.processDetails->processNameString);  // Already allocated free first
-            newProcess->process.processDetails->processNameString = malloc(strlen(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea))+1);
-            strcpy( newProcess->process.processDetails->processNameString, lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea));
-          }
+          strcpy( newProcess->process.processDetails->processNameString, lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea));
           lv_obj_clear_state(newProcess->process.processDetails->processRunButton, LV_STATE_DISABLED);
           lv_obj_add_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
 
@@ -107,7 +97,7 @@ void event_processDetail(lv_event_t * e)
 
     if(data == newProcess->process.processDetails->processRunButton){
         //newProcess->process.processDetails->stepElementsList.size = 0;
-        lv_msgbox_close(mboxCont);
+//        lv_msgbox_close(mboxCont);
 //        lv_obj_delete(mboxCont);
         LV_LOG_USER("Pressed processRunButton");
         checkup(newProcess);
@@ -254,8 +244,7 @@ if(existingProcess != NULL) {
                   lv_obj_set_style_border_opa(newProcess->process.processDetails->processDetailNameTextArea, LV_OPA_TRANSP, 0);
                   lv_textarea_set_max_length(newProcess->process.processDetails->processDetailNameTextArea, MAX_PROC_NAME_LEN);
                   //newProcess->process.processDetails->processNameString = generateRandomCharArray(10);
-                  lv_textarea_set_text(newProcess->process.processDetails->processDetailNameTextArea, newProcess->process.processDetails->processNameString ? 
-                    newProcess->process.processDetails->processNameString : ""); 
+                  lv_textarea_set_text(newProcess->process.processDetails->processDetailNameTextArea, newProcess->process.processDetails->processNameString); 
 
 
             newProcess->process.processDetails->processDetailStepsLabel = lv_label_create(newProcess->process.processDetails->processDetailContainer);         

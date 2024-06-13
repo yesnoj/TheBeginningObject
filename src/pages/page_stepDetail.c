@@ -34,19 +34,7 @@ void event_stepDetail(lv_event_t * e)
     if(obj == newStep->step.stepDetails->stepSaveButton){
       LV_LOG_USER("Pressed stepSaveButton");
 
-      /*If step name has changed update it */
-      if( newStep->step.stepDetails->stepNameString == NULL ) { 
-        if(strlen(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea)) > 0 ) {
-          newStep->step.stepDetails->stepNameString = malloc(strlen(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea))+1);
-          strcpy(newStep->step.stepDetails->stepNameString, lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea));
-        }
-      } else if(strcmp(newStep->step.stepDetails->stepNameString, lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea))) {
-        /* If the name has been previously allocated and now is different free and reallocate*/
-        free(newStep->step.stepDetails->stepNameString);
-        newStep->step.stepDetails->stepNameString = malloc(strlen(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea))+1);
-        strcpy(newStep->step.stepDetails->stepNameString, lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea));
-      }
-
+      strcpy(newStep->step.stepDetails->stepNameString, lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea));
       if(addStepElement(newStep, data) != NULL){
           LV_LOG_USER("Step %p element created!Now process %p has n: %d steps",newStep,data, ((processNode *)data)->process.processDetails->stepElementsList.size);
           stepElementCreate(newStep , data , -1);
@@ -242,8 +230,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_color_hex(WHITE), 0);
                   lv_textarea_set_max_length(newStep->step.stepDetails->stepDetailNamelTextArea, MAX_PROC_NAME_LEN);
                   //newStep->step.stepDetails->stepNameString = generateRandomCharArray(10);
-                  lv_textarea_set_text(newStep->step.stepDetails->stepDetailNamelTextArea, newStep->step.stepDetails->stepNameString ?
-                    newStep->step.stepDetails->stepNameString : "");
+                  lv_textarea_set_text(newStep->step.stepDetails->stepDetailNamelTextArea, newStep->step.stepDetails->stepNameString);
 
 
 

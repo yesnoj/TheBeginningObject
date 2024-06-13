@@ -354,7 +354,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
 
 
                 newStep->step.stepName = lv_label_create(newStep->step.stepElementSummary);         
-                lv_label_set_text(newStep->step.stepName, newStep->step.stepDetails->stepNameString ? newStep->step.stepDetails->stepNameString : ""); 
+                lv_label_set_text(newStep->step.stepName, newStep->step.stepDetails->stepNameString); 
                 lv_obj_set_style_text_font(newStep->step.stepName, &lv_font_montserrat_22, 0);      
                 lv_label_set_long_mode(newStep->step.stepName, LV_LABEL_LONG_SCROLL_CIRCULAR);
                 lv_obj_set_width(newStep->step.stepName, 175);        
