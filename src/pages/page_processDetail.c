@@ -32,6 +32,7 @@ void event_processDetail(lv_event_t * e)
 
 
   if(code == LV_EVENT_CLICKED) {
+    gui.tempProcessNode = newProcess;
     if(data == newProcess->process.processDetails->processDetailCloseButton){
         //newProcess->process.processDetails->stepElementsList.size = 0;
         //lv_obj_send_event(newProcess->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
