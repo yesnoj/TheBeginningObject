@@ -164,7 +164,7 @@ void event_settings_handler(lv_event_t * e)
 //lv_obj_set_scroll_dir(mBoxPopupTextContainer, LV_DIR_VER);
 
 
-static void initSettings(void){
+void initSettings(void){
 /*********************
  *    PAGE HEADER
  *********************/
@@ -278,7 +278,11 @@ static void initSettings(void){
         gui.page.settings.tempSensorTuneButton = lv_button_create(gui.page.settings.tempTuningContainer);
         lv_obj_set_size(gui.page.settings.tempSensorTuneButton, BUTTON_TUNE_WIDTH, BUTTON_TUNE_HEIGHT);
         lv_obj_align(gui.page.settings.tempSensorTuneButton, LV_ALIGN_RIGHT_MID, 5 , 0);
-        lv_obj_add_event_cb(gui.page.settings.tempSensorTuneButton, event_settings_handler, LV_EVENT_ALL, gui.page.settings.tempSensorTuneButton);
+        lv_obj_add_event_cb(gui.page.settings.tempSensorTuneButton, event_settings_handler, LV_EVENT_CLICKED, gui.page.settings.tempSensorTuneButton);
+        lv_obj_add_event_cb(gui.page.settings.tempSensorTuneButton, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.tempSensorTuneButton);
+        lv_obj_add_event_cb(gui.page.settings.tempSensorTuneButton, event_settings_handler, LV_EVENT_SHORT_CLICKED, gui.page.settings.tempSensorTuneButton);
+        lv_obj_add_event_cb(gui.page.settings.tempSensorTuneButton, event_settings_handler, LV_EVENT_LONG_PRESSED_REPEAT, gui.page.settings.tempSensorTuneButton);
+        lv_obj_add_event_cb(gui.page.settings.tempSensorTuneButton, event_settings_handler, LV_EVENT_RELEASED, gui.page.settings.tempSensorTuneButton);
         lv_obj_set_style_bg_color(gui.page.settings.tempSensorTuneButton, lv_color_hex(ORANGE), LV_PART_MAIN);
 
         gui.page.settings.tempSensorTuneButtonLabel = lv_label_create(gui.page.settings.tempSensorTuneButton);
@@ -311,7 +315,11 @@ static void initSettings(void){
         gui.page.settings.filmRotationSpeedValueLabel = lv_label_create(gui.page.settings.filmRotationSpeedContainer);
         lv_obj_set_style_text_font(gui.page.settings.filmRotationSpeedValueLabel, &lv_font_montserrat_22, 0);              
         lv_obj_align(gui.page.settings.filmRotationSpeedValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_ALL, gui.page.settings.filmRotationSpeedValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_CLICKED, gui.page.settings.filmRotationSpeedValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.filmRotationSpeedValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_SHORT_CLICKED, gui.page.settings.filmRotationSpeedValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_LONG_PRESSED_REPEAT, gui.page.settings.filmRotationSpeedValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_RELEASED, gui.page.settings.filmRotationSpeedValueLabel);
         lv_label_set_text_fmt(gui.page.settings.filmRotationSpeedValueLabel, "%d%%", gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
 
 
@@ -342,7 +350,11 @@ static void initSettings(void){
         gui.page.settings.filmRotationInverseIntervalValueLabel = lv_label_create(gui.page.settings.filmRotationInverseIntervallContainer);
         lv_obj_set_style_text_font(gui.page.settings.filmRotationInverseIntervalValueLabel, &lv_font_montserrat_22, 0);              
         lv_obj_align(gui.page.settings.filmRotationInverseIntervalValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(gui.page.settings.filmRotationInversionIntervalSlider, event_settings_handler, LV_EVENT_ALL, gui.page.settings.filmRotationInverseIntervalValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationInversionIntervalSlider, event_settings_handler, LV_EVENT_CLICKED, gui.page.settings.filmRotationInverseIntervalValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationInversionIntervalSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.filmRotationInverseIntervalValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationInversionIntervalSlider, event_settings_handler, LV_EVENT_SHORT_CLICKED, gui.page.settings.filmRotationInverseIntervalValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationInversionIntervalSlider, event_settings_handler, LV_EVENT_LONG_PRESSED, gui.page.settings.filmRotationInverseIntervalValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRotationInversionIntervalSlider, event_settings_handler, LV_EVENT_RELEASED, gui.page.settings.filmRotationInverseIntervalValueLabel);
         lv_label_set_text_fmt(gui.page.settings.filmRotationInverseIntervalValueLabel, "%dsec%", gui.page.settings.settingsParams.rotationIntervalSetpoint);
 
   
@@ -371,7 +383,11 @@ static void initSettings(void){
         gui.page.settings.filmRotationRandomValueLabel = lv_label_create(gui.page.settings.randomContainer);
         lv_obj_set_style_text_font(gui.page.settings.filmRotationRandomValueLabel, &lv_font_montserrat_22, 0);              
         lv_obj_align(gui.page.settings.filmRotationRandomValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_ALL, gui.page.settings.filmRotationRandomValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_CLICKED, gui.page.settings.filmRotationRandomValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.filmRotationRandomValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_SHORT_CLICKED, gui.page.settings.filmRotationRandomValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_LONG_PRESSED_REPEAT, gui.page.settings.filmRotationRandomValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_RELEASED, gui.page.settings.filmRotationRandomValueLabel);
         lv_label_set_text_fmt(gui.page.settings.filmRotationRandomValueLabel, "~%d%", gui.page.settings.settingsParams.randomSetpoint);
 
 
@@ -447,7 +463,11 @@ static void initSettings(void){
         gui.page.settings.drainFillTimeValueLabel = lv_label_create(gui.page.settings.drainFillTimeContainer);
         lv_obj_set_style_text_font(gui.page.settings.drainFillTimeValueLabel, &lv_font_montserrat_22, 0);              
         lv_obj_align(gui.page.settings.drainFillTimeValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_ALL, gui.page.settings.drainFillTimeValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_CLICKED, gui.page.settings.drainFillTimeValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.drainFillTimeValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_SHORT_CLICKED, gui.page.settings.drainFillTimeValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_LONG_PRESSED_REPEAT, gui.page.settings.drainFillTimeValueLabel);
+        lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_RELEASED, gui.page.settings.drainFillTimeValueLabel);
         lv_label_set_text_fmt(gui.page.settings.drainFillTimeValueLabel, "%d%%", gui.page.settings.settingsParams.drainFillOverlapSetpoint);
 
 }

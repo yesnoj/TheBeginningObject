@@ -241,7 +241,10 @@ if(existingProcess != NULL) {
                   lv_obj_set_width(newProcess->process.processDetails->processDetailNameTextArea, 280);
                   lv_obj_set_style_text_font(newProcess->process.processDetails->processDetailNameTextArea, &lv_font_montserrat_30, 0);              
                   lv_obj_align(newProcess->process.processDetails->processDetailNameTextArea, LV_ALIGN_TOP_LEFT, -20, -25);
-                  lv_obj_add_event_cb(newProcess->process.processDetails->processDetailNameTextArea, event_keyboard, LV_EVENT_ALL, NULL);
+                  lv_obj_add_event_cb(newProcess->process.processDetails->processDetailNameTextArea, event_keyboard, LV_EVENT_CLICKED, NULL);
+                  lv_obj_add_event_cb(newProcess->process.processDetails->processDetailNameTextArea, event_keyboard, LV_EVENT_DEFOCUSED, NULL);
+                  lv_obj_add_event_cb(newProcess->process.processDetails->processDetailNameTextArea, event_keyboard, LV_EVENT_CANCEL, NULL);
+                  lv_obj_add_event_cb(newProcess->process.processDetails->processDetailNameTextArea, event_keyboard, LV_EVENT_READY, NULL);
                   lv_obj_add_state(newProcess->process.processDetails->processDetailNameTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_border_opa(newProcess->process.processDetails->processDetailNameTextArea, LV_OPA_TRANSP, 0);
                   lv_textarea_set_max_length(newProcess->process.processDetails->processDetailNameTextArea, MAX_PROC_NAME_LEN);
@@ -329,7 +332,10 @@ if(existingProcess != NULL) {
                           lv_textarea_set_placeholder_text(newProcess->process.processDetails->processTempTextArea, processDetailTempPlaceHolder_text);
                           lv_obj_align(newProcess->process.processDetails->processTempTextArea, LV_ALIGN_LEFT_MID, 100, 0);
                           lv_obj_set_width(newProcess->process.processDetails->processTempTextArea, 60);
-                          lv_obj_add_event_cb(newProcess->process.processDetails->processTempTextArea, event_processDetail, LV_EVENT_ALL, newProcess->process.processDetails->processTempTextArea);
+                          lv_obj_add_event_cb(newProcess->process.processDetails->processTempTextArea, event_processDetail, LV_EVENT_CLICKED, newProcess->process.processDetails->processTempTextArea);
+                          lv_obj_add_event_cb(newProcess->process.processDetails->processTempTextArea, event_processDetail, LV_EVENT_REFRESH, newProcess->process.processDetails->processTempTextArea);
+                          lv_obj_add_event_cb(newProcess->process.processDetails->processTempTextArea, event_processDetail, LV_EVENT_VALUE_CHANGED, newProcess->process.processDetails->processTempTextArea);
+                          lv_obj_add_event_cb(newProcess->process.processDetails->processTempTextArea, event_processDetail, LV_EVENT_FOCUSED, newProcess->process.processDetails->processTempTextArea);
 //                          lv_obj_add_state(newProcess->process.processDetails->processTempTextArea, LV_STATE_FOCUSED);
                           lv_obj_set_style_bg_color(newProcess->process.processDetails->processTempTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                           lv_obj_set_style_text_align(newProcess->process.processDetails->processTempTextArea , LV_TEXT_ALIGN_CENTER, 0);
@@ -371,7 +377,10 @@ if(existingProcess != NULL) {
                           lv_obj_align(newProcess->process.processDetails->processToleranceTextArea, LV_ALIGN_LEFT_MID, 100, 0);
                           lv_obj_set_width(newProcess->process.processDetails->processToleranceTextArea, 60);
 
-                          lv_obj_add_event_cb(newProcess->process.processDetails->processToleranceTextArea, event_processDetail, LV_EVENT_ALL, newProcess->process.processDetails->processToleranceTextArea);
+                          lv_obj_add_event_cb(newProcess->process.processDetails->processToleranceTextArea, event_processDetail, LV_EVENT_CLICKED, newProcess->process.processDetails->processToleranceTextArea);
+                          lv_obj_add_event_cb(newProcess->process.processDetails->processToleranceTextArea, event_processDetail, LV_EVENT_REFRESH, newProcess->process.processDetails->processToleranceTextArea);
+                          lv_obj_add_event_cb(newProcess->process.processDetails->processToleranceTextArea, event_processDetail, LV_EVENT_VALUE_CHANGED, newProcess->process.processDetails->processToleranceTextArea);
+                          lv_obj_add_event_cb(newProcess->process.processDetails->processToleranceTextArea, event_processDetail, LV_EVENT_FOCUSED, newProcess->process.processDetails->processToleranceTextArea);
 //                          lv_obj_add_state(newProcess->process.processDetails->processToleranceTextArea, LV_STATE_FOCUSED);
                           lv_obj_set_style_bg_color(newProcess->process.processDetails->processToleranceTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                           lv_obj_set_style_text_align(newProcess->process.processDetails->processToleranceTextArea , LV_TEXT_ALIGN_CENTER, 0);
