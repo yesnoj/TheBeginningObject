@@ -8,6 +8,7 @@
 #include "SD.h"
 #include "SPI.h"
 
+
 #include "include/definitions.h"
 #include "include/accessory.c"
 
@@ -46,6 +47,11 @@ void sysMan( void *arg ) {
           writeFullJSONFile(SD, FILENAME_SAVE,gui, false);
           break;
       // Add Further processor intensive tasks here to keep them out of the GUI execution path
+
+			case SAVE_MACHINE_STATS:
+	        LV_LOG_USER("Save On EEPROM!");
+          writeMachineStats(&gui.page.tools.machineStats);
+          break;
 
       default:
           LV_LOG_USER( "Unknown System Manager Request!");
@@ -120,6 +126,7 @@ void setup()
     
     //writeFullJSONFile(SD, FILENAME_SAVE,gui);
     readFULLJSONFile(SD, FILENAME_SAVE, gui, false);
+    readMachineStats(&gui.page.tools.machineStats);
 }
 
 void loop()

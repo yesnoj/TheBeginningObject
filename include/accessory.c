@@ -23,11 +23,13 @@
  *      MACROS
  **********************/
 
+
 #define LESS_THAN_10 1
 #define GREATER_THAN_9 2
 #define GREATER_THAN_99 3
 
 struct gui_components   gui;
+Preferences preferences;
 
 extern LGFX lcd;
 void (*rebootBoard)(void) = 0;
@@ -770,20 +772,6 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
                 LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
             }
 
-            JsonObject machineStats = doc["machineStats"];
-            gui.page.tools.machineStats.completedProcesses   = machineStats["completedProcesses"];                 
-            gui.page.tools.machineStats.totalMins            = machineStats["totalMins"];                
-            gui.page.tools.machineStats.completedCleanCycle  = machineStats["completedCleanCycle"];
-            gui.page.tools.machineStats.stoppedProcesses     = machineStats["stoppedProcesses"];
-
-            if(enableLog){
-                LV_LOG_USER("--- MACHINE STATISTICS ---");
-                LV_LOG_USER("completedProcesses:%d",gui.page.tools.machineStats.completedProcesses);
-                LV_LOG_USER("totalMins:%d",gui.page.tools.machineStats.totalMins);
-                LV_LOG_USER("completedCleanCycle:%d",gui.page.tools.machineStats.completedCleanCycle);
-                LV_LOG_USER("stoppedProcesses:%d",gui.page.tools.machineStats.stoppedProcesses);
-            }
-
             processList *processElementsList = &(gui.page.processes.processElementsList);
             processElementsList->start = NULL;
             processElementsList->end = NULL;
@@ -934,22 +922,6 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
         LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
         LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
       }
-
-      JsonObject machineStats = doc.createNestedObject("machineStats");
-
-       machineStats["completedProcesses"]    = gui.page.tools.machineStats.completedProcesses;
-       machineStats["totalMins"]             = gui.page.tools.machineStats.totalMins;
-       machineStats["completedCleanCycle"]   = gui.page.tools.machineStats.completedCleanCycle;
-       machineStats["stoppedProcesses"]      = gui.page.tools.machineStats.stoppedProcesses;
-
-      if(enableLog){
-          LV_LOG_USER("--- MACHINE STATISTICS ---");
-          LV_LOG_USER("completedProcesses:%d",gui.page.tools.machineStats.completedProcesses);
-          LV_LOG_USER("totalMins:%d",gui.page.tools.machineStats.totalMins);
-          LV_LOG_USER("completedCleanCycle:%d",gui.page.tools.machineStats.completedCleanCycle);
-          LV_LOG_USER("stoppedProcesses:%d",gui.page.tools.machineStats.stoppedProcesses);
-      }
-
 
         JsonObject Processes = doc.createNestedObject("Processes");
         
@@ -1554,6 +1526,47 @@ void emptyList(void *list, NodeType_t type) {
         slist->size = 0;
     }
 }
+
+
+void readMachineStats(machineStatistics * machineStats) {  
+  // Apri il namespace "stats" in modalità RO
+  preferences.begin("stats", true);
+
+  // Leggi i valori dalla memoria, usa valori di default se non esistono
+  machineStats->completed = preferences.getULong("completed", 0);
+  machineStats->totalMins = preferences.getULong64("totalMins", 0);
+  machineStats->clean = preferences.getULong("clean", 0);
+  machineStats->stopped = preferences.getULong("stopped", 0);
+
+  LV_LOG_USER("Get values: \ncompletedProcesses: %d \ntotalMins: %llu \ncompletedCleanCycle: %d \nstoppedProcesses: %d\n", 
+                machineStats->completed, 
+                machineStats->totalMins, 
+                machineStats->clean, 
+                machineStats->stopped);
+  // Chiudi il namespace
+  preferences.end();
+}
+
+void writeMachineStats(machineStatistics * machineStats) {
+  // Apri il namespace "stats" in modalità RW
+  preferences.begin("stats", false);
+
+  // Scrivi i valori nella memoria
+  preferences.putUInt("completed", machineStats->completed);
+  preferences.putULong64("totalMins", machineStats->totalMins);
+  preferences.putUInt("clean",machineStats->clean);
+  preferences.putUInt("stopped", machineStats->stopped);
+
+  // Chiudi il namespace
+  preferences.end();
+
+  LV_LOG_USER("Set values: \ncompletedProcesses: %d \ntotalMins: %llu \ncompletedCleanCycle: %d \nstoppedProcesses: %d\n", 
+                machineStats->completed, 
+                machineStats->totalMins, 
+                machineStats->clean, 
+                machineStats->stopped);
+  }
+
 
 /*
 

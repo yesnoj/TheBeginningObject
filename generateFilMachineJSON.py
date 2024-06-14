@@ -24,12 +24,6 @@ def generate_json():
             "isProcessAutostart": 0,
             "drainFillOverlapSetpoint": 0
         },
-        "machineStats": {
-            "completedProcesses": random.randint(0, 100),
-            "totalMins": random.randint(0, 100),
-            "completedCleanCycle": random.randint(0, 100),
-            "stoppedProcesses": random.randint(0, 100),
-        },
         "Processes": {}
     }
 

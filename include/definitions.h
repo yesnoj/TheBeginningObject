@@ -10,6 +10,8 @@
 
 #include "FreeRTOS.h"
 #include "semphr.h"
+
+
 //#include <OneWire.h>
 
 //Set to 1 to enable all errors (SD/I2C)
@@ -108,7 +110,9 @@
 #include <LovyanGFX.hpp>
 #include <Adafruit_MCP23X17.h>
 #include "Adafruit_SHT31.h"
+#include <Preferences.h> 
 
+extern Preferences preferences;
 Adafruit_MCP23X17 mcp;
 Adafruit_SHT31 sensorTempBath     = Adafruit_SHT31();
 Adafruit_SHT31 sensorTempChemical = Adafruit_SHT31();
@@ -279,12 +283,12 @@ struct machineSettings {
   uint8_t 	        	drainFillOverlapSetpoint;
 };
 
-struct machineStatistics {
-  uint32_t 	          completedProcesses;
+typedef struct machineStatistics {
+  uint32_t 	          completed;
   uint64_t 	          totalMins;
-  uint32_t 	          completedCleanCycle;
-  uint32_t 	          stoppedProcesses;
-};
+  uint32_t 	          stopped;
+  uint32_t 	          clean;
+}machineStatistics;
 
 
 /*********************
@@ -891,6 +895,7 @@ struct gui_components {
 * System manager defines
 *********************/
 #define SAVE_PROCESS_CONFIG           0x0001
+#define SAVE_MACHINE_STATS            0x0002
 
 LV_FONT_DECLARE(FilMachineFontIcons_15);
 LV_FONT_DECLARE(FilMachineFontIcons_20);
@@ -1270,6 +1275,8 @@ static float Temp_Bath;
 static float Temp_Chemical;
 static bool  tempReached = false;
 
+
+
 /*********************
 * ELEMENTS Function Prototypes
 *********************/
@@ -1396,6 +1403,8 @@ void testPin(uint8_t pin);
 void initializeTemperatureSensor();
 void printTemperature(float temp);
 //char* printAddressSensor(DeviceAddress deviceAddress);
+void writeMachineStats(machineStatistics machineStats);
+void readMachineStats(machineStatistics machineStats);
 
 void toLowerCase(char *str);
 int caseInsensitiveStrstr(const char *haystack, const char *needle);

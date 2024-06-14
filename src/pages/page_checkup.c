@@ -212,10 +212,6 @@ void processTimer(lv_timer_t * timer)
             lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
             
-            gui.page.tools.machineStats.stoppedProcesses ++;
-            lv_label_set_text_fmt(gui.page.tools.toolStatStoppedProcessesValue, "%d", gui.page.tools.machineStats.stoppedProcesses);
-            qSysAction( SAVE_PROCESS_CONFIG );
-            
             lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->timer);
         }
         else{              
@@ -246,9 +242,6 @@ void processTimer(lv_timer_t * timer)
         }
     }
     else{
-        gui.page.tools.machineStats.stoppedProcesses ++;
-        lv_label_set_text_fmt(gui.page.tools.toolStatStoppedProcessesValue, "%d", gui.page.tools.machineStats.stoppedProcesses);
-        qSysAction( SAVE_PROCESS_CONFIG );
         lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->timer);
 
     }
@@ -273,11 +266,13 @@ void processTimer(lv_timer_t * timer)
           lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
           lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
           
-          gui.page.tools.machineStats.completedProcesses++;
+          gui.page.tools.machineStats.completed++;
           gui.page.tools.machineStats.totalMins += gui.tempProcessNode->process.processDetails->timeMins;
-          lv_label_set_text_fmt(gui.page.tools.toolStatTotalTimeValue, "%d", gui.page.tools.machineStats.totalMins);
-          lv_label_set_text_fmt(gui.page.tools.toolStatCompletedProcessesValue, "%d", gui.page.tools.machineStats.completedProcesses);
-          qSysAction( SAVE_PROCESS_CONFIG );
+          lv_label_set_text(gui.page.tools.toolStatTotalTimeValue, itoa(gui.page.tools.machineStats.totalMins, tempBuffer, 10));
+          lv_label_set_text(gui.page.tools.toolStatCompletedProcessesValue, itoa(gui.page.tools.machineStats.completed, tempBuffer, 10));
+          qSysAction( SAVE_MACHINE_STATS );
+          
+
 
           lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->timer);
         }

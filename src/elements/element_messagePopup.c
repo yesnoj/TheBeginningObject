@@ -1,3 +1,4 @@
+#include "widgets/label/lv_label.h"
 #include "misc/lv_area.h"
 /**
  * @file element_messagePopup.c
@@ -95,6 +96,10 @@ void event_messagePopup(lv_event_t *e)
                   lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_OBJ_FLAG_HIDDEN);
                   lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
                   lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
+
+                  gui.page.tools.machineStats.stopped ++;
+                  lv_label_set_text(gui.page.tools.toolStatStoppedProcessesValue, itoa(gui.page.tools.machineStats.stopped ,tempBuffer, 10)); //THIS CAUSE CRASH!
+                  qSysAction( SAVE_MACHINE_STATS );
             }
             if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton)
             {
@@ -107,6 +112,10 @@ void event_messagePopup(lv_event_t *e)
                 gui.tempProcessNode->process.processDetails->checkup->stopAfter = 1;
                 lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED); 
                 lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);  
+
+                gui.page.tools.machineStats.stopped ++;
+                lv_label_set_text(gui.page.tools.toolStatStoppedProcessesValue, itoa(gui.page.tools.machineStats.stopped, tempBuffer, 10)); //THIS CAUSE CRASH!
+                qSysAction( SAVE_MACHINE_STATS );
             }
             if (gui.element.messagePopup.whoCallMe == &gui)
             {
