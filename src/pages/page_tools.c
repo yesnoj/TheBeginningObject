@@ -9,7 +9,7 @@
 #include "../../include/definitions.h"
 
 extern struct gui_components gui;
-
+static lv_timer_t * guiUpdaterTimer;
 
 //ACCESSORY INCLUDES
 
@@ -28,7 +28,6 @@ void event_toolsElement(lv_event_t * e){
       if(code == LV_EVENT_CLICKED) {    
           LV_LOG_USER("PRESSED gui.page.tools.toolsCleaningButton");
           gui.page.tools.machineStats.clean ++;
-          lv_label_set_text(gui.page.tools.toolStatCompleteCycleValue, itoa(gui.page.tools.machineStats.clean, tempBuffer, 10));
           qSysAction( SAVE_MACHINE_STATS );
       }
   }
@@ -65,6 +64,13 @@ void event_toolsElement(lv_event_t * e){
   }
 }
 
+void guiUpdater_timer(lv_timer_t * timer)
+{
+  lv_label_set_text_fmt(gui.page.tools.toolStatTotalTimeValue, "%d", gui.page.tools.machineStats.totalMins);
+  lv_label_set_text_fmt(gui.page.tools.toolStatCompletedProcessesValue, "%d", gui.page.tools.machineStats.completed);
+  lv_label_set_text_fmt(gui.page.tools.toolStatStoppedProcessesValue, "%d", gui.page.tools.machineStats.stopped);
+  lv_label_set_text_fmt(gui.page.tools.toolStatCompleteCycleValue, "%d", gui.page.tools.machineStats.clean);
+}
 
 void initTools(void){
 /*********************
@@ -375,6 +381,7 @@ void tools(void)
 {   
   if(gui.page.tools.toolsSection == NULL){
     initTools();
+    guiUpdaterTimer = lv_timer_create(guiUpdater_timer, 1000,  NULL);
     lv_obj_add_flag(gui.page.tools.toolsSection, LV_OBJ_FLAG_HIDDEN);
   }
   lv_style_set_line_color(&gui.page.tools.style_sectionTitleLine, lv_palette_main(LV_PALETTE_BLUE));
