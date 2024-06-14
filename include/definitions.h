@@ -906,9 +906,9 @@ LV_FONT_DECLARE(FilMachineFontIcons_100);
 LV_IMG_DECLARE(splash_img);
 
 
-#define TAB_PROCESSES 1
-#define TAB_SETTINGS  2
-#define TAB_TOOLS     3
+#define TAB_PROCESSES 3
+#define TAB_SETTINGS  4
+#define TAB_TOOLS     5
 
 #define FILENAME_SAVE         "/FilMachine.json"
 

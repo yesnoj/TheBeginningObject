@@ -60,19 +60,19 @@ void event_tab_switch(lv_event_t * e)
             lv_obj_set_style_bg_color(gui.page.menu.newTabSelected, lv_color_hex(GREEN_DARK), 0);
             lv_obj_remove_local_style_prop(gui.page.menu.oldTabSelected, LV_STYLE_BG_COLOR, 0);
             
-            processes();
+            lv_obj_clear_flag(gui.page.processes.processesSection, LV_OBJ_FLAG_HIDDEN);
         }
         if(gui.page.menu.newSelection == TAB_SETTINGS){
             lv_obj_set_style_bg_color(gui.page.menu.newTabSelected, lv_color_hex(ORANGE_DARK), 0);
             lv_obj_remove_local_style_prop(gui.page.menu.oldTabSelected, LV_STYLE_BG_COLOR, 0); 
 
-            settings();
+            lv_obj_clear_flag(gui.page.settings.settingsSection, LV_OBJ_FLAG_HIDDEN);
         }
         if(gui.page.menu.newSelection == TAB_TOOLS){
             lv_obj_set_style_bg_color(gui.page.menu.newTabSelected, lv_color_hex(BLUE_DARK), 0);
             lv_obj_remove_local_style_prop(gui.page.menu.oldTabSelected, LV_STYLE_BG_COLOR, 0); 
 
-            tools();
+            lv_obj_clear_flag(gui.page.tools.toolsSection, LV_OBJ_FLAG_HIDDEN);
         }
       }
     
@@ -88,10 +88,10 @@ void menu(void){
     gui.page.menu.screen_mainMenu = lv_obj_create(NULL);
     lv_scr_load(gui.page.menu.screen_mainMenu);
 
-    initSettings();
-    initTools();
     processes();
- 
+    settings();
+    tools();
+    
     gui.page.menu.processesTab = lv_obj_create(gui.page.menu.screen_mainMenu);
     lv_obj_set_pos(gui.page.menu.processesTab, 5, 7);                            
     lv_obj_set_size(gui.page.menu.processesTab, 130, 97);   
