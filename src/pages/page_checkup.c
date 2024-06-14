@@ -641,7 +641,8 @@ void checkup(processNode *processToCheckup)
                               lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea, LV_ALIGN_TOP_MID, 0, 45);
                               lv_obj_set_width(gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea, 100);
 
-                              lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea, event_checkup, LV_EVENT_ALL, gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea);
+                              lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea, event_checkup, LV_EVENT_FOCUSED, gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea);
+                              lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea, event_checkup, LV_EVENT_VALUE_CHANGED, gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea);
                               lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea, LV_STATE_FOCUSED);
                               lv_obj_set_style_bg_color(gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                               lv_obj_set_style_text_align(gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea , LV_TEXT_ALIGN_CENTER, 0);

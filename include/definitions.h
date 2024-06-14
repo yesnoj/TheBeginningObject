@@ -1344,6 +1344,7 @@ void processes(void);
 void event_settings_style_delete(lv_event_t *e);
 void event_settingPopupMBox(lv_event_t *e);
 void event_settings_handler(lv_event_t *e);
+void initSettings(void);
 void settings(void);
 
 
@@ -1353,6 +1354,7 @@ void stepDetail(processNode *referenceNode, stepNode *currentNode);
 
 // @file page_tools.c
 void event_toolsElement(lv_event_t *e);
+void initTools(void);
 void tools(void);
 
 

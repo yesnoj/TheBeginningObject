@@ -13,6 +13,7 @@
  *********************/
 #include "lvgl.h"
 #include "definitions.h"
+#define ARDUINOJSON_DEFAULT_NESTING_LIMIT 30
 #include <ArduinoJson.h>
 
 #include <FS.h>
@@ -217,7 +218,10 @@ void create_keyboard()
     lv_obj_set_size(gui.element.keyboardPopup.keyBoardParent, LV_PCT(100), LV_PCT(100));
 
     gui.element.keyboardPopup.keyboard = lv_keyboard_create(gui.element.keyboardPopup.keyBoardParent);
-    lv_obj_add_event_cb(gui.element.keyboardPopup.keyboard, event_keyboard, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(gui.element.keyboardPopup.keyboard, event_keyboard, LV_EVENT_CLICKED, NULL);
+    lv_obj_add_event_cb(gui.element.keyboardPopup.keyboard, event_keyboard, LV_EVENT_DEFOCUSED, NULL);
+    lv_obj_add_event_cb(gui.element.keyboardPopup.keyboard, event_keyboard, LV_EVENT_CANCEL, NULL);
+    lv_obj_add_event_cb(gui.element.keyboardPopup.keyboard, event_keyboard, LV_EVENT_READY, NULL);
     lv_obj_add_flag(gui.element.keyboardPopup.keyboard, LV_OBJ_FLAG_EVENT_BUBBLE);
 
 
@@ -675,7 +679,7 @@ void initSD_I2C_MCP23017() {
 machineSettings readJSONFile(fs::FS &fs, const char *filename, machineSettings &settings) {
     File file = fs.open(filename);
     
-    StaticJsonDocument<192> doc;
+    JsonDocument doc;
 
     // Deserialize the JSON document
     DeserializationError error = deserializeJson(doc, file);
@@ -712,7 +716,7 @@ void writeJSONFile(fs::FS &fs, const char *path,const machineSettings &settings)
         //return;
     }
 
-    StaticJsonDocument<192> doc;
+    JsonDocument doc;
 
     doc["tempUnit"]                   = settings.tempUnit;
     doc["waterInlet"]                 = settings.waterInlet;
@@ -740,7 +744,6 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
     if(initErrors == 0){
         File file = fs.open(filename);
         
-//        DynamicJsonDocument doc(56 * 1024);
         JsonDocument doc;
         // Deserialize the JSON document
         DeserializationError error = deserializeJson(doc, file);
@@ -875,8 +878,8 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
             }
         }
         file.close();
-        return gui;
     }
+    return gui;
 }
 
 void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, uint8_t enableLog) {
@@ -895,9 +898,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
             return;
         }
 
-//        StaticJsonDocument<56 * 1024> doc;
-//        DynamicJsonDocument doc(56 * 1024);
         JsonDocument doc;
+
         JsonObject machineSettings = doc.createNestedObject("machineSettings");
 
         machineSettings["tempUnit"]                   = gui.page.settings.settingsParams.tempUnit;
@@ -930,8 +932,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
         while(currentProcessNode != NULL){
             snprintf(processName, sizeof(processName), "Process%d", processCounter);
             JsonObject currentProcess = Processes.createNestedObject(processName);
-            const char* tp = currentProcessNode->process.processDetails->processNameString;
-            currentProcess["processNameString"] = tp;
+            currentProcess["processNameString"] = currentProcessNode->process.processDetails->processNameString;
             currentProcess["temp"] = currentProcessNode->process.processDetails->temp;
             currentProcess["tempTolerance"] = currentProcessNode->process.processDetails->tempTolerance;
             currentProcess["isTempControlled"] = currentProcessNode->process.processDetails->isTempControlled;
@@ -962,8 +963,7 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
             while(currentStepNode != NULL){                
                 snprintf(stepName, sizeof(stepName), "Step%d", stepCounter);
                 JsonObject currentStep = currentProcessSteps.createNestedObject(stepName);
-                const char* tp = currentStepNode->step.stepDetails->stepNameString;
-                currentStep["stepNameString"] = tp;
+                currentStep["stepNameString"] = currentStepNode->step.stepDetails->stepNameString;
                 currentStep["timeMins"] = currentStepNode->step.stepDetails->timeMins;
                 currentStep["timeSecs"] = currentStepNode->step.stepDetails->timeSecs;
                 currentStep["type"] = currentStepNode->step.stepDetails->type;

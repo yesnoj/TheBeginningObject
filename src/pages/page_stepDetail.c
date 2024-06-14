@@ -224,7 +224,10 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_textarea_set_placeholder_text(newStep->step.stepDetails->stepDetailNamelTextArea, stepDetailPlaceHolder_text);
                   lv_obj_align(newStep->step.stepDetails->stepDetailNamelTextArea, LV_ALIGN_LEFT_MID, 70, 0);
                   lv_obj_set_width(newStep->step.stepDetails->stepDetailNamelTextArea, 210);
-                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailNamelTextArea, event_keyboard, LV_EVENT_ALL, NULL);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailNamelTextArea, event_keyboard, LV_EVENT_CLICKED, NULL);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailNamelTextArea, event_keyboard, LV_EVENT_DEFOCUSED, NULL);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailNamelTextArea, event_keyboard, LV_EVENT_CANCEL, NULL);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailNamelTextArea, event_keyboard, LV_EVENT_READY, NULL);
                   lv_obj_add_state(newStep->step.stepDetails->stepDetailNamelTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_border_color(newStep->step.stepDetails->stepDetailNamelTextArea, lv_color_hex(WHITE), 0);
@@ -252,7 +255,11 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_align(newStep->step.stepDetails->stepDetailMinTextArea, LV_ALIGN_LEFT_MID, 100, 0);
                   lv_obj_set_width(newStep->step.stepDetails->stepDetailMinTextArea, 60);
                  
-                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailMinTextArea, event_stepDetail, LV_EVENT_ALL, newStep->step.stepDetails->stepDetailMinTextArea);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailMinTextArea, event_stepDetail, LV_EVENT_CLICKED, newStep->step.stepDetails->stepDetailMinTextArea);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailMinTextArea, event_stepDetail, LV_EVENT_VALUE_CHANGED, newStep->step.stepDetails->stepDetailMinTextArea);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailMinTextArea, event_stepDetail, LV_EVENT_REFRESH, newStep->step.stepDetails->stepDetailMinTextArea);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailMinTextArea, event_stepDetail, LV_EVENT_DELETE, newStep->step.stepDetails->stepDetailMinTextArea);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailMinTextArea, event_stepDetail, LV_EVENT_FOCUSED, newStep->step.stepDetails->stepDetailMinTextArea);
 //                  lv_textarea_set_cursor_hidden(newStep->step.stepDetails->stepDetailMinTextArea, true);
 //                  lv_obj_add_state(newStep->step.stepDetails->stepDetailMinTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailMinTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
@@ -269,7 +276,11 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_align(newStep->step.stepDetails->stepDetailSecTextArea, LV_ALIGN_LEFT_MID, 187, 0);
                   lv_obj_set_width(newStep->step.stepDetails->stepDetailSecTextArea, 60);
 
-                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailSecTextArea, event_stepDetail, LV_EVENT_ALL, newStep->step.stepDetails->stepDetailSecTextArea);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailSecTextArea, event_stepDetail, LV_EVENT_CLICKED, newStep->step.stepDetails->stepDetailSecTextArea);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailSecTextArea, event_stepDetail, LV_EVENT_VALUE_CHANGED, newStep->step.stepDetails->stepDetailSecTextArea);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailSecTextArea, event_stepDetail, LV_EVENT_REFRESH, newStep->step.stepDetails->stepDetailSecTextArea);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailSecTextArea, event_stepDetail, LV_EVENT_DELETE, newStep->step.stepDetails->stepDetailSecTextArea);
+                  lv_obj_add_event_cb(newStep->step.stepDetails->stepDetailSecTextArea, event_stepDetail, LV_EVENT_FOCUSED, newStep->step.stepDetails->stepDetailSecTextArea);
 //                  lv_obj_add_state(newStep->step.stepDetails->stepDetailSecTextArea, LV_STATE_FOCUSED); 
                   lv_obj_set_style_bg_color(newStep->step.stepDetails->stepDetailSecTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_text_align(newStep->step.stepDetails->stepDetailSecTextArea , LV_TEXT_ALIGN_CENTER, 0);
