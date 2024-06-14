@@ -38,7 +38,7 @@ void event_stepDetail(lv_event_t * e)
       if(addStepElement(newStep, data) != NULL){
           LV_LOG_USER("Step %p element created!Now process %p has n: %d steps",newStep,data, ((processNode *)data)->process.processDetails->stepElementsList.size);
           stepElementCreate(newStep , data , -1);
-          //lv_obj_send_event(fakeObject, LV_EVENT_REFRESH, NULL);
+          
       }
       else{
           LV_LOG_USER("Step element creation failed, maximum entries reached" );
@@ -46,6 +46,7 @@ void event_stepDetail(lv_event_t * e)
 
       data->process.processDetails->somethingChanged = 1;
       lv_obj_send_event(data->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
+      lv_obj_add_state(data->process.processDetails->processRunButton, LV_STATE_DISABLED);
       
       if(newStep->step.swipedLeft == 1 && newStep->step.swipedRight == 0){
         uint32_t  x = lv_obj_get_x_aligned(newStep->step.stepElement) + 50;
@@ -161,9 +162,12 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
       if(existingStep != NULL) {
           LV_LOG_USER("Step already exist with address 0x%p", currentNode);
           newStep = existingStep; // Usa il nodo già presente anziché allocarne uno nuovo
+          lv_obj_clear_state(newStep->step.stepDetails->stepSaveButton, LV_STATE_DISABLED);
+
       } else {
           newStep = (stepNode*)allocateAndInitializeNode(STEP_NODE);
           LV_LOG_USER("New stepNode created at address 0x%p", newStep);
+          lv_obj_add_state(newStep->step.stepDetails->stepSaveButton, LV_STATE_DISABLED);
       }
       
       gui.tempStepNode = newStep;
@@ -394,7 +398,6 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
       lv_obj_align(newStep->step.stepDetails->stepSaveButton, LV_ALIGN_BOTTOM_LEFT, 10 , 10);
       lv_obj_add_event_cb(newStep->step.stepDetails->stepSaveButton, event_stepDetail, LV_EVENT_CLICKED, referenceNode);
       lv_obj_add_event_cb(newStep->step.stepDetails->stepSaveButton, event_stepDetail, LV_EVENT_REFRESH, NULL);
-      lv_obj_add_state(newStep->step.stepDetails->stepSaveButton, LV_STATE_DISABLED);
       lv_obj_set_style_bg_color(newStep->step.stepDetails->stepSaveButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
 
           newStep->step.stepDetails->stepSaveLabel = lv_label_create(newStep->step.stepDetails->stepSaveButton);
