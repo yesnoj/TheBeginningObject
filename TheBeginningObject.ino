@@ -44,7 +44,7 @@ void sysMan( void *arg ) {
 
 			case SAVE_PROCESS_CONFIG:
 	        LV_LOG_USER("Save JSON!");
-          writeFullJSONFile(SD, "/test.json",gui, false);//FILENAME_SAVE
+          writeFullJSONFile(SD, FILENAME_SAVE,gui, false);//FILENAME_SAVE
           break;
       // Add Further processor intensive tasks here to keep them out of the GUI execution path
 

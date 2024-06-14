@@ -912,8 +912,8 @@ LV_IMG_DECLARE(splash_img);
 
 #define FILENAME_SAVE         "/FilMachine.json"
 
-#define MAX_STEP_ELEMENTS		  10
-#define MAX_PROC_ELEMENTS		  30
+#define MAX_STEP_ELEMENTS		  30//10
+#define MAX_PROC_ELEMENTS		  100//30
 
 
 /*********************
