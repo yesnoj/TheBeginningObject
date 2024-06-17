@@ -97,8 +97,8 @@ void event_messagePopup(lv_event_t *e)
                   lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
                   lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
 
-                  lv_label_set_text_fmt(gui.page.tools.toolStatStoppedProcessesValue, "%d", ++gui.page.tools.machineStats.stopped); //THIS CAUSE CRASH!
-                  qSysAction( SAVE_MACHINE_STATS );
+                   gui.page.tools.machineStats.stopped++;
+                   qSysAction( SAVE_MACHINE_STATS );
             }
             if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton)
             {
@@ -111,8 +111,8 @@ void event_messagePopup(lv_event_t *e)
                 gui.tempProcessNode->process.processDetails->checkup->stopAfter = 1;
                 lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED); 
                 lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);  
-
-                lv_label_set_text_fmt(gui.page.tools.toolStatStoppedProcessesValue, "%d", ++gui.page.tools.machineStats.stopped); //THIS CAUSE CRASH!
+                
+                gui.page.tools.machineStats.stopped++;
                 qSysAction( SAVE_MACHINE_STATS );
             }
             if (gui.element.messagePopup.whoCallMe == &gui)

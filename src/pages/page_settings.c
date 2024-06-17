@@ -476,10 +476,10 @@ void settings(void)
 {   
   if(gui.page.settings.settingsSection == NULL){
     initSettings();
+    lv_obj_add_flag(gui.page.settings.settingsSection, LV_OBJ_FLAG_HIDDEN);
   }
 
-  lv_obj_clear_flag(gui.page.settings.settingsSection, LV_OBJ_FLAG_HIDDEN);
+  
   lv_style_set_line_color(&gui.page.settings.style_sectionTitleLine, lv_palette_main(LV_PALETTE_ORANGE));
-
 }
 

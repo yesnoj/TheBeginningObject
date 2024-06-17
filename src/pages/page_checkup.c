@@ -268,12 +268,8 @@ void processTimer(lv_timer_t * timer)
           
           gui.page.tools.machineStats.completed++;
           gui.page.tools.machineStats.totalMins += gui.tempProcessNode->process.processDetails->timeMins;
-          lv_label_set_text(gui.page.tools.toolStatTotalTimeValue, itoa(gui.page.tools.machineStats.totalMins, tempBuffer, 10));
-          lv_label_set_text(gui.page.tools.toolStatCompletedProcessesValue, itoa(gui.page.tools.machineStats.completed, tempBuffer, 10));
           qSysAction( SAVE_MACHINE_STATS );
           
-
-
           lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->timer);
         }
     }
