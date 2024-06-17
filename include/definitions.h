@@ -910,7 +910,7 @@ LV_IMG_DECLARE(splash_img);
 #define TAB_SETTINGS  4
 #define TAB_TOOLS     5
 
-#define FILENAME_SAVE         "/FilMachine.json"
+#define FILENAME_SAVE         "/FilMachine.cfg"
 
 #define MAX_STEP_ELEMENTS		  30//10
 #define MAX_PROC_ELEMENTS		  100//30
