@@ -31,7 +31,7 @@ static void increase_lvgl_tick( void *arg ) {
   lv_tick_inc(LVGL_TICK_PERIOD_MS);
 }
 
-#define MEM_MSG_DISPLAY_TIME  10000
+#define MEM_MSG_DISPLAY_TIME  1000
 void sysMan( void *arg ) {
 
   uint16_t  msg;
@@ -43,8 +43,10 @@ void sysMan( void *arg ) {
 			switch(msg) {
 
 			case SAVE_PROCESS_CONFIG:
-	        LV_LOG_USER("Save JSON!");
-          writeFullJSONFile(SD, FILENAME_SAVE,gui, false);//FILENAME_SAVE
+	        //LV_LOG_USER("Save JSON!");
+
+          //writeFullJSONFile(SD, "/test.json",gui, true);//FILENAME_SAVE
+          writeConfigFile(SD, FILENAME_SAVE, true);
           break;
       // Add Further processor intensive tasks here to keep them out of the GUI execution path
 
@@ -125,7 +127,8 @@ void setup()
     //readJSONFile(SD, FILENAME_SAVE, gui.page.settings.settingsParams);
     
     //writeFullJSONFile(SD, FILENAME_SAVE,gui);
-    readFULLJSONFile(SD, FILENAME_SAVE, gui, false);
+    //readFULLJSONFile(SD, FILENAME_SAVE, gui, true);
+    readConfigFile(SD, FILENAME_SAVE, true);
     readMachineStats(&gui.page.tools.machineStats);
 }
 

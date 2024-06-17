@@ -167,7 +167,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
       } else {
           newStep = (stepNode*)allocateAndInitializeNode(STEP_NODE);
           LV_LOG_USER("New stepNode created at address 0x%p", newStep);
-          lv_obj_add_state(newStep->step.stepDetails->stepSaveButton, LV_STATE_DISABLED);
+          lv_obj_add_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED); //   newStep->step.stepDetails->stepSaveButton
       }
       
       gui.tempStepNode = newStep;
