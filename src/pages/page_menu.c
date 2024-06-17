@@ -88,8 +88,6 @@ void menu(void){
     gui.page.menu.screen_mainMenu = lv_obj_create(NULL);
     lv_scr_load(gui.page.menu.screen_mainMenu);
 
-    initSettings();
-    initTools();
     processes();
  
     gui.page.menu.processesTab = lv_obj_create(gui.page.menu.screen_mainMenu);

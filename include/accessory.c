@@ -13,7 +13,6 @@
  *********************/
 #include "lvgl.h"
 #include "definitions.h"
-#define ARDUINOJSON_DEFAULT_NESTING_LIMIT 30
 #include <ArduinoJson.h>
 
 #include <FS.h>
@@ -674,7 +673,19 @@ void initSD_I2C_MCP23017() {
   }
 }
 
+struct SpiRamAllocator : ArduinoJson::Allocator {
+  void* allocate(size_t size) override {
+    return heap_caps_malloc(size, MALLOC_CAP_SPIRAM);
+  }
 
+  void deallocate(void* pointer) override {
+    heap_caps_free(pointer);
+  }
+
+  void* reallocate(void* ptr, size_t new_size) override {
+    return heap_caps_realloc(ptr, new_size, MALLOC_CAP_SPIRAM);
+  }
+};
 
 machineSettings readJSONFile(fs::FS &fs, const char *filename, machineSettings &settings) {
     File file = fs.open(filename);
@@ -744,8 +755,8 @@ gui_components readFULLJSONFile(fs::FS &fs, const char *filename, gui_components
     if(initErrors == 0){
         File file = fs.open(filename);
         
-        JsonDocument doc;
-        // Deserialize the JSON document
+//        SpiRamAllocator allocator;
+        JsonDocument doc;        // Deserialize the JSON document(&allocator)
         DeserializationError error = deserializeJson(doc, file);
         if (error) {
             LV_LOG_USER("Failed to read file, using default configuration");
@@ -888,8 +899,8 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
         SD.remove(path);
         uint8_t processCounter = 0;
         uint8_t stepCounter = 0;
-        char processName[20];
-        char stepName[20];
+        char processName[MAX_PROC_NAME_LEN+1];
+        char stepName[MAX_PROC_NAME_LEN+1];
 
         File file = fs.open(path, FILE_WRITE);
         if (!file) {
@@ -898,9 +909,10 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
             return;
         }
 
-        JsonDocument doc;
+        SpiRamAllocator allocator;
+        JsonDocument doc(&allocator);
 
-        JsonObject machineSettings = doc.createNestedObject("machineSettings");
+        JsonObject machineSettings = doc["machineSettings"].to<JsonObject>();  // .createNestedObject
 
         machineSettings["tempUnit"]                   = gui.page.settings.settingsParams.tempUnit;
         machineSettings["waterInlet"]                 = gui.page.settings.settingsParams.waterInlet;
@@ -925,14 +937,26 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
         LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
       }
 
-        JsonObject Processes = doc.createNestedObject("Processes");
+        JsonObject Processes = doc["Processes"].to<JsonObject>();  // .createNestedObject
         
         processNode *currentProcessNode = gui.page.processes.processElementsList.start;
 
+        if(enableLog){
+          LV_LOG_USER("--- PROCESS PARAMS ---");
+          LV_LOG_USER("processNameString:%s",currentProcessNode->process.processDetails->processNameString);
+          LV_LOG_USER("temp:%d",currentProcessNode->process.processDetails->temp);
+          LV_LOG_USER("tempTolerance:%d",currentProcessNode->process.processDetails->tempTolerance);
+          LV_LOG_USER("isTempControlled:%d",currentProcessNode->process.processDetails->isTempControlled);
+          LV_LOG_USER("isPreferred:%d",currentProcessNode->process.processDetails->isPreferred);
+          LV_LOG_USER("filmType:%d",currentProcessNode->process.processDetails->filmType);
+          LV_LOG_USER("timeMins:%d",currentProcessNode->process.processDetails->timeMins);
+          LV_LOG_USER("timeSecs:%d",currentProcessNode->process.processDetails->timeSecs);
+        }
+
         while(currentProcessNode != NULL){
             snprintf(processName, sizeof(processName), "Process%d", processCounter);
-            JsonObject currentProcess = Processes.createNestedObject(processName);
-            currentProcess["processNameString"] = currentProcessNode->process.processDetails->processNameString;
+            JsonObject currentProcess = Processes[processName].to<JsonObject>(); //.createNestedObject(
+            currentProcess[String("processNameString")] = currentProcessNode->process.processDetails->processNameString;
             currentProcess["temp"] = currentProcessNode->process.processDetails->temp;
             currentProcess["tempTolerance"] = currentProcessNode->process.processDetails->tempTolerance;
             currentProcess["isTempControlled"] = currentProcessNode->process.processDetails->isTempControlled;
@@ -942,28 +966,16 @@ void writeFullJSONFile(fs::FS &fs, const char *path,const gui_components gui, ui
             currentProcess["timeSecs"] = currentProcessNode->process.processDetails->timeSecs;
 
 
-          if(enableLog){
-            LV_LOG_USER("--- PROCESS PARAMS ---");
-            LV_LOG_USER("processNameString:%s",currentProcessNode->process.processDetails->processNameString);
-            LV_LOG_USER("temp:%d",currentProcessNode->process.processDetails->temp);
-            LV_LOG_USER("tempTolerance:%d",currentProcessNode->process.processDetails->tempTolerance);
-            LV_LOG_USER("isTempControlled:%d",currentProcessNode->process.processDetails->isTempControlled);
-            LV_LOG_USER("isPreferred:%d",currentProcessNode->process.processDetails->isPreferred);
-            LV_LOG_USER("filmType:%d",currentProcessNode->process.processDetails->filmType);
-            LV_LOG_USER("timeMins:%d",currentProcessNode->process.processDetails->timeMins);
-            LV_LOG_USER("timeSecs:%d",currentProcessNode->process.processDetails->timeSecs);
-          }
-
             stepNode *currentStepNode = currentProcessNode->process.processDetails->stepElementsList.start;
 
             processCounter++;
             stepCounter = 0;
 
-            JsonObject currentProcessSteps = currentProcess.createNestedObject("Steps");
+            JsonObject currentProcessSteps = currentProcess["Steps"].to<JsonObject>();     //.createNestedObject(
             while(currentStepNode != NULL){                
                 snprintf(stepName, sizeof(stepName), "Step%d", stepCounter);
-                JsonObject currentStep = currentProcessSteps.createNestedObject(stepName);
-                currentStep["stepNameString"] = currentStepNode->step.stepDetails->stepNameString;
+                JsonObject currentStep = currentProcessSteps[stepName].to<JsonObject>();  //.createNestedObject(
+                currentStep[String("stepNameString")] = currentStepNode->step.stepDetails->stepNameString;
                 currentStep["timeMins"] = currentStepNode->step.stepDetails->timeMins;
                 currentStep["timeSecs"] = currentStepNode->step.stepDetails->timeSecs;
                 currentStep["type"] = currentStepNode->step.stepDetails->type;

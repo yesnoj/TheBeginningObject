@@ -345,7 +345,7 @@ typedef struct sStepDetail {
 	/* Params objects */
 
 //	  processNode       *referenceProcess;  // Use a pointer instead of an instance
-    char                stepNameString[MAX_PROC_NAME_LEN];
+    char                stepNameString[MAX_PROC_NAME_LEN+1];
     uint8_t             timeMins;
     uint8_t             timeSecs;
     chemicalType_t      type;
@@ -535,7 +535,7 @@ typedef struct sProcessDetail {
 	/* Params objects */
     stepList          stepElementsList;  /* Process steps list */
 	  sCheckup		      *checkup;
-    char              processNameString[MAX_PROC_NAME_LEN];
+    char              processNameString[MAX_PROC_NAME_LEN+1];
     uint32_t          temp;
     uint8_t           tempTolerance;
     uint8_t           isTempControlled;
