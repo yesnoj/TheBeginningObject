@@ -1,11 +1,12 @@
 import json
 import random
 import string
+import pickle  # Aggiunto
 
 # Definizione delle costanti
 MAX_PROC_NAME_LEN = 20  
-MAX_STEP_ELEMENTS = 10  #MAX 10 PROCESS
-MAX_PROC_ELEMENTS = 30  #MAX 30 PROCESS
+MAX_STEP_ELEMENTS = 30  #MAX 10 PROCESS
+MAX_PROC_ELEMENTS = 100  #MAX 30 PROCESS
 
 def random_string(length):
     letters = string.ascii_lowercase
@@ -75,6 +76,5 @@ def generate_json():
 
 if __name__ == "__main__":
     generated_json = generate_json()
-    with open("FilMachine.json", "w") as json_file:
-        json.dump(generated_json, json_file, separators=(',', ':'))  # Formato JSON in linea
-        #json.dump(generated_json, json_file, indent=4)  # Formato JSON standard, ESP32 doesn't like it!
+    with open("FilMachine.cfg", "wb") as binary_file:  # Modificato
+        pickle.dump(generated_json, binary_file)  # Modificato
