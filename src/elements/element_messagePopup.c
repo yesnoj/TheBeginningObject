@@ -144,6 +144,28 @@ void event_messagePopup(lv_event_t *e)
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton2");
             if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode || gui.element.messagePopup.whoCallMe == gui.tempStepNode || gui.element.messagePopup.whoCallMe == gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton || gui.element.messagePopup.whoCallMe == gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton)
             {
+                if(gui.element.messagePopup.whoCallMe == gui.tempStepNode){
+                    if(gui.tempStepNode->step.swipedLeft == 0 && gui.tempStepNode->step.swipedRight == 1){
+                      uint32_t  x = lv_obj_get_x_aligned(gui.tempStepNode->step.stepElement) - 50;
+                      uint32_t  y = lv_obj_get_y_aligned(gui.tempStepNode->step.stepElement);
+                      lv_obj_set_pos(gui.tempStepNode->step.stepElement, x, y);
+                      gui.tempStepNode->step.swipedLeft = 0;
+                      gui.tempStepNode->step.swipedRight = 0;
+                      lv_obj_add_flag(gui.tempStepNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
+                      lv_obj_add_flag(gui.tempStepNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
+                    }
+                }
+                if(gui.element.messagePopup.whoCallMe == gui.tempProcessNode){
+                    if(gui.tempProcessNode->process.swipedLeft == 0 && gui.tempProcessNode->process.swipedRight == 1){
+                      uint32_t  x = lv_obj_get_x_aligned(gui.tempProcessNode->process.processElement) - 50;
+                      uint32_t  y = lv_obj_get_y_aligned(gui.tempProcessNode->process.processElement);
+                      lv_obj_set_pos(gui.tempProcessNode->process.processElement, x, y);
+                      gui.tempProcessNode->process.swipedLeft = 0;
+                      gui.tempProcessNode->process.swipedRight = 0;
+                      lv_obj_add_flag(gui.tempProcessNode->process.deleteButton, LV_OBJ_FLAG_HIDDEN);
+                    }
+                }
+
                 LV_LOG_USER("Cancel delete element!");
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
