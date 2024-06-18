@@ -693,14 +693,23 @@ void readConfigFile(fs::FS &fs, const char *path, bool enableLog) {
     if(enableLog) {
         LV_LOG_USER("--- MACHINE PARAMS ---");
         LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
+//        LV_LOG_USER("size:%d",sizeof(gui.page.settings.settingsParams.tempUnit));
         LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
+//        LV_LOG_USER("size:%d",sizeof(gui.page.settings.settingsParams.waterInlet));
         LV_LOG_USER("calibratedTemp:%d",gui.page.settings.settingsParams.calibratedTemp);
+//        LV_LOG_USER("size:%d",sizeof(gui.page.settings.settingsParams.calibratedTemp));
         LV_LOG_USER("filmRotationSpeedSetpoint:%d",gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
+//        LV_LOG_USER("size:%d",sizeof(gui.page.settings.settingsParams.filmRotationSpeedSetpoint));
         LV_LOG_USER("rotationIntervalSetpoint:%d",gui.page.settings.settingsParams.rotationIntervalSetpoint);
+//        LV_LOG_USER("size:%d",sizeof(gui.page.settings.settingsParams.rotationIntervalSetpoint));
         LV_LOG_USER("randomSetpoint:%d",gui.page.settings.settingsParams.randomSetpoint);
+//        LV_LOG_USER("size:%d",sizeof(gui.page.settings.settingsParams.randomSetpoint));
         LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
+//        LV_LOG_USER("size:%d",sizeof(gui.page.settings.settingsParams.isPersistentAlarm));
         LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
+//        LV_LOG_USER("size:%d",sizeof(gui.page.settings.settingsParams.isProcessAutostart));
         LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
+//        LV_LOG_USER("size:%d",sizeof(gui.page.settings.settingsParams.drainFillOverlapSetpoint));
     }   
 
     // Load Processes
@@ -740,13 +749,21 @@ void readConfigFile(fs::FS &fs, const char *path, bool enableLog) {
       if(enableLog){
         LV_LOG_USER("--- PROCESS PARAMS ---");
         LV_LOG_USER("processNameString:%s",nodeP->process.processDetails->processNameString);
+//        LV_LOG_USER("size:%d",sizeof(nodeP->process.processDetails->processNameString));
         LV_LOG_USER("temp:%d",nodeP->process.processDetails->temp);
+//        LV_LOG_USER("size:%d",sizeof(nodeP->process.processDetails->temp));
         LV_LOG_USER("tempTolerance:%d",nodeP->process.processDetails->tempTolerance);
+//        LV_LOG_USER("size:%d",sizeof(nodeP->process.processDetails->tempTolerance));
         LV_LOG_USER("isTempControlled:%d",nodeP->process.processDetails->isTempControlled);
+//        LV_LOG_USER("size:%d",sizeof(nodeP->process.processDetails->isTempControlled));
         LV_LOG_USER("isPreferred:%d",nodeP->process.processDetails->isPreferred);
+//        LV_LOG_USER("size:%d",sizeof(nodeP->process.processDetails->isPreferred));
         LV_LOG_USER("filmType:%d",nodeP->process.processDetails->filmType);
+//        LV_LOG_USER("size:%d",sizeof(nodeP->process.processDetails->filmType));
         LV_LOG_USER("timeMins:%d",nodeP->process.processDetails->timeMins);
+//        LV_LOG_USER("size:%d",sizeof(nodeP->process.processDetails->timeMins));
         LV_LOG_USER("timeSecs:%d",nodeP->process.processDetails->timeSecs);
+//        LV_LOG_USER("size:%d",sizeof(nodeP->process.processDetails->timeSecs));
       }
 
       stepList *stepElementsList = &nodeP->process.processDetails->stepElementsList;
@@ -783,11 +800,17 @@ void readConfigFile(fs::FS &fs, const char *path, bool enableLog) {
         if(enableLog){
           LV_LOG_USER("--- STEP PARAMS ---");
           LV_LOG_USER("stepNameString:%s",nodeS->step.stepDetails->stepNameString);
+//          LV_LOG_USER("size:%d",sizeof(nodeS->step.stepDetails->stepNameString));
           LV_LOG_USER("timeMins:%d",nodeS->step.stepDetails->timeMins);
+//          LV_LOG_USER("size:%d",sizeof(nodeS->step.stepDetails->timeMins));
           LV_LOG_USER("timeSecs:%d",nodeS->step.stepDetails->timeSecs);
+//          LV_LOG_USER("size:%d",sizeof(nodeS->step.stepDetails->timeSecs));
           LV_LOG_USER("type:%d",nodeS->step.stepDetails->type);
+//          LV_LOG_USER("size:%d",sizeof(nodeS->step.stepDetails->type));
           LV_LOG_USER("source:%d",nodeS->step.stepDetails->source);
+//          LV_LOG_USER("size:%d",sizeof(nodeS->step.stepDetails->source));
           LV_LOG_USER("discardAfterProc:%d",nodeS->step.stepDetails->discardAfterProc);
+//          LV_LOG_USER("size:%d",sizeof(nodeS->step.stepDetails->discardAfterProc));
         }
 
       }

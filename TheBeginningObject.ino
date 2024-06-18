@@ -31,7 +31,7 @@ static void increase_lvgl_tick( void *arg ) {
   lv_tick_inc(LVGL_TICK_PERIOD_MS);
 }
 
-#define MEM_MSG_DISPLAY_TIME  1000
+#define MEM_MSG_DISPLAY_TIME  60000
 void sysMan( void *arg ) {
 
   uint16_t  msg;

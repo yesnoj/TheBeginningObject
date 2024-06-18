@@ -68,7 +68,7 @@ void event_checkup(lv_event_t * e){
       if(data == gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
           LV_LOG_USER("Set Tank Size");
           rollerPopupCreate(checkupTankSizesList,checkupTankSize_text,data, 
-              gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea); //referenceProcess
+              gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea); //referenceProcess  THIS IS BROKEN! NEEDS ATTENTION
       }
   }
   if(code == LV_EVENT_VALUE_CHANGED) {
