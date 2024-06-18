@@ -67,7 +67,7 @@ for p in range(MAX_PROC_ELEMENTS):
     steps, total_mins, total_secs = generate_steps()
     process = {
         "processNameString": random_string(MAX_PROC_NAME_LEN),
-        "temp": random.randint(20, 80),
+        "temp": random.randint(20, 40),
         "tempTolerance": random.randint(0, 4),
         "isTempControlled": random.randint(0, 1),
         "isPreferred": random.randint(0, 1),

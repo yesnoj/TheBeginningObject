@@ -117,11 +117,11 @@ void event_stepDetail(lv_event_t * e)
         
         if((lv_obj_t*)data == gui.tempStepNode->step.stepDetails->stepDetailMinTextArea){
             LV_LOG_USER("Set minutes");
-            rollerPopupCreate(gui.element.rollerPopup.minutesOptions, setMinutesPopupTitle_text, gui.tempStepNode->step.stepDetails->stepDetailMinTextArea, 0);
+            rollerPopupCreate(gui.element.rollerPopup.minutesOptions,setMinutesPopupTitle_text,gui.tempStepNode->step.stepDetails->stepDetailMinTextArea, findRolleStringIndex(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailMinTextArea),gui.element.rollerPopup.minutesOptions));
         }
         if((lv_obj_t*)data == gui.tempStepNode->step.stepDetails->stepDetailSecTextArea){
             LV_LOG_USER("Set seconds");
-            rollerPopupCreate(gui.element.rollerPopup.secondsOptions, setSecondsPopupTitle_text, gui.tempStepNode->step.stepDetails->stepDetailSecTextArea, 0);
+            rollerPopupCreate(gui.element.rollerPopup.secondsOptions,setSecondsPopupTitle_text,gui.tempStepNode->step.stepDetails->stepDetailSecTextArea, findRolleStringIndex(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailSecTextArea),gui.element.rollerPopup.secondsOptions));
         }
     }
   

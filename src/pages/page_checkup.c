@@ -35,19 +35,6 @@ static uint8_t secondsStepLeft = 0;
 static uint8_t stepPercentage = 0;
 static uint8_t processPercentage = 0;
 
-static void exitCheckup(){
-    isProcessingStatus0created = 0;
-    isProcessingStatus1created = 0;
-    isStepStatus0created = 0;
-    isStepStatus1created = 0;
-    isStepStatus2created = 0;
-    isStepStatus3created = 0;
-    isStepStatus4created = 0;
-
-    lv_obj_delete(gui.tempProcessNode->process.processDetails->checkup->checkupContainer); // was gui.tempProcessNode->process.processDetails->checkup
-    //list of all styles to be reset, so clean the memory.
-    //lv_style_reset(&gui.tempProcessNode->process.processDetails->checkup->textAreaStyleCheckup);
-}
 
 void event_checkup(lv_event_t * e){
   lv_event_code_t code = lv_event_get_code(e);
@@ -66,8 +53,7 @@ void event_checkup(lv_event_t * e){
   if(code == LV_EVENT_FOCUSED) {
       if(data == gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
           LV_LOG_USER("Set Tank Size");
-          rollerPopupCreate(checkupTankSizesList,checkupTankSize_text,data, 
-              gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea); //referenceProcess  THIS IS BROKEN! NEEDS ATTENTION
+          rollerPopupCreate(checkupTankSizesList,checkupTankSize_text,data,0); //referenceProcess  THIS IS BROKEN! NEEDS ATTENTION
       }
   }
   if(code == LV_EVENT_VALUE_CHANGED) {
@@ -132,7 +118,19 @@ void event_checkup(lv_event_t * e){
     if(obj == gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton){
         LV_LOG_USER("User pressed gui.tempProcessNode->process.processDetails->checkup->checkupCloseButtonLabel");
         lv_msgbox_close(mboxCont);
-        exitCheckup();
+        
+        isProcessingStatus0created = 0;
+        isProcessingStatus1created = 0;
+        isStepStatus0created = 0;
+        isStepStatus1created = 0;
+        isStepStatus2created = 0;
+        isStepStatus3created = 0;
+        isStepStatus4created = 0;
+        
+        lv_obj_delete(gui.tempProcessNode->process.processDetails->checkup->checkupContainer); // was gui.tempProcessNode->process.processDetails->checkup
+        //list of all styles to be reset, so clean the memory.
+        lv_style_reset(&gui.tempProcessNode->process.processDetails->checkup->textAreaStyleCheckup);
+        lv_scr_load(gui.page.menu.screen_mainMenu);
         return;
     }
     if(obj == gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton){
@@ -277,16 +275,20 @@ void initCheckup()
 {  
       LV_LOG_USER("Final checks, current on gui.tempProcessNode->process.processDetails->checkup->processStep :%d",gui.tempProcessNode->process.processDetails->checkup->processStep);
       
+      //in this way processDetail is deleted, to free memory and the "checkout" is a standard screen on top
+      lv_obj_del(gui.tempProcessNode->process.processDetails->processDetailParent);
+      gui.tempProcessNode->process.processDetails->checkup->checkupParent = lv_obj_create(NULL);
+      lv_scr_load(gui.tempProcessNode->process.processDetails->checkup->checkupParent);
+
       gui.tempStepNode = gui.tempProcessNode->process.processDetails->stepElementsList.start;
       
-      gui.tempProcessNode->process.processDetails->checkup->checkupParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
-      lv_obj_class_init_obj(gui.tempProcessNode->process.processDetails->checkup->checkupParent);
-      lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->checkup->checkupParent, LV_OBJ_FLAG_IGNORE_LAYOUT);
-      lv_obj_set_size(gui.tempProcessNode->process.processDetails->checkup->checkupParent, LV_PCT(100), LV_PCT(100));
+      //in this way create a new layer on top of others, so "checkout" will be on top of processDetail
+      //gui.tempProcessNode->process.processDetails->checkup->checkupParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
+      //lv_obj_class_init_obj(gui.tempProcessNode->process.processDetails->checkup->checkupParent);
+      //lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->checkup->checkupParent, LV_OBJ_FLAG_IGNORE_LAYOUT);
+      //lv_obj_set_size(gui.tempProcessNode->process.processDetails->checkup->checkupParent, LV_PCT(100), LV_PCT(100));
       
-
-
-
+      
       if(gui.tempProcessNode->process.processDetails->checkup->checkupParent == NULL){
         LV_LOG_USER("Oggetto non creato");
       }

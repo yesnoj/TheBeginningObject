@@ -1407,6 +1407,8 @@ void printTemperature(float temp);
 //char* printAddressSensor(DeviceAddress deviceAddress);
 void writeMachineStats(machineStatistics machineStats);
 void readMachineStats(machineStatistics machineStats);
+uint32_t findRolleStringIndex(const char *input, const char *list);
+char* getRollerStringIndex(uint32_t index, const char *list);
 
 void toLowerCase(char *str);
 int caseInsensitiveStrstr(const char *haystack, const char *needle);

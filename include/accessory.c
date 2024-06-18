@@ -1371,6 +1371,65 @@ void writeMachineStats(machineStatistics * machineStats) {
   }
 
 
+uint32_t findRolleStringIndex(const char *input, const char *list) {
+    const char *start = list;
+    const char *end;
+    uint32_t index = 0;
+
+    while ((end = strchr(start, '\n')) != NULL) {
+        uint32_t length = end - start;
+        if (strncmp(start, input, length) == 0 && input[length] == '\0') {
+            LV_LOG_USER("String index %s: %d",input,index);
+            return index;
+        }
+        start = end + 1;
+        index++;
+    }
+
+    if (strcmp(start, input) == 0) {
+        LV_LOG_USER("String index %s: %d",input,index);
+        return index;
+    }
+    
+    LV_LOG_USER("String index %s: %d",input,index);
+    return -1; // String not found
+}
+
+char* getRollerStringIndex(uint32_t index, const char *list) {
+    const char *start = list;
+    const char *end;
+    uint32_t currentIndex = 0;
+
+    while ((end = strchr(start, '\n')) != NULL) {
+        if (currentIndex == index) {
+            uint32_t length = end - start;
+            char *result = (char*) malloc((length + 1) * sizeof(char));
+            if (result == NULL) {
+                return NULL; // Allocation failed
+            }
+            strncpy(result, start, length);
+            result[length] = '\0';
+            return result;
+        }
+        start = end + 1;
+        currentIndex++;
+    }
+
+    // Check for the last item in the list (without a trailing newline)
+    if (currentIndex == index) {
+        uint32_t length = strlen(start);
+        char *result = (char*) malloc((length + 1) * sizeof(char));
+        if (result == NULL) {
+            return NULL; // Allocation failed
+        }
+        strcpy(result, start);
+        return result;
+    }
+
+    // If index is out of bounds
+    return NULL;
+}
+
 /*
 void filterAndDisplayProcesses(void) {
     processNode *currentNode = gui.page.processes.processElementsList.start;

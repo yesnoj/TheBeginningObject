@@ -1,3 +1,4 @@
+#include "core/lv_obj_tree.h"
 #include "misc/lv_event.h"
 /**
  * @file page_processDetail.c
@@ -101,6 +102,8 @@ void event_processDetail(lv_event_t * e)
 //        lv_msgbox_close(mboxCont);
 //        lv_obj_delete(mboxCont);
         LV_LOG_USER("Pressed processRunButton");
+        gui.tempProcessNode->process.processDetails->checkup->checkupParent = NULL;
+        lv_style_reset(&gui.tempProcessNode->process.processDetails->textAreaStyle);
         checkup(gui.tempProcessNode);
     }
     if(data == gui.tempProcessNode->process.processDetails->processNewStepButton){
@@ -145,25 +148,16 @@ void event_processDetail(lv_event_t * e)
       
       if(data == gui.tempProcessNode->process.processDetails->processTempTextArea){
           LV_LOG_USER("Set Temperature");
-          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusOptions,tuneTempPopupTitle_text,gui.tempProcessNode->process.processDetails->processTempTextArea, 0);
+          
+          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusOptions,tuneTempPopupTitle_text,gui.tempProcessNode->process.processDetails->processTempTextArea, findRolleStringIndex(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processTempTextArea),gui.element.rollerPopup.tempCelsiusOptions));
       }
       if(data == gui.tempProcessNode->process.processDetails->processToleranceTextArea){
           LV_LOG_USER("Set Tolerance");
-          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusToleranceOptions,tuneTempPopupTitle_text,gui.tempProcessNode->process.processDetails->processToleranceTextArea, 0);
+          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusToleranceOptions,tuneTempPopupTitle_text,gui.tempProcessNode->process.processDetails->processToleranceTextArea, findRolleStringIndex(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea),gui.element.rollerPopup.tempCelsiusToleranceOptions));
       }
   }
 }
  
-void event_processDetail_style_delete(lv_event_t * e)
-{
-    lv_event_code_t code = lv_event_get_code(e);
-
-    if(code == LV_EVENT_DELETE) {
-        //list of all styles to be reset, so clean the memory.
-        lv_style_reset(&gui.tempProcessNode->process.processDetails->textAreaStyle);
-    }
-}
-
 
 
 /*********************
@@ -396,11 +390,11 @@ if(existingProcess != NULL) {
                           if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, celsius_text); 
                               sprintf(formatted_string, "%d", gui.tempProcessNode->process.processDetails->tempTolerance);
-                              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, formatted_string);
+                              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(gui.tempProcessNode->process.processDetails->tempTolerance,gui.element.rollerPopup.tempCelsiusToleranceOptions));
                           } else{
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, fahrenheit_text);
                               sprintf(formatted_string, "%d", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->tempTolerance));
-                              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, formatted_string);
+                              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(gui.tempProcessNode->process.processDetails->tempTolerance,gui.element.rollerPopup.tempCelsiusToleranceOptions));
                           }  
 
 
