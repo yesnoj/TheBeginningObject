@@ -46,7 +46,6 @@ void event_stepDetail(lv_event_t * e)
 
       data->process.processDetails->somethingChanged = 1;
       lv_obj_send_event(data->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
-      lv_obj_add_state(data->process.processDetails->processRunButton, LV_STATE_DISABLED);
       
       if(newStep->step.swipedLeft == 1 && newStep->step.swipedRight == 0){
         uint32_t  x = lv_obj_get_x_aligned(newStep->step.stepElement) + 50;

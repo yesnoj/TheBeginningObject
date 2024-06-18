@@ -1,5 +1,4 @@
-#include "misc/lv_event.h"
-#include <sys/_stdint.h>
+
 /**
  * @file page_checkup.c
  *
@@ -133,7 +132,6 @@ void event_checkup(lv_event_t * e){
     if(obj == gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton){
         LV_LOG_USER("User pressed gui.tempProcessNode->process.processDetails->checkup->checkupCloseButtonLabel");
         lv_msgbox_close(mboxCont);
-        //lv_obj_delete(mboxCont);
         exitCheckup();
         return;
     }
@@ -324,7 +322,7 @@ void initCheckup()
             gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameContainer = lv_obj_create(gui.tempProcessNode->process.processDetails->checkup->checkupContainer);
             lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameContainer, LV_OBJ_FLAG_SCROLLABLE); 
             lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameContainer, LV_ALIGN_TOP_LEFT, -10, -15);
-            lv_obj_set_size(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameContainer, 350, 50); 
+            lv_obj_set_size(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameContainer, 420, 50); 
             //lv_obj_set_style_border_color(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameContainer, lv_color_hex(GREEN_DARK), 0);
             lv_obj_set_style_border_opa(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameContainer, LV_OPA_TRANSP, 0);
 
@@ -354,25 +352,6 @@ void initCheckup()
 
 void checkup(processNode *processToCheckup)
 {   
-
-/*
-  processNode* existingProcess = (processNode*)isNodeInList((void*)&(gui.page.processes.processElementsList), processToCheckup, PROCESS_NODE);
-      if(existingProcess != NULL) {
-          LV_LOG_USER("Process already present");
-          referenceProcess = (processNode*)allocateAndInitializeNode(PROCESS_NODE);
-          referenceProcess = existingProcess; // Usa il nodo già presente anziché allocarne uno nuovo
-          gui.tempProcessNode = processToCheckup;
-      } else {
-          LV_LOG_USER("Process not present?!?!?");
-      }
-
-
-      //referenceProcess = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
-      //referenceProcess = processToCheckup;
-      //gui.tempProcessNode = processToCheckup;
-*/
-
-
   if(processToCheckup->process.processDetails->checkup->checkupParent == NULL){
     LV_LOG_USER("initCheckup");
 

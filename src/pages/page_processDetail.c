@@ -125,6 +125,7 @@ void event_processDetail(lv_event_t * e)
         }
         if(newProcess->process.processDetails->somethingChanged == 1 && newProcess->process.processDetails->stepElementsList.size > 0){
               lv_obj_clear_state(newProcess->process.processDetails->processSaveButton, LV_STATE_DISABLED);
+              lv_obj_add_state(newProcess->process.processDetails->processRunButton, LV_STATE_DISABLED);
               LV_LOG_USER("Updated SAVE button : ENABLED");
         }
     }
@@ -230,7 +231,7 @@ if(existingProcess != NULL) {
             newProcess->process.processDetails->processDetailNameContainer = lv_obj_create(newProcess->process.processDetails->processDetailContainer);
             lv_obj_remove_flag(newProcess->process.processDetails->processDetailNameContainer, LV_OBJ_FLAG_SCROLLABLE); 
             lv_obj_align(newProcess->process.processDetails->processDetailNameContainer, LV_ALIGN_TOP_LEFT, -10, -15);
-            lv_obj_set_size(newProcess->process.processDetails->processDetailNameContainer, 350, 50); 
+            lv_obj_set_size(newProcess->process.processDetails->processDetailNameContainer, 420, 50); 
             //lv_obj_set_style_border_color(newProcess->process.processDetails->processDetailNameContainer, lv_color_hex(GREEN_DARK), 0);
             lv_obj_set_style_border_opa(newProcess->process.processDetails->processDetailNameContainer, LV_OPA_TRANSP, 0);
 

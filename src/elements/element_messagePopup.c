@@ -64,6 +64,8 @@ void event_messagePopup(lv_event_t *e)
                 } else {
                   calcolateTotalTime(gui.tempProcessNode);
                   LV_LOG_USER("Delete step element instance at address 0x%p", gui.element.messagePopup.whoCallMe);
+                  gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+                  lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
                   qSysAction( SAVE_PROCESS_CONFIG );
                 }
                 
