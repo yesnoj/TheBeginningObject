@@ -271,7 +271,7 @@ typedef enum {
     NO,
 } yesOrNo_t;
 
-struct machineSettings {
+struct __attribute__ ((packed)) machineSettings {
   tempUnit_t 	        tempUnit; //0= C° 1= °F
   yesOrNo_t 	        waterInlet;
   float 	        	  calibratedTemp;

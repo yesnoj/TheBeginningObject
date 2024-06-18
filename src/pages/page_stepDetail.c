@@ -162,7 +162,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
       if(existingStep != NULL) {
           LV_LOG_USER("Step already exist with address 0x%p", currentNode);
           newStep = existingStep; // Usa il nodo già presente anziché allocarne uno nuovo
-          lv_obj_clear_state(newStep->step.stepDetails->stepSaveButton, LV_STATE_DISABLED);
+          lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED); // newStep->step.stepDetails->stepSaveButton
 
       } else {
           newStep = (stepNode*)allocateAndInitializeNode(STEP_NODE);
