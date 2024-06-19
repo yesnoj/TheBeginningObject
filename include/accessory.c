@@ -198,6 +198,8 @@ void event_keyboard(lv_event_t* e)
               LV_LOG_USER("Press ok from processDetailNameTextArea");
               lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
 
+              gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+              lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
               hideKeyboard(gui.tempProcessNode->process.processDetails->processDetailParent);
             }
             if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea){

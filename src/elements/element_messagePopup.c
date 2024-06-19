@@ -170,7 +170,7 @@ void event_messagePopup(lv_event_t *e)
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
 //                lv_obj_delete(mboxCont);
-                gui.element.messagePopup.mBoxPopupParent = NULL;
+              gui.element.messagePopup.mBoxPopupParent = NULL;
             }
             if(gui.element.messagePopup.whoCallMe == &gui){
                 LV_LOG_USER("Cancel delete all process!");

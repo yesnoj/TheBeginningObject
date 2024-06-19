@@ -36,8 +36,13 @@ void event_processDetail(lv_event_t * e)
     if(data == gui.tempProcessNode->process.processDetails->processDetailCloseButton){
         //gui.tempProcessNode->process.processDetails->stepElementsList.size = 0;
         //lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
-        lv_msgbox_close(mboxCont);
+        //lv_msgbox_close(mboxCont);
 //        lv_obj_delete(mboxCont);
+        lv_obj_delete(mboxCont);
+        //list of all styles to be reset, so clean the memory.
+        lv_style_reset(&gui.tempProcessNode->process.processDetails->textAreaStyle);
+        lv_scr_load(gui.page.menu.screen_mainMenu);
+
         LV_LOG_USER("Close Process Detail");
     }
     if(data == gui.tempProcessNode->process.processDetails->processColorLabel){
@@ -61,16 +66,16 @@ void event_processDetail(lv_event_t * e)
     }
 
     if(data == gui.tempProcessNode->process.processDetails->processPreferredLabel){
-        if(gui.tempProcessNode->process.processDetails->isPreferred == 0){
-          lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, lv_color_hex(RED), LV_PART_MAIN);
-          gui.tempProcessNode->process.processDetails->isPreferred = 1;
+			if(  lv_color_eq( lv_obj_get_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, LV_PART_MAIN ), lv_color_hex(RED) ) ) {
+				  lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, lv_color_hex(WHITE), LV_PART_MAIN);
+				  gui.tempProcessNode->process.processDetails->isPreferred = 0;
           gui.tempProcessNode->process.processDetails->somethingChanged = 1;
-          lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
-        }
-        else{
-          lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, lv_color_hex(WHITE), LV_PART_MAIN);
-          gui.tempProcessNode->process.processDetails->isPreferred = 0;
-        }
+			} else {
+				lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, lv_color_hex(RED), LV_PART_MAIN);
+				gui.tempProcessNode->process.processDetails->isPreferred = 1;
+        gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+			}
+      lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
       //  LV_LOG_USER("Process is preferred :%d",isPreferred);
     }
     if(data == gui.tempProcessNode->process.processDetails->processSaveButton && gui.tempProcessNode->process.processDetails->stepElementsList.size > 0){
@@ -193,10 +198,13 @@ if(existingProcess != NULL) {
   LV_LOG_USER("Processes available %d",gui.page.processes.processElementsList.size);
   LV_LOG_USER("Process address 0x%p, with n:%d steps",gui.tempProcessNode, gui.tempProcessNode->process.processDetails->stepElementsList.size); 
 
-  gui.tempProcessNode->process.processDetails->processDetailParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
-  lv_obj_class_init_obj(gui.tempProcessNode->process.processDetails->processDetailParent);
-  lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->processDetailParent, LV_OBJ_FLAG_IGNORE_LAYOUT);
-  lv_obj_set_size(gui.tempProcessNode->process.processDetails->processDetailParent, LV_PCT(100), LV_PCT(100));
+  gui.tempProcessNode->process.processDetails->processDetailParent = lv_obj_create(NULL);
+      lv_scr_load(gui.tempProcessNode->process.processDetails->processDetailParent);
+
+  //gui.tempProcessNode->process.processDetails->processDetailParent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
+  //lv_obj_class_init_obj(gui.tempProcessNode->process.processDetails->processDetailParent);
+  //lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->processDetailParent, LV_OBJ_FLAG_IGNORE_LAYOUT);
+  //lv_obj_set_size(gui.tempProcessNode->process.processDetails->processDetailParent, LV_PCT(100), LV_PCT(100));
   
   lv_style_init(&gui.tempProcessNode->process.processDetails->textAreaStyle);
   

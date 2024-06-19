@@ -159,14 +159,11 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
       if(existingStep != NULL) {
           LV_LOG_USER("Step already exist with address 0x%p", currentNode);
           gui.tempStepNode = existingStep; // Usa il nodo già presente anziché allocarne uno nuovo
-          lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED); // gui.tempStepNode->step.stepDetails->stepSaveButton
 
       } else {
           gui.tempStepNode = (stepNode*)allocateAndInitializeNode(STEP_NODE);
           LV_LOG_USER("New stepNode created at address 0x%p", gui.tempStepNode);
-          lv_obj_add_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED); //   gui.tempStepNode->step.stepDetails->stepSaveButton
       }
-      
       
 
       LV_LOG_USER("Step detail creation");
@@ -396,6 +393,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
       lv_obj_add_event_cb(gui.tempStepNode->step.stepDetails->stepSaveButton, event_stepDetail, LV_EVENT_CLICKED, referenceNode);
       lv_obj_add_event_cb(gui.tempStepNode->step.stepDetails->stepSaveButton, event_stepDetail, LV_EVENT_REFRESH, NULL);
       lv_obj_set_style_bg_color(gui.tempStepNode->step.stepDetails->stepSaveButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+      lv_obj_add_state(gui.tempStepNode->step.stepDetails->stepSaveButton, LV_STATE_DISABLED);
 
           gui.tempStepNode->step.stepDetails->stepSaveLabel = lv_label_create(gui.tempStepNode->step.stepDetails->stepSaveButton);
           lv_label_set_text(gui.tempStepNode->step.stepDetails->stepSaveLabel, stepDetailSave_text);
