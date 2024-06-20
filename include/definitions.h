@@ -566,6 +566,7 @@ typedef struct singleProcess {
     uint8_t            swipedLeft;
     uint8_t            swipedRight;
     uint8_t             isFiltered;
+    bool               gestureHandled;
 
     sProcessDetail     *processDetails;  /* Process details, that includes all steps */
 } singleProcess;
@@ -1107,10 +1108,7 @@ lv_obj_t * tempSensorTuneButton;
 #define processDetailTempTolerance_text 	 		"Tolerance:"
 #define processDetailPlaceHolder_text 			   		"Enter name"
 
-//uint8_t isPreferred;
 
-//lv_obj_t * processTempTextArea;
-//lv_obj_t * processToleranceTextArea;
 
 /*********************
 * Step detail strings/vars
@@ -1146,6 +1144,7 @@ uint8_t stepSource;
 uint8_t discardAfter;
 double stepSourceTemp;
 lv_obj_t * stepDetailNamelTextArea;
+bool gesture_handled;
 
 /*********************
 * Popup elements
@@ -1269,11 +1268,6 @@ static const uint8_t fahrenheitOffset = 32;
 static const float lowestTemp = 16.0;
 static const float stepTemp = 0.5;
 static const float initialTemp = 20.0;
-static float manualTemp = initialTemp;
-static float DevTemp;
-static float Temp_Bath;
-static float Temp_Chemical;
-static bool  tempReached = false;
 
 
 

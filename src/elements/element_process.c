@@ -11,7 +11,6 @@
 #include "../../include/definitions.h"
 
 extern struct gui_components gui;
-static bool gesture_handled = false;
 
 //ACCESSORY INCLUDES
 
@@ -146,7 +145,7 @@ void event_processElement(lv_event_t * e) {
     }
 
     if (code == LV_EVENT_GESTURE) {
-        gesture_handled = true; // Imposta il flag quando un gesto viene gestito
+        ((processNode*)data)->process.gestureHandled = true; // Imposta il flag quando un gesto viene gestito
 
         switch (dir) {
             case LV_DIR_LEFT:
@@ -172,8 +171,8 @@ void event_processElement(lv_event_t * e) {
                 break;
         }
     } else if (code == LV_EVENT_CLICKED) {
-        if (gesture_handled) {
-            gesture_handled = false; // Reset del flag dopo aver ignorato l'evento cliccato
+        if (currentNode->process.gestureHandled) {
+            currentNode->process.gestureHandled = false; // Reset del flag dopo aver ignorato l'evento cliccato
             return;
         }
 
@@ -231,6 +230,7 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
  
   newProcess->process.swipedLeft = 1;
   newProcess->process.swipedRight = 0;
+  newProcess->process.gestureHandled = false;
 
 	newProcess->process.processElement = lv_obj_create(gui.page.processes.processesListContainer);
 	newProcess->process.container_y = -10 + ((positionIndex - 1) * 70);

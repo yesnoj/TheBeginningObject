@@ -149,7 +149,7 @@ void event_messagePopup(lv_event_t *e)
                       uint32_t  x = lv_obj_get_x_aligned(gui.tempStepNode->step.stepElement) - 50;
                       uint32_t  y = lv_obj_get_y_aligned(gui.tempStepNode->step.stepElement);
                       lv_obj_set_pos(gui.tempStepNode->step.stepElement, x, y);
-                      gui.tempStepNode->step.swipedLeft = 0;
+                      gui.tempStepNode->step.swipedLeft = 1;
                       gui.tempStepNode->step.swipedRight = 0;
                       lv_obj_add_flag(gui.tempStepNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
                       lv_obj_add_flag(gui.tempStepNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
@@ -160,9 +160,10 @@ void event_messagePopup(lv_event_t *e)
                       uint32_t  x = lv_obj_get_x_aligned(gui.tempProcessNode->process.processElement) - 50;
                       uint32_t  y = lv_obj_get_y_aligned(gui.tempProcessNode->process.processElement);
                       lv_obj_set_pos(gui.tempProcessNode->process.processElement, x, y);
-                      gui.tempProcessNode->process.swipedLeft = 0;
+                      gui.tempProcessNode->process.swipedLeft = 1;
                       gui.tempProcessNode->process.swipedRight = 0;
                       lv_obj_add_flag(gui.tempProcessNode->process.deleteButton, LV_OBJ_FLAG_HIDDEN);
+                      gui.tempProcessNode->process.gestureHandled = false;
                     }
                 }
 

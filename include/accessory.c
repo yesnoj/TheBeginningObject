@@ -44,7 +44,6 @@ uint8_t qSysAction( uint16_t msg ) {
 
 void event_cb(lv_event_t * e)
 {
-  lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
   lv_obj_t * objCont = (lv_obj_t *)lv_obj_get_parent(obj);
   lv_obj_t * mboxCont = (lv_obj_t *)lv_obj_get_parent(objCont);
@@ -121,8 +120,6 @@ void event_keyboard(lv_event_t* e)
   lv_obj_t * objCont = (lv_obj_t *)lv_obj_get_parent(obj);
   lv_obj_t * mboxCont = (lv_obj_t *)lv_obj_get_parent(objCont);
   lv_obj_t * mboxParent = (lv_obj_t *)lv_obj_get_parent(mboxCont);
-  lv_obj_t * godFatherCont = (lv_obj_t *)lv_obj_get_parent(mboxParent);
-  lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
 
    if(code == LV_EVENT_CLICKED){ 
       if(obj == gui.element.filterPopup.mBoxNameTextArea){
