@@ -126,19 +126,19 @@ void event_keyboard(lv_event_t* e)
           LV_LOG_USER("LV_EVENT_FOCUSED on filterPopup.mBoxNameTextArea");
           lv_obj_set_user_data(gui.element.keyboardPopup.keyboard,obj);
 
-          showKeyboard(gui.element.filterPopup.mBoxFilterPopupParent);
+          showKeyboard(gui.element.filterPopup.mBoxFilterPopupParent, obj);
       }
       if(obj == gui.tempProcessNode->process.processDetails->processDetailNameTextArea){
           LV_LOG_USER("LV_EVENT_FOCUSED on processDetailNameTextArea");
           lv_obj_set_user_data(gui.element.keyboardPopup.keyboard,obj);
 
-          showKeyboard(gui.tempProcessNode->process.processDetails->processDetailParent);
+          showKeyboard(gui.tempProcessNode->process.processDetails->processDetailParent, obj);
       }
       if(obj == gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea){
           LV_LOG_USER("LV_EVENT_FOCUSED on stepDetailNamelTextArea");
           lv_obj_set_user_data(gui.element.keyboardPopup.keyboard,obj);
 
-          showKeyboard(gui.tempStepNode->step.stepDetails->stepDetailParent);
+          showKeyboard(gui.tempStepNode->step.stepDetails->stepDetailParent, obj);
       }
    }
   
@@ -522,9 +522,13 @@ void init_globals( void ) {
 }
 
 //without the commented part, the keyboard will be shown OVER the caller
-void showKeyboard(lv_obj_t * whoCallMe){
+void showKeyboard(lv_obj_t * whoCallMe, lv_obj_t * textArea){
     //lv_obj_add_flag(whoCallMe, LV_OBJ_FLAG_HIDDEN);
-    lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
+    if(strlen(lv_textarea_get_text(textArea)) > 0){
+      lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, lv_textarea_get_text(textArea));
+    }
+    else
+      lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
     lv_obj_remove_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_foreground(gui.element.keyboardPopup.keyBoardParent);
 }

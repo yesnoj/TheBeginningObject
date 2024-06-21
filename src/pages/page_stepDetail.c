@@ -1,6 +1,4 @@
-#include <sys/_stdint.h>
-#include "core/lv_obj_event.h"
-#include "misc/lv_event.h"
+
 /**
  * @file page_stepDetail.c
  *

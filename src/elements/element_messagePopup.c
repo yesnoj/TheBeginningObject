@@ -1,5 +1,4 @@
-#include "widgets/label/lv_label.h"
-#include "misc/lv_area.h"
+
 /**
  * @file element_messagePopup.c
  *

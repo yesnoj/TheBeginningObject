@@ -1,5 +1,4 @@
-#include "core/lv_obj_tree.h"
-#include "misc/lv_event.h"
+
 /**
  * @file page_processDetail.c
  *
@@ -102,6 +101,11 @@ void event_processDetail(lv_event_t * e)
             filterAndDisplayProcesses();
         LV_LOG_USER("Pressed processSaveButton");
     }
+    if(data == gui.tempProcessNode->process.processDetails->processSaveButton && gui.tempProcessNode->process.processDetails->stepElementsList.size == 0){
+       lv_obj_add_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);
+       lv_obj_add_state(gui.tempProcessNode->process.processDetails->processRunButton, LV_STATE_DISABLED);
+       lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processDetailCloseButton, LV_STATE_DISABLED);
+    }
 
     if(data == gui.tempProcessNode->process.processDetails->processRunButton){
         //gui.tempProcessNode->process.processDetails->stepElementsList.size = 0;
@@ -130,6 +134,12 @@ void event_processDetail(lv_event_t * e)
               lv_obj_add_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);
               lv_obj_add_state(gui.tempProcessNode->process.processDetails->processRunButton, LV_STATE_DISABLED);
               LV_LOG_USER("Updated SAVE button : DISABLED");   
+        }
+        if(gui.tempProcessNode->process.processDetails->somethingChanged == 1 && gui.tempProcessNode->process.processDetails->stepElementsList.size == 0){
+              lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);
+              lv_obj_add_state(gui.tempProcessNode->process.processDetails->processDetailCloseButton, LV_STATE_DISABLED);
+              lv_obj_add_state(gui.tempProcessNode->process.processDetails->processRunButton, LV_STATE_DISABLED);
+              LV_LOG_USER("Updated SAVE button : ENABLED");
         }
         if(gui.tempProcessNode->process.processDetails->somethingChanged == 1 && gui.tempProcessNode->process.processDetails->stepElementsList.size > 0){
               lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);

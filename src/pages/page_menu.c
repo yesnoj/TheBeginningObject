@@ -1,4 +1,4 @@
-#include "misc/lv_event.h"
+
 /**
  * @file page_menu.c
  *

@@ -1,5 +1,4 @@
-#include <sys/_stdint.h>
-#include "misc/lv_event.h"
+
 /**
  * @file element_process.c
  *

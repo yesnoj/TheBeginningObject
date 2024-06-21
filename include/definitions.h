@@ -373,6 +373,7 @@ typedef struct singleStep { //GRAPHIC ELEMENT IN THE STEPS LIST
     uint8_t            swipedLeft;
     uint8_t            swipedRight;
     bool               gestureHandled;
+    bool               longPressHandled;
     /* Params objects */
     sStepDetail 	  *stepDetails;
 } singleStep;
@@ -1370,7 +1371,7 @@ void event_keyboard(lv_event_t* e);
 void createQuestionMark(lv_obj_t * parent,lv_obj_t * element,lv_event_cb_t e, const int32_t x, const int32_t y);
 void createMessageBox(char *title, char *text, char *button1Text, char *button2Text);
 void create_keyboard();
-void showKeyboard(lv_obj_t * whoCallMe);
+void showKeyboard(lv_obj_t * whoCallMe, lv_obj_t * textArea);
 void hideKeyboard(lv_obj_t * whoCallMe);
 char *createRollerValues( uint32_t maxVal, const char* extra_str );
 uint8_t SD_init();

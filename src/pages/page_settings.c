@@ -1,5 +1,4 @@
-#include "misc/lv_event.h"
-#include "widgets/slider/lv_slider.h"
+
 /**
  * @file page_settings.c
  *

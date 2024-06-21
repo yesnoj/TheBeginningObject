@@ -1,5 +1,4 @@
-#include <sys/_stdint.h>
-#include "widgets/textarea/lv_textarea.h"
+
 /**
  * @file element_filter.c
  *
