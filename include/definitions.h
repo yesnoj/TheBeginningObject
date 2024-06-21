@@ -372,6 +372,7 @@ typedef struct singleStep { //GRAPHIC ELEMENT IN THE STEPS LIST
     lv_obj_t          *editButtonLabel;
     uint8_t            swipedLeft;
     uint8_t            swipedRight;
+    bool               gestureHandled;
     /* Params objects */
     sStepDetail 	  *stepDetails;
 } singleStep;

@@ -12,6 +12,11 @@
 #include "include/definitions.h"
 #include "include/accessory.c"
 
+
+void lv_example_obj_2(void);
+static void drag_event_handler(lv_event_t * e);
+
+
 lv_display_t *lvDisplay;
 lv_indev_t *lvInput;
 
@@ -111,7 +116,7 @@ void setup()
 
     initSD_I2C_MCP23017();
     homePage();
-
+    //lv_example_obj_2();
     /* Create System message queue */
     gui.sysActionQ = xQueueCreate( 16, sizeof( uint16_t ) );
     /* Create task to process external functions which will slow the GUI response */							
@@ -136,3 +141,71 @@ void loop()
     //testPin(WATER_RLY);
 }
 
+
+
+
+void event_handler_2(lv_event_t *e) {
+    lv_obj_t *obj = (lv_obj_t *)lv_event_get_target(e);
+    lv_event_code_t code = lv_event_get_code(e);
+
+    static lv_point_t last_point;
+    static bool dragging = false;
+
+    if (code == LV_EVENT_PRESSED) {
+        // Porta l'oggetto in primo piano
+        lv_obj_move_foreground(obj);
+
+        // Ottieni il punto corrente
+        lv_indev_get_point(lv_indev_get_act(), &last_point);
+        dragging = true;
+    } 
+    else if (code == LV_EVENT_RELEASED) {
+        dragging = false;
+    } 
+    else if (code == LV_EVENT_PRESSING) {
+        if (dragging) {
+            lv_point_t current_point;
+            lv_indev_get_point(lv_indev_get_act(), &current_point);
+
+            lv_coord_t dx = current_point.x - last_point.x;
+            lv_coord_t dy = current_point.y - last_point.y;
+
+            // Sposta l'oggetto
+            lv_obj_set_pos(obj, lv_obj_get_x(obj) + dx, lv_obj_get_y(obj) + dy);
+
+            // Aggiorna il punto precedente
+            last_point = current_point;
+
+            // Richiedi il ridisegno dell'area
+            lv_obj_invalidate(obj);
+        }
+    }
+}
+
+
+
+/**
+ * Make an object draggable.
+ */
+void lv_example_obj_2(void)
+{
+    lv_obj_t * obj;
+    lv_obj_t * obj2;
+    obj = lv_obj_create(lv_screen_active());
+    lv_obj_set_size(obj, 150, 100);
+    lv_obj_add_event_cb(obj, event_handler_2, LV_EVENT_ALL, NULL);
+
+    obj2 = lv_obj_create(lv_screen_active());
+    lv_obj_set_size(obj2, 150, 100);
+    lv_obj_add_event_cb(obj2, event_handler_2, LV_EVENT_ALL, NULL);
+
+
+    lv_obj_t * label = lv_label_create(obj);
+    lv_obj_t * label2 = lv_label_create(obj2);
+    lv_label_set_text(label, "Drag me1");
+    lv_label_set_text(label2, "Drag me2");
+
+    lv_obj_center(label);
+    lv_obj_center(label2);
+
+}
