@@ -59,7 +59,7 @@ void event_messagePopup(lv_event_t *e)
             {
                 LV_LOG_USER("Delete step!");
                 
-                if( !deleteStepElement( gui.element.messagePopup.whoCallMe , gui.tempProcessNode) ) {
+                if( !deleteStepElement( gui.element.messagePopup.whoCallMe , gui.tempProcessNode, false) ) {
                   LV_LOG_USER("Delete step element instance at address 0x%p Failed!", gui.element.messagePopup.whoCallMe);
                 } else {
                   calcolateTotalTime(gui.tempProcessNode);

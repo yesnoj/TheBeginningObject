@@ -1298,7 +1298,7 @@ void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *w
 // @file element_step.c
 void event_stepElement(lv_event_t *e);
 void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t tempSize);
-bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference );
+bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference , bool isDeleteProcess);
 stepNode *addStepElement(stepNode * stepToAdd, processNode * processReference);
 
 /*********************

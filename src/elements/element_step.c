@@ -47,7 +47,7 @@ stepNode *addStepElement(stepNode * stepToAdd, processNode * processReference) {
 
 
 
-bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference ) {
+bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference , bool isDeleteProcess) {
 
 	stepNode 	*adjust_y_ptr = NULL;
 	lv_coord_t		container_y_prev, container_y_new ;
@@ -73,23 +73,23 @@ bool deleteStepElement( stepNode	*stepToDelete, processNode * processReference )
 			stepToDelete->prev->next = stepToDelete->next;	// Re-join the linked list if not at beginning
 			stepToDelete->next->prev = stepToDelete->prev;
 		}
-
-		while( adjust_y_ptr ) {
-			if( adjust_y_ptr->next ) container_y_new = adjust_y_ptr->step.container_y;
-			adjust_y_ptr->step.container_y = container_y_prev;
-			lv_obj_set_y(adjust_y_ptr->step.stepElement, adjust_y_ptr->step.container_y);
-			if( adjust_y_ptr->next ) container_y_prev = container_y_new;
-			adjust_y_ptr = adjust_y_ptr->next;
-		}
-		/* Only delete all LVGL objects associated with entry if called from process detail screen */
-    if(stepToDelete->step.stepElement) lv_obj_delete_async( stepToDelete->step.stepElement );
-	  /* Free the allocated memory for the list entry*/
-    free( stepToDelete );	
-		processReference->process.processDetails->stepElementsList.size--;  // Update list size
-    lv_obj_send_event(processReference->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL); // Refresh Screen and states
+    if(!isDeleteProcess){
+      while( adjust_y_ptr) {
+        if( adjust_y_ptr->next ) container_y_new = adjust_y_ptr->step.container_y;
+        adjust_y_ptr->step.container_y = container_y_prev;
+        lv_obj_set_y(adjust_y_ptr->step.stepElement, adjust_y_ptr->step.container_y);
+        if( adjust_y_ptr->next ) container_y_prev = container_y_new;
+        adjust_y_ptr = adjust_y_ptr->next;
+      }
+      /* Only delete all LVGL objects associated with entry if called from process detail screen */
+      if(stepToDelete->step.stepElement) lv_obj_delete_async( stepToDelete->step.stepElement );
+      /* Free the allocated memory for the list entry*/
+      free( stepToDelete );	
+      processReference->process.processDetails->stepElementsList.size--;  // Update list size
+      lv_obj_send_event(processReference->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL); // Refresh Screen and states
 
     LV_LOG_USER("Process address %p, with n:%d steps",processReference, processReference->process.processDetails->stepElementsList.size); 
-
+    }
 		return true;
 	}
 	return false;
@@ -124,7 +124,7 @@ static bool deleteStepElementByObj( lv_obj_t *obj, processNode * processReferenc
 
 	stepNode	*step_ptr  = getStepElementEntryByObject(obj,processReference);
 
-	return deleteStepElement(step_ptr,processReference);
+	return deleteStepElement(step_ptr,processReference, false);
 }
 
 

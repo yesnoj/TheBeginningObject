@@ -83,6 +83,7 @@ void event_processDetail(lv_event_t * e)
           
           strcpy( gui.tempProcessNode->process.processDetails->processNameString, lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea));
           lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processRunButton, LV_STATE_DISABLED);
+          lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processDetailCloseButton, LV_STATE_DISABLED);
           lv_obj_add_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);
 
           if(isNodeInList((void*)&(gui.page.processes.processElementsList), gui.tempProcessNode, PROCESS_NODE) == NULL ) { 
@@ -132,6 +133,7 @@ void event_processDetail(lv_event_t * e)
         }
         if(gui.tempProcessNode->process.processDetails->somethingChanged == 1 && gui.tempProcessNode->process.processDetails->stepElementsList.size > 0){
               lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);
+              lv_obj_add_state(gui.tempProcessNode->process.processDetails->processDetailCloseButton, LV_STATE_DISABLED);
               lv_obj_add_state(gui.tempProcessNode->process.processDetails->processRunButton, LV_STATE_DISABLED);
               LV_LOG_USER("Updated SAVE button : ENABLED");
         }

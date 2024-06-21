@@ -77,7 +77,7 @@ bool deleteProcessElement( processNode	*processToDelete ) {
 
        while(processToDelete->process.processDetails->stepElementsList.start != NULL) {
 
-            deleteStepElement( processToDelete->process.processDetails->stepElementsList.start, processToDelete );
+            deleteStepElement( processToDelete->process.processDetails->stepElementsList.start, processToDelete , true);
       }
     }
 		lv_obj_delete_async( processToDelete->process.processElement );			// Delete all LVGL objects associated with entry
