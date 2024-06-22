@@ -923,8 +923,8 @@ LV_IMG_DECLARE(splash_img);
 #define FILENAME_SAVE         "/FilMachine.cfg"
 #define FILENAME_BACKUP       "/FilMachineBackup.cfg"
 
-#define MAX_STEP_ELEMENTS		  30//10
-#define MAX_PROC_ELEMENTS		  100//30
+#define MAX_STEP_ELEMENTS		  10//30//10
+#define MAX_PROC_ELEMENTS		  20//100//30
 
 
 /*********************
@@ -1178,6 +1178,8 @@ bool gesture_handled;
 #define warningPopupLowWaterTitle_text 		   		"The water level is too low!Temperature control has been suspended\nRefill the water bath immediately to correct resume the temperature control process"
 #define stopNowProcessPopupBody_text			   		"Stopping a process will ruin the film inside the tank and leave the chemistry inside!\nDo you want to stop the process now?"
 #define stopAfterProcessPopupBody_text			   		"Do you want to stop the process after this step is completed?"
+#define maxNumberEntryProcessPopupBody_text			   		"Max number of PROCESS already reached!"
+#define maxNumberEntryStepsPopupBody_text			   		"Max number of STEP already reached!"
 
 static const char *currentStep[3] = {"Filling", "Draining", "Processing"};
 

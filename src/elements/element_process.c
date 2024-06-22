@@ -21,7 +21,10 @@ extern struct gui_components gui;
 ******************************/
 
 processNode *addProcessElement(processNode	*processToAdd) {
-	if( gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS ) return NULL;		// Put some limit on things!
+	if( gui.page.processes.processElementsList.size == MAX_PROC_ELEMENTS ) {
+    messagePopupCreate(warningPopupTitle_text, maxNumberEntryProcessPopupBody_text, NULL, NULL, NULL);
+    return NULL;
+    }		// Put some limit on things!
 
   LV_LOG_USER("Processes available %d first",gui.page.processes.processElementsList.size);
       if( gui.page.processes.processElementsList.start == NULL) {					/* Deals with the first entry */

@@ -24,8 +24,12 @@ extern struct gui_components gui;
 *  LINKED LIST IMPLEMENTATION
 ******************************/
 stepNode *addStepElement(stepNode * stepToAdd, processNode * processReference) {
-  
-	if(processReference->process.processDetails->stepElementsList.size == MAX_STEP_ELEMENTS || isNodeInList((void*)&(processReference->process.processDetails->stepElementsList), stepToAdd, STEP_NODE) != NULL) return NULL;		// Put some limit on things!
+  if(processReference->process.processDetails->stepElementsList.size == MAX_STEP_ELEMENTS){
+      messagePopupCreate(warningPopupTitle_text, maxNumberEntryStepsPopupBody_text, NULL, NULL, NULL);
+      return NULL;
+  }
+	if(isNodeInList((void*)&(processReference->process.processDetails->stepElementsList), stepToAdd, STEP_NODE) != NULL) 
+      return NULL;		// Put some limit on things!
 	
   if(processReference->process.processDetails->stepElementsList.start == NULL) {					/* Deals with the first entry */
 		processReference->process.processDetails->stepElementsList.start = stepToAdd;
