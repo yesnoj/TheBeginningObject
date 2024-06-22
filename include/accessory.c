@@ -1438,22 +1438,25 @@ char* getRollerStringIndex(uint32_t index, const char *list) {
 }
 
 
-void copyAndRenameFile(fs::FS &fs, const char* sourceFile, const char* destFile) {
+bool copyAndRenameFile(fs::FS &fs, const char* sourceFile, const char* destFile) {
+    // Verifica se il file di destinazione esiste già e rimuovilo se necessario
     if (fs.exists(destFile)) {
         fs.remove(destFile);
     }
 
-    File srcFile = fs.open(sourceFile, FILE_READ); // Apre il file sorgente in modalità lettura
+    // Apre il file sorgente in modalità lettura
+    File srcFile = fs.open(sourceFile, FILE_READ);
     if (!srcFile) {
         LV_LOG_USER("Errore nell'apertura del file sorgente!");
-        return;
+        return false;
     }
 
-    File destFileObj = SD.open(destFile, FILE_WRITE); // Crea o sovrascrive il file destinazione
+    // Crea o sovrascrive il file destinazione
+    File destFileObj = fs.open(destFile, FILE_WRITE);
     if (!destFileObj) {
         LV_LOG_USER("Errore nell'apertura del file destinazione!");
         srcFile.close();
-        return;
+        return false;
     }
 
     // Legge il contenuto del file sorgente e lo scrive nel file destinazione
@@ -1465,7 +1468,22 @@ void copyAndRenameFile(fs::FS &fs, const char* sourceFile, const char* destFile)
     srcFile.close();
     destFileObj.close();
 
-    LV_LOG_USER("File copiato e rinominato con successo!");
+    // Verifica se il file destinazione è stato creato correttamente e se non è vuoto
+    if (fs.exists(destFile)) {
+        File checkFile = fs.open(destFile, FILE_READ);
+        if (checkFile && checkFile.size() > 0) {
+            LV_LOG_USER("File copiato e rinominato con successo!");
+            checkFile.close();
+            return true;
+        } else {
+            LV_LOG_USER("Errore: il file di destinazione è vuoto o non può essere letto.");
+        }
+        checkFile.close();
+    } else {
+        LV_LOG_USER("Errore: il file di destinazione non è stato creato correttamente.");
+    }
+
+    return false;
 }
 
 

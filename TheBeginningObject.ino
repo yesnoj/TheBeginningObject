@@ -58,8 +58,8 @@ void sysMan( void *arg ) {
           break;
       case RELOAD_CFG:
           LV_LOG_USER("Reload FilMachine.cfg from backup");
-          copyAndRenameFile(SD, FILENAME_BACKUP, FILENAME_SAVE);
-          rebootBoard();
+          if(copyAndRenameFile(SD, FILENAME_BACKUP, FILENAME_SAVE))
+              rebootBoard();
       default:
           LV_LOG_USER( "Unknown System Manager Request!");
           break;
