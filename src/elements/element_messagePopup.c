@@ -136,7 +136,13 @@ void event_messagePopup(lv_event_t *e)
                 //    LV_LOG_USER("Processes already empty");
                 //}
             }
-
+            if (gui.element.messagePopup.whoCallMe == gui.page.tools.toolsImportIcon)
+            {
+                LV_LOG_USER("Cancel reboot");
+                lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
+                lv_msgbox_close(mboxCont);
+                gui.element.messagePopup.mBoxPopupParent = NULL;
+            }
         }
         if (obj == gui.element.messagePopup.mBoxPopupButton2)
         {
@@ -171,6 +177,15 @@ void event_messagePopup(lv_event_t *e)
                 lv_msgbox_close(mboxCont);
 //                lv_obj_delete(mboxCont);
               gui.element.messagePopup.mBoxPopupParent = NULL;
+            }
+            if (gui.element.messagePopup.whoCallMe == gui.page.tools.toolsImportIcon)
+            {
+                lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
+                lv_msgbox_close(mboxCont);
+                gui.element.messagePopup.mBoxPopupParent = NULL;
+
+                  LV_LOG_USER("Import process from SD"); 
+                  qSysAction( RELOAD_CFG );
             }
             if(gui.element.messagePopup.whoCallMe == &gui){
                 LV_LOG_USER("Cancel delete all process!");

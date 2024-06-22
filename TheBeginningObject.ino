@@ -56,7 +56,10 @@ void sysMan( void *arg ) {
 	        LV_LOG_USER("Save On EEPROM!");
           writeMachineStats(&gui.page.tools.machineStats);
           break;
-
+      case RELOAD_CFG:
+          LV_LOG_USER("Reload FilMachine.cfg from backup");
+          copyAndRenameFile(SD, FILENAME_BACKUP, FILENAME_SAVE);
+          rebootBoard();
       default:
           LV_LOG_USER( "Unknown System Manager Request!");
           break;

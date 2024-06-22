@@ -523,14 +523,18 @@ void init_globals( void ) {
 
 //without the commented part, the keyboard will be shown OVER the caller
 void showKeyboard(lv_obj_t * whoCallMe, lv_obj_t * textArea){
+    if(textArea != NULL){
     //lv_obj_add_flag(whoCallMe, LV_OBJ_FLAG_HIDDEN);
-    if(strlen(lv_textarea_get_text(textArea)) > 0){
-      lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, lv_textarea_get_text(textArea));
+      if(strlen(lv_textarea_get_text(textArea)) > 0)
+        lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, lv_textarea_get_text(textArea));
+      else
+        lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
+
+      lv_obj_remove_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
+      lv_obj_move_foreground(gui.element.keyboardPopup.keyBoardParent);
     }
-    else
-      lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
-    lv_obj_remove_flag(gui.element.keyboardPopup.keyBoardParent, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_move_foreground(gui.element.keyboardPopup.keyBoardParent);
+      else 
+        lv_textarea_set_text(gui.element.keyboardPopup.keyboardTextArea, "");
 }
 
 void hideKeyboard(lv_obj_t * whoCallMe){
@@ -1432,6 +1436,39 @@ char* getRollerStringIndex(uint32_t index, const char *list) {
     // If index is out of bounds
     return NULL;
 }
+
+
+void copyAndRenameFile(fs::FS &fs, const char* sourceFile, const char* destFile) {
+    if (fs.exists(destFile)) {
+        fs.remove(destFile);
+    }
+
+    File srcFile = fs.open(sourceFile, FILE_READ); // Apre il file sorgente in modalità lettura
+    if (!srcFile) {
+        LV_LOG_USER("Errore nell'apertura del file sorgente!");
+        return;
+    }
+
+    File destFileObj = SD.open(destFile, FILE_WRITE); // Crea o sovrascrive il file destinazione
+    if (!destFileObj) {
+        LV_LOG_USER("Errore nell'apertura del file destinazione!");
+        srcFile.close();
+        return;
+    }
+
+    // Legge il contenuto del file sorgente e lo scrive nel file destinazione
+    while (srcFile.available()) {
+        destFileObj.write(srcFile.read());
+    }
+
+    // Chiude entrambi i file
+    srcFile.close();
+    destFileObj.close();
+
+    LV_LOG_USER("File copiato e rinominato con successo!");
+}
+
+
 
 /*
 void filterAndDisplayProcesses(void) {

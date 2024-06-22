@@ -1,3 +1,5 @@
+#include "misc/lv_palette.h"
+#include <sys/_stdint.h>
 #include "core/lv_obj_pos.h"
 
 
@@ -12,6 +14,7 @@
 #include "../../include/definitions.h"
 
 extern struct gui_components gui;
+
 
 
 //ACCESSORY INCLUDES
@@ -242,7 +245,8 @@ void event_stepElement(lv_event_t *e) {
         LV_LOG_USER("LV_EVENT_LONG_PRESSED");
         lv_obj_move_foreground(objElement);
         lv_indev_get_point(lv_indev_get_act(), &last_point);
-        lv_style_set_border_color(&currentNode->step.stepStyle, lv_color_hex(RED));
+        //lv_style_set_border_color(&currentNode->step.stepStyle, lv_color_hex(RED));
+        lv_style_set_shadow_spread(&currentNode->step.stepStyle, 3);
         lv_obj_remove_flag(lv_obj_get_parent(objElement), LV_OBJ_FLAG_SCROLLABLE);
         dragging = true;
     } 
@@ -256,7 +260,8 @@ void event_stepElement(lv_event_t *e) {
         currentNode->step.longPressHandled = false;
         
         
-        lv_style_set_border_color(&currentNode->step.stepStyle, lv_color_hex(GREEN_DARK));
+        //lv_style_set_border_color(&currentNode->step.stepStyle, lv_color_hex(GREEN_DARK));
+        lv_style_set_shadow_spread(&currentNode->step.stepStyle, 0);
         lv_obj_add_flag(lv_obj_get_parent(objElement), LV_OBJ_FLAG_SCROLLABLE);
 
         // Inserisci l'elemento nella nuova posizione
@@ -441,6 +446,9 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
     lv_style_set_border_width(&newStep->step.stepStyle, 4);
     lv_style_set_border_opa(&newStep->step.stepStyle, LV_OPA_50);
     lv_style_set_border_side(&newStep->step.stepStyle, LV_BORDER_SIDE_BOTTOM | LV_BORDER_SIDE_RIGHT);
+    lv_style_set_shadow_width(&newStep->step.stepStyle, 5);
+    lv_style_set_shadow_spread(&newStep->step.stepStyle, 0);
+    lv_style_set_shadow_color(&newStep->step.stepStyle, lv_palette_main(LV_PALETTE_RED));
 		LV_LOG_USER("First call to processElementCreate style now initialised");
 	}
 

@@ -11,7 +11,6 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 
-
 //#include <OneWire.h>
 
 //Set to 1 to enable all errors (SD/I2C)
@@ -890,6 +889,13 @@ struct gui_components {
   stepNode          *tempStepNode;
 };
 
+typedef struct {
+    lv_obj_t *obj;
+    lv_coord_t original_width;
+    lv_coord_t original_height;
+    float current_scale;
+} LVGLObjectScale;
+
 /*********************
 * GLOBAL DEFINES
 *********************/
@@ -899,6 +905,7 @@ struct gui_components {
 *********************/
 #define SAVE_PROCESS_CONFIG           0x0001
 #define SAVE_MACHINE_STATS            0x0002
+#define RELOAD_CFG                    0x0003
 
 LV_FONT_DECLARE(FilMachineFontIcons_15);
 LV_FONT_DECLARE(FilMachineFontIcons_20);
@@ -914,6 +921,7 @@ LV_IMG_DECLARE(splash_img);
 #define TAB_TOOLS     5
 
 #define FILENAME_SAVE         "/FilMachine.cfg"
+#define FILENAME_BACKUP       "/FilMachineBackup.cfg"
 
 #define MAX_STEP_ELEMENTS		  30//10
 #define MAX_PROC_ELEMENTS		  100//30
@@ -1074,6 +1082,7 @@ LV_IMG_DECLARE(splash_img);
 #define drainMachine_text 							"Drain machine"
 #define importConfigAndProcesses_text 				"Import"
 #define importConfigAndProcessesMBox_text 			"Import configuration and processes from micro USB drive"
+#define importConfigAndProcessesMBox2_text       "This will reboot your FilMachine!Are you sure?!"
 #define exportConfigAndProcesses_text 				"Export"
 #define exportConfigAndProcessesMBox_text 			"Export configuration and processes from micro USB drive"
 #define statCompleteProcesses_text 					"Completed processes"
@@ -1405,6 +1414,7 @@ void writeMachineStats(machineStatistics machineStats);
 void readMachineStats(machineStatistics machineStats);
 uint32_t findRolleStringIndex(const char *input, const char *list);
 char* getRollerStringIndex(uint32_t index, const char *list);
+
 
 void toLowerCase(char *str);
 int caseInsensitiveStrstr(const char *haystack, const char *needle);
