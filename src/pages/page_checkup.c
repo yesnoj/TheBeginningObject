@@ -330,7 +330,7 @@ void initCheckup()
 
                   gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameContainer);         
                   lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameValue, gui.tempProcessNode->process.processDetails->processNameString); 
-                  lv_obj_set_width(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameValue, 300);
+                  lv_obj_set_width(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameValue, 420);
                   lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameValue, &lv_font_montserrat_30, 0);              
                   lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameValue, LV_ALIGN_TOP_LEFT, -10, -8);
                   lv_label_set_long_mode(gui.tempProcessNode->process.processDetails->checkup->checkupProcessNameValue, LV_LABEL_LONG_SCROLL_CIRCULAR);

@@ -1,3 +1,4 @@
+#include "misc/lv_event.h"
 
 /**
  * @file element_process.c
@@ -202,7 +203,14 @@ void event_processElement(lv_event_t * e) {
             gui.tempProcessNode = currentNode;
             processDetail(currentNode->process.processDetails->processesContainer); // currentNode
         }
-    } else if (code == LV_EVENT_DELETE) {
+    }
+     else if (code == LV_EVENT_LONG_PRESSED) {
+            LV_LOG_USER("Duplicate process element %p", currentNode);
+            gui.tempProcessNode = currentNode;
+            currentNode->process.gestureHandled = true;
+            messagePopupCreate(duplicatePopupTitle_text, duplicateProcessPopupBody_text, checkupNo_text, checkupYes_text, currentNode);
+     }
+     else if (code == LV_EVENT_DELETE) {
         lv_style_reset(&currentNode->process.processStyle);
     }
 }
@@ -265,6 +273,7 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         lv_obj_align(newProcess->process.processElementSummary, LV_ALIGN_TOP_LEFT, 34, -16);
         lv_obj_remove_flag(newProcess->process.processElementSummary, LV_OBJ_FLAG_SCROLLABLE);
         lv_obj_add_event_cb(newProcess->process.processElementSummary, event_processElement, LV_EVENT_CLICKED, newProcess->process.processElementSummary);
+        lv_obj_add_event_cb(newProcess->process.processElementSummary, event_processElement, LV_EVENT_LONG_PRESSED, newProcess->process.processElementSummary);
         lv_obj_add_style(newProcess->process.processElementSummary, &newProcess->process.processStyle, 0);
 
         newProcess->process.processName = lv_label_create(newProcess->process.processElementSummary);

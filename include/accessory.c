@@ -1486,6 +1486,108 @@ bool copyAndRenameFile(fs::FS &fs, const char* sourceFile, const char* destFile)
     return false;
 }
 
+char* generateRandomSuffix(const char* baseName) {
+    static char newProcessName[MAX_PROC_NAME_LEN + 1]; // Include spazio per il carattere nullo
+
+    // Controlla se baseName ha già un suffisso numerico
+    size_t len = strlen(baseName);
+    int suffix = 1; // Suffisso iniziale
+
+    // Calcola la lunghezza massima possibile per il nome base (senza suffisso)
+    size_t maxBaseLen = MAX_PROC_NAME_LEN - 4; // 4 caratteri per "_000"
+
+    if (len > maxBaseLen) {
+        // Se baseName è più lungo del massimo consentito per il nome base, accorcialo
+        strncpy(newProcessName, baseName, maxBaseLen); // Copia solo maxBaseLen caratteri
+        newProcessName[maxBaseLen] = '\0'; // Assicura che ci sia il terminatore nullo
+        len = maxBaseLen; // Aggiorna la lunghezza effettiva del nuovo nome base
+    } else {
+        // Altrimenti copialo direttamente
+        strncpy(newProcessName, baseName, sizeof(newProcessName)); // Copia tutta la stringa
+        newProcessName[sizeof(newProcessName) - 1] = '\0'; // Assicura che ci sia il terminatore nullo
+    }
+
+    // Verifica se baseName ha già un suffisso numerico valido
+    if (len > 4 && baseName[len - 4] == '_' && isdigit(baseName[len - 3]) && isdigit(baseName[len - 2]) && isdigit(baseName[len - 1])) {
+        // Se baseName ha già un suffisso numerico, estrai il suffisso corrente
+        suffix = atoi(&baseName[len - 3]); // Ottieni il suffisso numerico
+        newProcessName[len - 4] = '\0'; // Rimuovi il suffisso numerico per creare il nuovo nome base
+    }
+
+    bool uniqueNameFound = false;
+
+    while (!uniqueNameFound) {
+        // Crea il nuovo suffisso
+        char suffixStr[5]; // 4 caratteri per "_000" + 1 per il terminatore nullo
+        snprintf(suffixStr, sizeof(suffixStr), "_%03d", suffix); // Formatta il suffisso a tre cifre con zeri a sinistra se necessario
+
+        // Concatena il suffisso al nuovo nome
+        strncat(newProcessName, suffixStr, sizeof(newProcessName) - strlen(newProcessName) - 1);
+
+        // Verifica se il nuovo nome con suffisso è unico nella lista
+        uniqueNameFound = true;
+        processNode *current = gui.page.processes.processElementsList.start;
+        while (current != NULL) {
+            if (strcmp(current->process.processDetails->processNameString, newProcessName) == 0) {
+                uniqueNameFound = false;
+                suffix++; // Incrementa il suffisso
+                // Rimuovi il suffisso aggiunto per ricominciare il ciclo e provare con un nuovo suffisso
+                size_t baseLen = strlen(newProcessName) - 4; // Lunghezza del nome base senza il suffisso
+                newProcessName[baseLen] = '\0'; // Termina la stringa dopo il nome base
+                break;
+            }
+            current = current->next;
+        }
+    }
+
+    return newProcessName;
+}
+
+char* copyString(const char* source) {
+    size_t length = strlen(source) + 1;
+    char* copy = (char*)malloc(length);
+    if (copy) {
+        strcpy(copy, source);
+    }
+    return copy;
+}
+
+// Funzione per duplicare un sProcessDetail
+sProcessDetail* duplicateProcessDetails(const sProcessDetail* source) {
+    sProcessDetail* copy = (sProcessDetail*)malloc(sizeof(sProcessDetail));
+    if (copy) {
+        memcpy(copy, source, sizeof(sProcessDetail));
+    }
+    return copy;
+}
+
+// Funzione per duplicare un processNode
+processNode* duplicateProcessNode(const processNode* originalNode) {
+    if (originalNode == nullptr) return nullptr;
+
+    // Crea un nuovo nodo
+    processNode* newNode = (processNode*)malloc(sizeof(processNode));
+    if (!newNode) return nullptr;
+
+    // Duplica i dettagli del processo
+    newNode->process.processDetails = duplicateProcessDetails(originalNode->process.processDetails);
+    if (!newNode->process.processDetails) {
+        free(newNode);
+        return nullptr;
+    }
+
+    // Copia il resto del contenuto del processo
+    memcpy(&newNode->process, &originalNode->process, sizeof(singleProcess));
+
+    // Imposta il nuovo puntatore ai dettagli del processo
+    newNode->process.processDetails = newNode->process.processDetails;
+
+    // Imposta i puntatori next e prev a nullptr
+    newNode->next = nullptr;
+    newNode->prev = nullptr;
+
+    return newNode;
+}
 
 
 /*

@@ -135,12 +135,14 @@ void event_processDetail(lv_event_t * e)
               lv_obj_add_state(gui.tempProcessNode->process.processDetails->processRunButton, LV_STATE_DISABLED);
               LV_LOG_USER("Updated SAVE button : DISABLED");   
         }
+        /*
         if(gui.tempProcessNode->process.processDetails->somethingChanged == 1 && gui.tempProcessNode->process.processDetails->stepElementsList.size == 0){
               lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);
               lv_obj_add_state(gui.tempProcessNode->process.processDetails->processDetailCloseButton, LV_STATE_DISABLED);
               lv_obj_add_state(gui.tempProcessNode->process.processDetails->processRunButton, LV_STATE_DISABLED);
               LV_LOG_USER("Updated SAVE button : ENABLED");
         }
+        */
         if(gui.tempProcessNode->process.processDetails->somethingChanged == 1 && gui.tempProcessNode->process.processDetails->stepElementsList.size > 0){
               lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);
               lv_obj_add_state(gui.tempProcessNode->process.processDetails->processDetailCloseButton, LV_STATE_DISABLED);
@@ -252,7 +254,7 @@ if(existingProcess != NULL) {
                   gui.tempProcessNode->process.processDetails->processDetailNameTextArea = lv_textarea_create(gui.tempProcessNode->process.processDetails->processDetailNameContainer); 
                   lv_textarea_set_one_line(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, true);
                   lv_textarea_set_placeholder_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, processDetailPlaceHolder_text);
-                  lv_obj_set_width(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, 280);
+                  lv_obj_set_width(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, 420);
                   lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, &lv_font_montserrat_30, 0);              
                   lv_obj_align(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, LV_ALIGN_TOP_LEFT, -20, -25);
                   lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, event_keyboard, LV_EVENT_CLICKED, NULL);

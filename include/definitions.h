@@ -1170,6 +1170,8 @@ bool gesture_handled;
 #define messagePopupDetailTitle_text 				"Detail information"
 #define deleteButton_text 							"Delete"
 #define deletePopupTitle_text 						"Delete element"
+#define duplicatePopupTitle_text 						"Duplicate process"
+#define duplicateProcessPopupBody_text 						"Do you want do duplicate the selected process?"
 #define deleteAllProcessPopupTitle_text 						"Delete all process"
 #define deletePopupBody_text 						"Are you sure to delete the selected element?"
 #define deleteAllProcessPopupBody_text 						"Are you sure to delete all the process created?"
@@ -1414,7 +1416,10 @@ void writeMachineStats(machineStatistics machineStats);
 void readMachineStats(machineStatistics machineStats);
 uint32_t findRolleStringIndex(const char *input, const char *list);
 char* getRollerStringIndex(uint32_t index, const char *list);
-
+char* generateRandomSuffix(const char* baseName);
+processNode* duplicateProcessNode(const processNode* originalNode);
+sProcessDetail* duplicateProcessDetails(const sProcessDetail* source);
+char* copyString(const char* source);
 
 void toLowerCase(char *str);
 int caseInsensitiveStrstr(const char *haystack, const char *needle);

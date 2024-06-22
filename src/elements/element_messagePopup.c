@@ -37,7 +37,7 @@ void event_messagePopup(lv_event_t *e)
         if (obj == gui.element.messagePopup.mBoxPopupButton1)
         {
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton1");
-            if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode)
+            if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == 1 && gui.tempProcessNode->process.swipedLeft == 0)//manage the delete by pressing button with gesture
             {
                 LV_LOG_USER("Delete process!");
 
@@ -53,7 +53,13 @@ void event_messagePopup(lv_event_t *e)
 //                lv_obj_delete(mboxCont);  // Not required! Can cause crash!
                 gui.element.messagePopup.mBoxPopupParent = NULL;
             }
-
+            if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == 0 && gui.tempProcessNode->process.swipedLeft == 1)//manage duplicate 
+            {
+                LV_LOG_USER("Cancel duplicate");
+                lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
+                lv_msgbox_close(mboxCont);
+                gui.element.messagePopup.mBoxPopupParent = NULL;
+            }
             if (gui.element.messagePopup.whoCallMe == gui.tempStepNode)
             {
                 LV_LOG_USER("Delete step!");
@@ -132,13 +138,10 @@ void event_messagePopup(lv_event_t *e)
                   //gui.page.processes.processElementsList.size = 0;
                   
                   qSysAction( SAVE_PROCESS_CONFIG );
-               // }else {
-                //    LV_LOG_USER("Processes already empty");
-                //}
             }
             if (gui.element.messagePopup.whoCallMe == gui.page.tools.toolsImportIcon)
             {
-                LV_LOG_USER("Cancel reboot");
+                LV_LOG_USER("Cancel import from SD");
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
@@ -149,8 +152,9 @@ void event_messagePopup(lv_event_t *e)
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton2");
             if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode || gui.element.messagePopup.whoCallMe == gui.tempStepNode || gui.element.messagePopup.whoCallMe == gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton || gui.element.messagePopup.whoCallMe == gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton)
             {
-                if(gui.element.messagePopup.whoCallMe == gui.tempStepNode){
+                if(gui.element.messagePopup.whoCallMe == gui.tempStepNode && gui.tempStepNode->step.swipedLeft == 0 && gui.tempStepNode->step.swipedRight == 1){
                     if(gui.tempStepNode->step.swipedLeft == 0 && gui.tempStepNode->step.swipedRight == 1){
+                      LV_LOG_USER("Cancel delete element!");
                       uint32_t  x = lv_obj_get_x_aligned(gui.tempStepNode->step.stepElement) - 50;
                       uint32_t  y = lv_obj_get_y_aligned(gui.tempStepNode->step.stepElement);
                       lv_obj_set_pos(gui.tempStepNode->step.stepElement, x, y);
@@ -160,8 +164,9 @@ void event_messagePopup(lv_event_t *e)
                       lv_obj_add_flag(gui.tempStepNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
                     }
                 }
-                if(gui.element.messagePopup.whoCallMe == gui.tempProcessNode){
+                if(gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == 1 && gui.tempProcessNode->process.swipedLeft == 0){
                     if(gui.tempProcessNode->process.swipedLeft == 0 && gui.tempProcessNode->process.swipedRight == 1){
+                      LV_LOG_USER("Cancel delete element!");
                       uint32_t  x = lv_obj_get_x_aligned(gui.tempProcessNode->process.processElement) - 50;
                       uint32_t  y = lv_obj_get_y_aligned(gui.tempProcessNode->process.processElement);
                       lv_obj_set_pos(gui.tempProcessNode->process.processElement, x, y);
@@ -172,12 +177,30 @@ void event_messagePopup(lv_event_t *e)
                     }
                 }
 
-                LV_LOG_USER("Cancel delete element!");
+                if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == 0 && gui.tempProcessNode->process.swipedLeft == 1)
+                {
+                    LV_LOG_USER("Duplicate process");
+                    char* newProcessName = generateRandomSuffix(gui.tempProcessNode->process.processDetails->processNameString);
+                    LV_LOG_USER("New name %s",newProcessName);
+                    strncpy(gui.tempProcessNode->process.processDetails->processNameString, newProcessName, sizeof(gui.tempProcessNode->process.processDetails->processNameString) - 1);
+                    gui.tempProcessNode->process.processDetails->processNameString[sizeof(gui.tempProcessNode->process.processDetails->processNameString) - 1] = '\0';
+                    processNode* duplicatedNode = duplicateProcessNode(gui.tempProcessNode);                    
+
+                    if(addProcessElement(duplicatedNode) != NULL){
+                        LV_LOG_USER("Create GUI entry");
+                        processElementCreate(gui.tempProcessNode, -1);
+                        qSysAction( SAVE_PROCESS_CONFIG );
+                    }
+                    gui.tempProcessNode->process.gestureHandled = false;
+                    
+                }
+
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
-//                lv_obj_delete(mboxCont);
-              gui.element.messagePopup.mBoxPopupParent = NULL;
+                gui.element.messagePopup.mBoxPopupParent = NULL;
             }
+
+
             if (gui.element.messagePopup.whoCallMe == gui.page.tools.toolsImportIcon)
             {
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
@@ -191,7 +214,6 @@ void event_messagePopup(lv_event_t *e)
                 LV_LOG_USER("Cancel delete all process!");
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
-//                lv_obj_delete(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
             }
         }
