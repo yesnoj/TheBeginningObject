@@ -1,3 +1,4 @@
+#include <string.h>
 
 /**
  * @file page_processDetail.c
@@ -126,24 +127,7 @@ void event_processDetail(lv_event_t * e)
   if(code == LV_EVENT_REFRESH){
     
     if(obj == gui.tempProcessNode->process.processDetails->processSaveButton){
-        if(gui.tempProcessNode->process.processDetails->stepElementsList.size > 0){
-              lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);
-              LV_LOG_USER("Updated SAVE button: ENABLED");
-        }
-        else{
-              lv_obj_add_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);
-              lv_obj_add_state(gui.tempProcessNode->process.processDetails->processRunButton, LV_STATE_DISABLED);
-              LV_LOG_USER("Updated SAVE button : DISABLED");   
-        }
-        /*
-        if(gui.tempProcessNode->process.processDetails->somethingChanged == true && gui.tempProcessNode->process.processDetails->stepElementsList.size == 0){
-              lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);
-              lv_obj_add_state(gui.tempProcessNode->process.processDetails->processDetailCloseButton, LV_STATE_DISABLED);
-              lv_obj_add_state(gui.tempProcessNode->process.processDetails->processRunButton, LV_STATE_DISABLED);
-              LV_LOG_USER("Updated SAVE button : ENABLED");
-        }
-        */
-        if(gui.tempProcessNode->process.processDetails->somethingChanged == true && gui.tempProcessNode->process.processDetails->stepElementsList.size > 0){
+        if(gui.tempProcessNode->process.processDetails->somethingChanged == true && gui.tempProcessNode->process.processDetails->stepElementsList.size > 0 && strlen(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea)) > 0){
               lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);
               lv_obj_add_state(gui.tempProcessNode->process.processDetails->processDetailCloseButton, LV_STATE_DISABLED);
               lv_obj_add_state(gui.tempProcessNode->process.processDetails->processRunButton, LV_STATE_DISABLED);
@@ -172,7 +156,7 @@ void event_processDetail(lv_event_t * e)
       }
       if(data == gui.tempProcessNode->process.processDetails->processToleranceTextArea){
           LV_LOG_USER("Set Tolerance");
-          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusToleranceOptions,tuneTempPopupTitle_text,gui.tempProcessNode->process.processDetails->processToleranceTextArea, findRolleStringIndex(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea),gui.element.rollerPopup.tempCelsiusToleranceOptions));
+          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusToleranceOptions,tuneTolerancePopupTitle_text,gui.tempProcessNode->process.processDetails->processToleranceTextArea, findRolleStringIndex(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea),gui.element.rollerPopup.tempCelsiusToleranceOptions));
       }
   }
 }

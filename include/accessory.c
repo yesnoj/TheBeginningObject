@@ -354,19 +354,54 @@ uint32_t calc_buf_len( uint32_t maxVal, uint8_t extra_len ) {
     }
 }
 
-char *createRollerValues( uint32_t minVal ,uint32_t maxVal, const char* extra_str ) {
-    uint32_t buf_len = calc_buf_len( maxVal, strlen(extra_str));
-    uint32_t buf_ptr = 0;
-    char *buf = (char *)malloc( buf_len );
-
-    for( uint32_t i = minVal; i <= maxVal; i++ ) {
-        buf_ptr += lv_snprintf( &buf[buf_ptr], (buf_len - buf_ptr), "%s%d\n", extra_str, i );
+char *createRollerValues(uint32_t minVal, uint32_t maxVal, const char* extra_str) {
+    // Calcola la lunghezza necessaria del buffer
+    uint32_t buf_len = 0;
+    for (uint32_t i = minVal; i <= maxVal; i++) {
+        buf_len += snprintf(NULL, 0, "%s%d\n", extra_str, i);
     }
-    //LV_LOG_USER("Created :%s",buf);
+    buf_len -= 1; // Rimuovi l'ultimo '\n' per evitare lo spazio vuoto
+
+    // Alloca memoria per il buffer
+    char *buf = (char *)malloc(buf_len + 1); // +1 per il terminatore nullo
+    if (!buf) {
+        return NULL; // Gestione del fallimento della malloc
+    }
+
+    // Popola il buffer con i valori
+    uint32_t buf_ptr = 0;
+    for (uint32_t i = minVal; i <= maxVal; i++) {
+        if (i == maxVal) {
+            buf_ptr += lv_snprintf(&buf[buf_ptr], (buf_len - buf_ptr + 1), "%s%d", extra_str, i);
+        } else {
+            buf_ptr += lv_snprintf(&buf[buf_ptr], (buf_len - buf_ptr + 1), "%s%d\n", extra_str, i);
+        }
+    }
+
     return buf;
 }
 
+/*
+char *createRollerValues(uint32_t minVal, uint32_t maxVal, const char* extra_str) {
+    uint32_t buf_len = calc_buf_len(maxVal, strlen(extra_str));
+    uint32_t buf_ptr = 0;
+    char *buf = (char *)malloc(buf_len);
 
+    if (!buf) {
+        return NULL; // Handle malloc failure
+    }
+
+    for (uint32_t i = minVal; i <= maxVal; i++) {
+        if (i == maxVal) {
+            buf_ptr += lv_snprintf(&buf[buf_ptr], (buf_len - buf_ptr), "%s%d", extra_str, i);
+        } else {
+            buf_ptr += lv_snprintf(&buf[buf_ptr], (buf_len - buf_ptr), "%s%d\n", extra_str, i);
+        }
+    }
+    return buf;
+}
+
+*/
 char * convertFloatToChar(float temp){
   char *buf =(char*)malloc(sizeof(temp));
   
@@ -503,9 +538,9 @@ void init_globals( void ) {
   gui.page.settings.titleLinePoints[1].x = 310;
   gui.page.tools.titleLinePoints[1].x = 310;
   
-  gui.element.rollerPopup.tempCelsiusOptions = createRollerValues(1,40,"");
+  gui.element.rollerPopup.tempCelsiusOptions = createRollerValues(0,40,"");
   gui.element.rollerPopup.minutesOptions = createRollerValues(0,240,"");
-  gui.element.rollerPopup.secondsOptions = createRollerValues(0,60,""); 
+  gui.element.rollerPopup.secondsOptions = createRollerValues(0,59,""); 
   gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(0,5,"0.");
 
   //gui.element.filterPopup.filterName = ""; // Not Required this will set this to some constant pointer which is not good...
@@ -760,7 +795,7 @@ void readConfigFile(fs::FS &fs, const char *path, bool enableLog) {
 //        LV_LOG_USER("size:%d",sizeof(nodeP->process.processDetails->processNameString));
         LV_LOG_USER("temp:%d",nodeP->process.processDetails->temp);
 //        LV_LOG_USER("size:%d",sizeof(nodeP->process.processDetails->temp));
-        LV_LOG_USER("tempTolerance:%d",nodeP->process.processDetails->tempTolerance);
+        LV_LOG_USER("tempTolerance:%f",nodeP->process.processDetails->tempTolerance);
 //        LV_LOG_USER("size:%d",sizeof(nodeP->process.processDetails->tempTolerance));
         LV_LOG_USER("isTempControlled:%d",nodeP->process.processDetails->isTempControlled);
 //        LV_LOG_USER("size:%d",sizeof(nodeP->process.processDetails->isTempControlled));
@@ -831,88 +866,85 @@ void readConfigFile(fs::FS &fs, const char *path, bool enableLog) {
 }
 
 void writeConfigFile(fs::FS &fs, const char *path, bool enableLog) {
+    if (initErrors == 0) {
+        LV_LOG_USER("Writing configuration file: %s", path);
+        SD.remove(path);
 
-  if(initErrors == 0) {
-
-    LV_LOG_USER("Writing configuration file: %s", path);
-    SD.remove(path);
-
-    File file = fs.open(path, FILE_WRITE);
-    if (!file) {
-        LV_LOG_USER("Failed to open file for writing");
-        return;
-    }
-    // Write Machine Parameters
-    file.write((uint8_t*)&gui.page.settings.settingsParams, sizeof(gui.page.settings.settingsParams));
-    
-    if(enableLog){
-      LV_LOG_USER("--- MACHINE PARAMS ---");
-      LV_LOG_USER("tempUnit:%d",gui.page.settings.settingsParams.tempUnit);
-      LV_LOG_USER("waterInlet:%d",gui.page.settings.settingsParams.waterInlet);
-      LV_LOG_USER("calibratedTemp:%d",gui.page.settings.settingsParams.calibratedTemp);
-      LV_LOG_USER("filmRotationSpeedSetpoint:%d",gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
-      LV_LOG_USER("rotationIntervalSetpoint:%d",gui.page.settings.settingsParams.rotationIntervalSetpoint);
-      LV_LOG_USER("randomSetpoint:%d",gui.page.settings.settingsParams.randomSetpoint);
-      LV_LOG_USER("isPersistentAlarm:%d",gui.page.settings.settingsParams.isPersistentAlarm);
-      LV_LOG_USER("isProcessAutostart:%d",gui.page.settings.settingsParams.isProcessAutostart);
-      LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
-    }
-
-    // Write Processes
-    processNode *currentProcessNode = gui.page.processes.processElementsList.start;
-    // Write process list size
-    file.write((uint8_t*)&gui.page.processes.processElementsList.size, sizeof(gui.page.processes.processElementsList.size));
-
-    while(currentProcessNode != NULL){
-
-      file.write((uint8_t*)&currentProcessNode->process.processDetails->processNameString, sizeof(currentProcessNode->process.processDetails->processNameString));
-      file.write((uint8_t*)&currentProcessNode->process.processDetails->temp, sizeof(currentProcessNode->process.processDetails->temp));
-      file.write((uint8_t*)&currentProcessNode->process.processDetails->tempTolerance, sizeof(currentProcessNode->process.processDetails->tempTolerance));
-      file.write((uint8_t*)&currentProcessNode->process.processDetails->isTempControlled, sizeof(currentProcessNode->process.processDetails->isTempControlled));
-      file.write((uint8_t*)&currentProcessNode->process.processDetails->isPreferred, sizeof(currentProcessNode->process.processDetails->isPreferred));
-      file.write((uint8_t*)&currentProcessNode->process.processDetails->filmType, sizeof(currentProcessNode->process.processDetails->filmType));
-      file.write((uint8_t*)&currentProcessNode->process.processDetails->timeMins, sizeof(currentProcessNode->process.processDetails->timeMins));
-      file.write((uint8_t*)&currentProcessNode->process.processDetails->timeSecs, sizeof(currentProcessNode->process.processDetails->timeSecs));
-
-      if(enableLog){
-        LV_LOG_USER("--- PROCESS PARAMS ---");
-        LV_LOG_USER("processNameString:%s",currentProcessNode->process.processDetails->processNameString);
-        LV_LOG_USER("temp:%d",currentProcessNode->process.processDetails->temp);
-        LV_LOG_USER("tempTolerance:%d",currentProcessNode->process.processDetails->tempTolerance);
-        LV_LOG_USER("isTempControlled:%d",currentProcessNode->process.processDetails->isTempControlled);
-        LV_LOG_USER("isPreferred:%d",currentProcessNode->process.processDetails->isPreferred);
-        LV_LOG_USER("filmType:%d",currentProcessNode->process.processDetails->filmType);
-        LV_LOG_USER("timeMins:%d",currentProcessNode->process.processDetails->timeMins);
-        LV_LOG_USER("timeSecs:%d",currentProcessNode->process.processDetails->timeSecs);
-      }
-
-      stepNode *currentStepNode = currentProcessNode->process.processDetails->stepElementsList.start;
-      // Write step list size
-      file.write((uint8_t*)&currentProcessNode->process.processDetails->stepElementsList.size, sizeof(currentProcessNode->process.processDetails->stepElementsList.size));
-      while(currentStepNode != NULL){                
-
-        file.write((uint8_t*)&currentStepNode->step.stepDetails->stepNameString, sizeof(currentStepNode->step.stepDetails->stepNameString));
-        file.write((uint8_t*)&currentStepNode->step.stepDetails->timeMins, sizeof(currentStepNode->step.stepDetails->timeMins));
-        file.write((uint8_t*)&currentStepNode->step.stepDetails->timeSecs, sizeof(currentStepNode->step.stepDetails->timeSecs));
-        file.write((uint8_t*)&currentStepNode->step.stepDetails->type, sizeof(currentStepNode->step.stepDetails->type));
-        file.write((uint8_t*)&currentStepNode->step.stepDetails->source, sizeof(currentStepNode->step.stepDetails->source));
-        file.write((uint8_t*)&currentStepNode->step.stepDetails->discardAfterProc, sizeof(currentStepNode->step.stepDetails->discardAfterProc));
-        
-        if(enableLog){
-          LV_LOG_USER("--- STEP PARAMS ---");
-          LV_LOG_USER("stepNameString:%s",currentStepNode->step.stepDetails->stepNameString);
-          LV_LOG_USER("timeMins:%d",currentStepNode->step.stepDetails->timeMins);
-          LV_LOG_USER("timeSecs:%d",currentStepNode->step.stepDetails->timeSecs);
-          LV_LOG_USER("type:%d",currentStepNode->step.stepDetails->type);
-          LV_LOG_USER("source:%d",currentStepNode->step.stepDetails->source);
-          LV_LOG_USER("discardAfterProc:%d",currentStepNode->step.stepDetails->discardAfterProc);
+        File file = fs.open(path, FILE_WRITE);
+        if (!file) {
+            LV_LOG_USER("Failed to open file for writing");
+            return;
         }
-        currentStepNode = currentStepNode->next;
-      }
-      currentProcessNode = currentProcessNode->next;
+
+        // Write Machine Parameters
+        file.write((uint8_t *)&gui.page.settings.settingsParams, sizeof(gui.page.settings.settingsParams));
+
+        if (enableLog) {
+            LV_LOG_USER("--- MACHINE PARAMS ---");
+            LV_LOG_USER("tempUnit:%d", gui.page.settings.settingsParams.tempUnit);
+            LV_LOG_USER("waterInlet:%d", gui.page.settings.settingsParams.waterInlet);
+            LV_LOG_USER("calibratedTemp:%d", gui.page.settings.settingsParams.calibratedTemp);
+            LV_LOG_USER("filmRotationSpeedSetpoint:%d", gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
+            LV_LOG_USER("rotationIntervalSetpoint:%d", gui.page.settings.settingsParams.rotationIntervalSetpoint);
+            LV_LOG_USER("randomSetpoint:%d", gui.page.settings.settingsParams.randomSetpoint);
+            LV_LOG_USER("isPersistentAlarm:%d", gui.page.settings.settingsParams.isPersistentAlarm);
+            LV_LOG_USER("isProcessAutostart:%d", gui.page.settings.settingsParams.isProcessAutostart);
+            LV_LOG_USER("drainFillOverlapSetpoint:%d", gui.page.settings.settingsParams.drainFillOverlapSetpoint);
+        }
+
+        // Write Processes
+        processNode *currentProcessNode = gui.page.processes.processElementsList.start;
+        // Write process list size
+        file.write((uint8_t *)&gui.page.processes.processElementsList.size, sizeof(gui.page.processes.processElementsList.size));
+
+        while (currentProcessNode != NULL) {
+            file.write((uint8_t *)currentProcessNode->process.processDetails->processNameString, sizeof(currentProcessNode->process.processDetails->processNameString));
+            file.write((uint8_t *)&currentProcessNode->process.processDetails->temp, sizeof(currentProcessNode->process.processDetails->temp));
+            file.write((uint8_t *)&currentProcessNode->process.processDetails->tempTolerance, sizeof(currentProcessNode->process.processDetails->tempTolerance));
+            file.write((uint8_t *)&currentProcessNode->process.processDetails->isTempControlled, sizeof(currentProcessNode->process.processDetails->isTempControlled));
+            file.write((uint8_t *)&currentProcessNode->process.processDetails->isPreferred, sizeof(currentProcessNode->process.processDetails->isPreferred));
+            file.write((uint8_t *)&currentProcessNode->process.processDetails->filmType, sizeof(currentProcessNode->process.processDetails->filmType));
+            file.write((uint8_t *)&currentProcessNode->process.processDetails->timeMins, sizeof(currentProcessNode->process.processDetails->timeMins));
+            file.write((uint8_t *)&currentProcessNode->process.processDetails->timeSecs, sizeof(currentProcessNode->process.processDetails->timeSecs));
+
+            if (enableLog) {
+                LV_LOG_USER("--- PROCESS PARAMS ---");
+                LV_LOG_USER("processNameString:%s", currentProcessNode->process.processDetails->processNameString);
+                LV_LOG_USER("temp:%d", currentProcessNode->process.processDetails->temp);
+                LV_LOG_USER("tempTolerance:%f", currentProcessNode->process.processDetails->tempTolerance);
+                LV_LOG_USER("isTempControlled:%d", currentProcessNode->process.processDetails->isTempControlled);
+                LV_LOG_USER("isPreferred:%d", currentProcessNode->process.processDetails->isPreferred);
+                LV_LOG_USER("filmType:%d", currentProcessNode->process.processDetails->filmType);
+                LV_LOG_USER("timeMins:%d", currentProcessNode->process.processDetails->timeMins);
+                LV_LOG_USER("timeSecs:%d", currentProcessNode->process.processDetails->timeSecs);
+            }
+
+            stepNode *currentStepNode = currentProcessNode->process.processDetails->stepElementsList.start;
+            // Write step list size
+            file.write((uint8_t *)&currentProcessNode->process.processDetails->stepElementsList.size, sizeof(currentProcessNode->process.processDetails->stepElementsList.size));
+            while (currentStepNode != NULL) {
+                file.write((uint8_t *)currentStepNode->step.stepDetails->stepNameString, sizeof(currentStepNode->step.stepDetails->stepNameString));
+                file.write((uint8_t *)&currentStepNode->step.stepDetails->timeMins, sizeof(currentStepNode->step.stepDetails->timeMins));
+                file.write((uint8_t *)&currentStepNode->step.stepDetails->timeSecs, sizeof(currentStepNode->step.stepDetails->timeSecs));
+                file.write((uint8_t *)&currentStepNode->step.stepDetails->type, sizeof(currentStepNode->step.stepDetails->type));
+                file.write((uint8_t *)&currentStepNode->step.stepDetails->source, sizeof(currentStepNode->step.stepDetails->source));
+                file.write((uint8_t *)&currentStepNode->step.stepDetails->discardAfterProc, sizeof(currentStepNode->step.stepDetails->discardAfterProc));
+
+                if (enableLog) {
+                    LV_LOG_USER("--- STEP PARAMS ---");
+                    LV_LOG_USER("stepNameString:%s", currentStepNode->step.stepDetails->stepNameString);
+                    LV_LOG_USER("timeMins:%d", currentStepNode->step.stepDetails->timeMins);
+                    LV_LOG_USER("timeSecs:%d", currentStepNode->step.stepDetails->timeSecs);
+                    LV_LOG_USER("type:%d", currentStepNode->step.stepDetails->type);
+                    LV_LOG_USER("source:%d", currentStepNode->step.stepDetails->source);
+                    LV_LOG_USER("discardAfterProc:%d", currentStepNode->step.stepDetails->discardAfterProc);
+                }
+                currentStepNode = currentStepNode->next;
+            }
+            currentProcessNode = currentProcessNode->next;
+        }
+        file.close();
     }
-    file.close();
-  }
 }
 
 void calcolateTotalTime(processNode *processNode){
@@ -1379,29 +1411,36 @@ void writeMachineStats(machineStatistics * machineStats) {
   }
 
 
-uint32_t findRolleStringIndex(const char *input, const char *list) {
-    const char *start = list;
-    const char *end;
+uint32_t findRolleStringIndex(const char *target, const char *array) {
+    const char *start = array;
     uint32_t index = 0;
 
-    while ((end = strchr(start, '\n')) != NULL) {
+    while (*start != '\0') {
+        // Troviamo la fine della stringa corrente
+        const char *end = strchr(start, '\n');
+        if (end == NULL) {
+            end = start + strlen(start);  // Se non troviamo '\n', prendiamo fino alla fine della stringa
+        }
+
+        // Lunghezza della stringa corrente
         uint32_t length = end - start;
-        if (strncmp(start, input, length) == 0 && input[length] == '\0') {
-            LV_LOG_USER("String index %s: %d",input,index);
+
+        // Confrontiamo la sottostringa
+        if (strncmp(start, target, length) == 0 && target[length] == '\0') {
             return index;
         }
-        start = end + 1;
+
+        // Passiamo alla prossima riga
+        start = end;
+        if (*start == '\n') {
+            start++;  // Salta il '\n' se lo troviamo
+        }
         index++;
     }
 
-    if (strcmp(start, input) == 0) {
-        LV_LOG_USER("String index %s: %d",input,index);
-        return index;
-    }
-    
-    LV_LOG_USER("String index %s: %d",input,index);
-    return -1; // String not found
+    return -1; // Stringa non trovata
 }
+
 
 char* getRollerStringIndex(uint32_t index, const char *list) {
     const char *start = list;

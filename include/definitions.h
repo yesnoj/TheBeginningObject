@@ -273,7 +273,7 @@ typedef enum {
 struct __attribute__ ((packed)) machineSettings {
   tempUnit_t 	        tempUnit; //0= C° 1= °F
   yesOrNo_t 	        waterInlet;
-  float 	        	  calibratedTemp;
+  uint8_t 	        	  calibratedTemp;
   uint8_t 	        	filmRotationSpeedSetpoint;
 	uint8_t 	        	rotationIntervalSetpoint;
   uint8_t 	        	randomSetpoint;
@@ -540,7 +540,7 @@ typedef struct sProcessDetail {
 	  sCheckup		      *checkup;
     char              processNameString[MAX_PROC_NAME_LEN+1];
     uint32_t          temp;
-    uint8_t           tempTolerance;
+    float             tempTolerance;
     uint8_t           isTempControlled;
     uint8_t           isPreferred;
     bool              somethingChanged;
@@ -1168,6 +1168,7 @@ bool gesture_handled;
 #define setMinutesPopupTitle_text 					"Set minutes"
 #define setSecondsPopupTitle_text 					"Set seconds"
 #define tuneTempPopupTitle_text 					"Set temperature"
+#define tuneTolerancePopupTitle_text 					"Set tolerance"
 #define tuneRollerButton_text 						"SET"
 #define messagePopupDetailTitle_text 				"Detail information"
 #define deleteButton_text 							"Delete"

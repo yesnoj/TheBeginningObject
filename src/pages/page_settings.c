@@ -94,7 +94,7 @@ void event_settings_handler(lv_event_t * e)
     if(act_cb == gui.page.settings.tempSensorTuneButton){
       if(code == LV_EVENT_SHORT_CLICKED) {
           LV_LOG_USER("TUNE short click");
-          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusOptions,tuneTempPopupTitle_text,gui.page.settings.tempSensorTuneButton, gui.page.settings.settingsParams.calibratedTemp - 1);
+          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusOptions,tuneTempPopupTitle_text,gui.page.settings.tempSensorTuneButton, gui.page.settings.settingsParams.calibratedTemp);
         }
       if(code == LV_EVENT_LONG_PRESSED_REPEAT) {
           LV_LOG_USER("TUNE Long click");
@@ -224,11 +224,6 @@ void initSettings(void){
         gui.page.settings.tempUnitCelsiusRadioButton = create_radiobutton(gui.page.settings.tempUnitContainer, celsius_text, -55, 0, 27, &lv_font_montserrat_18, lv_color_hex(ORANGE_DARK), lv_color_hex(ORANGE));
         gui.page.settings.tempUnitFahrenheitRadioButton = create_radiobutton(gui.page.settings.tempUnitContainer, fahrenheit_text, 5, 0, 27, &lv_font_montserrat_18, lv_color_hex(ORANGE_DARK), lv_color_hex(ORANGE));
         
-
-/*
-        machineSettings["calibratedTemp"]             = gui.page.settings.settingsParams.calibratedTemp;
-        machineSettings["drainFillOverlapSetpoint"]   = gui.page.settings.settingsParams.drainFillOverlapSetpoint;
-*/
         //Make the checkbox checked according the saved param
         gui.page.settings.active_index = gui.page.settings.settingsParams.tempUnit;
         lv_obj_add_state(lv_obj_get_child(gui.page.settings.tempUnitContainer, gui.page.settings.settingsParams.tempUnit), LV_STATE_CHECKED);

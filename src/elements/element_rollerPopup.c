@@ -13,10 +13,13 @@ extern struct gui_components gui;
 //ACCESSORY INCLUDES
 
 static uint32_t rollerSelected;
-static uint8_t isScrolled = 0;
+static bool isScrolled = false;
+
+
 
 void event_Roller(lv_event_t * e)
 {
+  
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
   lv_obj_t * objCont = (lv_obj_t *)lv_obj_get_parent(obj);
@@ -44,8 +47,8 @@ void event_Roller(lv_event_t * e)
               
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               if(isScrolled == 0){
-                  itoa(lv_roller_get_selected(gui.element.rollerPopup.roller) + 1, tempBuffer, 10);
-                  LV_LOG_USER("SET BUTTON from processTempTextArea value %d:",lv_roller_get_selected(gui.element.rollerPopup.roller) + 1);
+                  itoa(lv_roller_get_selected(gui.element.rollerPopup.roller), tempBuffer, 10);
+                  LV_LOG_USER("SET BUTTON from processTempTextArea value %d:",lv_roller_get_selected(gui.element.rollerPopup.roller));
                   gui.tempProcessNode->process.processDetails->temp = lv_roller_get_selected(gui.element.rollerPopup.roller);
                   lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea,tempBuffer);
                   }
@@ -54,7 +57,7 @@ void event_Roller(lv_event_t * e)
                     LV_LOG_USER("SET BUTTON from processTempTextArea value %d:",rollerSelected);
                     gui.tempProcessNode->process.processDetails->temp = rollerSelected;
                     lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea,tempBuffer);
-                    isScrolled = 0;
+                    isScrolled = false;
                     }
 
               gui.tempProcessNode->process.processDetails->somethingChanged = true;
@@ -65,22 +68,23 @@ void event_Roller(lv_event_t * e)
               //lv_obj_delete(godFatherCont);
               return; 
             }
+
+
             if((lv_obj_t *)data == gui.tempProcessNode->process.processDetails->processToleranceTextArea){
              lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
 
-
               if(isScrolled == 0){
-                  itoa(lv_roller_get_selected(gui.element.rollerPopup.roller) + 1, tempBuffer, 10);
-                  LV_LOG_USER("SET BUTTON from processToleranceTextArea value %d:",lv_roller_get_selected(gui.element.rollerPopup.roller) + 1);
-                  gui.tempProcessNode->process.processDetails->tempTolerance = lv_roller_get_selected(gui.element.rollerPopup.roller) + 1;
+                  itoa(lv_roller_get_selected(gui.element.rollerPopup.roller), tempBuffer, 10);
+                  LV_LOG_USER("SET BUTTON from processToleranceTextArea value %d:",lv_roller_get_selected(gui.element.rollerPopup.roller));
+                  gui.tempProcessNode->process.processDetails->tempTolerance = lv_roller_get_selected(gui.element.rollerPopup.roller);
                   lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea,tempBuffer);
                   }
                 else{
                     itoa(rollerSelected, tempBuffer, 10);
-                    LV_LOG_USER("SET BUTTON from processToleranceTextArea value %d:",rollerSelected - 1);
-                    gui.tempProcessNode->process.processDetails->tempTolerance = rollerSelected - 1;
-                    lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(rollerSelected - 1,gui.element.rollerPopup.tempCelsiusToleranceOptions));
-                    isScrolled = 0;
+                    LV_LOG_USER("SET BUTTON from processToleranceTextArea value %d:",rollerSelected);
+                    gui.tempProcessNode->process.processDetails->tempTolerance = rollerSelected;
+                    lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(rollerSelected,gui.element.rollerPopup.tempCelsiusToleranceOptions));
+                    isScrolled = false;
                     }
 
               gui.tempProcessNode->process.processDetails->somethingChanged = true;
@@ -100,10 +104,10 @@ void event_Roller(lv_event_t * e)
                   }
                 else{
                     itoa(rollerSelected, tempBuffer, 10);
-                    LV_LOG_USER("SET BUTTON from stepDetailMinTextArea value %d:",rollerSelected - 1);
-                    gui.tempStepNode->step.stepDetails->timeMins = rollerSelected - 1;
-                    lv_textarea_set_text(gui.tempStepNode->step.stepDetails->stepDetailMinTextArea, getRollerStringIndex(rollerSelected - 1,gui.element.rollerPopup.minutesOptions));
-                    isScrolled = 0;
+                    LV_LOG_USER("SET BUTTON from stepDetailMinTextArea value %d:",rollerSelected);
+                    gui.tempStepNode->step.stepDetails->timeMins = rollerSelected;
+                    lv_textarea_set_text(gui.tempStepNode->step.stepDetails->stepDetailMinTextArea, getRollerStringIndex(rollerSelected,gui.element.rollerPopup.minutesOptions));
+                    isScrolled = false;
                     }
 
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
@@ -123,10 +127,10 @@ void event_Roller(lv_event_t * e)
                   }
                 else{
                     itoa(rollerSelected, tempBuffer, 10);
-                    LV_LOG_USER("SET BUTTON from stepDetailMinTextArea value %d:",rollerSelected - 1);
-                    gui.tempStepNode->step.stepDetails->timeSecs = rollerSelected - 1;
-                    lv_textarea_set_text(gui.tempStepNode->step.stepDetails->stepDetailSecTextArea, getRollerStringIndex(rollerSelected - 1,gui.element.rollerPopup.secondsOptions));
-                    isScrolled = 0;
+                    LV_LOG_USER("SET BUTTON from stepDetailMinTextArea value %d:",rollerSelected);
+                    gui.tempStepNode->step.stepDetails->timeSecs = rollerSelected;
+                    lv_textarea_set_text(gui.tempStepNode->step.stepDetails->stepDetailSecTextArea, getRollerStringIndex(rollerSelected,gui.element.rollerPopup.secondsOptions));
+                    isScrolled = false;
                     }
 
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
@@ -150,16 +154,16 @@ void event_Roller(lv_event_t * e)
             }
           rollerSelected = 0;
         }
-        
+        free(tempBuffer);
     }
 
     if(code == LV_EVENT_VALUE_CHANGED){
       if(obj == gui.element.rollerPopup.roller){
-          isScrolled = 1;
+          isScrolled = true;
           lv_obj_clear_state(gui.element.rollerPopup.mBoxRollerButton, LV_STATE_DISABLED);
           //if we want to want the index of the selected element
-          rollerSelected = lv_roller_get_selected(obj) + 1;
-          LV_LOG_USER("ROLLER value: %d", rollerSelected);
+          rollerSelected = lv_roller_get_selected(obj) ;
+          LV_LOG_USER("ROLLER value: %d", rollerSelected );
 
           
           lv_roller_get_selected_str(obj, tempBuffer, sizeof(tempBuffer));
@@ -168,8 +172,8 @@ void event_Roller(lv_event_t * e)
           //LV_LOG_USER("ROLLER value: %s", rollerElementSelected);
       }
     }
+    
 }       
-
 
 void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *whoCallMe, uint32_t currentVal){
   /*********************
@@ -225,12 +229,13 @@ void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *w
   lv_style_set_border_color(&gui.element.rollerPopup.style_roller, lv_color_hex(LIGHT_BLUE_DARK));
   
   gui.element.rollerPopup.roller = lv_roller_create(gui.element.rollerPopup.mBoxRollerRollerContainer);
+
   lv_roller_set_options(gui.element.rollerPopup.roller, tempOptions, LV_ROLLER_MODE_NORMAL);
+
   lv_roller_set_visible_row_count(gui.element.rollerPopup.roller, 4);
   lv_obj_set_width(gui.element.rollerPopup.roller, 140);
   lv_obj_set_height(gui.element.rollerPopup.roller, 100);
   lv_obj_align(gui.element.rollerPopup.roller, LV_ALIGN_CENTER, 0, -30);
-  lv_obj_add_event_cb(gui.element.rollerPopup.roller, event_Roller, LV_EVENT_CLICKED, NULL);
   lv_obj_add_event_cb(gui.element.rollerPopup.roller, event_Roller, LV_EVENT_VALUE_CHANGED, NULL);
   lv_obj_add_style(gui.element.rollerPopup.roller, &gui.element.rollerPopup.style_roller, LV_PART_SELECTED);  
   lv_obj_set_style_border_color(gui.element.rollerPopup.roller, lv_color_hex(WHITE), LV_PART_MAIN);
@@ -240,15 +245,15 @@ void rollerPopupCreate(const char * tempOptions,const char * popupTitle, void *w
    lv_obj_set_size(gui.element.rollerPopup.mBoxRollerButton, BUTTON_TUNE_WIDTH, BUTTON_TUNE_HEIGHT);
    lv_obj_align(gui.element.rollerPopup.mBoxRollerButton, LV_ALIGN_BOTTOM_MID, 0 , 0);
    lv_obj_add_event_cb(gui.element.rollerPopup.mBoxRollerButton, event_Roller, LV_EVENT_CLICKED, gui.element.rollerPopup.whoCallMe);
-   lv_obj_add_event_cb(gui.element.rollerPopup.mBoxRollerButton, event_Roller, LV_EVENT_VALUE_CHANGED, gui.element.rollerPopup.whoCallMe);
-  if(currentVal == -1){
-      lv_roller_set_selected(gui.element.rollerPopup.roller, 0, LV_ANIM_OFF);
+   lv_obj_add_state(gui.element.rollerPopup.mBoxRollerButton, LV_STATE_DISABLED);
+   lv_roller_set_selected(gui.element.rollerPopup.roller, currentVal, LV_ANIM_OFF);
+
+
+  if(currentVal == 0)  
       lv_obj_add_state(gui.element.rollerPopup.mBoxRollerButton, LV_STATE_DISABLED);
-      }
-  else{
-      lv_roller_set_selected(gui.element.rollerPopup.roller, currentVal, LV_ANIM_OFF);
+  else
       lv_obj_clear_state(gui.element.rollerPopup.mBoxRollerButton, LV_STATE_DISABLED);
-      }
+        
 
          gui.element.rollerPopup.mBoxRollerButtonLabel = lv_label_create(gui.element.rollerPopup.mBoxRollerButton);         
          lv_label_set_text(gui.element.rollerPopup.mBoxRollerButtonLabel, tuneRollerButton_text); 
