@@ -345,6 +345,8 @@ typedef struct sStepDetail {
 
 //	  processNode       *referenceProcess;  // Use a pointer instead of an instance
     char                stepNameString[MAX_PROC_NAME_LEN+1];
+    bool              somethingChanged;
+    bool              isEditMode;
     uint8_t             timeMins;
     uint8_t             timeSecs;
     chemicalType_t      type;
@@ -541,7 +543,7 @@ typedef struct sProcessDetail {
     uint8_t           tempTolerance;
     uint8_t           isTempControlled;
     uint8_t           isPreferred;
-    uint8_t           somethingChanged;
+    bool              somethingChanged;
     filmType_t        filmType;
     uint32_t          timeMins;
     uint8_t           timeSecs;
@@ -568,7 +570,7 @@ typedef struct singleProcess {
     uint8_t            swipedRight;
     uint8_t             isFiltered;
     bool               gestureHandled;
-
+    bool               longPressHandled;
     sProcessDetail     *processDetails;  /* Process details, that includes all steps */
 } singleProcess;
 

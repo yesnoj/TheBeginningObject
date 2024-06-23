@@ -39,8 +39,10 @@ void event_stepDetail(lv_event_t * e)
       else{
           LV_LOG_USER("Step element creation failed, maximum entries reached" );
       }
-
-      data->process.processDetails->somethingChanged = 1;
+      gui.tempStepNode->step.stepDetails->somethingChanged = false;
+      lv_obj_send_event( gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
+    
+      data->process.processDetails->somethingChanged = true;
       lv_obj_send_event(data->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
       
       if(gui.tempStepNode->step.swipedLeft == 1 && gui.tempStepNode->step.swipedRight == 0){
@@ -95,19 +97,26 @@ void event_stepDetail(lv_event_t * e)
           lv_label_set_text(gui.tempStepNode->step.stepDetails->stepTypeHelpIcon, multiRinse_icon);
       }
       gui.tempStepNode->step.stepDetails->type = stepType;
+      gui.tempStepNode->step.stepDetails->somethingChanged = true;
+      lv_obj_send_event( gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
     }
 
     if(obj == gui.tempStepNode->step.stepDetails->stepDiscardAfterSwitch){
       discardAfter = lv_obj_has_state(obj, LV_STATE_CHECKED);
       gui.tempStepNode->step.stepDetails->discardAfterProc = discardAfter;
+      gui.tempStepNode->step.stepDetails->somethingChanged = true;
+      lv_obj_send_event( gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
+
       LV_LOG_USER("Discard After : %s", discardAfter ? "On" : "Off");
     }
 
     if(obj == gui.tempStepNode->step.stepDetails->stepSourceDropDownList){
-         stepSource = lv_dropdown_get_selected(gui.tempStepNode->step.stepDetails->stepSourceDropDownList);
-         gui.tempStepNode->step.stepDetails->source = stepSource;
+        stepSource = lv_dropdown_get_selected(gui.tempStepNode->step.stepDetails->stepSourceDropDownList);
+        gui.tempStepNode->step.stepDetails->source = stepSource;
 
-         LV_LOG_USER("Selected gui.tempStepNode->step.stepDetails->stepSourceDropDownList %d",stepSource);
+        gui.tempStepNode->step.stepDetails->somethingChanged = true;
+        lv_obj_send_event( gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
+        LV_LOG_USER("Selected gui.tempStepNode->step.stepDetails->stepSourceDropDownList %d",stepSource);
     }
   }
 
@@ -123,13 +132,19 @@ void event_stepDetail(lv_event_t * e)
         }
     }
   
+
+
+
+
   if(code == LV_EVENT_REFRESH){
-    
-    if(strlen(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea)) > 0 && (atoi(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailSecTextArea)) > 0 || atoi(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailMinTextArea)) > 0 )) {
-        lv_obj_clear_state(gui.tempStepNode->step.stepDetails->stepSaveButton, LV_STATE_DISABLED);
-    }
-    else{
-      lv_obj_add_state(gui.tempStepNode->step.stepDetails->stepSaveButton, LV_STATE_DISABLED);
+    if(obj == gui.tempStepNode->step.stepDetails->stepSaveButton){
+      if(gui.tempStepNode->step.stepDetails->isEditMode == false){ //means step is still not created
+          if(strlen(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea)) > 0 && (atoi(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailSecTextArea)) > 0 || atoi(lv_textarea_get_text(gui.tempStepNode->step.stepDetails->stepDetailMinTextArea)) > 0 )) {
+            lv_obj_clear_state(gui.tempStepNode->step.stepDetails->stepSaveButton, LV_STATE_DISABLED);
+          }
+      }else{//means step is already created, then we are editing
+          lv_obj_clear_state(gui.tempStepNode->step.stepDetails->stepSaveButton, LV_STATE_DISABLED);
+      }
     }
   }
 
@@ -157,9 +172,11 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
       if(existingStep != NULL) {
           LV_LOG_USER("Step already exist with address 0x%p", currentNode);
           gui.tempStepNode = existingStep; // Usa il nodo già presente anziché allocarne uno nuovo
+          gui.tempStepNode->step.stepDetails->isEditMode = true;
 
       } else {
           gui.tempStepNode = (stepNode*)allocateAndInitializeNode(STEP_NODE);
+          gui.tempStepNode->step.stepDetails->isEditMode = false;
           LV_LOG_USER("New stepNode created at address 0x%p", gui.tempStepNode);
       }
       

@@ -195,14 +195,15 @@ void event_keyboard(lv_event_t* e)
               LV_LOG_USER("Press ok from processDetailNameTextArea");
               lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
 
-              gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+              gui.tempProcessNode->process.processDetails->somethingChanged = true;
               lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
               hideKeyboard(gui.tempProcessNode->process.processDetails->processDetailParent);
             }
             if(lv_obj_get_user_data(gui.element.keyboardPopup.keyboard) == gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea){
               LV_LOG_USER("Press ok from stepDetailNamelTextArea");
               lv_textarea_set_text(gui.tempStepNode->step.stepDetails->stepDetailNamelTextArea, lv_textarea_get_text(gui.element.keyboardPopup.keyboardTextArea));
-              lv_obj_send_event(gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
+              gui.tempStepNode->step.stepDetails->somethingChanged = true;
+              lv_obj_send_event( gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
               hideKeyboard(gui.tempStepNode->step.stepDetails->stepDetailParent);
             } 
       }

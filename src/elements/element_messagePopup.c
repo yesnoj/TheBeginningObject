@@ -59,6 +59,7 @@ void event_messagePopup(lv_event_t *e)
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
+                gui.tempProcessNode->process.longPressHandled = false;
             }
             if (gui.element.messagePopup.whoCallMe == gui.tempStepNode)
             {
@@ -69,7 +70,7 @@ void event_messagePopup(lv_event_t *e)
                 } else {
                   calcolateTotalTime(gui.tempProcessNode);
                   LV_LOG_USER("Delete step element instance at address 0x%p", gui.element.messagePopup.whoCallMe);
-                  gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+                  gui.tempProcessNode->process.processDetails->somethingChanged = true;
                   lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
                   qSysAction( SAVE_PROCESS_CONFIG );
                 }
@@ -154,19 +155,20 @@ void event_messagePopup(lv_event_t *e)
             {
                 if(gui.element.messagePopup.whoCallMe == gui.tempStepNode && gui.tempStepNode->step.swipedLeft == 0 && gui.tempStepNode->step.swipedRight == 1){
                     if(gui.tempStepNode->step.swipedLeft == 0 && gui.tempStepNode->step.swipedRight == 1){
-                      LV_LOG_USER("Cancel delete element!");
+                      LV_LOG_USER("Cancel delete step element!");
                       uint32_t  x = lv_obj_get_x_aligned(gui.tempStepNode->step.stepElement) - 50;
                       uint32_t  y = lv_obj_get_y_aligned(gui.tempStepNode->step.stepElement);
                       lv_obj_set_pos(gui.tempStepNode->step.stepElement, x, y);
-                      gui.tempStepNode->step.swipedLeft = 1;
+                      gui.tempStepNode->step.swipedLeft = 0;
                       gui.tempStepNode->step.swipedRight = 0;
                       lv_obj_add_flag(gui.tempStepNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
                       lv_obj_add_flag(gui.tempStepNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
+                      gui.tempStepNode->step.gestureHandled = false;
                     }
                 }
                 if(gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == 1 && gui.tempProcessNode->process.swipedLeft == 0){
                     if(gui.tempProcessNode->process.swipedLeft == 0 && gui.tempProcessNode->process.swipedRight == 1){
-                      LV_LOG_USER("Cancel delete element!");
+                      LV_LOG_USER("Cancel delete process element!");
                       uint32_t  x = lv_obj_get_x_aligned(gui.tempProcessNode->process.processElement) - 50;
                       uint32_t  y = lv_obj_get_y_aligned(gui.tempProcessNode->process.processElement);
                       lv_obj_set_pos(gui.tempProcessNode->process.processElement, x, y);
@@ -177,7 +179,7 @@ void event_messagePopup(lv_event_t *e)
                     }
                 }
 
-                if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == 0 && gui.tempProcessNode->process.swipedLeft == 1)
+                if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == 0 && gui.tempProcessNode->process.swipedLeft == 1 && gui.tempProcessNode->process.longPressHandled == true)
                 {
                     LV_LOG_USER("Duplicate process");
                     char* newProcessName = generateRandomSuffix(gui.tempProcessNode->process.processDetails->processNameString);
@@ -191,7 +193,8 @@ void event_messagePopup(lv_event_t *e)
                         processElementCreate(gui.tempProcessNode, -1);
                         qSysAction( SAVE_PROCESS_CONFIG );
                     }
-                    gui.tempProcessNode->process.gestureHandled = false;
+                    gui.tempProcessNode->process.longPressHandled = false;
+                    //gui.tempProcessNode->process.gestureHandled = false;
                     
                 }
 

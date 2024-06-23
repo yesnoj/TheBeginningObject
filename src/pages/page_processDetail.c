@@ -48,7 +48,7 @@ void event_processDetail(lv_event_t * e)
         lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processColorLabel, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
         lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processBnWLabel, lv_color_hex(WHITE), LV_PART_MAIN);
         gui.tempProcessNode->process.processDetails->filmType = COLOR_FILM;
-        gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+        gui.tempProcessNode->process.processDetails->somethingChanged = true;
 
         lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 
@@ -58,7 +58,7 @@ void event_processDetail(lv_event_t * e)
         lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processBnWLabel, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
         lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processColorLabel, lv_color_hex(WHITE), LV_PART_MAIN);
         gui.tempProcessNode->process.processDetails->filmType = BLACK_AND_WHITE_FILM;
-        gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+        gui.tempProcessNode->process.processDetails->somethingChanged = true;
         
         lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);    
         LV_LOG_USER("Pressed processBnWLabel %d",gui.tempProcessNode->process.processDetails->filmType);
@@ -68,17 +68,17 @@ void event_processDetail(lv_event_t * e)
 			if(  lv_color_eq( lv_obj_get_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, LV_PART_MAIN ), lv_color_hex(RED) ) ) {
 				  lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, lv_color_hex(WHITE), LV_PART_MAIN);
 				  gui.tempProcessNode->process.processDetails->isPreferred = 0;
-          gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+          gui.tempProcessNode->process.processDetails->somethingChanged = true;
 			} else {
 				lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, lv_color_hex(RED), LV_PART_MAIN);
 				gui.tempProcessNode->process.processDetails->isPreferred = 1;
-        gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+        gui.tempProcessNode->process.processDetails->somethingChanged = true;
 			}
       lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
       //  LV_LOG_USER("Process is preferred :%d",isPreferred);
     }
     if(data == gui.tempProcessNode->process.processDetails->processSaveButton && gui.tempProcessNode->process.processDetails->stepElementsList.size > 0){
-          gui.tempProcessNode->process.processDetails->somethingChanged = 0;
+          gui.tempProcessNode->process.processDetails->somethingChanged = false;
           
           strcpy( gui.tempProcessNode->process.processDetails->processNameString, lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea));
           lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processRunButton, LV_STATE_DISABLED);
@@ -136,14 +136,14 @@ void event_processDetail(lv_event_t * e)
               LV_LOG_USER("Updated SAVE button : DISABLED");   
         }
         /*
-        if(gui.tempProcessNode->process.processDetails->somethingChanged == 1 && gui.tempProcessNode->process.processDetails->stepElementsList.size == 0){
+        if(gui.tempProcessNode->process.processDetails->somethingChanged == true && gui.tempProcessNode->process.processDetails->stepElementsList.size == 0){
               lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);
               lv_obj_add_state(gui.tempProcessNode->process.processDetails->processDetailCloseButton, LV_STATE_DISABLED);
               lv_obj_add_state(gui.tempProcessNode->process.processDetails->processRunButton, LV_STATE_DISABLED);
               LV_LOG_USER("Updated SAVE button : ENABLED");
         }
         */
-        if(gui.tempProcessNode->process.processDetails->somethingChanged == 1 && gui.tempProcessNode->process.processDetails->stepElementsList.size > 0){
+        if(gui.tempProcessNode->process.processDetails->somethingChanged == true && gui.tempProcessNode->process.processDetails->stepElementsList.size > 0){
               lv_obj_clear_state(gui.tempProcessNode->process.processDetails->processSaveButton, LV_STATE_DISABLED);
               lv_obj_add_state(gui.tempProcessNode->process.processDetails->processDetailCloseButton, LV_STATE_DISABLED);
               lv_obj_add_state(gui.tempProcessNode->process.processDetails->processRunButton, LV_STATE_DISABLED);
@@ -156,7 +156,7 @@ void event_processDetail(lv_event_t * e)
       
       if(data == gui.tempProcessNode->process.processDetails->processTempControlSwitch){
           LV_LOG_USER("Temperature controlled : %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
-          gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+          gui.tempProcessNode->process.processDetails->somethingChanged = true;
           gui.tempProcessNode->process.processDetails->isTempControlled = lv_obj_has_state(obj, LV_STATE_CHECKED);
           lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
       }

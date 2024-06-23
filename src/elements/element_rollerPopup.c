@@ -46,7 +46,7 @@ void event_Roller(lv_event_t * e)
               if(isScrolled == 0){
                   itoa(lv_roller_get_selected(gui.element.rollerPopup.roller) + 1, tempBuffer, 10);
                   LV_LOG_USER("SET BUTTON from processTempTextArea value %d:",lv_roller_get_selected(gui.element.rollerPopup.roller) + 1);
-                  gui.tempProcessNode->process.processDetails->temp = lv_roller_get_selected(gui.element.rollerPopup.roller) + 1;
+                  gui.tempProcessNode->process.processDetails->temp = lv_roller_get_selected(gui.element.rollerPopup.roller);
                   lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea,tempBuffer);
                   }
                 else{
@@ -57,7 +57,7 @@ void event_Roller(lv_event_t * e)
                     isScrolled = 0;
                     }
 
-              gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+              gui.tempProcessNode->process.processDetails->somethingChanged = true;
               lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 
               lv_style_reset(&gui.element.rollerPopup.style_roller);
@@ -83,7 +83,7 @@ void event_Roller(lv_event_t * e)
                     isScrolled = 0;
                     }
 
-              gui.tempProcessNode->process.processDetails->somethingChanged = 1;
+              gui.tempProcessNode->process.processDetails->somethingChanged = true;
               lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 
               lv_style_reset(&gui.element.rollerPopup.style_roller);
@@ -109,7 +109,8 @@ void event_Roller(lv_event_t * e)
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(gui.element.rollerPopup.mBoxRollerParent);
-              lv_obj_send_event(gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
+              gui.tempStepNode->step.stepDetails->somethingChanged = true;
+              lv_obj_send_event( gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
               //lv_obj_delete(gui.element.rollerPopup.mBoxRollerParent);
               return; 
             }
@@ -132,7 +133,8 @@ void event_Roller(lv_event_t * e)
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(gui.element.rollerPopup.mBoxRollerParent);
               //lv_obj_delete(gui.element.rollerPopup.mBoxRollerParent);
-              lv_obj_send_event(gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
+              gui.tempStepNode->step.stepDetails->somethingChanged = true;
+              lv_obj_send_event( gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
               return; 
             }
             if((lv_obj_t*)data == gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
