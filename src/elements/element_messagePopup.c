@@ -72,6 +72,7 @@ void event_messagePopup(lv_event_t *e)
                   LV_LOG_USER("Delete step element instance at address 0x%p", gui.element.messagePopup.whoCallMe);
                   gui.tempProcessNode->process.processDetails->somethingChanged = true;
                   lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
+                  gui.tempStepNode->step.longPressHandled = false;
                   qSysAction( SAVE_PROCESS_CONFIG );
                 }
                 
@@ -163,7 +164,7 @@ void event_messagePopup(lv_event_t *e)
                       gui.tempStepNode->step.swipedRight = 0;
                       lv_obj_add_flag(gui.tempStepNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
                       lv_obj_add_flag(gui.tempStepNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
-                      gui.tempStepNode->step.gestureHandled = false;
+                      gui.tempStepNode->step.longPressHandled = false;
                     }
                 }
                 if(gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == 1 && gui.tempProcessNode->process.swipedLeft == 0){

@@ -243,66 +243,72 @@ void event_stepElement(lv_event_t *e) {
     return;
   }
 
-  if (code == LV_EVENT_RELEASED && currentNode->step.longPressHandled == true) {
+  if (code == LV_EVENT_RELEASED) {
     LV_LOG_USER("LV_EVENT_RELEASED");
-    if (currentNode->step.gestureHandled == true) {
+    if (currentNode->step.gestureHandled == true && currentNode->step.swipedLeft == 0) {
       currentNode->step.gestureHandled = false;
       return;
     }
+    if(currentNode->step.longPressHandled == true){
+      //Do all the reorder stuff just if the size is > 1
+      if(data->process.processDetails->stepElementsList.size > 1){
+        //lv_style_set_border_color(&currentNode->step.stepStyle, lv_color_hex(GREEN_DARK));
+        lv_style_set_shadow_spread(&currentNode->step.stepStyle, 0);
+        lv_obj_add_flag(lv_obj_get_parent(objElement), LV_OBJ_FLAG_SCROLLABLE);
 
-    //lv_style_set_border_color(&currentNode->step.stepStyle, lv_color_hex(GREEN_DARK));
-    lv_style_set_shadow_spread(&currentNode->step.stepStyle, 0);
-    lv_obj_add_flag(lv_obj_get_parent(objElement), LV_OBJ_FLAG_SCROLLABLE);
+        // Inserisci l'elemento nella nuova posizione
+        stepNode *previous = NULL;
+        stepNode *next = data->process.processDetails->stepElementsList.start;
+        lv_coord_t obj_y = lv_obj_get_y_aligned(objElement);
 
-    // Inserisci l'elemento nella nuova posizione
-    stepNode *previous = NULL;
-    stepNode *next = data->process.processDetails->stepElementsList.start;
-    lv_coord_t obj_y = lv_obj_get_y_aligned(objElement);
+        // Determina se stiamo trascinando verso l'alto o verso il basso
+        bool moveUp = true;  // Flag per indicare il movimento verso l'alto
 
-    // Determina se stiamo trascinando verso l'alto o verso il basso
-    bool moveUp = true;  // Flag per indicare il movimento verso l'alto
+        // Controlla la direzione del movimento
+        lv_indev_get_point(lv_indev_get_act(), &last_point);
 
-    // Controlla la direzione del movimento
-    lv_indev_get_point(lv_indev_get_act(), &last_point);
+        if (last_point.y > obj_y) {
+          moveUp = false;  // Stiamo trascinando verso il basso
+        }
 
-    if (last_point.y > obj_y) {
-      moveUp = false;  // Stiamo trascinando verso il basso
-    }
+        // Cerca la posizione corretta nella lista in base alla direzione del movimento
+        while (next) {
+          lv_coord_t next_y = lv_obj_get_y_aligned(next->step.stepElement);
+          if ((moveUp && next_y >= obj_y) || (!moveUp && next_y > obj_y)) {
+            break;
+          }
+          previous = next;
+          next = next->next;
+        }
 
-    // Cerca la posizione corretta nella lista in base alla direzione del movimento
-    while (next) {
-      lv_coord_t next_y = lv_obj_get_y_aligned(next->step.stepElement);
-      if ((moveUp && next_y >= obj_y) || (!moveUp && next_y > obj_y)) {
-        break;
+        removeStepElementFromList(data, currentNode);
+
+        if (previous == NULL) {
+          insertStepElementAfter(data, NULL, currentNode);
+        } else {
+          insertStepElementAfter(data, previous, currentNode);
+        }
+
+        reorderStepElements(data);
+        lv_obj_invalidate(objElement);
+
+        if (hasListChanged(data)) {
+          gui.tempProcessNode->process.processDetails->somethingChanged = true;
+          lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
+        }
+
+        dragging = false;
       }
-      previous = next;
-      next = next->next;
     }
-
-    removeStepElementFromList(data, currentNode);
-
-    if (previous == NULL) {
-      insertStepElementAfter(data, NULL, currentNode);
-    } else {
-      insertStepElementAfter(data, previous, currentNode);
-    }
-
-    reorderStepElements(data);
-    lv_obj_invalidate(objElement);
-
-    if (hasListChanged(data)) {
-      gui.tempProcessNode->process.processDetails->somethingChanged = true;
-      lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
-    }
-
-    dragging = false;
   }
 
   if (code == LV_EVENT_GESTURE && currentNode->step.longPressHandled == false) {
     // Gestione LV_EVENT_GESTURE
     currentNode->step.gestureHandled = true;
     switch (dir) {
+      //COMMENTED as now the edit will be done using the standard "click"
       case LV_DIR_LEFT:
+      /*
         if (currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0) {
           LV_LOG_USER("Left gesture for edit");
           x = lv_obj_get_x_aligned(currentNode->step.stepElement) - 50;
@@ -312,6 +318,7 @@ void event_stepElement(lv_event_t *e) {
           lv_obj_remove_flag(currentNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
           break;
         }
+        */
         if (currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 1) {
           LV_LOG_USER("Left gesture to return");
           x = lv_obj_get_x_aligned(currentNode->step.stepElement) - 50;
@@ -322,8 +329,10 @@ void event_stepElement(lv_event_t *e) {
           lv_obj_add_flag(currentNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
           break;
         }
+    
 
       case LV_DIR_RIGHT:
+      /*
         if (currentNode->step.swipedLeft == 1 && currentNode->step.swipedRight == 0) {
           LV_LOG_USER("Right gesture to return");
           x = lv_obj_get_x_aligned(currentNode->step.stepElement) + 50;
@@ -335,6 +344,7 @@ void event_stepElement(lv_event_t *e) {
           currentNode->step.gestureHandled = false;
           break;
         }
+        */
         if (currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0) {
           LV_LOG_USER("Right gesture for delete");
           x = lv_obj_get_x_aligned(currentNode->step.stepElement) + 50;
@@ -344,12 +354,14 @@ void event_stepElement(lv_event_t *e) {
           lv_obj_remove_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
           break;
         }
+        
     }
   }
 
-  if (code == LV_EVENT_CLICKED && currentNode->step.longPressHandled == false) {
+  if (code == LV_EVENT_CLICKED && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0) {
     // Gestione LV_EVENT_CLICKED
-    if (obj == currentNode->step.editButton) {
+    //if (obj == currentNode->step.editButton) {
+    if(obj == currentNode->step.stepElementSummary && currentNode->step.swipedLeft == 0){
       LV_LOG_USER("Click Edit button step address 0x%p", currentNode);
       stepDetail(data, currentNode);
       return;
@@ -365,7 +377,7 @@ void event_stepElement(lv_event_t *e) {
   }
 
 
-  if (code == LV_EVENT_LONG_PRESSED && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0) {
+  if (code == LV_EVENT_LONG_PRESSED && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0 && data->process.processDetails->stepElementsList.size > 1) {
     currentNode->step.longPressHandled = true;
     // Gestione LV_EVENT_LONG_PRESSED
     LV_LOG_USER("LV_EVENT_LONG_PRESSED");
@@ -483,6 +495,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
   lv_obj_add_event_cb(newStep->step.stepElement, event_stepElement, LV_EVENT_GESTURE, processReference);
   lv_obj_add_event_cb(newStep->step.stepElement, event_stepElement, LV_EVENT_LONG_PRESSED_REPEAT, processReference);
   lv_obj_add_event_cb(newStep->step.stepElement, event_stepElement, LV_EVENT_RELEASED, processReference);
+  lv_obj_add_event_cb(newStep->step.stepElement, event_stepElement, LV_EVENT_CLICKED, processReference);
   lv_obj_add_event_cb(newStep->step.stepElement, event_stepElement, LV_EVENT_LONG_PRESSED, processReference);
 
 
@@ -507,7 +520,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
                 lv_obj_set_style_text_font(newStep->step.deleteButtonLabel, &FilMachineFontIcons_30, 0);              
                 lv_obj_align(newStep->step.deleteButtonLabel, LV_ALIGN_CENTER, -5 , 0);
 
-
+        //Actually present but hidden, as now the edit will be done using the standard "click"
         newStep->step.editButton = lv_obj_create(newStep->step.stepElement);
         lv_obj_set_style_bg_color(newStep->step.editButton, lv_color_hex(LIGHT_BLUE_DARK), LV_PART_MAIN);
         lv_obj_set_size(newStep->step.editButton, 60, 70);
