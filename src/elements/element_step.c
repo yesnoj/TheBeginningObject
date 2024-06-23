@@ -255,7 +255,7 @@ void event_stepElement(lv_event_t *e) {
         dragging = true;
     } 
      
-    if (code == LV_EVENT_RELEASED) {
+    if (code == LV_EVENT_RELEASED && currentNode->step.longPressHandled == true) {
       LV_LOG_USER("LV_EVENT_RELEASED");
       if(currentNode->step.gestureHandled == true){
         currentNode->step.gestureHandled = false;
