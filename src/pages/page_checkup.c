@@ -36,6 +36,28 @@ static uint8_t stepPercentage = 0;
 static uint8_t processPercentage = 0;
 
 
+void resetStuffBeforeNextProcess(){
+    isProcessingStatus0created = 0;
+    isProcessingStatus1created = 0;
+    isStepStatus0created = 0;
+    isStepStatus1created = 0;
+    isStepStatus2created = 0;
+    isStepStatus3created = 0;
+    isStepStatus4created = 0;
+
+    minutesProcessElapsed = 0;
+    secondsProcessElapsed = 1;
+    hoursProcessElapsed = 0;
+    minutesStepElapsed = 0;
+    secondsStepElapsed = 1;
+    minutesProcessLeft = 0;
+    secondsProcessLeft = 0;
+    minutesStepLeft = 0;
+    secondsStepLeft = 0;
+    stepPercentage = 0;
+    processPercentage = 0;
+}
+
 void event_checkup(lv_event_t * e){
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
@@ -375,7 +397,7 @@ void checkup(processNode *processToCheckup)
     initCheckup();
   }
     LV_LOG_USER("initCheckup Done!");
-
+        resetStuffBeforeNextProcess();
         //LEFT SIDE OF SCREEN
         if(gui.tempProcessNode->process.processDetails->checkup->isProcessing == 0){
             if(isProcessingStatus0created == 0){

@@ -283,8 +283,8 @@ if(existingProcess != NULL) {
 
 
             gui.tempProcessNode->process.processDetails->processNewStepButton = lv_button_create(gui.tempProcessNode->process.processDetails->processDetailContainer);
-            lv_obj_set_size(gui.tempProcessNode->process.processDetails->processNewStepButton, BUTTON_POPUP_CLOSE_WIDTH * 0.8, BUTTON_POPUP_CLOSE_HEIGHT * 0.8);
-            lv_obj_align(gui.tempProcessNode->process.processDetails->processNewStepButton, LV_ALIGN_TOP_LEFT, 216 , 55);
+            lv_obj_set_size(gui.tempProcessNode->process.processDetails->processNewStepButton, BUTTON_POPUP_CLOSE_WIDTH * 0.9, BUTTON_POPUP_CLOSE_HEIGHT * 0.9);
+            lv_obj_align(gui.tempProcessNode->process.processDetails->processNewStepButton, LV_ALIGN_TOP_LEFT, 212 , 55);
             lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->processNewStepButton, event_processDetail, LV_EVENT_CLICKED, gui.tempProcessNode->process.processDetails->processNewStepButton);
             lv_obj_set_style_bg_color(gui.tempProcessNode->process.processDetails->processNewStepButton, lv_palette_main(LV_PALETTE_GREEN), LV_PART_MAIN);
             //lv_obj_move_foreground(gui.tempProcessNode->process.processDetails->processNewStepButton);
