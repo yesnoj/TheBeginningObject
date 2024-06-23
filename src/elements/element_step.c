@@ -221,226 +221,181 @@ bool hasListChanged(processNode *data) {
 }
 
 void event_stepElement(lv_event_t *e) {
-  int8_t x;
+    int8_t x;
 
-  lv_event_code_t code = lv_event_get_code(e);
-  lv_obj_t *obj = (lv_obj_t *)lv_event_get_target(e);
-  lv_obj_t *objElement = (lv_obj_t *)lv_obj_get_parent(obj);
-  processNode *data = (processNode *)lv_event_get_user_data(e);
-  stepNode *currentNode = getStepElementEntryByObject(obj, data);
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t *obj = (lv_obj_t *)lv_event_get_target(e);
+    lv_obj_t *objElement = (lv_obj_t *)lv_obj_get_parent(obj);
+    processNode *data = (processNode *)lv_event_get_user_data(e);
+    stepNode *currentNode = getStepElementEntryByObject(obj, data);
 
-  lv_indev_t *indev = lv_indev_active();
-  lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_active());
+    lv_indev_t *indev = lv_indev_active();
+    lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_active());
 
-  static lv_point_t last_point;
-  static bool dragging = false;
+    static lv_point_t last_point;
+    static bool dragging = false;
+    static bool ignore_click = false;  // Flag to ignore click
 
-  if (indev == NULL)
-    return;
-
-  if (currentNode == NULL) {
-    LV_LOG_USER("Bad object passed to eventProcessElement!");
-    return;
-  }
-
-  if (code == LV_EVENT_RELEASED) {
-    LV_LOG_USER("LV_EVENT_RELEASED");
-    if (currentNode->step.gestureHandled == true && currentNode->step.swipedLeft == 0) {
-      currentNode->step.gestureHandled = false;
-      return;
-    }
-    if(currentNode->step.longPressHandled == true){
-      //Do all the reorder stuff just if the size is > 1
-      if(data->process.processDetails->stepElementsList.size > 1){
-        //lv_style_set_border_color(&currentNode->step.stepStyle, lv_color_hex(GREEN_DARK));
-        lv_style_set_shadow_spread(&currentNode->step.stepStyle, 0);
-        lv_obj_add_flag(lv_obj_get_parent(objElement), LV_OBJ_FLAG_SCROLLABLE);
-
-        // Inserisci l'elemento nella nuova posizione
-        stepNode *previous = NULL;
-        stepNode *next = data->process.processDetails->stepElementsList.start;
-        lv_coord_t obj_y = lv_obj_get_y_aligned(objElement);
-
-        // Determina se stiamo trascinando verso l'alto o verso il basso
-        bool moveUp = true;  // Flag per indicare il movimento verso l'alto
-
-        // Controlla la direzione del movimento
-        lv_indev_get_point(lv_indev_get_act(), &last_point);
-
-        if (last_point.y > obj_y) {
-          moveUp = false;  // Stiamo trascinando verso il basso
-        }
-
-        // Cerca la posizione corretta nella lista in base alla direzione del movimento
-        while (next) {
-          lv_coord_t next_y = lv_obj_get_y_aligned(next->step.stepElement);
-          if ((moveUp && next_y >= obj_y) || (!moveUp && next_y > obj_y)) {
-            break;
-          }
-          previous = next;
-          next = next->next;
-        }
-
-        removeStepElementFromList(data, currentNode);
-
-        if (previous == NULL) {
-          insertStepElementAfter(data, NULL, currentNode);
-        } else {
-          insertStepElementAfter(data, previous, currentNode);
-        }
-
-        reorderStepElements(data);
-        lv_obj_invalidate(objElement);
-
-        if (hasListChanged(data)) {
-          gui.tempProcessNode->process.processDetails->somethingChanged = true;
-          lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
-        }
-
-        dragging = false;
-      }
-    }
-  }
-
-  if (code == LV_EVENT_GESTURE && currentNode->step.longPressHandled == false) {
-    // Gestione LV_EVENT_GESTURE
-    currentNode->step.gestureHandled = true;
-    switch (dir) {
-      //COMMENTED as now the edit will be done using the standard "click"
-      case LV_DIR_LEFT:
-      /*
-        if (currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0) {
-          LV_LOG_USER("Left gesture for edit");
-          x = lv_obj_get_x_aligned(currentNode->step.stepElement) - 50;
-          lv_obj_set_pos(currentNode->step.stepElement, x, lv_obj_get_y_aligned(currentNode->step.stepElement));
-          currentNode->step.swipedLeft = 1;
-          currentNode->step.swipedRight = 0;
-          lv_obj_remove_flag(currentNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
-          break;
-        }
-        */
-        if (currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 1) {
-          LV_LOG_USER("Left gesture to return");
-          x = lv_obj_get_x_aligned(currentNode->step.stepElement) - 50;
-          lv_obj_set_pos(currentNode->step.stepElement, x, lv_obj_get_y_aligned(currentNode->step.stepElement));
-          currentNode->step.swipedLeft = 0;
-          currentNode->step.swipedRight = 0;
-          lv_obj_add_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
-          lv_obj_add_flag(currentNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
-          break;
-        }
-    
-
-      case LV_DIR_RIGHT:
-      /*
-        if (currentNode->step.swipedLeft == 1 && currentNode->step.swipedRight == 0) {
-          LV_LOG_USER("Right gesture to return");
-          x = lv_obj_get_x_aligned(currentNode->step.stepElement) + 50;
-          lv_obj_set_pos(currentNode->step.stepElement, x, lv_obj_get_y_aligned(currentNode->step.stepElement));
-          currentNode->step.swipedLeft = 0;
-          currentNode->step.swipedRight = 0;
-          lv_obj_add_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
-          lv_obj_add_flag(currentNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
-          currentNode->step.gestureHandled = false;
-          break;
-        }
-        */
-        if (currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0) {
-          LV_LOG_USER("Right gesture for delete");
-          x = lv_obj_get_x_aligned(currentNode->step.stepElement) + 50;
-          lv_obj_set_pos(currentNode->step.stepElement, x, lv_obj_get_y_aligned(currentNode->step.stepElement));
-          currentNode->step.swipedRight = 1;
-          currentNode->step.swipedLeft = 0;
-          lv_obj_remove_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
-          break;
-        }
-        
-    }
-  }
-
-  if (code == LV_EVENT_CLICKED && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0) {
-    // Gestione LV_EVENT_CLICKED
-    //if (obj == currentNode->step.editButton) {
-    if(obj == currentNode->step.stepElementSummary && currentNode->step.swipedLeft == 0){
-      LV_LOG_USER("Click Edit button step address 0x%p", currentNode);
-      stepDetail(data, currentNode);
-      return;
-    }
-    if (obj == currentNode->step.deleteButton) {
-      if (gui.element.messagePopup.mBoxPopupParent == NULL) {
-        LV_LOG_USER("Click Delete button step address %p", currentNode);
-        gui.tempStepNode = currentNode;
-        messagePopupCreate(deletePopupTitle_text, deletePopupBody_text, deleteButton_text, stepDetailCancel_text, gui.tempStepNode);
+    if (indev == NULL)
         return;
-      }
+
+    if (currentNode == NULL) {
+        LV_LOG_USER("Bad object passed to eventProcessElement!");
+        return;
     }
-  }
 
-
-  if (code == LV_EVENT_LONG_PRESSED && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0 && data->process.processDetails->stepElementsList.size > 1) {
-    currentNode->step.longPressHandled = true;
-    // Gestione LV_EVENT_LONG_PRESSED
-    LV_LOG_USER("LV_EVENT_LONG_PRESSED");
-    lv_obj_move_foreground(objElement);
-    lv_indev_get_point(lv_indev_get_act(), &last_point);
-    //lv_style_set_border_color(&currentNode->step.stepStyle, lv_color_hex(RED));
-    lv_style_set_shadow_spread(&currentNode->step.stepStyle, 3);
-    lv_obj_remove_flag(lv_obj_get_parent(objElement), LV_OBJ_FLAG_SCROLLABLE);
-    dragging = true;
-  }
-
-
-  if (code == LV_EVENT_LONG_PRESSED_REPEAT && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0) {
-    currentNode->step.longPressHandled = true;
-    // Gestione LV_EVENT_LONG_PRESSED_REPEAT
-    //   if (!currentNode->step.longPressHandled) {
-    // Gestisci long press solo se non è stato già gestito
-    //     currentNode->step.longPressHandled = true;
-    // Esegui le azioni per il long press
-    // }
-
-    LV_LOG_USER("LV_EVENT_LONG_PRESSED_REPEAT");
-
-    if (gui.tempProcessNode->process.processDetails->stepElementsList.size > 1) {
-      if (dragging) {
-        lv_point_t current_point;
-        lv_indev_get_point(lv_indev_get_act(), &current_point);
-
-        lv_coord_t dy = current_point.y - last_point.y;
-
-        if (gui.tempProcessNode->process.processDetails->stepElementsList.start == currentNode) {
-          LV_LOG_USER("IS FIRST STEP IN LIST %d %d", dy, lv_obj_get_y_aligned(objElement));
-          if ((dy + lv_obj_get_y_aligned(objElement)) >= -16) {
-            lv_obj_set_pos(objElement, lv_obj_get_x_aligned(objElement), lv_obj_get_y_aligned(objElement) + dy);
-            last_point = current_point;
-            lv_obj_invalidate(objElement);
-          }
-        } else if (gui.tempProcessNode->process.processDetails->stepElementsList.end == currentNode) {
-          LV_LOG_USER("IS LAST STEP IN LIST %d %d", dy, lv_obj_get_y_aligned(objElement));
-          if ((dy + lv_obj_get_y_aligned(objElement)) <= (((gui.tempProcessNode->process.processDetails->stepElementsList.size) * 70) - 53)) {
-            lv_obj_set_pos(objElement, lv_obj_get_x_aligned(objElement), lv_obj_get_y_aligned(objElement) + dy);
-            last_point = current_point;
-            lv_obj_invalidate(objElement);
-          }
-        } else {
-
-          LV_LOG_USER("IS MIDDLE STEP IN LIST %d %d", dy, lv_obj_get_y_aligned(objElement));
-          lv_obj_set_pos(objElement, lv_obj_get_x_aligned(objElement), lv_obj_get_y_aligned(objElement) + dy);
-          last_point = current_point;
-          lv_obj_invalidate(objElement);
+    if (code == LV_EVENT_RELEASED) {
+        LV_LOG_USER("LV_EVENT_RELEASED");
+        if (currentNode->step.gestureHandled == true && currentNode->step.swipedLeft == 0) {
+            currentNode->step.gestureHandled = false;
+            return;
         }
-      }
+        if (currentNode->step.longPressHandled == true) {
+            if (data->process.processDetails->stepElementsList.size > 1) {
+                lv_style_set_shadow_spread(&currentNode->step.stepStyle, 0);
+                lv_obj_add_flag(lv_obj_get_parent(objElement), LV_OBJ_FLAG_SCROLLABLE);
+
+                stepNode *previous = NULL;
+                stepNode *next = data->process.processDetails->stepElementsList.start;
+                lv_coord_t obj_y = lv_obj_get_y_aligned(objElement);
+
+                bool moveUp = true;
+                lv_indev_get_point(lv_indev_get_act(), &last_point);
+
+                if (last_point.y > obj_y) {
+                    moveUp = false;
+                }
+
+                while (next) {
+                    lv_coord_t next_y = lv_obj_get_y_aligned(next->step.stepElement);
+                    if ((moveUp && next_y >= obj_y) || (!moveUp && next_y > obj_y)) {
+                        break;
+                    }
+                    previous = next;
+                    next = next->next;
+                }
+
+                removeStepElementFromList(data, currentNode);
+
+                if (previous == NULL) {
+                    insertStepElementAfter(data, NULL, currentNode);
+                } else {
+                    insertStepElementAfter(data, previous, currentNode);
+                }
+
+                reorderStepElements(data);
+                lv_obj_invalidate(objElement);
+
+                if (hasListChanged(data)) {
+                    gui.tempProcessNode->process.processDetails->somethingChanged = true;
+                    lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
+                }
+
+                dragging = false;
+            }
+        }
+        ignore_click = false;  // Reset ignore click flag on release
     }
-  }
 
+    if (code == LV_EVENT_GESTURE && currentNode->step.longPressHandled == false) {
+        currentNode->step.gestureHandled = true;
+        switch (dir) {
+            case LV_DIR_LEFT:
+                if (currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 1) {
+                    LV_LOG_USER("Left gesture to return");
+                    x = lv_obj_get_x_aligned(currentNode->step.stepElement) - 50;
+                    lv_obj_set_pos(currentNode->step.stepElement, x, lv_obj_get_y_aligned(currentNode->step.stepElement));
+                    currentNode->step.swipedLeft = 0;
+                    currentNode->step.swipedRight = 0;
+                    lv_obj_add_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
+                    lv_obj_add_flag(currentNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
+                    ignore_click = true;  // Set ignore click flag
+                    break;
+                }
+                break;
 
+            case LV_DIR_RIGHT:
+                if (currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0) {
+                    LV_LOG_USER("Right gesture for delete");
+                    x = lv_obj_get_x_aligned(currentNode->step.stepElement) + 50;
+                    lv_obj_set_pos(currentNode->step.stepElement, x, lv_obj_get_y_aligned(currentNode->step.stepElement));
+                    currentNode->step.swipedRight = 1;
+                    currentNode->step.swipedLeft = 0;
+                    lv_obj_remove_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
+                    ignore_click = true;  // Set ignore click flag
+                    break;
+                }
+                break;
+        }
+    }
 
-  if (code == LV_EVENT_DELETE) {
-    // Gestione LV_EVENT_DELETE
-    lv_style_reset(&currentNode->step.stepStyle);
-    return;
-  }
+    if (code == LV_EVENT_CLICKED ) {
+        if (obj == currentNode->step.stepElementSummary && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0 && !ignore_click) {
+            LV_LOG_USER("Click Edit button step address 0x%p", currentNode);
+            stepDetail(data, currentNode);
+            return;
+        }
+        if (obj == currentNode->step.deleteButton && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 1 && !ignore_click) {
+            if (gui.element.messagePopup.mBoxPopupParent == NULL) {
+                LV_LOG_USER("Click Delete button step address %p", currentNode);
+                gui.tempStepNode = currentNode;
+                messagePopupCreate(deletePopupTitle_text, deletePopupBody_text, deleteButton_text, stepDetailCancel_text, gui.tempStepNode);
+                return;
+            }
+        }
+    }
+
+    if (code == LV_EVENT_LONG_PRESSED && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0 && data->process.processDetails->stepElementsList.size > 1) {
+        currentNode->step.longPressHandled = true;
+        LV_LOG_USER("LV_EVENT_LONG_PRESSED");
+        lv_obj_move_foreground(objElement);
+        lv_indev_get_point(lv_indev_get_act(), &last_point);
+        lv_style_set_shadow_spread(&currentNode->step.stepStyle, 3);
+        lv_obj_remove_flag(lv_obj_get_parent(objElement), LV_OBJ_FLAG_SCROLLABLE);
+        dragging = true;
+    }
+
+    if (code == LV_EVENT_LONG_PRESSED_REPEAT && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0) {
+        currentNode->step.longPressHandled = true;
+        LV_LOG_USER("LV_EVENT_LONG_PRESSED_REPEAT");
+
+        if (gui.tempProcessNode->process.processDetails->stepElementsList.size > 1) {
+            if (dragging) {
+                lv_point_t current_point;
+                lv_indev_get_point(lv_indev_get_act(), &current_point);
+
+                lv_coord_t dy = current_point.y - last_point.y;
+
+                if (gui.tempProcessNode->process.processDetails->stepElementsList.start == currentNode) {
+                    LV_LOG_USER("IS FIRST STEP IN LIST %d %d", dy, lv_obj_get_y_aligned(objElement));
+                    if ((dy + lv_obj_get_y_aligned(objElement)) >= -16) {
+                        lv_obj_set_pos(objElement, lv_obj_get_x_aligned(objElement), lv_obj_get_y_aligned(objElement) + dy);
+                        last_point = current_point;
+                        lv_obj_invalidate(objElement);
+                    }
+                } else if (gui.tempProcessNode->process.processDetails->stepElementsList.end == currentNode) {
+                    LV_LOG_USER("IS LAST STEP IN LIST %d %d", dy, lv_obj_get_y_aligned(objElement));
+                    if ((dy + lv_obj_get_y_aligned(objElement)) <= (((gui.tempProcessNode->process.processDetails->stepElementsList.size) * 70) - 53)) {
+                        lv_obj_set_pos(objElement, lv_obj_get_x_aligned(objElement), lv_obj_get_y_aligned(objElement) + dy);
+                        last_point = current_point;
+                        lv_obj_invalidate(objElement);
+                    }
+                } else {
+                    LV_LOG_USER("IS MIDDLE STEP IN LIST %d %d", dy, lv_obj_get_y_aligned(objElement));
+                    lv_obj_set_pos(objElement, lv_obj_get_x_aligned(objElement), lv_obj_get_y_aligned(objElement) + dy);
+                    last_point = current_point;
+                    lv_obj_invalidate(objElement);
+                }
+            }
+        }
+    }
+
+    if (code == LV_EVENT_DELETE) {
+        lv_style_reset(&currentNode->step.stepStyle);
+        return;
+    }
 }
+
 
 void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t tempSize){
   /*********************
