@@ -8,8 +8,8 @@ import time
 # Definition of constants
 MAX_STEP_MIN = 5 
 MAX_PROC_NAME_LEN = 10  
-MAX_STEP_ELEMENTS = 3  #MAX 10 PROCESS / DEV.A 30
-MAX_PROC_ELEMENTS = 5  #MAX 30 PROCESS / DEV.A 100
+MAX_STEP_ELEMENTS = 30  #MAX 10 PROCESS / DEV.A 30
+MAX_PROC_ELEMENTS = 50  #MAX 30 PROCESS / DEV.A 100
 
 # Definition of output file names
 OUTPUT_FILE_CFG = 'FilMachine.cfg'
@@ -68,10 +68,10 @@ for p in range(MAX_PROC_ELEMENTS):
     process = {
         "processNameString": random_string(MAX_PROC_NAME_LEN),
         "temp": random.randint(20, 40),
-        "tempTolerance": random.randint(0, 4),
+        "tempTolerance": float(random.randint(0, 5)) / 10,  # Updated as value changed to float in global structure
         "isTempControlled": random.randint(0, 1),
         "isPreferred": random.randint(0, 1),
-        "filmType": random.randint(0, 1),  # Currently can only select 0 or 1 will crash otherwise
+        "filmType": random.randint(0, 1),
         "timeMins": total_mins,
         "timeSecs": total_secs,
         "steps": steps
@@ -82,7 +82,7 @@ for p in range(MAX_PROC_ELEMENTS):
 def write_settings(file, settings):
     file.write(struct.pack('<L', settings["tempUnit"]))
     file.write(struct.pack('<L', settings["waterInlet"]))
-    file.write(struct.pack('<L', settings["calibratedTemp"]))
+    file.write(struct.pack('<B', settings["calibratedTemp"]))  # Updated to a byte value as was 32-bit, has been changed in global structure...
     file.write(struct.pack('<B', settings["filmRotationSpeedSetpoint"]))
     file.write(struct.pack('<B', settings["rotationIntervalSetpoint"]))
     file.write(struct.pack('<B', settings["randomSetpoint"]))
@@ -91,9 +91,9 @@ def write_settings(file, settings):
     file.write(struct.pack('<B', settings["drainFillOverlapSetpoint"]))
 
 def write_process(file, process):
-    file.write(process["processNameString"].encode('UTF-8').ljust(21, b'\x00'))
+    file.write(process["processNameString"].encode('ASCII').ljust(21, b'\x00'))  #updated type to ASCII as UTF-8 can generate characters with more than 1 byte! Crash for us!
     file.write(struct.pack('<L', process["temp"]))
-    file.write(struct.pack('<B', process["tempTolerance"]))
+    file.write(struct.pack('<f', process["tempTolerance"])) # Updated for float 
     file.write(struct.pack('<B', process["isTempControlled"]))
     file.write(struct.pack('<B', process["isPreferred"]))
     file.write(struct.pack('<L', process["filmType"]))
@@ -104,7 +104,7 @@ def write_process(file, process):
         write_step(file, step)
 
 def write_step(file, step):
-    file.write(step["stepNameString"].encode('UTF-8').ljust(21, b'\x00')) #
+    file.write(step["stepNameString"].encode('ASCII').ljust(21, b'\x00')) #
     file.write(struct.pack('<B', step["timeMins"]))
     file.write(struct.pack('<B', step["timeSecs"]))
     file.write(struct.pack('<L', step["type"]))

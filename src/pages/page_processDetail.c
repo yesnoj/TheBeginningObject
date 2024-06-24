@@ -351,7 +351,7 @@ if(existingProcess != NULL) {
                               lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea, formatted_string);
                           } else{
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, fahrenheit_text);
-                              sprintf(formatted_string, "%d", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->temp));
+                              sprintf(formatted_string, "%f", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->temp));
                               lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea, formatted_string);
                           }  
                           
@@ -399,7 +399,7 @@ if(existingProcess != NULL) {
                               lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(gui.tempProcessNode->process.processDetails->tempTolerance,gui.element.rollerPopup.tempCelsiusToleranceOptions));
                           } else{
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, fahrenheit_text);
-                              sprintf(formatted_string, "%d", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->tempTolerance));
+                              sprintf(formatted_string, "%f", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->tempTolerance));
                               lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(gui.tempProcessNode->process.processDetails->tempTolerance,gui.element.rollerPopup.tempCelsiusToleranceOptions));
                           }  
 

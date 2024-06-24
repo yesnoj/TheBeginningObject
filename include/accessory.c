@@ -430,11 +430,11 @@ void* allocateAndInitializeNode(NodeType_t type) {
     // Initialize and allocate according to the node type
     switch (type) {
         case STEP_NODE:
-            node = malloc(sizeof(stepNode));
+            node = ps_malloc(sizeof(stepNode));
             if (node != NULL) {
                 memset(node, 0, sizeof(stepNode));
                 stepNode* step = (stepNode*)node;
-                step->step.stepDetails = (sStepDetail *)malloc(sizeof(sStepDetail));
+                step->step.stepDetails = (sStepDetail *)ps_malloc(sizeof(sStepDetail));
                 if (step->step.stepDetails == NULL) {
                     // Handle memory allocation failure
                     free(step);
@@ -448,11 +448,11 @@ void* allocateAndInitializeNode(NodeType_t type) {
             break;
 
         case PROCESS_NODE:
-            node = malloc(sizeof(processNode));
+            node = ps_malloc(sizeof(processNode));
             if (node != NULL) {
                 memset(node, 0, sizeof(processNode));
                 processNode* process = (processNode*)node;
-                process->process.processDetails = (sProcessDetail *)malloc(sizeof(sProcessDetail));
+                process->process.processDetails = (sProcessDetail *)ps_malloc(sizeof(sProcessDetail));
                 if (process->process.processDetails == NULL) {
                     // Handle memory allocation failure
                     free(process);
@@ -460,7 +460,7 @@ void* allocateAndInitializeNode(NodeType_t type) {
                 }
                 memset(process->process.processDetails, 0, sizeof(sProcessDetail));
 
-                process->process.processDetails->checkup = (sCheckup *)malloc(sizeof(sCheckup));
+                process->process.processDetails->checkup = (sCheckup *)ps_malloc(sizeof(sCheckup));
                 if (process->process.processDetails->checkup == NULL) {
                     // Handle memory allocation failure
                     free(process->process.processDetails);
@@ -762,8 +762,10 @@ void readConfigFile(fs::FS &fs, const char *path, bool enableLog) {
     processElementsList->size = 0;    
     // Read process list size
     file.read((uint8_t*)&processElementsList->size, sizeof(processElementsList->size));
+    if(enableLog) LV_LOG_USER("Number of Processes:%d", processElementsList->size);
 
     for(int32_t process = 0; process < processElementsList->size; process++){
+      if(enableLog) LV_LOG_USER("Process:%d", process);
 
       processNode *nodeP = (processNode*) allocateAndInitializeNode(PROCESS_NODE);
       if (nodeP == NULL) {
@@ -816,7 +818,9 @@ void readConfigFile(fs::FS &fs, const char *path, bool enableLog) {
 
       // Write step list size
       file.read((uint8_t*)&stepElementsList->size, sizeof(stepElementsList->size));
+      if(enableLog) LV_LOG_USER("Process Steps:%d", stepElementsList->size);
       for(int32_t step = 0; step < stepElementsList->size; step++){                
+        if(enableLog) LV_LOG_USER("Step:%d", step);
         stepNode *nodeS = (stepNode*) allocateAndInitializeNode(STEP_NODE);
         if (nodeS == NULL) {
           LV_LOG_USER("Failed to allocate memory for step node");
