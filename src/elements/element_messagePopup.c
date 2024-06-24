@@ -37,7 +37,7 @@ void event_messagePopup(lv_event_t *e)
         if (obj == gui.element.messagePopup.mBoxPopupButton1)
         {
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton1");
-            if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == 1 && gui.tempProcessNode->process.swipedLeft == 0)//manage the delete by pressing button with gesture
+            if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == true && gui.tempProcessNode->process.swipedLeft == false)//manage the delete by pressing button with gesture
             {
                 LV_LOG_USER("Delete process!");
 
@@ -53,7 +53,7 @@ void event_messagePopup(lv_event_t *e)
 //                lv_obj_delete(mboxCont);  // Not required! Can cause crash!
                 gui.element.messagePopup.mBoxPopupParent = NULL;
             }
-            if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == 0 && gui.tempProcessNode->process.swipedLeft == 1)//manage duplicate 
+            if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == false && gui.tempProcessNode->process.swipedLeft == true)//manage duplicate 
             {
                 LV_LOG_USER("Cancel duplicate");
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
@@ -89,13 +89,13 @@ void event_messagePopup(lv_event_t *e)
                 //lv_obj_delete(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
                 
-                if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == 0){
+                if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == false){
                     lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->timer);
                     lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);  
                     lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);  
                     lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);  
                   }
-                if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == 1){
+                if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == true){
                     lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);  
                     lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);                   
                   }
@@ -117,7 +117,7 @@ void event_messagePopup(lv_event_t *e)
                 //lv_obj_delete(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
 
-                gui.tempProcessNode->process.processDetails->checkup->stopAfter = 1;
+                gui.tempProcessNode->process.processDetails->checkup->stopAfter = true;
                 lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED); 
                 lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);  
                 
@@ -154,33 +154,33 @@ void event_messagePopup(lv_event_t *e)
             LV_LOG_USER("Pressed gui.element.messagePopup.mBoxPopupButton2");
             if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode || gui.element.messagePopup.whoCallMe == gui.tempStepNode || gui.element.messagePopup.whoCallMe == gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton || gui.element.messagePopup.whoCallMe == gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton)
             {
-                if(gui.element.messagePopup.whoCallMe == gui.tempStepNode && gui.tempStepNode->step.swipedLeft == 0 && gui.tempStepNode->step.swipedRight == 1){
-                    if(gui.tempStepNode->step.swipedLeft == 0 && gui.tempStepNode->step.swipedRight == 1){
+                if(gui.element.messagePopup.whoCallMe == gui.tempStepNode && gui.tempStepNode->step.swipedLeft == false && gui.tempStepNode->step.swipedRight == true){
+                    if(gui.tempStepNode->step.swipedLeft == false && gui.tempStepNode->step.swipedRight == true){
                       LV_LOG_USER("Cancel delete step element!");
                       uint32_t  x = lv_obj_get_x_aligned(gui.tempStepNode->step.stepElement) - 50;
                       uint32_t  y = lv_obj_get_y_aligned(gui.tempStepNode->step.stepElement);
                       lv_obj_set_pos(gui.tempStepNode->step.stepElement, x, y);
-                      gui.tempStepNode->step.swipedLeft = 0;
-                      gui.tempStepNode->step.swipedRight = 0;
+                      gui.tempStepNode->step.swipedLeft = false;
+                      gui.tempStepNode->step.swipedRight = false;
                       lv_obj_add_flag(gui.tempStepNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
                       lv_obj_add_flag(gui.tempStepNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
                       gui.tempStepNode->step.longPressHandled = false;
                     }
                 }
-                if(gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == 1 && gui.tempProcessNode->process.swipedLeft == 0){
-                    if(gui.tempProcessNode->process.swipedLeft == 0 && gui.tempProcessNode->process.swipedRight == 1){
+                if(gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == true && gui.tempProcessNode->process.swipedLeft == false){
+                    if(gui.tempProcessNode->process.swipedLeft == false && gui.tempProcessNode->process.swipedRight == true){
                       LV_LOG_USER("Cancel delete process element!");
                       uint32_t  x = lv_obj_get_x_aligned(gui.tempProcessNode->process.processElement) - 50;
                       uint32_t  y = lv_obj_get_y_aligned(gui.tempProcessNode->process.processElement);
                       lv_obj_set_pos(gui.tempProcessNode->process.processElement, x, y);
-                      gui.tempProcessNode->process.swipedLeft = 1;
-                      gui.tempProcessNode->process.swipedRight = 0;
+                      gui.tempProcessNode->process.swipedLeft = true;
+                      gui.tempProcessNode->process.swipedRight = false;
                       lv_obj_add_flag(gui.tempProcessNode->process.deleteButton, LV_OBJ_FLAG_HIDDEN);
                       gui.tempProcessNode->process.gestureHandled = false;
                     }
                 }
 
-                if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == 0 && gui.tempProcessNode->process.swipedLeft == 1 && gui.tempProcessNode->process.longPressHandled == true)
+                if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode && gui.tempProcessNode->process.swipedRight == false && gui.tempProcessNode->process.swipedLeft == true && gui.tempProcessNode->process.longPressHandled == true)
                 {
                     LV_LOG_USER("Duplicate process");
                     char* newProcessName = generateRandomSuffix(gui.tempProcessNode->process.processDetails->processNameString);

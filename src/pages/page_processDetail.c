@@ -68,11 +68,11 @@ void event_processDetail(lv_event_t * e)
     if(data == gui.tempProcessNode->process.processDetails->processPreferredLabel){
 			if(  lv_color_eq( lv_obj_get_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, LV_PART_MAIN ), lv_color_hex(RED) ) ) {
 				  lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, lv_color_hex(WHITE), LV_PART_MAIN);
-				  gui.tempProcessNode->process.processDetails->isPreferred = 0;
+				  gui.tempProcessNode->process.processDetails->isPreferred = false;
           gui.tempProcessNode->process.processDetails->somethingChanged = true;
 			} else {
 				lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, lv_color_hex(RED), LV_PART_MAIN);
-				gui.tempProcessNode->process.processDetails->isPreferred = 1;
+				gui.tempProcessNode->process.processDetails->isPreferred = true;
         gui.tempProcessNode->process.processDetails->somethingChanged = true;
 			}
       lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
@@ -98,7 +98,7 @@ void event_processDetail(lv_event_t * e)
           qSysAction( SAVE_PROCESS_CONFIG );
           
         updateProcessElement(gui.tempProcessNode);
-        if(gui.page.processes.isFiltered == 1)
+        if(gui.page.processes.isFiltered == true)
             filterAndDisplayProcesses();
         LV_LOG_USER("Pressed processSaveButton");
     }
@@ -465,7 +465,7 @@ if(existingProcess != NULL) {
                   lv_obj_align(gui.tempProcessNode->process.processDetails->processPreferredLabel, LV_ALIGN_TOP_LEFT, 120, 140);
                   lv_obj_add_flag(gui.tempProcessNode->process.processDetails->processPreferredLabel, LV_OBJ_FLAG_CLICKABLE);
                   lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->processPreferredLabel, event_processDetail, LV_EVENT_CLICKED, gui.tempProcessNode->process.processDetails->processPreferredLabel);
-                  if(gui.tempProcessNode->process.processDetails->isPreferred == 0){
+                  if(gui.tempProcessNode->process.processDetails->isPreferred == false){
                     lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, lv_color_hex(WHITE), LV_PART_MAIN);
                   }
                   else{

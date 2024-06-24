@@ -219,7 +219,7 @@ void processTimer(lv_timer_t * timer)
 
 
     if(gui.tempStepNode != NULL) { 
-        if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == 1 && remainingStepMins == 0 && remainingStepSecsOnly == 0){
+        if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == true && remainingStepMins == 0 && remainingStepSecsOnly == 0){
             lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);
             lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);
             lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED); 
@@ -388,7 +388,7 @@ void checkup(processNode *processToCheckup)
     gui.tempProcessNode->process.processDetails->checkup->stepCheckFilmStatus = 0;
     gui.tempProcessNode->process.processDetails->checkup->stepReachTempStatus = 0;
     gui.tempProcessNode->process.processDetails->checkup->activeVolume_index  = 0;
-    gui.tempProcessNode->process.processDetails->checkup->stopAfter  = 0;
+    gui.tempProcessNode->process.processDetails->checkup->stopAfter  = false;
 
     LV_LOG_USER("isProcessing %d", gui.tempProcessNode->process.processDetails->checkup->isProcessing);
     if(gui.tempProcessNode->process.processDetails->checkup->isProcessing == 0)

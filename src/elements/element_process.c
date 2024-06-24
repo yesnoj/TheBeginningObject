@@ -249,7 +249,7 @@ void event_processElement(lv_event_t *e) {
 
     if (code == LV_EVENT_RELEASED) {
         LV_LOG_USER("LV_EVENT_RELEASED");
-        if (currentNode->process.gestureHandled == true && currentNode->process.swipedLeft == 1) {
+        if (currentNode->process.gestureHandled == true && currentNode->process.swipedLeft == true) {
             currentNode->process.gestureHandled = false;
             return;
         }
@@ -261,24 +261,24 @@ void event_processElement(lv_event_t *e) {
 
         switch (dir) {
             case LV_DIR_LEFT:
-                if (currentNode->process.swipedLeft == 0 && currentNode->process.swipedRight == 1) {
+                if (currentNode->process.swipedLeft == false && currentNode->process.swipedRight == true) {
                     LV_LOG_USER("Left gesture to return");
                     x = lv_obj_get_x_aligned(obj) - 50;
                     lv_obj_set_pos(obj, x, lv_obj_get_y_aligned(obj));
-                    currentNode->process.swipedRight = 0;
-                    currentNode->process.swipedLeft = 1;
+                    currentNode->process.swipedRight = false;
+                    currentNode->process.swipedLeft = true;
                     lv_obj_add_flag(currentNode->process.deleteButton, LV_OBJ_FLAG_HIDDEN);
                     ignore_click = true;  // Set ignore click flag
                 }
                 break;
 
             case LV_DIR_RIGHT:
-                if (currentNode->process.swipedLeft == 1 && currentNode->process.swipedRight == 0) {
+                if (currentNode->process.swipedLeft == true && currentNode->process.swipedRight == false) {
                     LV_LOG_USER("Right gesture for delete");
                     x = lv_obj_get_x_aligned(obj) + 50;
                     lv_obj_set_pos(obj, x, lv_obj_get_y_aligned(obj));
-                    currentNode->process.swipedRight = 1;
-                    currentNode->process.swipedLeft = 0;
+                    currentNode->process.swipedRight = true;
+                    currentNode->process.swipedLeft = false;
                     lv_obj_remove_flag(currentNode->process.deleteButton, LV_OBJ_FLAG_HIDDEN);
                     ignore_click = true;  // Set ignore click flag
                 }
@@ -292,13 +292,13 @@ void event_processElement(lv_event_t *e) {
         if (obj == currentNode->process.preferredIcon) {
             if (lv_color_eq(lv_obj_get_style_text_color(currentNode->process.preferredIcon, LV_PART_MAIN), lv_color_hex(RED))) {
                 lv_obj_set_style_text_color(currentNode->process.preferredIcon, lv_color_hex(WHITE), LV_PART_MAIN);
-                currentNode->process.processDetails->isPreferred = 0;
+                currentNode->process.processDetails->isPreferred = false;
             } else {
                 lv_obj_set_style_text_color(currentNode->process.preferredIcon, lv_color_hex(RED), LV_PART_MAIN);
-                currentNode->process.processDetails->isPreferred = 1;
+                currentNode->process.processDetails->isPreferred = true;
             }
             LV_LOG_USER("Process is preferred: %d", currentNode->process.processDetails->isPreferred);
-            if (gui.page.processes.isFiltered == 1)
+            if (gui.page.processes.isFiltered == true)
                 filterAndDisplayProcesses();
             qSysAction(SAVE_PROCESS_CONFIG);
         }
@@ -311,14 +311,14 @@ void event_processElement(lv_event_t *e) {
             }
         }
 
-        if (obj == currentNode->process.processElementSummary && currentNode->process.swipedLeft == 1) {
+        if (obj == currentNode->process.processElementSummary && currentNode->process.swipedLeft == true) {
             LV_LOG_USER("Process Element Details address %p", currentNode);
             gui.tempProcessNode = currentNode;
             processDetail(currentNode->process.processDetails->processesContainer); // currentNode
         }
     }
 
-    if (code == LV_EVENT_LONG_PRESSED && currentNode->process.swipedLeft == 1) {
+    if (code == LV_EVENT_LONG_PRESSED && currentNode->process.swipedLeft == true) {
         LV_LOG_USER("LV_EVENT_LONG_PRESSED");
         currentNode->process.longPressHandled = true;
         gui.tempProcessNode = currentNode;
@@ -354,8 +354,8 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         
   LV_LOG_USER("Process size :%d",gui.page.processes.processElementsList.size);
  
-  newProcess->process.swipedLeft = 1;
-  newProcess->process.swipedRight = 0;
+  newProcess->process.swipedLeft = true;
+  newProcess->process.swipedRight = false;
   newProcess->process.gestureHandled = false;
 
 	newProcess->process.processElement = lv_obj_create(gui.page.processes.processesListContainer);
@@ -445,7 +445,7 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         lv_obj_set_style_text_color(newProcess->process.preferredIcon, lv_color_hex(WHITE), LV_PART_MAIN);
         lv_obj_align(newProcess->process.preferredIcon, LV_ALIGN_RIGHT_MID, 15, 0);
         
-        if(newProcess->process.processDetails->isPreferred == 1){
+        if(newProcess->process.processDetails->isPreferred == true){
             lv_obj_set_style_text_color(newProcess->process.preferredIcon, lv_color_hex(RED), LV_PART_MAIN);
         }
         else{

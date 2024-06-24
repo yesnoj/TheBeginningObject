@@ -246,7 +246,7 @@ void event_stepElement(lv_event_t *e) {
 
     if (code == LV_EVENT_RELEASED) {
         LV_LOG_USER("LV_EVENT_RELEASED");
-        if (currentNode->step.gestureHandled == true && currentNode->step.swipedLeft == 0) {
+        if (currentNode->step.gestureHandled == true && currentNode->step.swipedLeft == false) {
             currentNode->step.gestureHandled = false;
             return;
         }
@@ -301,12 +301,12 @@ void event_stepElement(lv_event_t *e) {
         currentNode->step.gestureHandled = true;
         switch (dir) {
             case LV_DIR_LEFT:
-                if (currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 1) {
+                if (currentNode->step.swipedLeft == false && currentNode->step.swipedRight == true) {
                     LV_LOG_USER("Left gesture to return");
                     x = lv_obj_get_x_aligned(currentNode->step.stepElement) - 50;
                     lv_obj_set_pos(currentNode->step.stepElement, x, lv_obj_get_y_aligned(currentNode->step.stepElement));
-                    currentNode->step.swipedLeft = 0;
-                    currentNode->step.swipedRight = 0;
+                    currentNode->step.swipedLeft = false;
+                    currentNode->step.swipedRight = false;
                     lv_obj_add_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
                     lv_obj_add_flag(currentNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
                     ignore_click = true;  // Set ignore click flag
@@ -315,12 +315,12 @@ void event_stepElement(lv_event_t *e) {
                 break;
 
             case LV_DIR_RIGHT:
-                if (currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0) {
+                if (currentNode->step.swipedLeft == false && currentNode->step.swipedRight == false) {
                     LV_LOG_USER("Right gesture for delete");
                     x = lv_obj_get_x_aligned(currentNode->step.stepElement) + 50;
                     lv_obj_set_pos(currentNode->step.stepElement, x, lv_obj_get_y_aligned(currentNode->step.stepElement));
-                    currentNode->step.swipedRight = 1;
-                    currentNode->step.swipedLeft = 0;
+                    currentNode->step.swipedRight = true;
+                    currentNode->step.swipedLeft = false;
                     lv_obj_remove_flag(currentNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
                     ignore_click = true;  // Set ignore click flag
                     break;
@@ -330,12 +330,12 @@ void event_stepElement(lv_event_t *e) {
     }
 
     if (code == LV_EVENT_CLICKED ) {
-        if (obj == currentNode->step.stepElementSummary && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0 && !ignore_click) {
+        if (obj == currentNode->step.stepElementSummary && currentNode->step.swipedLeft == false && currentNode->step.swipedRight == false && !ignore_click) {
             LV_LOG_USER("Click Edit button step address 0x%p", currentNode);
             stepDetail(data, currentNode);
             return;
         }
-        if (obj == currentNode->step.deleteButton && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 1 && !ignore_click) {
+        if (obj == currentNode->step.deleteButton && currentNode->step.swipedLeft == false && currentNode->step.swipedRight == true && !ignore_click) {
             if (gui.element.messagePopup.mBoxPopupParent == NULL) {
                 LV_LOG_USER("Click Delete button step address %p", currentNode);
                 gui.tempStepNode = currentNode;
@@ -345,7 +345,7 @@ void event_stepElement(lv_event_t *e) {
         }
     }
 
-    if (code == LV_EVENT_LONG_PRESSED && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0 && data->process.processDetails->stepElementsList.size > 1) {
+    if (code == LV_EVENT_LONG_PRESSED && currentNode->step.swipedLeft == false && currentNode->step.swipedRight == false && data->process.processDetails->stepElementsList.size > 1) {
         currentNode->step.longPressHandled = true;
         LV_LOG_USER("LV_EVENT_LONG_PRESSED");
         lv_obj_move_foreground(objElement);
@@ -355,7 +355,7 @@ void event_stepElement(lv_event_t *e) {
         dragging = true;
     }
 
-    if (code == LV_EVENT_LONG_PRESSED_REPEAT && currentNode->step.swipedLeft == 0 && currentNode->step.swipedRight == 0) {
+    if (code == LV_EVENT_LONG_PRESSED_REPEAT && currentNode->step.swipedLeft == false && currentNode->step.swipedRight == false) {
         currentNode->step.longPressHandled = true;
         LV_LOG_USER("LV_EVENT_LONG_PRESSED_REPEAT");
 
@@ -426,8 +426,8 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
 		LV_LOG_USER("First call to processElementCreate style now initialised");
 	}
 
-  newStep->step.swipedLeft = 0;
-  newStep->step.swipedRight = 0;
+  newStep->step.swipedLeft = false;
+  newStep->step.swipedRight = false;
   newStep->step.gestureHandled = false;
   newStep->step.longPressHandled = false;
   newStep->step.stepElement = lv_obj_create(processReference->process.processDetails->processStepsContainer);
