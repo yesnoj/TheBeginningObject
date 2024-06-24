@@ -154,7 +154,7 @@ void event_Roller(lv_event_t * e)
             }
           rollerSelected = 0;
         }
-        free(tempBuffer);
+        //free(tempBuffer);
     }
 
     if(code == LV_EVENT_VALUE_CHANGED){

@@ -38,7 +38,7 @@ void event_filterMBox(lv_event_t * e){
                 if(strlen(gui.element.filterPopup.filterName) > 0) 
                     isFilterName = true;
 
-            if( isFilterName || gui.element.filterPopup.isColorFilter != 0 || gui.element.filterPopup.isBnWFilter != 0 || gui.element.filterPopup.preferredOnly != 0)
+            if( isFilterName || gui.element.filterPopup.isColorFilter != false || gui.element.filterPopup.isBnWFilter != false || gui.element.filterPopup.preferredOnly != false)
             {
               lv_obj_set_style_text_color(gui.page.processes.iconFilterLabel, lv_color_hex(GREEN), LV_PART_MAIN);
               filterAndDisplayProcesses();
@@ -47,7 +47,7 @@ void event_filterMBox(lv_event_t * e){
           if(resetPressed == 1){
             LV_LOG_USER("resetPressed %d", resetPressed); 
             lv_obj_set_style_text_color(gui.page.processes.iconFilterLabel, lv_color_hex(WHITE), LV_PART_MAIN);
-            gui.page.processes.isFiltered = 0;
+            gui.page.processes.isFiltered = false;
             removeFiltersAndDisplayAllProcesses();
             resetPressed = 0;   
           }
@@ -61,9 +61,9 @@ void event_filterMBox(lv_event_t * e){
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectColorRadioButton, LV_STATE_CHECKED);
           lv_obj_remove_state(gui.element.filterPopup.mBoxSelectBnWRadioButton, LV_STATE_CHECKED);
           resetPressed = 1;
-          gui.element.filterPopup.isColorFilter = 0;
-          gui.element.filterPopup.isBnWFilter = 0;
-          gui.element.filterPopup.preferredOnly = 0;
+          gui.element.filterPopup.isColorFilter = false;
+          gui.element.filterPopup.isBnWFilter = false;
+          gui.element.filterPopup.preferredOnly = false;
           if(gui.element.filterPopup.filterName != NULL ) {
             free(gui.element.filterPopup.filterName);
             gui.element.filterPopup.filterName = NULL;
@@ -92,7 +92,7 @@ void event_filterMBox(lv_event_t * e){
     }
 
     if(code == LV_EVENT_VALUE_CHANGED) {
-      if(gui.element.filterPopup.filterName == NULL && gui.element.filterPopup.isColorFilter == 0 && gui.element.filterPopup.isBnWFilter == 0 && gui.element.filterPopup.preferredOnly == 0)
+      if(gui.element.filterPopup.filterName == NULL && gui.element.filterPopup.isColorFilter == false && gui.element.filterPopup.isBnWFilter == false && gui.element.filterPopup.preferredOnly == false)
           resetPressed = 1;
     }
 }

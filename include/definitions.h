@@ -265,20 +265,16 @@ typedef enum {
     CHEMICAL_SOURCE_NA
 } chemicalSource_t;
 
-typedef enum {
-	  YES,
-    NO,
-} yesOrNo_t;
 
 struct __attribute__ ((packed)) machineSettings {
   tempUnit_t 	        tempUnit; //0= C° 1= °F
-  yesOrNo_t 	        waterInlet;
-  uint8_t 	        	  calibratedTemp;
+  bool 	              waterInlet;
+  uint8_t 	        	calibratedTemp;
   uint8_t 	        	filmRotationSpeedSetpoint;
 	uint8_t 	        	rotationIntervalSetpoint;
   uint8_t 	        	randomSetpoint;
-  yesOrNo_t 	        isPersistentAlarm;
-  yesOrNo_t 	        isProcessAutostart;
+  bool 	              isPersistentAlarm;
+  bool      	        isProcessAutostart;
   uint8_t 	        	drainFillOverlapSetpoint;
 };
 
@@ -345,8 +341,8 @@ typedef struct sStepDetail {
 
 //	  processNode       *referenceProcess;  // Use a pointer instead of an instance
     char                stepNameString[MAX_PROC_NAME_LEN+1];
-    bool              somethingChanged;
-    bool              isEditMode;
+    bool                somethingChanged;
+    bool                isEditMode;
     uint8_t             timeMins;
     uint8_t             timeSecs;
     chemicalType_t      type;
@@ -371,8 +367,8 @@ typedef struct singleStep { //GRAPHIC ELEMENT IN THE STEPS LIST
     lv_obj_t          *deleteButtonLabel;
     lv_obj_t          *editButton;
     lv_obj_t          *editButtonLabel;
-    uint8_t            swipedLeft;
-    uint8_t            swipedRight;
+    bool               swipedLeft;
+    bool               swipedRight;
     bool               gestureHandled;
     bool               longPressHandled;
     /* Params objects */
@@ -479,7 +475,7 @@ typedef struct sCheckup{
 	uint8_t 			processStep;//0 or 1 or 2 or 3 or 4
 	uint32_t			activeVolume_index;
 	uint8_t 			tankSize;
-	uint8_t 			stopAfter;
+	bool    			stopAfter;
 
 	uint8_t 			stepFillWaterStatus;
 	uint8_t 			stepReachTempStatus;
@@ -541,8 +537,8 @@ typedef struct sProcessDetail {
     char              processNameString[MAX_PROC_NAME_LEN+1];
     uint32_t          temp;
     float             tempTolerance;
-    uint8_t           isTempControlled;
-    uint8_t           isPreferred;
+    bool           isTempControlled;
+    bool           isPreferred;
     bool              somethingChanged;
     filmType_t        filmType;
     uint32_t          timeMins;
@@ -566,9 +562,9 @@ typedef struct singleProcess {
     lv_obj_t          *deleteButton;
     lv_obj_t          *deleteButtonLabel;
     lv_coord_t         container_y;
-    uint8_t            swipedLeft;
-    uint8_t            swipedRight;
-    uint8_t             isFiltered;
+    bool               swipedLeft;
+    bool               swipedRight;
+    bool               isFiltered;
     bool               gestureHandled;
     bool               longPressHandled;
     sProcessDetail     *processDetails;  /* Process details, that includes all steps */
@@ -646,9 +642,9 @@ struct sFilterPopup {
   
 	/* Params objects */
   char                *filterName;
-  uint8_t             isColorFilter;
-  uint8_t             isBnWFilter;
-  uint8_t             preferredOnly;
+  bool                isColorFilter;
+  bool                isBnWFilter;
+  bool                preferredOnly;
 };
 
 
@@ -728,7 +724,7 @@ struct sProcesses {
 
   lv_obj_t	        	*processFilterButton;
   lv_obj_t	        	*newProcessButton;
-  uint8_t             isFiltered;
+  bool                isFiltered;
   /* Params objects */
   processList           processElementsList;
 };
@@ -1099,12 +1095,6 @@ LV_IMG_DECLARE(splash_img);
 
 #define softwareCreditsValue_text 					"Credit to Frank P. \nand \nPete B."
 
-uint8_t completedProcesses;
-uint8_t totalMinProcesses;
-uint8_t completedClean;
-uint8_t stoppedProcesses;
-lv_obj_t * tempSensorTuneButton;
-
 
 /*********************
 * Process detail strings/vars
@@ -1152,12 +1142,8 @@ static const char* stepSourceList = "C1\n"
 static const char* processSourceList[4] = {"C1", "C2", "C3", "WB"};
 static const char* processTempControlList[3] = {"Off", "Run", "Susp."};
                         
-uint8_t stepType;
-uint8_t stepSource;
-uint8_t discardAfter;
-double stepSourceTemp;
-lv_obj_t * stepDetailNamelTextArea;
-bool gesture_handled;
+
+
 
 /*********************
 * Popup elements
