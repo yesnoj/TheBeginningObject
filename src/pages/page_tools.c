@@ -81,7 +81,7 @@ void initTools(void){
   lv_obj_set_size(gui.page.tools.toolsSection, 335, 303); 
   //lv_obj_remove_flag(gui.page.tools.toolsSection, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_set_scroll_dir(gui.page.tools.toolsSection, LV_DIR_VER);
-  lv_obj_set_style_border_color(gui.page.tools.toolsSection, lv_color_hex(BLUE_DARK), 0);  
+  lv_obj_set_style_border_color(gui.page.tools.toolsSection, lv_color_hex(LIGHT_BLUE), 0);  
 
  
 
@@ -126,7 +126,7 @@ void initTools(void){
       lv_obj_set_size(gui.page.tools.toolsCleaningButton, BUTTON_PROCESS_WIDTH * 0.8, BUTTON_PROCESS_HEIGHT);
       lv_obj_align(gui.page.tools.toolsCleaningButton, LV_ALIGN_RIGHT_MID, 0, 0);
       lv_obj_add_event_cb(gui.page.tools.toolsCleaningButton, event_toolsElement, LV_EVENT_CLICKED, gui.page.tools.toolsCleaningButton);
-      lv_obj_set_style_bg_color(gui.page.tools.toolsCleaningButton, lv_color_hex(BLUE_DARK), LV_PART_MAIN);
+      lv_obj_set_style_bg_color(gui.page.tools.toolsCleaningButton, lv_color_hex(LIGHT_BLUE), LV_PART_MAIN);
               
              gui.page.tools.toolsCleaningButtonLabel = lv_label_create(gui.page.tools.toolsCleaningButton);         
              lv_label_set_text(gui.page.tools.toolsCleaningButtonLabel, play_icon); 
@@ -152,7 +152,7 @@ void initTools(void){
       lv_obj_set_size(gui.page.tools.toolsDrainingButton, BUTTON_PROCESS_WIDTH * 0.8, BUTTON_PROCESS_HEIGHT);
       lv_obj_align(gui.page.tools.toolsDrainingButton, LV_ALIGN_RIGHT_MID, 0, 0);
       lv_obj_add_event_cb(gui.page.tools.toolsDrainingButton, event_toolsElement, LV_EVENT_CLICKED, gui.page.tools.toolsDrainingButton);
-      lv_obj_set_style_bg_color(gui.page.tools.toolsDrainingButton, lv_color_hex(BLUE_DARK), LV_PART_MAIN);
+      lv_obj_set_style_bg_color(gui.page.tools.toolsDrainingButton, lv_color_hex(LIGHT_BLUE), LV_PART_MAIN);
               
              gui.page.tools.toolsDrainingButtonLabel = lv_label_create(gui.page.tools.toolsDrainingButton);         
              lv_label_set_text(gui.page.tools.toolsDrainingButtonLabel, play_icon); 
@@ -196,7 +196,7 @@ void initTools(void){
       lv_obj_set_size(gui.page.tools.toolsImportButton, BUTTON_PROCESS_WIDTH * 0.8, BUTTON_PROCESS_HEIGHT);
       lv_obj_align(gui.page.tools.toolsImportButton, LV_ALIGN_RIGHT_MID, 0, 0);
       lv_obj_add_event_cb(gui.page.tools.toolsImportButton, event_toolsElement, LV_EVENT_CLICKED, gui.page.tools.toolsImportButton);
-      lv_obj_set_style_bg_color(gui.page.tools.toolsImportButton, lv_color_hex(BLUE_DARK), LV_PART_MAIN);
+      lv_obj_set_style_bg_color(gui.page.tools.toolsImportButton, lv_color_hex(LIGHT_BLUE), LV_PART_MAIN);
               
              gui.page.tools.toolsImportButtonLabel = lv_label_create(gui.page.tools.toolsImportButton);         
              lv_label_set_text(gui.page.tools.toolsImportButtonLabel, play_icon); 
@@ -223,7 +223,7 @@ void initTools(void){
       lv_obj_set_size(gui.page.tools.toolsExportButton, BUTTON_PROCESS_WIDTH * 0.8, BUTTON_PROCESS_HEIGHT);
       lv_obj_align(gui.page.tools.toolsExportButton, LV_ALIGN_RIGHT_MID, 0, 0);
       lv_obj_add_event_cb(gui.page.tools.toolsExportButton, event_toolsElement, LV_EVENT_CLICKED, gui.page.tools.toolsExportButton);
-      lv_obj_set_style_bg_color(gui.page.tools.toolsExportButton, lv_color_hex(BLUE_DARK), LV_PART_MAIN);
+      lv_obj_set_style_bg_color(gui.page.tools.toolsExportButton, lv_color_hex(LIGHT_BLUE), LV_PART_MAIN);
               
              gui.page.tools.toolsExportButtonLabel = lv_label_create(gui.page.tools.toolsExportButton);         
              lv_label_set_text(gui.page.tools.toolsExportButtonLabel, play_icon); 
