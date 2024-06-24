@@ -965,7 +965,8 @@ LV_IMG_DECLARE(splash_img);
 #define RED              0xff2600
 #define RED_DARK         0x91060a
 #define BLUE             0x1d53ab
-#define BLUE_DARK        0x123773     
+#define BLUE_DARK        0x123773 
+#define GREEN_LIGHT      0x24d64e    
 #define GREEN            0x77bb41
 #define GREEN_DARK       0x0e6b2c
 #define CYAN             0x00fdff

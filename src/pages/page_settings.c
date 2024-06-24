@@ -172,7 +172,7 @@ void initSettings(void){
   lv_obj_set_pos(gui.page.settings.settingsSection, 140, 7);                            
   lv_obj_set_size(gui.page.settings.settingsSection, 335, 303); 
   lv_obj_remove_flag(gui.page.settings.settingsSection, LV_OBJ_FLAG_SCROLLABLE);    
-  lv_obj_set_style_border_color(gui.page.settings.settingsSection, lv_color_hex(ORANGE_DARK), 0);
+  lv_obj_set_style_border_color(gui.page.settings.settingsSection, lv_color_hex(ORANGE_LIGHT), 0);
 
 
 	lv_coord_t pad = 2;
