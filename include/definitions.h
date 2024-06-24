@@ -604,9 +604,10 @@ struct sRollerPopup {
   lv_obj_t 	         	*whoCallMe;
 
   char                *minutesOptions;
-  char                *secondsOptions;  
+  char                *secondsOptions; 
+  char                *tempFahrenheitOptions;
   char                *tempCelsiusOptions;       
-  char                *tempCelsiusToleranceOptions;  
+  char                *tempToleranceOptions;  
 	/* Params objects */
 };
 
@@ -921,8 +922,8 @@ LV_IMG_DECLARE(splash_img);
 #define FILENAME_SAVE         "/FilMachine.cfg"
 #define FILENAME_BACKUP       "/FilMachineBackup.cfg"
 
-#define MAX_STEP_ELEMENTS		  10//30//10
-#define MAX_PROC_ELEMENTS		  20//100//30
+#define MAX_STEP_ELEMENTS		  30//30//10
+#define MAX_PROC_ELEMENTS		  50//100//30
 
 
 /*********************
@@ -1375,14 +1376,14 @@ void createMessageBox(char *title, char *text, char *button1Text, char *button2T
 void create_keyboard();
 void showKeyboard(lv_obj_t * whoCallMe, lv_obj_t * textArea);
 void hideKeyboard(lv_obj_t * whoCallMe);
-char *createRollerValues( uint32_t maxVal, const char* extra_str );
+char *createRollerValues( uint32_t maxVal, const char* extra_str, bool isFahrenheit );
 uint8_t SD_init();
 void initSD_I2C_MCP23017();
 void initMCP23017Pins();
 
 void calcolateTotalTime(processNode *processNode);
 uint8_t calcolatePercentage(uint32_t minutes, uint8_t seconds, uint32_t total_minutes, uint8_t total_seconds);
-float convertCelsiusoToFahrenheit(uint32_t tempC);
+uint32_t convertCelsiusoToFahrenheit(uint32_t tempC);
 void updateProcessElement(processNode *process);
 void updateStepElement(processNode *referenceProcess, stepNode *step);
 uint32_t loadSDCardProcesses();

@@ -57,7 +57,7 @@
     /*Instead of an address give a memory allocator that will be called to get a memory pool for LVGL. E.g. my_malloc*/
     #if LV_MEM_ADR == 0
         #undef LV_MEM_POOL_INCLUDE
-        #define LV_MEM_POOL_ALLOC ps_malloc()
+        #define LV_MEM_POOL_ALLOC ps_malloc
     #endif
 #endif  /*LV_USE_STDLIB_MALLOC == LV_STDLIB_BUILTIN*/
 

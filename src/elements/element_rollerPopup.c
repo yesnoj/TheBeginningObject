@@ -50,14 +50,29 @@ void event_Roller(lv_event_t * e)
                   itoa(lv_roller_get_selected(gui.element.rollerPopup.roller), tempBuffer, 10);
                   LV_LOG_USER("SET BUTTON from processTempTextArea value %d:",lv_roller_get_selected(gui.element.rollerPopup.roller));
                   gui.tempProcessNode->process.processDetails->temp = lv_roller_get_selected(gui.element.rollerPopup.roller);
-                  lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea,tempBuffer);
+
+                  if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
+                    lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea,tempBuffer);
+                  }
+                  else{
+                        sprintf(tempBuffer, "%d", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->temp));
+                        lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea, tempBuffer);
+                    }
                   }
                 else{
-                    itoa(rollerSelected, tempBuffer, 10);
-                    LV_LOG_USER("SET BUTTON from processTempTextArea value %d:",rollerSelected);
-                    gui.tempProcessNode->process.processDetails->temp = rollerSelected;
-                    lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea,tempBuffer);
-                    isScrolled = false;
+                      itoa(rollerSelected, tempBuffer, 10);
+                      LV_LOG_USER("SET BUTTON from processTempTextArea value %d:",rollerSelected);
+                      gui.tempProcessNode->process.processDetails->temp = rollerSelected;
+
+                      if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
+                        lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea,tempBuffer);
+                      }
+                      else{
+                            sprintf(tempBuffer, "%d", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->temp));
+                            lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea, tempBuffer);
+                        }
+
+                      isScrolled = false;
                     }
 
               gui.tempProcessNode->process.processDetails->somethingChanged = true;
@@ -83,7 +98,7 @@ void event_Roller(lv_event_t * e)
                     itoa(rollerSelected, tempBuffer, 10);
                     LV_LOG_USER("SET BUTTON from processToleranceTextArea value %d:",rollerSelected);
                     gui.tempProcessNode->process.processDetails->tempTolerance = rollerSelected;
-                    lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(rollerSelected,gui.element.rollerPopup.tempCelsiusToleranceOptions));
+                    lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(rollerSelected,gui.element.rollerPopup.tempToleranceOptions));
                     isScrolled = false;
                     }
 

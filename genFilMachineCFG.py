@@ -8,8 +8,8 @@ import time
 # Definition of constants
 MAX_STEP_MIN = 5 
 MAX_PROC_NAME_LEN = 10  
-MAX_STEP_ELEMENTS = 30  #MAX 10 PROCESS / DEV.A 30
-MAX_PROC_ELEMENTS = 50  #MAX 30 PROCESS / DEV.A 100
+MAX_STEP_ELEMENTS = 3  #MAX 10 PROCESS / DEV.A 30
+MAX_PROC_ELEMENTS = 5  #MAX 30 PROCESS / DEV.A 100
 
 # Definition of output file names
 OUTPUT_FILE_CFG = 'FilMachine.cfg'

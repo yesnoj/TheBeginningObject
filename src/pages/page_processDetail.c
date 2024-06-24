@@ -68,11 +68,11 @@ void event_processDetail(lv_event_t * e)
     if(data == gui.tempProcessNode->process.processDetails->processPreferredLabel){
 			if(  lv_color_eq( lv_obj_get_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, LV_PART_MAIN ), lv_color_hex(RED) ) ) {
 				  lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, lv_color_hex(WHITE), LV_PART_MAIN);
-				  gui.tempProcessNode->process.processDetails->isPreferred = false;
+				  gui.tempProcessNode->process.processDetails->isPreferred = 0;
           gui.tempProcessNode->process.processDetails->somethingChanged = true;
 			} else {
 				lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, lv_color_hex(RED), LV_PART_MAIN);
-				gui.tempProcessNode->process.processDetails->isPreferred = true;
+				gui.tempProcessNode->process.processDetails->isPreferred = 1;
         gui.tempProcessNode->process.processDetails->somethingChanged = true;
 			}
       lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
@@ -98,7 +98,7 @@ void event_processDetail(lv_event_t * e)
           qSysAction( SAVE_PROCESS_CONFIG );
           
         updateProcessElement(gui.tempProcessNode);
-        if(gui.page.processes.isFiltered == true)
+        if(gui.page.processes.isFiltered == 1)
             filterAndDisplayProcesses();
         LV_LOG_USER("Pressed processSaveButton");
     }
@@ -152,11 +152,15 @@ void event_processDetail(lv_event_t * e)
       if(data == gui.tempProcessNode->process.processDetails->processTempTextArea){
           LV_LOG_USER("Set Temperature");
           
+      if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
           rollerPopupCreate(gui.element.rollerPopup.tempCelsiusOptions,tuneTempPopupTitle_text,gui.tempProcessNode->process.processDetails->processTempTextArea, findRolleStringIndex(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processTempTextArea),gui.element.rollerPopup.tempCelsiusOptions));
+          }else {
+                rollerPopupCreate(gui.element.rollerPopup.tempFahrenheitOptions,tuneTempPopupTitle_text,gui.tempProcessNode->process.processDetails->processTempTextArea, findRolleStringIndex(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processTempTextArea),gui.element.rollerPopup.tempFahrenheitOptions));
+          }
       }
       if(data == gui.tempProcessNode->process.processDetails->processToleranceTextArea){
           LV_LOG_USER("Set Tolerance");
-          rollerPopupCreate(gui.element.rollerPopup.tempCelsiusToleranceOptions,tuneTolerancePopupTitle_text,gui.tempProcessNode->process.processDetails->processToleranceTextArea, findRolleStringIndex(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea),gui.element.rollerPopup.tempCelsiusToleranceOptions));
+          rollerPopupCreate(gui.element.rollerPopup.tempToleranceOptions,tuneTolerancePopupTitle_text,gui.tempProcessNode->process.processDetails->processToleranceTextArea, findRolleStringIndex(lv_textarea_get_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea),gui.element.rollerPopup.tempToleranceOptions));
       }
   }
 }
@@ -347,11 +351,11 @@ if(existingProcess != NULL) {
                           gui.tempProcessNode->process.processDetails->processTempUnitLabel = lv_label_create(gui.tempProcessNode->process.processDetails->processTempContainer);  
                           if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, celsius_text); 
-                              lv_snprintf(formatted_string, sizeof(formatted_string), "%d", gui.tempProcessNode->process.processDetails->temp);
+                              sprintf(formatted_string, "%d", gui.tempProcessNode->process.processDetails->temp);
                               lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea, formatted_string);
                           } else{
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, fahrenheit_text);
-                              lv_snprintf(formatted_string, sizeof(formatted_string), "%5.1f", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->temp));
+                              sprintf(formatted_string, "%d", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->temp));
                               lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea, formatted_string);
                           }  
                           
@@ -395,12 +399,12 @@ if(existingProcess != NULL) {
                           lv_obj_align(gui.tempProcessNode->process.processDetails->processTempUnitLabel, LV_ALIGN_LEFT_MID, 160, 0);
                           if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, celsius_text); 
-                              lv_snprintf(formatted_string, sizeof(formatted_string), "%d", gui.tempProcessNode->process.processDetails->tempTolerance);
-                              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(gui.tempProcessNode->process.processDetails->tempTolerance,gui.element.rollerPopup.tempCelsiusToleranceOptions));
+                              sprintf(formatted_string, "%d", gui.tempProcessNode->process.processDetails->tempTolerance);
+                              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(gui.tempProcessNode->process.processDetails->tempTolerance,gui.element.rollerPopup.tempToleranceOptions));
                           } else{
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, fahrenheit_text);
-                              lv_snprintf(formatted_string, sizeof(formatted_string), "%5.1f", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->tempTolerance));
-                              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(gui.tempProcessNode->process.processDetails->tempTolerance,gui.element.rollerPopup.tempCelsiusToleranceOptions));
+                              sprintf(formatted_string, "%d", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->tempTolerance));
+                              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(gui.tempProcessNode->process.processDetails->tempTolerance,gui.element.rollerPopup.tempToleranceOptions));
                           }  
 
 
@@ -419,6 +423,7 @@ if(existingProcess != NULL) {
                           gui.tempProcessNode->process.processDetails->processTotalTimeValue = lv_label_create(gui.tempProcessNode->process.processDetails->processTotalTimeContainer);         
                           lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->processTotalTimeValue, &lv_font_montserrat_20, 0);              
                           lv_obj_align(gui.tempProcessNode->process.processDetails->processTotalTimeValue, LV_ALIGN_LEFT_MID, 100, 0);   
+//                          sprintf(formatted_string, "%dm%ds", gui.tempProcessNode->process.processDetails->timeMins, gui.tempProcessNode->process.processDetails->timeSecs);
                           lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->processTotalTimeValue, "%dm%ds", 
                             gui.tempProcessNode->process.processDetails->timeMins, gui.tempProcessNode->process.processDetails->timeSecs); 
 
@@ -464,7 +469,7 @@ if(existingProcess != NULL) {
                   lv_obj_align(gui.tempProcessNode->process.processDetails->processPreferredLabel, LV_ALIGN_TOP_LEFT, 120, 140);
                   lv_obj_add_flag(gui.tempProcessNode->process.processDetails->processPreferredLabel, LV_OBJ_FLAG_CLICKABLE);
                   lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->processPreferredLabel, event_processDetail, LV_EVENT_CLICKED, gui.tempProcessNode->process.processDetails->processPreferredLabel);
-                  if(gui.tempProcessNode->process.processDetails->isPreferred == false){
+                  if(gui.tempProcessNode->process.processDetails->isPreferred == 0){
                     lv_obj_set_style_text_color(gui.tempProcessNode->process.processDetails->processPreferredLabel, lv_color_hex(WHITE), LV_PART_MAIN);
                   }
                   else{

@@ -323,8 +323,8 @@ void createQuestionMark(lv_obj_t * parent,lv_obj_t * element,lv_event_cb_t e, co
     lv_obj_add_flag(questionMark, LV_OBJ_FLAG_CLICKABLE);
 }
 
-float convertCelsiusoToFahrenheit(uint32_t tempC){
-  return ((tempC * 1.8) + 32); 
+uint32_t convertCelsiusoToFahrenheit(uint32_t tempC){
+  return static_cast<uint32_t>(tempC * 1.8 + 32 + 0.5); // Aggiunge 0.5 per l'approssimazione
 }
 
 uint32_t calc_buf_len( uint32_t maxVal, uint8_t extra_len ) {
@@ -354,7 +354,37 @@ uint32_t calc_buf_len( uint32_t maxVal, uint8_t extra_len ) {
     }
 }
 
-char *createRollerValues(uint32_t minVal, uint32_t maxVal, const char* extra_str) {
+char *createRollerValues(uint32_t minVal, uint32_t maxVal, const char* extra_str, bool isFahrenheit) {
+    // Calcola la lunghezza necessaria del buffer
+    uint32_t buf_len = 0;
+    for (uint32_t i = minVal; i <= maxVal; i++) {
+        int value = isFahrenheit ? static_cast<int>(i * 1.8 + 32) : i;
+        buf_len += snprintf(NULL, 0, "%s%d\n", extra_str, value);
+    }
+    buf_len -= 1; // Rimuovi l'ultimo '\n' per evitare lo spazio vuoto
+
+    // Alloca memoria per il buffer
+    char *buf = (char *)malloc(buf_len + 1); // +1 per il terminatore nullo
+    if (!buf) {
+        return NULL; // Gestione del fallimento della malloc
+    }
+
+    // Popola il buffer con i valori
+    uint32_t buf_ptr = 0;
+    for (uint32_t i = minVal; i <= maxVal; i++) {
+        int value = isFahrenheit ? static_cast<int>(i * 1.8 + 32) : i;
+        if (i == maxVal) {
+            buf_ptr += snprintf(&buf[buf_ptr], (buf_len - buf_ptr + 1), "%s%d", extra_str, value);
+        } else {
+            buf_ptr += snprintf(&buf[buf_ptr], (buf_len - buf_ptr + 1), "%s%d\n", extra_str, value);
+        }
+    }
+    //LV_LOG_USER("Roller values :%s",buf);
+    return buf;
+}
+
+/*
+char *createRollerValues(uint32_t minVal, uint32_t maxVal, const char* extra_str, bool isFahrenheit) {
     // Calcola la lunghezza necessaria del buffer
     uint32_t buf_len = 0;
     for (uint32_t i = minVal; i <= maxVal; i++) {
@@ -380,6 +410,7 @@ char *createRollerValues(uint32_t minVal, uint32_t maxVal, const char* extra_str
 
     return buf;
 }
+*/
 
 /*
 char *createRollerValues(uint32_t minVal, uint32_t maxVal, const char* extra_str) {
@@ -538,10 +569,11 @@ void init_globals( void ) {
   gui.page.settings.titleLinePoints[1].x = 310;
   gui.page.tools.titleLinePoints[1].x = 310;
   
-  gui.element.rollerPopup.tempCelsiusOptions = createRollerValues(0,40,"");
-  gui.element.rollerPopup.minutesOptions = createRollerValues(0,240,"");
-  gui.element.rollerPopup.secondsOptions = createRollerValues(0,59,""); 
-  gui.element.rollerPopup.tempCelsiusToleranceOptions = createRollerValues(0,5,"0.");
+  gui.element.rollerPopup.tempCelsiusOptions = createRollerValues(0,40,"",false);
+  gui.element.rollerPopup.tempFahrenheitOptions = createRollerValues(0,40,"",true);
+  gui.element.rollerPopup.minutesOptions = createRollerValues(0,240,"",false);
+  gui.element.rollerPopup.secondsOptions = createRollerValues(0,59,"",false); 
+  gui.element.rollerPopup.tempToleranceOptions = createRollerValues(0,5,"0.",false);
 
   //gui.element.filterPopup.filterName = ""; // Not Required this will set this to some constant pointer which is not good...
   //gui.element.filterPopup.isColorFilter = FILM_TYPE_NA;   // This breaks filtering not needed

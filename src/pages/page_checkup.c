@@ -546,7 +546,13 @@ void checkup(processNode *processToCheckup)
                           lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupWaterTempLabel, LV_ALIGN_LEFT_MID, -15, 0);
 
                           gui.tempProcessNode->process.processDetails->checkup->checkupWaterTempValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupWaterTempContainer);         
-                          lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupWaterTempValue, "36.4°C"); 
+
+                          if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
+                              lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupWaterTempValue, "%.1f°C", 32.4); 
+                            } else{
+                                  lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupWaterTempValue, "%.2f°F", 20.5); 
+                            }
+
                           lv_obj_set_width(gui.tempProcessNode->process.processDetails->checkup->checkupWaterTempValue, LV_SIZE_CONTENT);
                           lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupWaterTempValue, &lv_font_montserrat_20, 0);              
                           lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupWaterTempValue, LV_ALIGN_RIGHT_MID, 10, 0);
@@ -729,8 +735,14 @@ void checkup(processNode *processToCheckup)
                                         lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempLabel, &lv_font_montserrat_18, 0);              
                                         lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempLabel, LV_ALIGN_CENTER, 0, -15);
 
-                                        gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer);         
-                                        lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "20.4°C"); 
+                                        gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer);
+
+                                        if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
+                                            lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%.1f°C", 30); 
+                                        } else{
+                                               lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%.2f°F", 20.4); 
+                                              }
+
                                         lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, &lv_font_montserrat_20, 0);              
                                         lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, LV_ALIGN_CENTER, 0, 20);
 
@@ -747,8 +759,14 @@ void checkup(processNode *processToCheckup)
                                         lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTargetWaterTempLabel, &lv_font_montserrat_18, 0);              
                                         lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetWaterTempLabel, LV_ALIGN_CENTER, 0, -15);
 
-                                        gui.tempProcessNode->process.processDetails->checkup->checkupTargetWaterTempValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTargetWaterTempContainer);         
-                                        lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupTargetWaterTempValue, "15.4°C"); 
+                                        gui.tempProcessNode->process.processDetails->checkup->checkupTargetWaterTempValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTargetWaterTempContainer);   
+
+                                        if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
+                                            lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetWaterTempValue, "%.1f°C", 15.4); 
+                                        } else{
+                                               lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetWaterTempValue, "%.2f°F", 20.4); 
+                                              }
+
                                         lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTargetWaterTempValue, &lv_font_montserrat_20, 0);              
                                         lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetWaterTempValue, LV_ALIGN_CENTER, 0, 20);
 
@@ -767,7 +785,13 @@ void checkup(processNode *processToCheckup)
                                         lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetChemistryTempLabel, LV_ALIGN_CENTER, 0, -15);
 
                                         gui.tempProcessNode->process.processDetails->checkup->checkupTargetChemistryTempValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTargetChemistryTempContainer);         
-                                        lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupTargetChemistryTempValue, "49.8°C"); 
+
+                                        if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
+                                            lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetChemistryTempValue, "%.1f°C", 32.4); 
+                                        } else{
+                                               lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetChemistryTempValue, "%.2f°F", 20.5); 
+                                              }
+
                                         lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTargetChemistryTempValue, &lv_font_montserrat_20, 0);              
                                         lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetChemistryTempValue, LV_ALIGN_CENTER, 0, 20);
 
