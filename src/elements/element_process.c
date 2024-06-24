@@ -425,7 +425,6 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         lv_obj_align(newProcess->process.processTimeIcon, LV_ALIGN_LEFT_MID, 65, 17);
 
         newProcess->process.processTime = lv_label_create(newProcess->process.processElementSummary);    
-//        sprintf(formatted_string, "%dm%ds", newProcess->process.processDetails->timeMins, newProcess->process.processDetails->timeSecs);
         lv_label_set_text_fmt(newProcess->process.processTime, "%dm%ds", newProcess->process.processDetails->timeMins, 
           newProcess->process.processDetails->timeSecs); 
         lv_obj_set_style_text_font(newProcess->process.processTime, &lv_font_montserrat_18, 0);              

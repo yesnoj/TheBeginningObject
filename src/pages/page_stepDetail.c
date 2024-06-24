@@ -274,7 +274,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_set_style_bg_color(gui.tempStepNode->step.stepDetails->stepDetailMinTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_text_align(gui.tempStepNode->step.stepDetails->stepDetailMinTextArea , LV_TEXT_ALIGN_CENTER, 0);
                   lv_obj_set_style_border_color(gui.tempStepNode->step.stepDetails->stepDetailMinTextArea, lv_color_hex(WHITE), 0);
-                  sprintf(formatted_string, "%d", gui.tempStepNode->step.stepDetails->timeMins);
+                  lv_snprintf(formatted_string, sizeof(formatted_string), "%d", gui.tempStepNode->step.stepDetails->timeMins);
                   lv_textarea_set_text(gui.tempStepNode->step.stepDetails->stepDetailMinTextArea, formatted_string); 
 
 
@@ -294,7 +294,7 @@ void stepDetail(processNode * referenceNode, stepNode * currentNode)
                   lv_obj_set_style_bg_color(gui.tempStepNode->step.stepDetails->stepDetailSecTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                   lv_obj_set_style_text_align(gui.tempStepNode->step.stepDetails->stepDetailSecTextArea , LV_TEXT_ALIGN_CENTER, 0);
                   lv_obj_set_style_border_color(gui.tempStepNode->step.stepDetails->stepDetailSecTextArea, lv_color_hex(WHITE), 0);
-                  sprintf(formatted_string, "%d", gui.tempStepNode->step.stepDetails->timeSecs);
+                  lv_snprintf(formatted_string, sizeof(formatted_string), "%d", gui.tempStepNode->step.stepDetails->timeSecs);
                   lv_textarea_set_text(gui.tempStepNode->step.stepDetails->stepDetailSecTextArea, formatted_string); 
 
     

@@ -81,13 +81,13 @@ for p in range(MAX_PROC_ELEMENTS):
     
 def write_settings(file, settings):
     file.write(struct.pack('<L', settings["tempUnit"]))
-    file.write(struct.pack('<L', settings["waterInlet"]))
+    file.write(struct.pack('<B', settings["waterInlet"]))
     file.write(struct.pack('<B', settings["calibratedTemp"]))  # Updated to a byte value as was 32-bit, has been changed in global structure...
     file.write(struct.pack('<B', settings["filmRotationSpeedSetpoint"]))
     file.write(struct.pack('<B', settings["rotationIntervalSetpoint"]))
     file.write(struct.pack('<B', settings["randomSetpoint"]))
-    file.write(struct.pack('<L', settings["isPersistentAlarm"]))
-    file.write(struct.pack('<L', settings["isProcessAutostart"]))
+    file.write(struct.pack('<B', settings["isPersistentAlarm"]))
+    file.write(struct.pack('<B', settings["isProcessAutostart"]))
     file.write(struct.pack('<B', settings["drainFillOverlapSetpoint"]))
 
 def write_process(file, process):

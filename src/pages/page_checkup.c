@@ -247,7 +247,6 @@ void processTimer(lv_timer_t * timer)
           lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, gui.tempStepNode->step.stepDetails->stepNameString);
 
           
-//          sprintf(formatted_string, "%dm%ds", remainingStepMins, remainingStepSecsOnly);
           lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, "%dm%ds", remainingStepMins,
             remainingStepSecsOnly);
           
@@ -264,7 +263,6 @@ void processTimer(lv_timer_t * timer)
 
     }
 
-//    sprintf(formatted_string, "%dm%ds", remainingProcessMins, remainingProcessSecsOnly);
     lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, "%dm%ds", remainingProcessMins,
       remainingProcessSecsOnly);
 
@@ -864,7 +862,6 @@ void checkup(processNode *processToCheckup)
                         lv_obj_set_style_border_opa(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer, LV_OPA_TRANSP, 0);
                         
                                 gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
-//                                sprintf(formatted_string, "%dm%ds", gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->timeMins, gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->timeSecs);
                                 lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, "%dm%ds", 
                                   gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->timeMins, 
                                     gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->timeSecs); //THIS NEED TO BE UPDATED AS THE TIME GOES ON!!
@@ -885,7 +882,6 @@ void checkup(processNode *processToCheckup)
                                 lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_ALIGN_CENTER, 0, 10);
 
                                 gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
-//                                sprintf(formatted_string, "%dm%ds", gui.tempProcessNode->process.processDetails->timeMins, gui.tempProcessNode->process.processDetails->timeSecs);
                                 lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, "%dm%ds", 
                                   gui.tempProcessNode->process.processDetails->timeMins, gui.tempProcessNode->process.processDetails->timeSecs); //THIS NEED TO BE UPDATED AS THE TIME GOES ON!!
                                 lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, &lv_font_montserrat_24, 0);              

@@ -347,11 +347,11 @@ if(existingProcess != NULL) {
                           gui.tempProcessNode->process.processDetails->processTempUnitLabel = lv_label_create(gui.tempProcessNode->process.processDetails->processTempContainer);  
                           if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, celsius_text); 
-                              sprintf(formatted_string, "%d", gui.tempProcessNode->process.processDetails->temp);
+                              lv_snprintf(formatted_string, sizeof(formatted_string), "%d", gui.tempProcessNode->process.processDetails->temp);
                               lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea, formatted_string);
                           } else{
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, fahrenheit_text);
-                              sprintf(formatted_string, "%f", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->temp));
+                              lv_snprintf(formatted_string, sizeof(formatted_string), "%5.1f", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->temp));
                               lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea, formatted_string);
                           }  
                           
@@ -395,11 +395,11 @@ if(existingProcess != NULL) {
                           lv_obj_align(gui.tempProcessNode->process.processDetails->processTempUnitLabel, LV_ALIGN_LEFT_MID, 160, 0);
                           if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, celsius_text); 
-                              sprintf(formatted_string, "%d", gui.tempProcessNode->process.processDetails->tempTolerance);
+                              lv_snprintf(formatted_string, sizeof(formatted_string), "%d", gui.tempProcessNode->process.processDetails->tempTolerance);
                               lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(gui.tempProcessNode->process.processDetails->tempTolerance,gui.element.rollerPopup.tempCelsiusToleranceOptions));
                           } else{
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, fahrenheit_text);
-                              sprintf(formatted_string, "%f", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->tempTolerance));
+                              lv_snprintf(formatted_string, sizeof(formatted_string), "%5.1f", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->tempTolerance));
                               lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(gui.tempProcessNode->process.processDetails->tempTolerance,gui.element.rollerPopup.tempCelsiusToleranceOptions));
                           }  
 
@@ -419,7 +419,6 @@ if(existingProcess != NULL) {
                           gui.tempProcessNode->process.processDetails->processTotalTimeValue = lv_label_create(gui.tempProcessNode->process.processDetails->processTotalTimeContainer);         
                           lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->processTotalTimeValue, &lv_font_montserrat_20, 0);              
                           lv_obj_align(gui.tempProcessNode->process.processDetails->processTotalTimeValue, LV_ALIGN_LEFT_MID, 100, 0);   
-//                          sprintf(formatted_string, "%dm%ds", gui.tempProcessNode->process.processDetails->timeMins, gui.tempProcessNode->process.processDetails->timeSecs);
                           lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->processTotalTimeValue, "%dm%ds", 
                             gui.tempProcessNode->process.processDetails->timeMins, gui.tempProcessNode->process.processDetails->timeSecs); 
 
