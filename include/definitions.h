@@ -273,7 +273,7 @@ typedef enum {
 struct __attribute__ ((packed)) machineSettings {
   tempUnit_t 	        tempUnit; //0= C° 1= °F
   yesOrNo_t 	        waterInlet;
-  uint8_t 	        	  calibratedTemp;
+  uint8_t 	        	calibratedTemp;
   uint8_t 	        	filmRotationSpeedSetpoint;
 	uint8_t 	        	rotationIntervalSetpoint;
   uint8_t 	        	randomSetpoint;
@@ -539,7 +539,7 @@ typedef struct sProcessDetail {
     stepList          stepElementsList;  /* Process steps list */
 	  sCheckup		      *checkup;
     char              processNameString[MAX_PROC_NAME_LEN+1];
-    uint32_t          temp;
+    uint8_t          temp;
     float             tempTolerance;
     uint8_t           isTempControlled;
     uint8_t           isPreferred;
@@ -1099,12 +1099,6 @@ LV_IMG_DECLARE(splash_img);
 
 #define softwareCreditsValue_text 					"Credit to Frank P. \nand \nPete B."
 
-uint8_t completedProcesses;
-uint8_t totalMinProcesses;
-uint8_t completedClean;
-uint8_t stoppedProcesses;
-lv_obj_t * tempSensorTuneButton;
-
 
 /*********************
 * Process detail strings/vars
@@ -1152,12 +1146,8 @@ static const char* stepSourceList = "C1\n"
 static const char* processSourceList[4] = {"C1", "C2", "C3", "WB"};
 static const char* processTempControlList[3] = {"Off", "Run", "Susp."};
                         
-uint8_t stepType;
-uint8_t stepSource;
-uint8_t discardAfter;
-double stepSourceTemp;
-lv_obj_t * stepDetailNamelTextArea;
-bool gesture_handled;
+
+
 
 /*********************
 * Popup elements

@@ -11,7 +11,6 @@
 
 extern struct gui_components gui;
 
-
 //ACCESSORY INCLUDES
 
 /* STEP DETAIL VARIABLES*/
@@ -82,41 +81,38 @@ void event_stepDetail(lv_event_t * e)
   if(code == LV_EVENT_VALUE_CHANGED){
     if(obj == gui.tempStepNode->step.stepDetails->stepTypeDropDownList){
       if(lv_dropdown_get_selected(gui.tempStepNode->step.stepDetails->stepTypeDropDownList) == 0){
-          stepType = 0;
-          LV_LOG_USER("Selected gui.tempStepNode->step.stepDetails->stepTypeDropDownList chemical_icon value:%d",stepType);
+          gui.tempStepNode->step.stepDetails->type = 0;
+          LV_LOG_USER("Selected gui.tempStepNode->step.stepDetails->stepTypeDropDownList chemical_icon value:%d",gui.tempStepNode->step.stepDetails->type);
           lv_label_set_text(gui.tempStepNode->step.stepDetails->stepTypeHelpIcon, chemical_icon);
       }
       if(lv_dropdown_get_selected(gui.tempStepNode->step.stepDetails->stepTypeDropDownList) == 1){
-          stepType = 1;
-          LV_LOG_USER("Selected gui.tempStepNode->step.stepDetails->stepTypeDropDownList rinse_icon value:%d",stepType);
+          gui.tempStepNode->step.stepDetails->type = 1;
+          LV_LOG_USER("Selected gui.tempStepNode->step.stepDetails->stepTypeDropDownList rinse_icon value:%d",gui.tempStepNode->step.stepDetails->type);
           lv_label_set_text(gui.tempStepNode->step.stepDetails->stepTypeHelpIcon, rinse_icon);
       }
       if(lv_dropdown_get_selected(gui.tempStepNode->step.stepDetails->stepTypeDropDownList) == 2){
-          stepType = 2;
-          LV_LOG_USER("Selected gui.tempStepNode->step.stepDetails->stepTypeDropDownList multiRinse_icon value:%d",stepType);
+          gui.tempStepNode->step.stepDetails->type = 2;
+          LV_LOG_USER("Selected gui.tempStepNode->step.stepDetails->stepTypeDropDownList multiRinse_icon value:%d",gui.tempStepNode->step.stepDetails->type);
           lv_label_set_text(gui.tempStepNode->step.stepDetails->stepTypeHelpIcon, multiRinse_icon);
       }
-      gui.tempStepNode->step.stepDetails->type = stepType;
       gui.tempStepNode->step.stepDetails->somethingChanged = true;
       lv_obj_send_event( gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
     }
 
     if(obj == gui.tempStepNode->step.stepDetails->stepDiscardAfterSwitch){
-      discardAfter = lv_obj_has_state(obj, LV_STATE_CHECKED);
-      gui.tempStepNode->step.stepDetails->discardAfterProc = discardAfter;
+      gui.tempStepNode->step.stepDetails->discardAfterProc = lv_obj_has_state(obj, LV_STATE_CHECKED);
       gui.tempStepNode->step.stepDetails->somethingChanged = true;
       lv_obj_send_event( gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
 
-      LV_LOG_USER("Discard After : %s", discardAfter ? "On" : "Off");
+      LV_LOG_USER("Discard After : %s", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off");
     }
 
     if(obj == gui.tempStepNode->step.stepDetails->stepSourceDropDownList){
-        stepSource = lv_dropdown_get_selected(gui.tempStepNode->step.stepDetails->stepSourceDropDownList);
-        gui.tempStepNode->step.stepDetails->source = stepSource;
+        gui.tempStepNode->step.stepDetails->source = lv_dropdown_get_selected(gui.tempStepNode->step.stepDetails->stepSourceDropDownList);
 
         gui.tempStepNode->step.stepDetails->somethingChanged = true;
         lv_obj_send_event( gui.tempStepNode->step.stepDetails->stepSaveButton, LV_EVENT_REFRESH, NULL);
-        LV_LOG_USER("Selected gui.tempStepNode->step.stepDetails->stepSourceDropDownList %d",stepSource);
+        LV_LOG_USER("Selected gui.tempStepNode->step.stepDetails->stepSourceDropDownList %d",gui.tempStepNode->step.stepDetails->source);
     }
   }
 
