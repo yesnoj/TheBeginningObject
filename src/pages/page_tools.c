@@ -18,28 +18,20 @@ void event_toolsPopup(lv_event_t * e){
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
-
-  if(data == gui.page.tools.toolsImportLabel){
-    if(code == LV_EVENT_CLICKED) {  
+  
+  if(code == LV_EVENT_CLICKED) {  
+    if(data == gui.page.tools.toolsImportLabel){
+        LV_LOG_USER("PRESSED gui.page.tools.toolsImportLabel");
         messagePopupCreate(messagePopupDetailTitle_text,importConfigAndProcessesMBox_text,NULL, NULL, NULL);
-      }
-  }
-  if(data == gui.page.tools.toolsExportLabel){
-    if(code == LV_EVENT_CLICKED) {  
-    messagePopupCreate(messagePopupDetailTitle_text,exportConfigAndProcessesMBox_text, NULL, NULL, NULL);
     }
-  }
-  if(data == gui.page.tools.toolCreditButton){
-    if(code == LV_EVENT_CLICKED) {  
+    if(data == gui.page.tools.toolsExportLabel){
+        LV_LOG_USER("PRESSED gui.page.tools.toolsExportLabel");
+        messagePopupCreate(messagePopupDetailTitle_text,exportConfigAndProcessesMBox_text, NULL, NULL, NULL);
+    }
+    if(data == gui.page.tools.toolCreditButton){
         LV_LOG_USER("PRESSED gui.page.tools.toolCreditButton");
         messagePopupCreate(softwareCredits_text,softwareCreditsValue_text, NULL, NULL, NULL);
     }
-  }
-  if(obj == gui.page.tools.toolsImportIcon){
-      if(code == LV_EVENT_CLICKED) {    
-           LV_LOG_USER("PRESSED gui.page.tools.toolsImportIcon");
-           messagePopupCreate(importConfigAndProcesses_text,importConfigAndProcessesMBox2_text, checkupNo_text, checkupYes_text, obj);
-      }
   }
 }
 
@@ -51,24 +43,24 @@ void event_toolsElement(lv_event_t * e){
   lv_obj_t * mboxParent = (lv_obj_t *)lv_obj_get_parent(mboxCont);
 
   lv_obj_t * data = (lv_obj_t *)lv_event_get_user_data(e);
- 
-  if(obj == gui.page.tools.toolsCleaningIcon){
-      if(code == LV_EVENT_CLICKED) {    
-          LV_LOG_USER("PRESSED gui.page.tools.toolsCleaningButton");
-          gui.page.tools.machineStats.clean ++;
-          qSysAction( SAVE_MACHINE_STATS );
-      }
-  }
-  if(obj == gui.page.tools.toolsDrainingIcon){
-      if(code == LV_EVENT_CLICKED) {    
-           LV_LOG_USER("PRESSED gui.page.tools.toolsDrainingIcon");
-      }
-  }
-  if(obj == gui.page.tools.toolsExportIcon){
-      if(code == LV_EVENT_CLICKED) {    
-           LV_LOG_USER("PRESSED gui.page.tools.toolsExportIcon");
-      }
-  }
+  
+  if(code == LV_EVENT_CLICKED) { 
+      if(obj == gui.page.tools.toolsCleaningButton){ 
+              LV_LOG_USER("PRESSED gui.page.tools.toolsCleaningButton");
+              gui.page.tools.machineStats.clean ++;
+              qSysAction( SAVE_MACHINE_STATS );
+          }
+      if(obj == gui.page.tools.toolsDrainingButton){ 
+              LV_LOG_USER("PRESSED gui.page.tools.toolsDrainingButton");
+          }
+      if(obj == gui.page.tools.toolsExportButton){
+              LV_LOG_USER("PRESSED gui.page.tools.toolsExportButton");
+          }
+      if(obj == gui.page.tools.toolsImportButton){
+          LV_LOG_USER("PRESSED gui.page.tools.toolsImportButton");
+          messagePopupCreate(importConfigAndProcesses_text,importConfigAndProcessesMBox2_text, checkupNo_text, checkupYes_text, obj);
+        }
+    }
 }
 
 void guiUpdater_timer(lv_timer_t * timer)
@@ -129,14 +121,17 @@ void initTools(void){
       lv_label_set_text(gui.page.tools.toolsCleaningLabel, cleanMachine_text); 
       lv_obj_set_style_text_font(gui.page.tools.toolsCleaningLabel, &lv_font_montserrat_20, 0);              
       lv_obj_align(gui.page.tools.toolsCleaningLabel, LV_ALIGN_LEFT_MID, -5, 0);
-
-      gui.page.tools.toolsCleaningIcon = lv_label_create(gui.page.tools.toolsCleaningContainer);
-      lv_label_set_text(gui.page.tools.toolsCleaningIcon, play_icon);
-      lv_obj_set_style_text_font(gui.page.tools.toolsCleaningIcon, &FilMachineFontIcons_30, 0);
-      lv_obj_align(gui.page.tools.toolsCleaningIcon, LV_ALIGN_RIGHT_MID, 0, 0);
-      lv_obj_add_flag(gui.page.tools.toolsCleaningIcon, LV_OBJ_FLAG_CLICKABLE);
-      lv_obj_add_event_cb(gui.page.tools.toolsCleaningIcon, event_toolsElement, LV_EVENT_CLICKED, gui.page.tools.toolsCleaningIcon);
-
+              
+      gui.page.tools.toolsCleaningButton =  lv_button_create(gui.page.tools.toolsCleaningContainer);
+      lv_obj_set_size(gui.page.tools.toolsCleaningButton, BUTTON_PROCESS_WIDTH * 0.8, BUTTON_PROCESS_HEIGHT);
+      lv_obj_align(gui.page.tools.toolsCleaningButton, LV_ALIGN_RIGHT_MID, 0, 0);
+      lv_obj_add_event_cb(gui.page.tools.toolsCleaningButton, event_toolsElement, LV_EVENT_CLICKED, gui.page.tools.toolsCleaningButton);
+      lv_obj_set_style_bg_color(gui.page.tools.toolsCleaningButton, lv_color_hex(BLUE_DARK), LV_PART_MAIN);
+              
+             gui.page.tools.toolsCleaningButtonLabel = lv_label_create(gui.page.tools.toolsCleaningButton);         
+             lv_label_set_text(gui.page.tools.toolsCleaningButtonLabel, play_icon); 
+             lv_obj_set_style_text_font(gui.page.tools.toolsCleaningButtonLabel, &FilMachineFontIcons_30, 0);              
+             lv_obj_align(gui.page.tools.toolsCleaningButtonLabel, LV_ALIGN_CENTER, 0, 0);
 
 
   gui.page.tools.toolsDrainingContainer = lv_obj_create(gui.page.tools.toolsSection);
@@ -147,17 +142,22 @@ void initTools(void){
   //lv_obj_set_style_border_color(gui.page.tools.toolsDrainingContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
   lv_obj_set_style_border_opa(gui.page.tools.toolsDrainingContainer, LV_OPA_TRANSP, 0);
 
+
       gui.page.tools.toolsDrainingLabel = lv_label_create(gui.page.tools.toolsDrainingContainer);         
       lv_label_set_text(gui.page.tools.toolsDrainingLabel, drainMachine_text); 
       lv_obj_set_style_text_font(gui.page.tools.toolsDrainingLabel, &lv_font_montserrat_20, 0);              
       lv_obj_align(gui.page.tools.toolsDrainingLabel, LV_ALIGN_LEFT_MID, -5, 0);
 
-      gui.page.tools.toolsDrainingIcon = lv_label_create(gui.page.tools.toolsDrainingContainer);
-      lv_label_set_text(gui.page.tools.toolsDrainingIcon, play_icon);
-      lv_obj_set_style_text_font(gui.page.tools.toolsDrainingIcon, &FilMachineFontIcons_30, 0);
-      lv_obj_align(gui.page.tools.toolsDrainingIcon, LV_ALIGN_RIGHT_MID, 0, 0);
-      lv_obj_add_flag(gui.page.tools.toolsDrainingIcon, LV_OBJ_FLAG_CLICKABLE);
-      lv_obj_add_event_cb(gui.page.tools.toolsDrainingIcon, event_toolsElement, LV_EVENT_CLICKED, gui.page.tools.toolsDrainingIcon);
+      gui.page.tools.toolsDrainingButton =  lv_button_create(gui.page.tools.toolsDrainingContainer);
+      lv_obj_set_size(gui.page.tools.toolsDrainingButton, BUTTON_PROCESS_WIDTH * 0.8, BUTTON_PROCESS_HEIGHT);
+      lv_obj_align(gui.page.tools.toolsDrainingButton, LV_ALIGN_RIGHT_MID, 0, 0);
+      lv_obj_add_event_cb(gui.page.tools.toolsDrainingButton, event_toolsElement, LV_EVENT_CLICKED, gui.page.tools.toolsDrainingButton);
+      lv_obj_set_style_bg_color(gui.page.tools.toolsDrainingButton, lv_color_hex(BLUE_DARK), LV_PART_MAIN);
+              
+             gui.page.tools.toolsDrainingButtonLabel = lv_label_create(gui.page.tools.toolsDrainingButton);         
+             lv_label_set_text(gui.page.tools.toolsDrainingButtonLabel, play_icon); 
+             lv_obj_set_style_text_font(gui.page.tools.toolsDrainingButtonLabel, &FilMachineFontIcons_30, 0);              
+             lv_obj_align(gui.page.tools.toolsDrainingButtonLabel, LV_ALIGN_CENTER, 0, 0);
 
 
   gui.page.tools.toolsUtilitiesLabel = lv_label_create(gui.page.tools.toolsSection);         
@@ -192,13 +192,16 @@ void initTools(void){
     
       createQuestionMark(gui.page.tools.toolsImportContainer,gui.page.tools.toolsImportLabel,event_toolsPopup, 2, -3);
 
-      gui.page.tools.toolsImportIcon = lv_label_create(gui.page.tools.toolsImportContainer);
-      lv_label_set_text(gui.page.tools.toolsImportIcon, play_icon);
-      lv_obj_set_style_text_font(gui.page.tools.toolsImportIcon, &FilMachineFontIcons_30, 0);
-      lv_obj_align(gui.page.tools.toolsImportIcon, LV_ALIGN_RIGHT_MID, 0, 0);
-      lv_obj_add_flag(gui.page.tools.toolsImportIcon, LV_OBJ_FLAG_CLICKABLE);
-      lv_obj_add_event_cb(gui.page.tools.toolsImportIcon, event_toolsPopup, LV_EVENT_CLICKED, gui.page.tools.toolsImportIcon);
-
+      gui.page.tools.toolsImportButton =  lv_button_create(gui.page.tools.toolsImportContainer);
+      lv_obj_set_size(gui.page.tools.toolsImportButton, BUTTON_PROCESS_WIDTH * 0.8, BUTTON_PROCESS_HEIGHT);
+      lv_obj_align(gui.page.tools.toolsImportButton, LV_ALIGN_RIGHT_MID, 0, 0);
+      lv_obj_add_event_cb(gui.page.tools.toolsImportButton, event_toolsElement, LV_EVENT_CLICKED, gui.page.tools.toolsImportButton);
+      lv_obj_set_style_bg_color(gui.page.tools.toolsImportButton, lv_color_hex(BLUE_DARK), LV_PART_MAIN);
+              
+             gui.page.tools.toolsImportButtonLabel = lv_label_create(gui.page.tools.toolsImportButton);         
+             lv_label_set_text(gui.page.tools.toolsImportButtonLabel, play_icon); 
+             lv_obj_set_style_text_font(gui.page.tools.toolsImportButtonLabel, &FilMachineFontIcons_30, 0);              
+             lv_obj_align(gui.page.tools.toolsImportButtonLabel, LV_ALIGN_CENTER, 0, 0);
 
 
   gui.page.tools.toolsExportContainer = lv_obj_create(gui.page.tools.toolsSection);
@@ -216,12 +219,17 @@ void initTools(void){
 
       createQuestionMark(gui.page.tools.toolsExportContainer,gui.page.tools.toolsExportLabel,event_toolsPopup, 2, -3);
 
-      gui.page.tools.toolsExportIcon = lv_label_create(gui.page.tools.toolsExportContainer);
-      lv_label_set_text(gui.page.tools.toolsExportIcon, play_icon);
-      lv_obj_set_style_text_font(gui.page.tools.toolsExportIcon, &FilMachineFontIcons_30, 0);
-      lv_obj_align(gui.page.tools.toolsExportIcon, LV_ALIGN_RIGHT_MID, 0, 0);
-      lv_obj_add_flag(gui.page.tools.toolsExportIcon, LV_OBJ_FLAG_CLICKABLE);
-      lv_obj_add_event_cb(gui.page.tools.toolsExportIcon, event_toolsElement, LV_EVENT_CLICKED, gui.page.tools.toolsExportIcon);
+      gui.page.tools.toolsExportButton =  lv_button_create(gui.page.tools.toolsExportContainer);
+      lv_obj_set_size(gui.page.tools.toolsExportButton, BUTTON_PROCESS_WIDTH * 0.8, BUTTON_PROCESS_HEIGHT);
+      lv_obj_align(gui.page.tools.toolsExportButton, LV_ALIGN_RIGHT_MID, 0, 0);
+      lv_obj_add_event_cb(gui.page.tools.toolsExportButton, event_toolsElement, LV_EVENT_CLICKED, gui.page.tools.toolsExportButton);
+      lv_obj_set_style_bg_color(gui.page.tools.toolsExportButton, lv_color_hex(BLUE_DARK), LV_PART_MAIN);
+              
+             gui.page.tools.toolsExportButtonLabel = lv_label_create(gui.page.tools.toolsExportButton);         
+             lv_label_set_text(gui.page.tools.toolsExportButtonLabel, play_icon); 
+             lv_obj_set_style_text_font(gui.page.tools.toolsExportButtonLabel, &FilMachineFontIcons_30, 0);              
+             lv_obj_align(gui.page.tools.toolsExportButtonLabel, LV_ALIGN_CENTER, 0, 0);
+
 
 
 

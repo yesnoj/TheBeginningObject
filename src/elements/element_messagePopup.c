@@ -14,6 +14,8 @@ extern struct gui_components gui;
 //ACCESSORY INCLUDES
 
 
+
+
 void event_messagePopup(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -141,7 +143,7 @@ void event_messagePopup(lv_event_t *e)
                   
                   qSysAction( SAVE_PROCESS_CONFIG );
             }
-            if (gui.element.messagePopup.whoCallMe == gui.page.tools.toolsImportIcon)
+            if (gui.element.messagePopup.whoCallMe == gui.page.tools.toolsImportButton)
             {
                 LV_LOG_USER("Cancel import from SD");
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
@@ -185,15 +187,24 @@ void event_messagePopup(lv_event_t *e)
                     LV_LOG_USER("Duplicate process");
                     char* newProcessName = generateRandomSuffix(gui.tempProcessNode->process.processDetails->processNameString);
                     LV_LOG_USER("New name %s",newProcessName);
-                    strncpy(gui.tempProcessNode->process.processDetails->processNameString, newProcessName, sizeof(gui.tempProcessNode->process.processDetails->processNameString) - 1);
-                    gui.tempProcessNode->process.processDetails->processNameString[sizeof(gui.tempProcessNode->process.processDetails->processNameString) - 1] = '\0';
-                    processNode* duplicatedNode = duplicateProcessNode(gui.tempProcessNode);                    
 
-                    if(addProcessElement(duplicatedNode) != NULL){
+                    struct processNode *duplicatedNode = deepCopyProcessNode(gui.element.messagePopup.whoCallMe);
+                        if (duplicatedNode == NULL) {
+                            fprintf(stderr, "Failed to allocate memory for duplicatedNode\n");
+                            free(gui.element.messagePopup.whoCallMe);
+                            return 1;
+                        }
+
+                        strncpy(duplicatedNode->process.processDetails->processNameString, newProcessName, sizeof(duplicatedNode->process.processDetails->processNameString) - 1);
+                        duplicatedNode->process.processDetails->processNameString[sizeof(duplicatedNode->process.processDetails->processNameString) - 1] = '\0';
+
+                        if(addProcessElement(duplicatedNode) != NULL){
                         LV_LOG_USER("Create GUI entry");
-                        processElementCreate(gui.tempProcessNode, -1);
+                        processElementCreate(duplicatedNode, -1);
                         qSysAction( SAVE_PROCESS_CONFIG );
                     }
+
+
                     gui.tempProcessNode->process.longPressHandled = false;
                     //gui.tempProcessNode->process.gestureHandled = false;
                     
@@ -205,7 +216,7 @@ void event_messagePopup(lv_event_t *e)
             }
 
 
-            if (gui.element.messagePopup.whoCallMe == gui.page.tools.toolsImportIcon)
+            if (gui.element.messagePopup.whoCallMe == gui.page.tools.toolsImportButton)
             {
                 lv_style_reset(&gui.element.messagePopup.style_mBoxPopupTitleLine);
                 lv_msgbox_close(mboxCont);

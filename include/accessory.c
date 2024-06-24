@@ -1615,51 +1615,93 @@ char* generateRandomSuffix(const char* baseName) {
     return newProcessName;
 }
 
-char* copyString(const char* source) {
-    size_t length = strlen(source) + 1;
-    char* copy = (char*)malloc(length);
-    if (copy) {
-        strcpy(copy, source);
-    }
+
+sStepDetail *deepCopyStepDetail(sStepDetail *original) {
+    if (original == NULL) return NULL;
+    sStepDetail *copy = (sStepDetail*)malloc(sizeof(sStepDetail));
+    if (copy == NULL) return NULL;
+    memcpy(copy, original, sizeof(sStepDetail));
+    // Copia profonda di eventuali strutture interne se necessario
     return copy;
 }
 
-// Funzione per duplicare un sProcessDetail
-sProcessDetail* duplicateProcessDetails(const sProcessDetail* source) {
-    sProcessDetail* copy = (sProcessDetail*)malloc(sizeof(sProcessDetail));
-    if (copy) {
-        memcpy(copy, source, sizeof(sProcessDetail));
-    }
+singleStep *deepCopySingleStep(singleStep *original) {
+    if (original == NULL) return NULL;
+    singleStep *copy = (singleStep*)malloc(sizeof(singleStep));
+    if (copy == NULL) return NULL;
+    memcpy(copy, original, sizeof(singleStep));
+    copy->stepDetails = deepCopyStepDetail(original->stepDetails);
+    // Copia profonda di eventuali strutture interne se necessario
     return copy;
 }
 
-// Funzione per duplicare un processNode
-processNode* duplicateProcessNode(const processNode* originalNode) {
-    if (originalNode == nullptr) return nullptr;
+stepNode *deepCopyStepNode(stepNode *original) {
+    if (original == NULL) return NULL;
+    stepNode *copy = (stepNode*)malloc(sizeof(stepNode));
+    if (copy == NULL) return NULL;
+    memcpy(copy, original, sizeof(stepNode));
+    copy->step = *deepCopySingleStep(&original->step);
+    return copy;
+}
 
-    // Crea un nuovo nodo
-    processNode* newNode = (processNode*)malloc(sizeof(processNode));
-    if (!newNode) return nullptr;
+stepList deepCopyStepList(stepList original) {
+    stepList copy;
+    copy.start = NULL;
+    copy.end = NULL;
+    copy.size = original.size;
+    stepNode *current = original.start;
+    stepNode **copyCurrent = &copy.start;
 
-    // Duplica i dettagli del processo
-    newNode->process.processDetails = duplicateProcessDetails(originalNode->process.processDetails);
-    if (!newNode->process.processDetails) {
-        free(newNode);
-        return nullptr;
+    while (current != NULL) {
+        *copyCurrent = deepCopyStepNode(current);
+        if (*copyCurrent != NULL) {
+            (*copyCurrent)->prev = (copyCurrent == &copy.start) ? NULL : (*(copyCurrent - 1));
+            copyCurrent = &(*copyCurrent)->next;
+        }
+        current = current->next;
     }
 
-    // Copia il resto del contenuto del processo
-    memcpy(&newNode->process, &originalNode->process, sizeof(singleProcess));
-
-    // Imposta il nuovo puntatore ai dettagli del processo
-    newNode->process.processDetails = newNode->process.processDetails;
-
-    // Imposta i puntatori next e prev a nullptr
-    newNode->next = nullptr;
-    newNode->prev = nullptr;
-
-    return newNode;
+    copy.end = (copyCurrent == &copy.start) ? NULL : (*(copyCurrent - 1));
+    return copy;
 }
+
+sCheckup *deepCopyCheckup(sCheckup *original) {
+    if (original == NULL) return NULL;
+    sCheckup *copy = (sCheckup*)malloc(sizeof(sCheckup));
+    if (copy == NULL) return NULL;
+    memcpy(copy, original, sizeof(sCheckup));
+    // Copia profonda di eventuali strutture interne se necessario
+    return copy;
+}
+
+sProcessDetail *deepCopyProcessDetail(sProcessDetail *original) {
+    if (original == NULL) return NULL;
+    sProcessDetail *copy =  (sProcessDetail*)malloc(sizeof(sProcessDetail));
+    if (copy == NULL) return NULL;
+    memcpy(copy, original, sizeof(sProcessDetail));
+    copy->stepElementsList = deepCopyStepList(original->stepElementsList);
+    copy->checkup = deepCopyCheckup(original->checkup);
+    return copy;
+}
+
+singleProcess *deepCopySingleProcess(singleProcess *original) {
+    if (original == NULL) return NULL;
+    singleProcess *copy =  (singleProcess*)malloc(sizeof(singleProcess));
+    if (copy == NULL) return NULL;
+    memcpy(copy, original, sizeof(singleProcess));
+    copy->processDetails = deepCopyProcessDetail(original->processDetails);
+    return copy;
+}
+
+struct processNode *deepCopyProcessNode(struct processNode *original) {
+    if (original == NULL) return NULL;
+    struct processNode *copy =  (processNode*)malloc(sizeof(struct processNode));
+    if (copy == NULL) return NULL;
+    memcpy(copy, original, sizeof(struct processNode));
+    copy->process = *deepCopySingleProcess(&original->process);
+    return copy;
+}
+
 
 
 /*

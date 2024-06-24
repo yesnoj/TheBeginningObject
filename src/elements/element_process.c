@@ -286,7 +286,7 @@ void event_processElement(lv_event_t *e) {
         }
     }
 
-    if (code == LV_EVENT_CLICKED && currentNode->process.longPressHandled == false && !ignore_click) {
+    if (code == LV_EVENT_SHORT_CLICKED && currentNode->process.longPressHandled == false && !ignore_click) {
         LV_LOG_USER("LV_EVENT_CLICKED");
 
         if (obj == currentNode->process.preferredIcon) {
@@ -366,7 +366,7 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
 	lv_obj_set_style_border_opa(newProcess->process.processElement, LV_OPA_TRANSP, 0);
   lv_obj_add_event_cb(newProcess->process.processElement, event_processElement, LV_EVENT_GESTURE, newProcess);
   lv_obj_add_event_cb(newProcess->process.processElement, event_processElement, LV_EVENT_RELEASED, newProcess);
-  lv_obj_add_event_cb(newProcess->process.processElement, event_processElement, LV_EVENT_CLICKED, newProcess);
+  lv_obj_add_event_cb(newProcess->process.processElement, event_processElement, LV_EVENT_SHORT_CLICKED, newProcess);
   lv_obj_add_event_cb(newProcess->process.processElement, event_processElement, LV_EVENT_LONG_PRESSED, newProcess);
 
   lv_obj_remove_flag(newProcess->process.processElement, LV_OBJ_FLAG_GESTURE_BUBBLE);
@@ -382,7 +382,7 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         lv_obj_align(newProcess->process.deleteButton, LV_ALIGN_TOP_LEFT, -16, -18);
         lv_obj_add_flag(newProcess->process.deleteButton, LV_OBJ_FLAG_HIDDEN);
         lv_obj_remove_flag(newProcess->process.deleteButton, LV_OBJ_FLAG_SCROLLABLE);
-        lv_obj_add_event_cb(newProcess->process.deleteButton, event_processElement, LV_EVENT_CLICKED, newProcess);
+        lv_obj_add_event_cb(newProcess->process.deleteButton, event_processElement, LV_EVENT_SHORT_CLICKED, newProcess);
 
                 newProcess->process.deleteButtonLabel = lv_label_create(newProcess->process.deleteButton);         
                 lv_label_set_text(newProcess->process.deleteButtonLabel, trash_icon); 
@@ -451,6 +451,6 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
             lv_obj_set_style_text_color(newProcess->process.preferredIcon, lv_color_hex(WHITE), LV_PART_MAIN);
         }
         
-        lv_obj_add_event_cb(newProcess->process.preferredIcon, event_processElement, LV_EVENT_CLICKED, newProcess);
+        lv_obj_add_event_cb(newProcess->process.preferredIcon, event_processElement, LV_EVENT_SHORT_CLICKED, newProcess);
 }
 

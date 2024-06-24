@@ -738,7 +738,7 @@ void checkup(processNode *processToCheckup)
                                         gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer);
 
                                         if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
-                                            lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%.1f°C", 30); 
+                                            lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%.1f°C", 30.0); 
                                         } else{
                                                lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%.2f°F", 20.4); 
                                               }

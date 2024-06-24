@@ -1,3 +1,4 @@
+#include "misc/lv_event.h"
 #include "misc/lv_palette.h"
 #include <sys/_stdint.h>
 #include "core/lv_obj_pos.h"
@@ -329,7 +330,7 @@ void event_stepElement(lv_event_t *e) {
         }
     }
 
-    if (code == LV_EVENT_CLICKED ) {
+      if (code == LV_EVENT_SHORT_CLICKED ) {
         if (obj == currentNode->step.stepElementSummary && currentNode->step.swipedLeft == false && currentNode->step.swipedRight == false && !ignore_click) {
             LV_LOG_USER("Click Edit button step address 0x%p", currentNode);
             stepDetail(data, currentNode);
@@ -450,7 +451,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
   lv_obj_add_event_cb(newStep->step.stepElement, event_stepElement, LV_EVENT_GESTURE, processReference);
   lv_obj_add_event_cb(newStep->step.stepElement, event_stepElement, LV_EVENT_LONG_PRESSED_REPEAT, processReference);
   lv_obj_add_event_cb(newStep->step.stepElement, event_stepElement, LV_EVENT_RELEASED, processReference);
-  lv_obj_add_event_cb(newStep->step.stepElement, event_stepElement, LV_EVENT_CLICKED, processReference);
+  lv_obj_add_event_cb(newStep->step.stepElement, event_stepElement, LV_EVENT_SHORT_CLICKED, processReference);
   lv_obj_add_event_cb(newStep->step.stepElement, event_stepElement, LV_EVENT_LONG_PRESSED, processReference);
 
 
@@ -467,7 +468,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
         lv_obj_align(newStep->step.deleteButton, LV_ALIGN_TOP_LEFT, -16, -18);
         lv_obj_add_flag(newStep->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
         lv_obj_remove_flag(newStep->step.deleteButton, LV_OBJ_FLAG_SCROLLABLE);
-        lv_obj_add_event_cb(newStep->step.deleteButton, event_stepElement, LV_EVENT_CLICKED, processReference);
+        lv_obj_add_event_cb(newStep->step.deleteButton, event_stepElement, LV_EVENT_SHORT_CLICKED, processReference);
         lv_obj_add_flag(newStep->step.deleteButton, LV_OBJ_FLAG_CLICKABLE);
 
                 newStep->step.deleteButtonLabel = lv_label_create(newStep->step.deleteButton);         
@@ -482,7 +483,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
         lv_obj_align(newStep->step.editButton, LV_ALIGN_TOP_LEFT, 260, -18);
         lv_obj_add_flag(newStep->step.editButton, LV_OBJ_FLAG_HIDDEN);
         lv_obj_remove_flag(newStep->step.editButton, LV_OBJ_FLAG_SCROLLABLE);
-        lv_obj_add_event_cb(newStep->step.editButton, event_stepElement, LV_EVENT_CLICKED, processReference);
+        lv_obj_add_event_cb(newStep->step.editButton, event_stepElement, LV_EVENT_SHORT_CLICKED, processReference);
         lv_obj_add_flag(newStep->step.editButton, LV_OBJ_FLAG_CLICKABLE);
 
                 newStep->step.editButtonLabel = lv_label_create(newStep->step.editButton);         

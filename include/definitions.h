@@ -806,10 +806,14 @@ struct sTools {
 	lv_obj_t 	        	*toolsImportLabel;
 	lv_obj_t 	        	*toolsExportLabel;
 
-	lv_obj_t 	        	*toolsCleaningIcon;
-	lv_obj_t 	        	*toolsDrainingIcon;
-	lv_obj_t 	        	*toolsImportIcon;
-	lv_obj_t 	        	*toolsExportIcon;
+	lv_obj_t 	        	*toolsCleaningButton;
+  lv_obj_t 	        	*toolsCleaningButtonLabel;
+	lv_obj_t 	        	*toolsDrainingButton;
+  lv_obj_t 	        	*toolsDrainingButtonLabel;
+	lv_obj_t 	        	*toolsImportButton;
+  lv_obj_t 	          *toolsImportButtonLabel;
+	lv_obj_t 	        	*toolsExportButton;
+  lv_obj_t 	        	*toolsExportButtonLabel;
 
 	lv_obj_t 	        	*toolsMaintenanceLabel;
 	lv_obj_t 	        	*toolsUtilitiesLabel;
@@ -1409,10 +1413,14 @@ void readMachineStats(machineStatistics machineStats);
 uint32_t findRolleStringIndex(const char *input, const char *list);
 char* getRollerStringIndex(uint32_t index, const char *list);
 char* generateRandomSuffix(const char* baseName);
-processNode* duplicateProcessNode(const processNode* originalNode);
-sProcessDetail* duplicateProcessDetails(const sProcessDetail* source);
-char* copyString(const char* source);
-
+sStepDetail *deepCopyStepDetail(sStepDetail *original);
+singleStep *deepCopySingleStep(singleStep *original);
+stepNode *deepCopyStepNode(stepNode *original);
+stepList deepCopyStepList(stepList original);
+sCheckup *deepCopyCheckup(sCheckup *original);
+sProcessDetail *deepCopyProcessDetail(sProcessDetail *original);
+singleProcess *deepCopySingleProcess(singleProcess *original);
+struct processNode *deepCopyProcessNode(struct processNode *original);
 void toLowerCase(char *str);
 int caseInsensitiveStrstr(const char *haystack, const char *needle);
 void filterAndDisplayProcesses( void );
