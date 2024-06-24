@@ -59,6 +59,13 @@ void event_tab_switch(lv_event_t * e)
         if(gui.page.menu.newSelection == TAB_PROCESSES){
             lv_obj_set_style_bg_color(gui.page.menu.newTabSelected, lv_color_hex(GREEN_DARK), 0);
             lv_obj_remove_local_style_prop(gui.page.menu.oldTabSelected, LV_STYLE_BG_COLOR, 0);
+
+            lv_obj_set_style_border_color(gui.page.menu.processesTab, lv_color_hex(GREEN_LIGHT), 0);
+            lv_obj_set_style_border_opa(gui.page.menu.processesTab, LV_OPA_MAX, 0);
+            lv_obj_set_style_border_color(gui.page.menu.toolsTab, lv_color_hex(GREY), 0);
+            lv_obj_set_style_border_opa(gui.page.menu.toolsTab, LV_OPA_50, 0);
+            lv_obj_set_style_border_color(gui.page.menu.settingsTab, lv_color_hex(GREY), 0);
+            lv_obj_set_style_border_opa(gui.page.menu.settingsTab, LV_OPA_50, 0);
             
             lv_obj_clear_flag(gui.page.processes.processesSection, LV_OBJ_FLAG_HIDDEN);
         }
@@ -66,11 +73,25 @@ void event_tab_switch(lv_event_t * e)
             lv_obj_set_style_bg_color(gui.page.menu.newTabSelected, lv_color_hex(ORANGE_DARK), 0);
             lv_obj_remove_local_style_prop(gui.page.menu.oldTabSelected, LV_STYLE_BG_COLOR, 0); 
 
+            lv_obj_set_style_border_color(gui.page.menu.processesTab, lv_color_hex(GREY), 0);
+            lv_obj_set_style_border_opa(gui.page.menu.processesTab, LV_OPA_50, 0);
+            lv_obj_set_style_border_color(gui.page.menu.toolsTab, lv_color_hex(GREY), 0);
+            lv_obj_set_style_border_opa(gui.page.menu.toolsTab, LV_OPA_50, 0);
+            lv_obj_set_style_border_color(gui.page.menu.settingsTab, lv_color_hex(ORANGE_LIGHT), 0);
+            lv_obj_set_style_border_opa(gui.page.menu.settingsTab, LV_OPA_MAX, 0);
+
             lv_obj_clear_flag(gui.page.settings.settingsSection, LV_OBJ_FLAG_HIDDEN);
         }
         if(gui.page.menu.newSelection == TAB_TOOLS){
             lv_obj_set_style_bg_color(gui.page.menu.newTabSelected, lv_color_hex(BLUE_DARK), 0);
             lv_obj_remove_local_style_prop(gui.page.menu.oldTabSelected, LV_STYLE_BG_COLOR, 0); 
+
+            lv_obj_set_style_border_color(gui.page.menu.processesTab, lv_color_hex(GREY), 0);
+            lv_obj_set_style_border_opa(gui.page.menu.processesTab, LV_OPA_50, 0);
+            lv_obj_set_style_border_color(gui.page.menu.toolsTab, lv_color_hex(LIGHT_BLUE), 0);
+            lv_obj_set_style_border_opa(gui.page.menu.toolsTab, LV_OPA_MAX, 0);
+            lv_obj_set_style_border_color(gui.page.menu.settingsTab, lv_color_hex(GREY), 0);
+            lv_obj_set_style_border_opa(gui.page.menu.settingsTab, LV_OPA_50, 0);
 
             lv_obj_clear_flag(gui.page.tools.toolsSection, LV_OBJ_FLAG_HIDDEN);
         }
@@ -97,8 +118,8 @@ void menu(void){
     lv_obj_set_size(gui.page.menu.processesTab, 130, 97);   
     lv_obj_add_event_cb(gui.page.menu.processesTab, event_tab_switch, LV_EVENT_CLICKED, gui.page.menu.processesTab);
     lv_obj_add_event_cb(gui.page.menu.processesTab, event_tab_switch, LV_EVENT_LONG_PRESSED, gui.page.menu.processesTab);
-    lv_obj_set_style_border_color(gui.page.menu.processesTab, lv_color_hex(GREY), 0);
-    lv_obj_set_style_border_opa(gui.page.menu.processesTab, LV_OPA_50, 0);
+    lv_obj_set_style_border_color(gui.page.menu.processesTab, lv_color_hex(GREEN_LIGHT), 0);
+    lv_obj_set_style_border_opa(gui.page.menu.processesTab, LV_OPA_MAX, 0);
     lv_obj_remove_flag(gui.page.menu.processesTab, LV_OBJ_FLAG_SCROLLABLE);      
 
           gui.page.menu.iconLabel = lv_label_create(gui.page.menu.processesTab);          
