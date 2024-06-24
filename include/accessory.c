@@ -976,7 +976,6 @@ void calcolateTotalTime(processNode *processNode){
     processNode->process.processDetails->timeMins = mins;
     processNode->process.processDetails->timeSecs = secs;
 
-//    sprintf(formatted_string, "%dm%ds", processNode->process.processDetails->timeMins, processNode->process.processDetails->timeSecs);
     lv_label_set_text_fmt(processNode->process.processDetails->processTotalTimeValue, "%dm%ds", processNode->process.processDetails->timeMins, 
       processNode->process.processDetails->timeSecs); 
     LV_LOG_USER("Process %p has a total tilme of %dmin:%dsec", processNode, mins, secs);
@@ -1011,7 +1010,6 @@ void updateProcessElement(processNode *process){
   if(existingProcess != NULL) {
       LV_LOG_USER("Updating process element in list");
       //Update time
-//      sprintf(formatted_string, "%dm%ds", process->process.processDetails->timeMins, process->process.processDetails->timeSecs);
       lv_label_set_text_fmt(existingProcess->process.processTime, "%dm%ds", process->process.processDetails->timeMins, 
         process->process.processDetails->timeSecs); 
       
@@ -1046,7 +1044,6 @@ void updateStepElement(processNode *referenceProcess, stepNode *step){
          lv_label_set_text(existingStep->step.stepName, step->step.stepDetails->stepNameString);
 
         //Update source
-//         sprintf(formatted_string, "From:%s", processSourceList[step->step.stepDetails->source]);        
          lv_label_set_text_fmt(existingStep->step.sourceLabel, "From:%s", processSourceList[step->step.stepDetails->source]); 
 
         //Update discard after icon
@@ -1065,7 +1062,6 @@ void updateStepElement(processNode *referenceProcess, stepNode *step){
               lv_label_set_text(existingStep->step.stepTypeIcon, multiRinse_icon); 
 
           //Update time
-//          sprintf(formatted_string, "%dm%ds", step->step.stepDetails->timeMins, step->step.stepDetails->timeSecs);
           lv_label_set_text_fmt(existingStep->step.stepTime, "%dm%ds", step->step.stepDetails->timeMins, step->step.stepDetails->timeSecs); 
       }
 }

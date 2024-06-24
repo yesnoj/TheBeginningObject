@@ -526,13 +526,11 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
                 lv_obj_align(newStep->step.stepTimeIcon, LV_ALIGN_LEFT_MID, -10, 17);
                 
                 newStep->step.stepTime = lv_label_create(newStep->step.stepElementSummary);    
-//                sprintf(formatted_string, "%dm%ds", newStep->step.stepDetails->timeMins, newStep->step.stepDetails->timeSecs);
                 lv_label_set_text_fmt(newStep->step.stepTime, "%dm%ds", newStep->step.stepDetails->timeMins, newStep->step.stepDetails->timeSecs); 
                 lv_obj_set_style_text_font(newStep->step.stepTime, &lv_font_montserrat_18, 0);              
                 lv_obj_align(newStep->step.stepTime, LV_ALIGN_LEFT_MID, 12, 17);
 
                 newStep->step.sourceLabel = lv_label_create(newStep->step.stepElementSummary); 
-//                sprintf(formatted_string, "From:%s", processSourceList[newStep->step.stepDetails->source]);        
                 lv_label_set_text_fmt(newStep->step.sourceLabel, "From:%s", processSourceList[newStep->step.stepDetails->source]); 
                 lv_obj_set_style_text_font(newStep->step.sourceLabel, &lv_font_montserrat_18, 0);      
                 lv_obj_set_width(newStep->step.sourceLabel, 120);        
