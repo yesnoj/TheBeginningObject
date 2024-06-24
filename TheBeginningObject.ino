@@ -16,7 +16,6 @@
 void lv_example_obj_2(void);
 static void drag_event_handler(lv_event_t * e);
 
-
 lv_display_t *lvDisplay;
 lv_indev_t *lvInput;
 
@@ -26,17 +25,15 @@ uint8_t initErrors = 0;
 
 /*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/
 const unsigned int lvBufferSize = (TFT_HOR_RES * TFT_VER_RES * 2) / 10;
-void *lvBuffer1 = malloc(lvBufferSize);
-void *lvBuffer2 = malloc(lvBufferSize);
-
-
+void *lvBuffer1 = heap_caps_malloc(lvBufferSize, MALLOC_CAP_INTERNAL);
+void *lvBuffer2 = heap_caps_malloc(lvBufferSize, MALLOC_CAP_INTERNAL);
 
 #define LVGL_TICK_PERIOD_MS    1
 static void increase_lvgl_tick( void *arg ) {
   lv_tick_inc(LVGL_TICK_PERIOD_MS);
 }
 
-#define MEM_MSG_DISPLAY_TIME  60000
+#define MEM_MSG_DISPLAY_TIME  20000
 void sysMan( void *arg ) {
 
   uint16_t  msg;
