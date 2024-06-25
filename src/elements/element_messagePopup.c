@@ -92,7 +92,7 @@ void event_messagePopup(lv_event_t *e)
                 gui.element.messagePopup.mBoxPopupParent = NULL;
                 
                 if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == false){
-                    lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->timer);
+                    lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->processTimer);
                     lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);  
                     lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);  
                     lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED); 

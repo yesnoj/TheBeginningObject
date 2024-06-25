@@ -469,14 +469,15 @@ typedef struct sCheckup{
 	lv_obj_t			*checkupStopAfterButton;
 	lv_obj_t			*checkupStopNowButton;
 	lv_obj_t			*checkupCloseButton;
-  lv_timer_t    *timer;
+  lv_timer_t    *processTimer;
+  lv_timer_t    *pumpTimer;
 
-	uint8_t 			isProcessing; // 0 or 1
+	bool 			    isProcessing; // 0 or 1
 	uint8_t 			processStep;//0 or 1 or 2 or 3 or 4
 	uint32_t			activeVolume_index;
 	uint8_t 			tankSize;
 	bool    			stopAfter;
-
+  bool          isFilling;
 	uint8_t 			stepFillWaterStatus;
 	uint8_t 			stepReachTempStatus;
 	uint8_t 			stepCheckFilmStatus;
@@ -484,7 +485,7 @@ typedef struct sCheckup{
 	lv_obj_t			*stepArc;
 	lv_obj_t			*processArc;
   lv_obj_t			*pumpArc;
-
+ 
 	lv_obj_t			*checkupTankSizeTextArea;
 
 	/* Params objects */
@@ -1230,11 +1231,18 @@ static const char * checkupTankSizesList = "Small\n"
 
 static const char *checkupStepStatuses[] = { dotStep_icon, arrowStep_icon, checkStep_icon };
 
-static const uint16_t tankFullSizes [3] = {500, 700, 1000}; 
-static const uint16_t tankLowSizes  [3] = {250, 350, 550}; 
-
-static const uint8_t tankFullFillDrainTimes [3] = {15, 19, 25}; 
-static const uint8_t tankLowFillDrainTimes  [3] = {8, 11, 16}; 
+static const uint16_t tanksSizesAndTimes[2][3][2] = {
+    { // Ml and seconds
+        {250,  8},
+        {350, 11},
+        {550, 16}
+    },
+    { // Ml and seconds
+        {500,  15},
+        {700,  19},
+        {1000, 25}
+    }
+};
 
 //lv_obj_t * checkupTankSizeTextArea;
 #define checkupTankSizePlaceHolder_text "Size"

@@ -1,3 +1,4 @@
+#include <sys/_stdint.h>
 
 /**
  * @file page_checkup.c
@@ -35,6 +36,10 @@ static uint8_t secondsStepLeft = 0;
 static uint8_t stepPercentage = 0;
 static uint8_t processPercentage = 0;
 
+static uint8_t tankFillTime = 0;
+static uint8_t tankTimeElapsed = 0;
+static uint8_t tankPercentage = 0;
+
 
 void resetStuffBeforeNextProcess(){
     isProcessingStatus0created = 0;
@@ -56,6 +61,10 @@ void resetStuffBeforeNextProcess(){
     secondsStepLeft = 0;
     stepPercentage = 0;
     processPercentage = 0;
+
+    tankFillTime = 0;
+    tankTimeElapsed = 0;
+    tankPercentage = 0; 
 }
 
 void event_checkup(lv_event_t * e){
@@ -75,7 +84,7 @@ void event_checkup(lv_event_t * e){
   if(code == LV_EVENT_FOCUSED) {
       if(data == gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
           LV_LOG_USER("Set Tank Size");
-          rollerPopupCreate(checkupTankSizesList,checkupTankSize_text,data,0); //referenceProcess  THIS IS BROKEN! NEEDS ATTENTION
+          rollerPopupCreate(checkupTankSizesList,checkupTankSize_text,data,gui.tempProcessNode->process.processDetails->checkup->tankSize); //referenceProcess  THIS IS BROKEN! NEEDS ATTENTION
       }
   }
   if(code == LV_EVENT_VALUE_CHANGED) {
@@ -166,7 +175,7 @@ void event_checkup(lv_event_t * e){
 
   }
 
-  if(gui.tempProcessNode->process.processDetails->checkup->tankSize >0 
+  if(gui.tempProcessNode->process.processDetails->checkup->tankSize > 0 
     && gui.tempProcessNode->process.processDetails->checkup->activeVolume_index > 0 && 
       gui.tempProcessNode->process.processDetails->checkup->processStep < 1){
         lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupStartButton, LV_STATE_DISABLED);
@@ -174,10 +183,141 @@ void event_checkup(lv_event_t * e){
 }
 
 
+void pumpTimer(lv_timer_t * timer){
+  LV_LOG_USER("pumpTimer running");
+  tankPercentage = calcolatePercentage(0, tankTimeElapsed, 0, tankFillTime);
+
+  //THIS WORKS, WITH JUST ONE ELEMENT
+  if(gui.tempProcessNode->process.processDetails->stepElementsList.size == 1){
+    if(gui.tempProcessNode->process.processDetails->checkup->isFilling == true){
+        if(tankPercentage < 100) {
+            LV_LOG_USER("First&Last step FILLING");
+            lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc, tankPercentage);
+            lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
+            tankTimeElapsed++;
+        }
+        if(tankPercentage == 100){
+          LV_LOG_USER("First&Last step FILLING COMPLETE");
+          lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc, tankPercentage);
+          lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, currentStep[2]);
+
+          tankPercentage = 0;
+          tankTimeElapsed = 0;
+          gui.tempProcessNode->process.processDetails->checkup->isFilling = false;
+          lv_timer_pause(gui.tempProcessNode->process.processDetails->checkup->pumpTimer);
+          lv_timer_resume(gui.tempProcessNode->process.processDetails->checkup->processTimer);
+          return;
+        }
+    }
+  else{          
+        if(tankPercentage < 100) {
+            LV_LOG_USER("First&Last step DRAINING");
+            lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc,100 - tankPercentage);
+            lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, currentStep[1]);
+            tankTimeElapsed++;
+        }
+        if(tankPercentage == 100){
+          LV_LOG_USER("First&Last step DRAINING COMPLETE");
+          lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc,100 - tankPercentage);
+          lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
+
+          tankPercentage = 0;
+          tankTimeElapsed = 0;
+          gui.tempProcessNode->process.processDetails->checkup->isFilling = false;
+          lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->pumpTimer);
+          return;
+        }
+      }
+  }
+
+//FIRST ACTION AFTER START PROCESS
+if(gui.tempProcessNode->process.processDetails->stepElementsList.size > 1){
+  if(gui.tempStepNode == gui.tempProcessNode->process.processDetails->stepElementsList.start && gui.tempProcessNode->process.processDetails->checkup->isFilling == true){
+      if(tankPercentage < 100) {
+        LV_LOG_USER("First step FILLING");
+        lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc, tankPercentage);
+        lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
+        tankTimeElapsed++;
+    }
+    if(tankPercentage == 100){
+      LV_LOG_USER("First step FILLING COMPLETE");
+      lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc, tankPercentage);
+      lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, currentStep[2]);
+
+      tankPercentage = 0;
+      tankTimeElapsed = 0;
+      gui.tempProcessNode->process.processDetails->checkup->isFilling = false;
+      lv_timer_pause(gui.tempProcessNode->process.processDetails->checkup->pumpTimer);
+      lv_timer_resume(gui.tempProcessNode->process.processDetails->checkup->processTimer);
+      return;
+    }
+  }
+
+
+
+  if(gui.tempStepNode != gui.tempProcessNode->process.processDetails->stepElementsList.start && gui.tempStepNode != gui.tempProcessNode->process.processDetails->stepElementsList.end){ 
+    if(gui.tempProcessNode->process.processDetails->checkup->isFilling == false){//FIRST DRAIN
+        if(tankPercentage < 100) {
+          LV_LOG_USER("Middle step DRAINING");
+          lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, currentStep[1]);
+          lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc,100 - tankPercentage);
+          
+          tankTimeElapsed++;
+        }
+        if(tankPercentage == 100){
+          LV_LOG_USER("Middle step DRAINING COMPLETE");
+          gui.tempProcessNode->process.processDetails->checkup->isFilling = true;
+          lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc,tankPercentage);
+          lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, currentStep[0]);
+
+          tankPercentage = 0;
+          tankTimeElapsed = 0;
+        }
+      }
+    if(gui.tempProcessNode->process.processDetails->checkup->isFilling == true){//THEN FILL
+        if(tankPercentage < 100) {
+          LV_LOG_USER("Middle step FILLING");
+          lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, currentStep[0]);
+          lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc, tankPercentage);
+          tankTimeElapsed++;
+        }
+        if(tankPercentage == 100){
+          LV_LOG_USER("Middle step FILLING COMPLETE");
+          gui.tempProcessNode->process.processDetails->checkup->isFilling = false;
+          lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc,tankPercentage);
+          lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, currentStep[2]);
+
+          tankPercentage = 0;
+          tankTimeElapsed = 0;
+          lv_timer_pause(gui.tempProcessNode->process.processDetails->checkup->pumpTimer);
+          lv_timer_resume(gui.tempProcessNode->process.processDetails->checkup->processTimer);
+          return;
+        }
+    }
+  }
+  //SOMETHING STRANGE HAPPENS
+  if(gui.tempStepNode->next == gui.tempProcessNode->process.processDetails->stepElementsList.end && gui.tempProcessNode->process.processDetails->checkup->isFilling == false){
+        if(tankPercentage < 100) {
+          LV_LOG_USER("Last step DRAINING");
+          lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc,100 - tankPercentage);
+          lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, currentStep[1]);
+          tankTimeElapsed++;
+        }
+        if(tankPercentage == 100){
+          LV_LOG_USER("Last step DRAINING COMPLETE");
+          lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc,100 - tankPercentage);
+          lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
+
+          lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->pumpTimer);
+          return;
+        }
+    } 
+  }
+}
+
 void processTimer(lv_timer_t * timer)
 { 
-    /* Use the user_data */
-    //uint32_t * user_data = timer->user_data;
+    LV_LOG_USER("processTimer running");
 
     if(secondsProcessElapsed >= 60) {
         secondsProcessElapsed = 0;
@@ -197,6 +337,7 @@ void processTimer(lv_timer_t * timer)
             minutesStepElapsed = 0;
         }
     }
+    
 
     processPercentage = calcolatePercentage(minutesProcessElapsed, secondsProcessElapsed, gui.tempProcessNode->process.processDetails->timeMins, gui.tempProcessNode->process.processDetails->timeSecs);
     LV_LOG_USER("Elapsed Time %dh:%dm:%ds, processPercentage %d stepPercentage %d", hoursProcessElapsed, minutesProcessElapsed, secondsProcessElapsed, processPercentage, stepPercentage); 
@@ -217,7 +358,7 @@ void processTimer(lv_timer_t * timer)
     uint8_t remainingStepMins = remainingStepSecs / 60;
     uint8_t remainingStepSecsOnly = remainingStepSecs % 60;
 
-    lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
+    
 
     if(gui.tempStepNode != NULL) { 
         if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == true && remainingStepMins == 0 && remainingStepSecsOnly == 0){
@@ -233,7 +374,8 @@ void processTimer(lv_timer_t * timer)
             lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
             
             lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->stepArc, 100);
-            lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->timer);
+
+            lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->processTimer);
         }
         else{              
           stepPercentage = calcolatePercentage(minutesStepElapsed, secondsStepElapsed, gui.tempStepNode->step.stepDetails->timeMins, gui.tempStepNode->step.stepDetails->timeSecs);
@@ -250,19 +392,21 @@ void processTimer(lv_timer_t * timer)
           lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, gui.tempStepNode->step.stepDetails->stepNameString);
 
           
-          lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, "%dm%ds", remainingStepMins,
-            remainingStepSecsOnly);
+          lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, "%dm%ds", remainingStepMins,remainingStepSecsOnly);
           
           if(stepPercentage == 100) {
               stepPercentage = 0;
               minutesStepElapsed = 0;
               secondsStepElapsed = 0;
               gui.tempStepNode = gui.tempStepNode->next;
+              
+              lv_timer_pause(gui.tempProcessNode->process.processDetails->checkup->processTimer);
+              lv_timer_resume(gui.tempProcessNode->process.processDetails->checkup->pumpTimer);
           }
         }
     }
     else{
-        lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->timer);
+        lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->processTimer);
 
     }
 
@@ -284,13 +428,13 @@ void processTimer(lv_timer_t * timer)
           lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_OBJ_FLAG_HIDDEN);
           lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
           lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
-          lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
           
           gui.page.tools.machineStats.completed++;
           gui.page.tools.machineStats.totalMins += gui.tempProcessNode->process.processDetails->timeMins;
           qSysAction( SAVE_MACHINE_STATS );
           
-          lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->timer);
+          lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->processTimer);
+          lv_timer_resume(gui.tempProcessNode->process.processDetails->checkup->pumpTimer);
         }
     }
 }
@@ -383,7 +527,8 @@ void checkup(processNode *processToCheckup)
 
     gui.tempProcessNode = processToCheckup;
 //    gui.tempProcessNode->process.processDetails->checkup = malloc(sizeof(sCheckup));
-    gui.tempProcessNode->process.processDetails->checkup->isProcessing = 0;
+    gui.tempProcessNode->process.processDetails->checkup->isProcessing = false;
+    gui.tempProcessNode->process.processDetails->checkup->isFilling = false;
     gui.tempProcessNode->process.processDetails->checkup->processStep = 0;
 
     gui.tempProcessNode->process.processDetails->checkup->stepFillWaterStatus = 0;
@@ -577,7 +722,11 @@ void checkup(processNode *processToCheckup)
                           lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupNextStepLabel, LV_ALIGN_LEFT_MID, -15, 0);
 
                           gui.tempProcessNode->process.processDetails->checkup->checkupNextStepValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupNextStepContainer);         
-                          lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupNextStepValue, "");
+                          if(gui.tempStepNode->next != NULL)
+                              lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupNextStepValue, gui.tempStepNode->next->step.stepDetails->stepNameString); 
+                          else       
+                              lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupNextStepValue, gui.tempStepNode->step.stepDetails->stepNameString);
+
                           lv_obj_set_width(gui.tempProcessNode->process.processDetails->checkup->checkupNextStepValue, 105);
                           lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupNextStepValue, &lv_font_montserrat_20, 0);              
                           lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupNextStepValue, LV_ALIGN_RIGHT_MID, 10, 0);
@@ -880,7 +1029,13 @@ void checkup(processNode *processToCheckup)
                   }
 
                   if(gui.tempProcessNode->process.processDetails->checkup->processStep == 4 && isStepStatus4created == 0){
-                        gui.tempProcessNode->process.processDetails->checkup->timer = lv_timer_create(processTimer, 1000,  gui.tempProcessNode); //&referenceProcess
+                        tankFillTime = tanksSizesAndTimes[gui.tempProcessNode->process.processDetails->checkup->activeVolume_index - 1][gui.tempProcessNode->process.processDetails->checkup->tankSize -1][1];
+                        LV_LOG_USER("tankFillTime Volume %d, size %d, time %d",gui.tempProcessNode->process.processDetails->checkup->activeVolume_index -1,gui.tempProcessNode->process.processDetails->checkup->tankSize - 1,tankFillTime);
+                        
+                        gui.tempProcessNode->process.processDetails->checkup->isFilling = true;
+                        gui.tempProcessNode->process.processDetails->checkup->processTimer = lv_timer_create(processTimer, 1000,  NULL); //&
+                        lv_timer_pause(gui.tempProcessNode->process.processDetails->checkup->processTimer);
+                        gui.tempProcessNode->process.processDetails->checkup->pumpTimer = lv_timer_create(pumpTimer, 1000,  NULL); //&referenceProcess
                         lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);
 
                         lv_obj_clean(gui.tempProcessNode->process.processDetails->checkup->checkupStepContainer);
@@ -948,12 +1103,11 @@ void checkup(processNode *processToCheckup)
                                 lv_obj_set_size(gui.tempProcessNode->process.processDetails->checkup->pumpArc, 220, 220);
                                 lv_arc_set_rotation(gui.tempProcessNode->process.processDetails->checkup->pumpArc, 48);
                                 lv_arc_set_bg_angles(gui.tempProcessNode->process.processDetails->checkup->pumpArc, 0, 84);
-                                lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc, 25);
                                 lv_arc_set_range(gui.tempProcessNode->process.processDetails->checkup->pumpArc, 0, 100);
                                 lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->pumpArc, LV_ALIGN_CENTER, 0, 2);
                                 lv_obj_remove_style(gui.tempProcessNode->process.processDetails->checkup->pumpArc, NULL, LV_PART_KNOB);
                                 lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->checkup->pumpArc, LV_OBJ_FLAG_CLICKABLE);
-                                lv_obj_set_style_arc_color(gui.tempProcessNode->process.processDetails->checkup->pumpArc,lv_color_hex(BLUE) , LV_PART_INDICATOR);
+                                lv_obj_set_style_arc_color(gui.tempProcessNode->process.processDetails->checkup->pumpArc,lv_color_hex(LIGHT_BLUE) , LV_PART_INDICATOR);
                                 lv_obj_set_style_arc_color(gui.tempProcessNode->process.processDetails->checkup->pumpArc, lv_color_hex(BLUE_DARK), LV_PART_MAIN);
                                 lv_obj_move_foreground(gui.tempProcessNode->process.processDetails->checkup->pumpArc);
                                 lv_arc_set_mode(gui.tempProcessNode->process.processDetails->checkup->pumpArc, LV_ARC_MODE_REVERSE);

@@ -160,9 +160,9 @@ void event_Roller(lv_event_t * e)
               return; 
             }
             if((lv_obj_t*)data == gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea){
-              LV_LOG_USER("SET BUTTON from checkupTankSizeTextArea value %d:",rollerSelected);
+              LV_LOG_USER("SET BUTTON from checkupTankSizeTextArea value %d:",rollerSelected + 1);
               
-              gui.tempProcessNode->process.processDetails->checkup->tankSize = rollerSelected;
+              gui.tempProcessNode->process.processDetails->checkup->tankSize = rollerSelected + 1;
               lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
               lv_textarea_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupTankSizeTextArea, tempBuffer);
               lv_style_reset(&gui.element.rollerPopup.style_roller);
