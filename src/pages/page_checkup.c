@@ -1069,8 +1069,8 @@ void checkup(processNode *processToCheckup)
                                 lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString);
                                 lv_obj_set_style_text_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue , LV_TEXT_ALIGN_CENTER, 0);
                                 lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, &lv_font_montserrat_22, 0);              
-                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_ALIGN_CENTER, 0, -35);
-                                lv_obj_set_width(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, 155);
+                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_ALIGN_CENTER, 0, -10);
+                                lv_obj_set_width(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, 170);
                                 lv_label_set_long_mode(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_LABEL_LONG_SCROLL_CIRCULAR);
 
                                 gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
