@@ -1046,7 +1046,8 @@ void updateProcessElement(processNode *process){
         process->process.processDetails->timeSecs); 
       
       //Update temp
-      lv_label_set_text_fmt(existingProcess->process.processTemp, "%d °C", process->process.processDetails->temp );
+      lv_obj_send_event(existingProcess->process.processElement, LV_EVENT_REFRESH, NULL);
+
  
       //Update preferred
       if(process->process.processDetails->isPreferred == 1){

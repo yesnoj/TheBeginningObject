@@ -66,18 +66,21 @@ void event_Roller(lv_event_t * e)
 
                       if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
                         lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea,tempBuffer);
+                         //lv_label_set_text_fmt(gui.tempProcessNode->process.processTemp, "%d°C", gui.tempProcessNode->process.processDetails->temp); 
                       }
                       else{
                             sprintf(tempBuffer, "%d", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->temp));
                             lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processTempTextArea, tempBuffer);
-                        }
+                            //lv_label_set_text_fmt(gui.tempProcessNode->process.processTemp, "%d°F", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->temp)); 
 
-                      isScrolled = false;
+                        }
+                   isScrolled = false;
                     }
 
               gui.tempProcessNode->process.processDetails->somethingChanged = true;
               lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
 
+ 
               lv_style_reset(&gui.element.rollerPopup.style_roller);
               lv_msgbox_close(godFatherCont);
               //lv_obj_delete(godFatherCont);
