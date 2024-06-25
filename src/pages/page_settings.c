@@ -1,3 +1,4 @@
+#include <sys/_stdint.h>
 
 /**
  * @file page_settings.c
@@ -79,6 +80,11 @@ void event_settings_handler(lv_event_t * e)
             LV_LOG_USER("Selected °C or °F: %d", (int)gui.page.settings.active_index);
             gui.page.settings.settingsParams.tempUnit = (int)gui.page.settings.active_index;
             qSysAction( SAVE_PROCESS_CONFIG );
+            (lv_obj_t *)lv_obj_get_child(cont, *active_id);
+            uint8_t i = 0;
+            for(i = 0; i < lv_obj_get_child_cnt(gui.page.processes.processesListContainer); i++) {
+              lv_obj_send_event(lv_obj_get_child(gui.page.processes.processesListContainer, i), LV_EVENT_REFRESH, NULL);
+            }
        }
     }
  

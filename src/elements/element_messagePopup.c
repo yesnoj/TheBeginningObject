@@ -204,8 +204,8 @@ void event_messagePopup(lv_event_t *e)
                         qSysAction( SAVE_PROCESS_CONFIG );
                     }
 
-
-                    gui.tempProcessNode->process.longPressHandled = false;
+                    duplicatedNode->process.longPressHandled = false;
+                    ((processNode *)(gui.element.messagePopup.whoCallMe))->process.longPressHandled = false;
                     //gui.tempProcessNode->process.gestureHandled = false;
                     
                 }

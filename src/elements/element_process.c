@@ -326,6 +326,14 @@ void event_processElement(lv_event_t *e) {
         messagePopupCreate(duplicatePopupTitle_text, duplicateProcessPopupBody_text, checkupNo_text, checkupYes_text, currentNode);
     }
 
+    if(code == LV_EVENT_REFRESH){
+      if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
+           lv_label_set_text_fmt(currentNode->process.processTemp, "%d°C", currentNode->process.processDetails->temp); 
+      } else{
+            lv_label_set_text_fmt(currentNode->process.processTemp, "%d°F", convertCelsiusoToFahrenheit(currentNode->process.processDetails->temp)); 
+      }
+    }
+
     if (code == LV_EVENT_DELETE) {
         lv_style_reset(&currentNode->process.processStyle);
     }
@@ -365,6 +373,7 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
 	lv_obj_remove_flag(newProcess->process.processElement, LV_OBJ_FLAG_SCROLLABLE);
 	lv_obj_set_style_border_opa(newProcess->process.processElement, LV_OPA_TRANSP, 0);
   lv_obj_add_event_cb(newProcess->process.processElement, event_processElement, LV_EVENT_GESTURE, newProcess);
+  lv_obj_add_event_cb(newProcess->process.processElement, event_processElement, LV_EVENT_REFRESH, newProcess);
   lv_obj_add_event_cb(newProcess->process.processElement, event_processElement, LV_EVENT_RELEASED, newProcess);
   lv_obj_add_event_cb(newProcess->process.processElement, event_processElement, LV_EVENT_SHORT_CLICKED, newProcess);
   lv_obj_add_event_cb(newProcess->process.processElement, event_processElement, LV_EVENT_LONG_PRESSED, newProcess);
@@ -413,8 +422,13 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         lv_obj_align(newProcess->process.processTempIcon, LV_ALIGN_LEFT_MID, -10, 17);
 
         newProcess->process.processTemp = lv_label_create(newProcess->process.processElementSummary);
-        lv_label_set_text_fmt(newProcess->process.processTemp, "%d °C", newProcess->process.processDetails->temp );
-        newProcess->process.processDetails->temp = newProcess->process.processDetails->temp;
+
+        if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
+           lv_label_set_text_fmt(newProcess->process.processTemp, "%d°C", newProcess->process.processDetails->temp); 
+        } else{
+            lv_label_set_text_fmt(newProcess->process.processTemp, "%d°F", convertCelsiusoToFahrenheit(newProcess->process.processDetails->temp)); 
+        }
+        
         lv_obj_set_style_text_font(newProcess->process.processTemp, &lv_font_montserrat_18, 0);
         lv_obj_align(newProcess->process.processTemp, LV_ALIGN_LEFT_MID, 7, 17);
 
