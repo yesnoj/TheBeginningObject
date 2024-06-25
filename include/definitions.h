@@ -391,7 +391,7 @@ typedef struct stepList {
 typedef struct sCheckup{
     /* LVGL objects */
 	lv_obj_t			*checkupParent;
-	lv_style_t		    textAreaStyleCheckup;
+	lv_style_t		textAreaStyleCheckup;
 	lv_obj_t			*checkupContainer;
 	lv_obj_t			*checkupNextStepsContainer;
 	lv_obj_t			*checkupProcessNameContainer;
@@ -483,6 +483,7 @@ typedef struct sCheckup{
 
 	lv_obj_t			*stepArc;
 	lv_obj_t			*processArc;
+  lv_obj_t			*pumpArc;
 
 	lv_obj_t			*checkupTankSizeTextArea;
 

@@ -95,7 +95,8 @@ void event_messagePopup(lv_event_t *e)
                     lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->timer);
                     lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);  
                     lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);  
-                    lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);  
+                    lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED); 
+                    lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN); 
                   }
                 if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == true){
                     lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);  

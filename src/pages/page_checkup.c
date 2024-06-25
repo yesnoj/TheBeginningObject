@@ -217,6 +217,7 @@ void processTimer(lv_timer_t * timer)
     uint8_t remainingStepMins = remainingStepSecs / 60;
     uint8_t remainingStepSecsOnly = remainingStepSecs % 60;
 
+    lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
 
     if(gui.tempStepNode != NULL) { 
         if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == true && remainingStepMins == 0 && remainingStepSecsOnly == 0){
@@ -229,7 +230,9 @@ void processTimer(lv_timer_t * timer)
             lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
             
+            lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->stepArc, 100);
             lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->timer);
         }
         else{              
@@ -281,6 +284,7 @@ void processTimer(lv_timer_t * timer)
           lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_OBJ_FLAG_HIDDEN);
           lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
           lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
+          lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
           
           gui.page.tools.machineStats.completed++;
           gui.page.tools.machineStats.totalMins += gui.tempProcessNode->process.processDetails->timeMins;
@@ -600,7 +604,9 @@ void checkup(processNode *processToCheckup)
                   lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, event_checkup, LV_EVENT_CLICKED, gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton);
                   lv_obj_set_style_bg_color(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, lv_color_hex(RED_DARK), LV_PART_MAIN);
                   lv_obj_move_foreground(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton);
-
+                  if(gui.tempProcessNode->process.processDetails->stepElementsList.size == 1){
+                    lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);
+                  }
 
                           gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButtonLabel = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton);         
                           lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButtonLabel, checkupStopAfter_text); 
@@ -732,7 +738,7 @@ void checkup(processNode *processToCheckup)
 
                                         gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempLabel = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer);         
                                         lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempLabel, checkupTargetTemp_text); 
-                                        lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempLabel, &lv_font_montserrat_18, 0);              
+                                        lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempLabel, &lv_font_montserrat_20, 0);              
                                         lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempLabel, LV_ALIGN_CENTER, 0, -15);
 
                                         gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer);
@@ -743,7 +749,7 @@ void checkup(processNode *processToCheckup)
                                                lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%.2f°F", 20.4); 
                                               }
 
-                                        lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, &lv_font_montserrat_20, 0);              
+                                        lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, &lv_font_montserrat_28, 0);              
                                         lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, LV_ALIGN_CENTER, 0, 20);
 
 
@@ -831,7 +837,7 @@ void checkup(processNode *processToCheckup)
 
                                         gui.tempProcessNode->process.processDetails->checkup->checkupTankIsPresentLabel = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTankIsPresentContainer);         
                                         lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupTankIsPresentLabel, checkupTankPosition_text); 
-                                        lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTankIsPresentLabel, &lv_font_montserrat_18, 0);              
+                                        lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTankIsPresentLabel, &lv_font_montserrat_20, 0);              
                                         lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTankIsPresentLabel, LV_ALIGN_CENTER, 0, -15);
 
                                         gui.tempProcessNode->process.processDetails->checkup->checkupTankIsPresentValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTankIsPresentContainer);         
@@ -849,7 +855,7 @@ void checkup(processNode *processToCheckup)
 
                                         gui.tempProcessNode->process.processDetails->checkup->checkupFilmRotatingLabel = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupFilmInPositionContainer);         
                                         lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupFilmRotatingLabel, checkupFilmRotation_text); 
-                                        lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupFilmRotatingLabel, &lv_font_montserrat_18, 0);              
+                                        lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupFilmRotatingLabel, &lv_font_montserrat_20, 0);              
                                         lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupFilmRotatingLabel, LV_ALIGN_CENTER, 0, -15);
 
                                         gui.tempProcessNode->process.processDetails->checkup->checkupFilmRotatingValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupFilmInPositionContainer);         
@@ -885,49 +891,39 @@ void checkup(processNode *processToCheckup)
                         //lv_obj_set_style_border_color(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer, lv_palette_main(LV_PALETTE_GREEN), 0);
                         lv_obj_set_style_border_opa(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer, LV_OPA_TRANSP, 0);
                         
-                                gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
-                                lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, "%dm%ds", 
-                                  gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->timeMins, 
-                                    gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->timeSecs); //THIS NEED TO BE UPDATED AS THE TIME GOES ON!!
-                                lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, &lv_font_montserrat_20, 0);              
-                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, LV_ALIGN_CENTER, 0, 80);
 
-                                gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
-                                lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString);
-                                lv_obj_set_style_text_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue , LV_TEXT_ALIGN_CENTER, 0);
-                                lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, &lv_font_montserrat_22, 0);              
-                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_ALIGN_CENTER, 0, -35);
-                                lv_obj_set_width(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, 130);
-                                lv_label_set_long_mode(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_LABEL_LONG_SCROLL_CIRCULAR);
-
-                                gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
-                                lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, currentStep[1]); 
-                                lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, &lv_font_montserrat_20, 0);              
-                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_ALIGN_CENTER, 0, 10);
-
-                                gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
-                                lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, "%dm%ds", 
-                                  gui.tempProcessNode->process.processDetails->timeMins, gui.tempProcessNode->process.processDetails->timeSecs); //THIS NEED TO BE UPDATED AS THE TIME GOES ON!!
-                                lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, &lv_font_montserrat_24, 0);              
-                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_ALIGN_CENTER, 0, -60);
-                              
                                 gui.tempProcessNode->process.processDetails->checkup->processArc = lv_arc_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);
                                 lv_obj_set_size(gui.tempProcessNode->process.processDetails->checkup->processArc, 220, 220);
                                 lv_arc_set_rotation(gui.tempProcessNode->process.processDetails->checkup->processArc, 140);
                                 lv_arc_set_bg_angles(gui.tempProcessNode->process.processDetails->checkup->processArc, 0, 260);
                                 lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->processArc, 0);
                                 lv_arc_set_range(gui.tempProcessNode->process.processDetails->checkup->processArc, 0, 100);
-                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->processArc, LV_ALIGN_CENTER, 0, 10);
+                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->processArc, LV_ALIGN_CENTER, 0, 2);
                                 lv_obj_remove_style(gui.tempProcessNode->process.processDetails->checkup->processArc, NULL, LV_PART_KNOB);
                                 lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->checkup->processArc, LV_OBJ_FLAG_CLICKABLE);
                                 lv_obj_set_style_arc_color(gui.tempProcessNode->process.processDetails->checkup->processArc,lv_color_hex(GREEN) , LV_PART_INDICATOR);
                                 lv_obj_set_style_arc_color(gui.tempProcessNode->process.processDetails->checkup->processArc, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
 
-                                gui.tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
-                                lv_obj_set_style_text_align(gui.tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel , LV_TEXT_ALIGN_CENTER, 0);
-                                lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel, &lv_font_montserrat_22, 0);              
-                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel, LV_ALIGN_CENTER, 0, -10);
-                                lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel, LV_OBJ_FLAG_HIDDEN);
+                                gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
+                                lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, "%dm%ds", 
+                                  gui.tempProcessNode->process.processDetails->timeMins, gui.tempProcessNode->process.processDetails->timeSecs); 
+                                lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, &lv_font_montserrat_28, 0);              
+                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_ALIGN_CENTER, 0, -60);
+
+                                gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
+                                lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->stepNameString);
+                                lv_obj_set_style_text_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue , LV_TEXT_ALIGN_CENTER, 0);
+                                lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, &lv_font_montserrat_22, 0);              
+                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_ALIGN_CENTER, 0, -35);
+                                lv_obj_set_width(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, 155);
+                                lv_label_set_long_mode(gui.tempProcessNode->process.processDetails->checkup->checkupStepNameValue, LV_LABEL_LONG_SCROLL_CIRCULAR);
+
+                                gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
+                                lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, "%dm%ds", 
+                                    gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->timeMins, 
+                                    gui.tempProcessNode->process.processDetails->stepElementsList.start->step.stepDetails->timeSecs); 
+                                lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, &lv_font_montserrat_22, 0);              
+                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, LV_ALIGN_CENTER, 0, 14);
 
                                 gui.tempProcessNode->process.processDetails->checkup->stepArc = lv_arc_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);
                                 lv_obj_set_size(gui.tempProcessNode->process.processDetails->checkup->stepArc, 220, 220);
@@ -935,14 +931,39 @@ void checkup(processNode *processToCheckup)
                                 lv_arc_set_bg_angles(gui.tempProcessNode->process.processDetails->checkup->stepArc, 0, 80);
                                 lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->stepArc, 0);
                                 lv_arc_set_range(gui.tempProcessNode->process.processDetails->checkup->stepArc, 0, 100);
-                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->stepArc, LV_ALIGN_CENTER, 0, 160);
+                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->stepArc, LV_ALIGN_CENTER, 0, 139);
                                 lv_obj_remove_style(gui.tempProcessNode->process.processDetails->checkup->stepArc, NULL, LV_PART_KNOB);
                                 lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->checkup->stepArc, LV_OBJ_FLAG_CLICKABLE);
                                 lv_obj_set_style_arc_color(gui.tempProcessNode->process.processDetails->checkup->stepArc,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
                                 lv_obj_set_style_arc_color(gui.tempProcessNode->process.processDetails->checkup->stepArc, lv_color_hex(ORANGE_DARK), LV_PART_MAIN);
                                 lv_obj_move_foreground(gui.tempProcessNode->process.processDetails->checkup->stepArc);
 
-                 
+                                gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
+                                lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, currentStep[0]); //THIS NEED TO BE UPDATED AS THE TIME GOES ON!!
+                                lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, &lv_font_montserrat_20, 0);              
+                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_ALIGN_CENTER, 0, 69);
+                                lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
+
+                                gui.tempProcessNode->process.processDetails->checkup->pumpArc = lv_arc_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);
+                                lv_obj_set_size(gui.tempProcessNode->process.processDetails->checkup->pumpArc, 220, 220);
+                                lv_arc_set_rotation(gui.tempProcessNode->process.processDetails->checkup->pumpArc, 48);
+                                lv_arc_set_bg_angles(gui.tempProcessNode->process.processDetails->checkup->pumpArc, 0, 84);
+                                lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->pumpArc, 25);
+                                lv_arc_set_range(gui.tempProcessNode->process.processDetails->checkup->pumpArc, 0, 100);
+                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->pumpArc, LV_ALIGN_CENTER, 0, 2);
+                                lv_obj_remove_style(gui.tempProcessNode->process.processDetails->checkup->pumpArc, NULL, LV_PART_KNOB);
+                                lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->checkup->pumpArc, LV_OBJ_FLAG_CLICKABLE);
+                                lv_obj_set_style_arc_color(gui.tempProcessNode->process.processDetails->checkup->pumpArc,lv_color_hex(BLUE) , LV_PART_INDICATOR);
+                                lv_obj_set_style_arc_color(gui.tempProcessNode->process.processDetails->checkup->pumpArc, lv_color_hex(BLUE_DARK), LV_PART_MAIN);
+                                lv_obj_move_foreground(gui.tempProcessNode->process.processDetails->checkup->pumpArc);
+                                lv_arc_set_mode(gui.tempProcessNode->process.processDetails->checkup->pumpArc, LV_ARC_MODE_REVERSE);
+
+                                gui.tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupProcessingContainer);         
+                                lv_obj_set_style_text_align(gui.tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel , LV_TEXT_ALIGN_CENTER, 0);
+                                lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel, &lv_font_montserrat_22, 0);              
+                                lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel, LV_ALIGN_CENTER, 0, -30);
+                                lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel, LV_OBJ_FLAG_HIDDEN);
+
                       isStepStatus4created = 1;
                   }
 }
