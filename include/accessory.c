@@ -983,7 +983,7 @@ void writeConfigFile(fs::FS &fs, const char *path, bool enableLog) {
     }
 }
 
-void calcolateTotalTime(processNode *processNode){
+void calculateTotalTime(processNode *processNode){
     uint32_t mins = 0;
     uint8_t  secs = 0;
 
@@ -1015,7 +1015,7 @@ void calcolateTotalTime(processNode *processNode){
 
 
 
-uint8_t calcolatePercentage(uint32_t minutes, uint8_t seconds, uint32_t total_minutes, uint8_t total_seconds) {
+uint8_t calculatePercentage(uint32_t minutes, uint8_t seconds, uint32_t total_minutes, uint8_t total_seconds) {
     // Calcola il tempo totale in secondi
     uint32_t total_time_seconds = total_minutes * 60 + total_seconds;
 

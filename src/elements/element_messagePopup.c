@@ -70,7 +70,7 @@ void event_messagePopup(lv_event_t *e)
                 if( !deleteStepElement( gui.element.messagePopup.whoCallMe , gui.tempProcessNode, false) ) {
                   LV_LOG_USER("Delete step element instance at address 0x%p Failed!", gui.element.messagePopup.whoCallMe);
                 } else {
-                  calcolateTotalTime(gui.tempProcessNode);
+                  calculateTotalTime(gui.tempProcessNode);
                   LV_LOG_USER("Delete step element instance at address 0x%p", gui.element.messagePopup.whoCallMe);
                   gui.tempProcessNode->process.processDetails->somethingChanged = true;
                   lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
@@ -92,7 +92,7 @@ void event_messagePopup(lv_event_t *e)
                 gui.element.messagePopup.mBoxPopupParent = NULL;
                 gui.tempProcessNode->process.processDetails->checkup->stopNow = true;
                 if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == false){
-                    lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->processTimer);
+                    //lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->processTimer);
                     lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);  
                     lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);  
                     //lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED); 
@@ -109,7 +109,7 @@ void event_messagePopup(lv_event_t *e)
                   lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
 
                   gui.page.tools.machineStats.stopped++;
-
+                  lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->processTimer);
                   lv_timer_resume(gui.tempProcessNode->process.processDetails->checkup->pumpTimer);
                   qSysAction( SAVE_MACHINE_STATS );
             }

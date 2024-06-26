@@ -408,7 +408,7 @@ void stepElementCreate(stepNode * newStep,processNode * processReference, int8_t
 
   gui.tempProcessNode = processReference;
   
-  calcolateTotalTime(processReference);
+  calculateTotalTime(processReference);
   
   LV_LOG_USER("Step element created with address 0x%p", newStep);
   LV_LOG_USER("Process element associated with address 0x%p", processReference);

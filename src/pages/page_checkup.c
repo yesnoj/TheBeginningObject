@@ -185,7 +185,7 @@ void event_checkup(lv_event_t * e){
 
 void pumpTimer(lv_timer_t * timer){
 
-tankPercentage = calcolatePercentage(0, tankTimeElapsed, 0, tankFillTime);
+tankPercentage = calculatePercentage(0, tankTimeElapsed, 0, tankFillTime);
   
 LV_LOG_USER("pumpTimer running :%d", tankPercentage);
 
@@ -339,6 +339,11 @@ LV_LOG_USER("pumpTimer running :%d", tankPercentage);
           }
         }
         else{ //STOP NOW pressed after STOP AFTER!
+                if(gui.tempProcessNode->process.processDetails->checkup->isFilling == false && tankPercentage == 0){
+                  tankPercentage = 100;
+                  tankTimeElapsed = tankFillTime;
+                  gui.tempProcessNode->process.processDetails->checkup->isFilling = true;
+                }
                   //Reverte liquid if is pumping-in
                 if(tankPercentage > 0) {
                     LV_LOG_USER("STOP NOW after STOP AFTER step NOW DRAINING");
@@ -358,6 +363,136 @@ LV_LOG_USER("pumpTimer running :%d", tankPercentage);
             }
       }
 }
+
+
+/*
+void handleNormalOperation(sCheckup *checkup) {
+    if (gui.tempStepNode != NULL) {
+        if (gui.tempStepNode->prev == NULL) {
+            LV_LOG_USER("First Step");
+            handleFillingStep(checkup, "First step FILLING", "First step FILLING COMPLETE");
+        } else if (gui.tempStepNode->next == NULL) {
+            LV_LOG_USER("Last Step");
+            handleDrainingStep(checkup, "Last step DRAINING", "Last step DRAINING COMPLETE");
+        } else {
+            LV_LOG_USER("Intermediate Step");
+            handleIntermediateStep(checkup);
+        }
+    }
+}
+
+void handleFillingStep(sCheckup *checkup, const char *fillingLog, const char *fillingCompleteLog) {
+    if (tankPercentage < 100) {
+        LV_LOG_USER(fillingLog);
+        lv_arc_set_value(checkup->pumpArc, tankPercentage);
+        lv_obj_remove_flag(checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
+        tankTimeElapsed++;
+    } else {
+        LV_LOG_USER(fillingCompleteLog);
+        lv_arc_set_value(checkup->pumpArc, tankPercentage);
+        lv_label_set_text(checkup->checkupStepKindValue, checkupProcessing_text);
+        resetFillingState(checkup);
+    }
+}
+
+void handleDrainingStep(sCheckup *checkup, const char *drainingLog, const char *drainingCompleteLog) {
+    if (tankPercentage < 100) {
+        LV_LOG_USER(drainingLog);
+        lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
+        lv_label_set_text(checkup->checkupStepKindValue, checkupDraining_text);
+        tankTimeElapsed++;
+    } else {
+        LV_LOG_USER(drainingCompleteLog);
+        lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
+        lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
+        finalizeDraining(checkup);
+    }
+}
+
+void handleIntermediateStep(sCheckup *checkup) {
+    if (!checkup->isFilling) {
+        handleDrainingStep(checkup, "Middle step DRAINING", "Middle step DRAINING COMPLETE");
+        checkup->isFilling = true;
+    } else {
+        handleFillingStep(checkup, "Middle step FILLING", "Middle step FILLING COMPLETE");
+        checkup->isFilling = false;
+        resetFillingState(checkup);
+    }
+}
+
+void handleStopNow(sCheckup *checkup) {
+    if (!checkup->isFilling && tankPercentage == 0) {
+        tankPercentage = 100;
+        tankTimeElapsed = tankFillTime;
+        checkup->isFilling = true;
+    }
+    if (tankPercentage > 0) {
+        LV_LOG_USER("STOP NOW DRAINING");
+        lv_arc_set_value(checkup->pumpArc, tankPercentage);
+        lv_label_set_text(checkup->checkupStepKindValue, checkupDraining_text);
+        tankTimeElapsed--;
+    } else {
+        LV_LOG_USER("STOP NOW DRAINING COMPLETE");
+        finalizeDraining(checkup);
+    }
+}
+
+void handleStopAfter(sCheckup *checkup) {
+    if (checkup->isFilling) {
+        handleFillingStep(checkup, "STOP AFTER step FILLING", "STOP AFTER step FILLING COMPLETE");
+    } else {
+        handleDrainingStep(checkup, "STOP AFTER step DRAINING", "STOP AFTER step DRAINING COMPLETE");
+    }
+}
+
+void handleStopNowAfterStopAfter(sCheckup *checkup) {
+    if (tankPercentage > 0) {
+        LV_LOG_USER("STOP NOW after STOP AFTER step NOW DRAINING");
+        lv_arc_set_value(checkup->pumpArc, tankPercentage);
+        lv_label_set_text(checkup->checkupStepKindValue, checkupDraining_text);
+        tankTimeElapsed--;
+    } else {
+        LV_LOG_USER("STOP NOW after STOP AFTER DRAINING COMPLETE");
+        finalizeDraining(checkup);
+    }
+}
+
+void resetFillingState(sCheckup *checkup) {
+    tankPercentage = 0;
+    tankTimeElapsed = 0;
+    checkup->isFilling = false;
+    lv_timer_pause(checkup->pumpTimer);
+    lv_timer_resume(checkup->processTimer);
+}
+
+void finalizeDraining(sCheckup *checkup) {
+    lv_arc_set_value(checkup->pumpArc, 0);
+    lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
+    lv_obj_clear_state(checkup->checkupCloseButton, LV_STATE_DISABLED);
+    lv_timer_delete(checkup->pumpTimer);
+}
+
+void pumpTimer(lv_timer_t *timer) {
+    tankPercentage = calculatePercentage(0, tankTimeElapsed, 0, tankFillTime);
+    LV_LOG_USER("pumpTimer running :%d", tankPercentage);
+
+    sCheckup *checkup = gui.tempProcessNode->process.processDetails->checkup;
+
+    if (!checkup->stopAfter) {
+        if (!checkup->stopNow) {
+            handleNormalOperation(checkup);
+        } else {
+            handleStopNow(checkup);
+        }
+    } else {
+        if (!checkup->stopNow) {
+            handleStopAfter(checkup);
+        } else {
+            handleStopNowAfterStopAfter(checkup);
+        }
+    }
+}
+*/
 
 void processTimer(lv_timer_t * timer)
 { 
@@ -383,7 +518,7 @@ void processTimer(lv_timer_t * timer)
     }
     
 
-    processPercentage = calcolatePercentage(minutesProcessElapsed, secondsProcessElapsed, gui.tempProcessNode->process.processDetails->timeMins, gui.tempProcessNode->process.processDetails->timeSecs);
+    processPercentage = calculatePercentage(minutesProcessElapsed, secondsProcessElapsed, gui.tempProcessNode->process.processDetails->timeMins, gui.tempProcessNode->process.processDetails->timeSecs);
     LV_LOG_USER("Elapsed Time %dh:%dm:%ds, processPercentage %d stepPercentage %d", hoursProcessElapsed, minutesProcessElapsed, secondsProcessElapsed, processPercentage, stepPercentage); 
 
     // Convert the remaining process time to minutes and seconds
@@ -422,7 +557,7 @@ void processTimer(lv_timer_t * timer)
             lv_timer_resume(gui.tempProcessNode->process.processDetails->checkup->pumpTimer);
         }
         else{              
-          stepPercentage = calcolatePercentage(minutesStepElapsed, secondsStepElapsed, gui.tempStepNode->step.stepDetails->timeMins, gui.tempStepNode->step.stepDetails->timeSecs);
+          stepPercentage = calculatePercentage(minutesStepElapsed, secondsStepElapsed, gui.tempStepNode->step.stepDetails->timeMins, gui.tempStepNode->step.stepDetails->timeSecs);
           lv_arc_set_value(gui.tempProcessNode->process.processDetails->checkup->stepArc, stepPercentage);
           lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupStepSourceValue, processSourceList[gui.tempStepNode->step.stepDetails->source]);
           

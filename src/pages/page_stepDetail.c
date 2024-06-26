@@ -53,7 +53,7 @@ void event_stepDetail(lv_event_t * e)
         lv_obj_add_flag(gui.tempStepNode->step.deleteButton, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(gui.tempStepNode->step.editButton, LV_OBJ_FLAG_HIDDEN);
       }
-      calcolateTotalTime(data);
+      calculateTotalTime(data);
       updateStepElement(data, gui.tempStepNode);
       lv_msgbox_close(mboxCont);
 //      lv_obj_delete(mboxCont);
