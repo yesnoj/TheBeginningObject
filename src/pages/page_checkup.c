@@ -183,6 +183,8 @@ void event_checkup(lv_event_t * e){
 }
 
 
+//WROTE BY HAND
+/*
 void pumpTimer(lv_timer_t * timer){
 
 tankPercentage = calculatePercentage(0, tankTimeElapsed, 0, tankFillTime);
@@ -363,6 +365,188 @@ LV_LOG_USER("pumpTimer running :%d", tankPercentage);
             }
       }
 }
+*/
+
+
+void handleFirstStep(sCheckup* checkup) {
+    LV_LOG_USER("First Step");
+    if (tankPercentage < 100) {
+        LV_LOG_USER("First step FILLING");
+        lv_arc_set_value(checkup->pumpArc, tankPercentage);
+        lv_obj_remove_flag(checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
+        tankTimeElapsed++;
+    } else {
+        LV_LOG_USER("First step FILLING COMPLETE");
+        lv_arc_set_value(checkup->pumpArc, tankPercentage);
+        lv_label_set_text(checkup->checkupStepKindValue, checkupProcessing_text);
+
+        tankPercentage = 0;
+        tankTimeElapsed = 0;
+        checkup->isFilling = false;
+        lv_timer_pause(checkup->pumpTimer);
+        lv_timer_resume(checkup->processTimer);
+    }
+}
+
+void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
+    if (isLastStep) {
+        LV_LOG_USER("Last step");
+        if (tankPercentage < 100) {
+            LV_LOG_USER("Last step DRAINING");
+            lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
+            lv_label_set_text(checkup->checkupStepKindValue, checkupDraining_text);
+            tankTimeElapsed++;
+        } else {
+            LV_LOG_USER("Last step DRAINING COMPLETE");
+            lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
+            lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
+            lv_obj_clear_state(checkup->checkupCloseButton, LV_STATE_DISABLED);
+            lv_timer_delete(checkup->pumpTimer);
+        }
+    } else {
+        LV_LOG_USER("Intermediate step");
+        if (checkup->isFilling) {
+            if (tankPercentage < 100) {
+                LV_LOG_USER("Middle step FILLING");
+                lv_arc_set_value(checkup->pumpArc, tankPercentage);
+                lv_label_set_text(checkup->checkupStepKindValue, checkupFilling_text);
+                tankTimeElapsed++;
+            } else {
+                LV_LOG_USER("Middle step FILLING COMPLETE");
+                lv_arc_set_value(checkup->pumpArc, tankPercentage);
+                lv_label_set_text(checkup->checkupStepKindValue, checkupProcessing_text);
+
+                tankPercentage = 0;
+                tankTimeElapsed = 0;
+                checkup->isFilling = false;
+                lv_timer_pause(checkup->pumpTimer);
+                lv_timer_resume(checkup->processTimer);
+            }
+        } else {
+            if (tankPercentage < 100) {
+                LV_LOG_USER("Middle step DRAINING");
+                lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
+                lv_label_set_text(checkup->checkupStepKindValue, checkupDraining_text);
+                tankTimeElapsed++;
+            } else {
+                LV_LOG_USER("Middle step DRAINING COMPLETE");
+                lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
+                lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
+
+                tankPercentage = 0;
+                tankTimeElapsed = 0;
+                checkup->isFilling = true;
+            }
+        }
+    }
+}
+
+void handleStopNow(sCheckup* checkup) {
+    if (!checkup->isFilling && tankPercentage == 0) {
+        tankPercentage = 100;
+        tankTimeElapsed = tankFillTime;
+        checkup->isFilling = true;
+    }
+    if (tankPercentage > 0) {
+        LV_LOG_USER("STOP NOW DRAINING");
+        lv_arc_set_value(checkup->pumpArc, tankPercentage);
+        lv_label_set_text(checkup->checkupStepKindValue, checkupDraining_text);
+        tankTimeElapsed--;
+    } else {
+        LV_LOG_USER("STOP NOW DRAINING COMPLETE");
+        lv_arc_set_value(checkup->pumpArc, tankPercentage);
+        lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
+        lv_obj_clear_state(checkup->checkupCloseButton, LV_STATE_DISABLED);
+        lv_timer_delete(checkup->pumpTimer);
+    }
+}
+
+void handleStopAfter(sCheckup* checkup) {
+    if (checkup->isFilling) {
+        if (tankPercentage < 100) {
+            LV_LOG_USER("STOP AFTER step FILLING");
+            lv_arc_set_value(checkup->pumpArc, tankPercentage);
+            lv_label_set_text(checkup->checkupStepKindValue, checkupFilling_text);
+            tankTimeElapsed++;
+        } else {
+            LV_LOG_USER("STOP AFTER step FILLING COMPLETE");
+            lv_arc_set_value(checkup->pumpArc, tankPercentage);
+            lv_label_set_text(checkup->checkupStepKindValue, checkupProcessing_text);
+
+            tankPercentage = 0;
+            tankTimeElapsed = 0;
+            checkup->isFilling = false;
+            lv_timer_pause(checkup->pumpTimer);
+            lv_timer_resume(checkup->processTimer);
+        }
+    } else {
+        if (tankPercentage < 100) {
+            LV_LOG_USER("STOP AFTER step DRAINING");
+            lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
+            lv_label_set_text(checkup->checkupStepKindValue, checkupDraining_text);
+            tankTimeElapsed++;
+        } else {
+            LV_LOG_USER("STOP AFTER step DRAINING COMPLETE");
+            lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
+            lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
+            lv_obj_clear_state(checkup->checkupCloseButton, LV_STATE_DISABLED);
+            lv_timer_delete(checkup->pumpTimer);
+        }
+    }
+}
+
+void handleStopNowAfterStopAfter(sCheckup* checkup) {
+    if (!checkup->isFilling && tankPercentage == 0) {
+        tankPercentage = 100;
+        tankTimeElapsed = tankFillTime;
+        checkup->isFilling = true;
+    }
+    if (tankPercentage > 0) {
+        LV_LOG_USER("STOP NOW after STOP AFTER step NOW DRAINING");
+        lv_arc_set_value(checkup->pumpArc, tankPercentage);
+        lv_label_set_text(checkup->checkupStepKindValue, checkupDraining_text);
+        tankTimeElapsed--;
+    } else {
+        LV_LOG_USER("STOP NOW after STOP AFTER DRAINING COMPLETE");
+        lv_arc_set_value(checkup->pumpArc, tankPercentage);
+        lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
+        lv_obj_clear_state(checkup->checkupCloseButton, LV_STATE_DISABLED);
+        lv_timer_delete(checkup->pumpTimer);
+    }
+}
+
+//Optimized BY CHATGPT
+void pumpTimer(lv_timer_t *timer) {
+    tankPercentage = calculatePercentage(0, tankTimeElapsed, 0, tankFillTime);
+    LV_LOG_USER("pumpTimer running :%d", tankPercentage);
+
+    sCheckup *checkup = gui.tempProcessNode->process.processDetails->checkup;
+
+    if (!checkup->stopAfter) {
+        if (!checkup->stopNow) {
+            if (gui.tempStepNode) {
+                if (!gui.tempStepNode->prev) {
+                    handleFirstStep(checkup);
+                } else {
+                    handleIntermediateOrLastStep(checkup, false);
+                }
+            } else {
+                handleIntermediateOrLastStep(checkup, true);
+            }
+        } else {
+            handleStopNow(checkup);
+        }
+    } else {
+        if (!checkup->stopNow) {
+            handleStopAfter(checkup);
+        } else {
+            handleStopNowAfterStopAfter(checkup);
+        }
+    }
+}
+
+
+
 
 
 
