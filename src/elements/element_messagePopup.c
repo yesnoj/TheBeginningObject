@@ -90,17 +90,16 @@ void event_messagePopup(lv_event_t *e)
                 lv_msgbox_close(mboxCont);
                 //lv_obj_delete(mboxCont);
                 gui.element.messagePopup.mBoxPopupParent = NULL;
-                
+                gui.tempProcessNode->process.processDetails->checkup->stopNow = true;
                 if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == false){
                     lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->processTimer);
                     lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);  
                     lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);  
-                    lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED); 
-                    lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN); 
+                    //lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED); 
                   }
                 if(gui.tempProcessNode->process.processDetails->checkup->stopAfter == true){
                     lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);  
-                    lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);                   
+                    //lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);                   
                   }
 
                   lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupProcessCompleteLabel, checkupProcessStopped_text);
@@ -109,8 +108,10 @@ void event_messagePopup(lv_event_t *e)
                   lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupStepTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
                   lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
 
-                   gui.page.tools.machineStats.stopped++;
-                   qSysAction( SAVE_MACHINE_STATS );
+                  gui.page.tools.machineStats.stopped++;
+
+                  lv_timer_resume(gui.tempProcessNode->process.processDetails->checkup->pumpTimer);
+                  qSysAction( SAVE_MACHINE_STATS );
             }
             if (gui.element.messagePopup.whoCallMe == gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton)
             {

@@ -476,6 +476,7 @@ typedef struct sCheckup{
 	uint8_t 			processStep;//0 or 1 or 2 or 3 or 4
 	uint32_t			activeVolume_index;
 	uint8_t 			tankSize;
+  bool    			stopNow;
 	bool    			stopAfter;
   bool          isFilling;
 	uint8_t 			stepFillWaterStatus;
@@ -1178,7 +1179,12 @@ static const char* processTempControlList[3] = {"Off", "Run", "Susp."};
 #define maxNumberEntryProcessPopupBody_text			   		"Max number of PROCESS already reached!"
 #define maxNumberEntryStepsPopupBody_text			   		"Max number of STEP already reached!"
 
-static const char *currentStep[3] = {"Filling", "Draining", "Processing"};
+
+#define checkupFilling_text          "Filling"
+#define checkupDraining_text         "Draining"
+#define checkupProcessing_text       "Processing"
+#define checkupDrainingComplete_text "Complete"
+
 
 char rollerElementSelected [10];
 lv_obj_t * questionMark;
