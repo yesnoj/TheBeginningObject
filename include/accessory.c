@@ -1703,6 +1703,21 @@ struct processNode *deepCopyProcessNode(struct processNode *original) {
     return copy;
 }
 
+char *ftoa(char *a, float f, uint8_t precisione) {
+   if (precisione > 8) return NULL;
+   //
+   long p[]  = {0, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};
+   char *ret = a;
+   long interi   = (long)f;
+   long decimali = abs( (long)( (f - interi) * p[precisione] ) );
+   //
+   ltoa(interi, a, 10);
+   while (*a != '\0') a++;
+   *a = '.';
+   a++;
+   ltoa(decimali, a, 10);
+   return ret;
+}
 
 
 /*

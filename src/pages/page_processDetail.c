@@ -397,16 +397,13 @@ if(existingProcess != NULL) {
                           lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, celsius_text); 
                           lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->processTempUnitLabel, &lv_font_montserrat_20, 0);              
                           lv_obj_align(gui.tempProcessNode->process.processDetails->processTempUnitLabel, LV_ALIGN_LEFT_MID, 160, 0);
+
                           if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, celsius_text); 
-                              sprintf(formatted_string, "%d", gui.tempProcessNode->process.processDetails->tempTolerance);
-                              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(gui.tempProcessNode->process.processDetails->tempTolerance,gui.element.rollerPopup.tempToleranceOptions));
                           } else{
                               lv_label_set_text(gui.tempProcessNode->process.processDetails->processTempUnitLabel, fahrenheit_text);
-                              sprintf(formatted_string, "%d", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->tempTolerance));
-                              lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(gui.tempProcessNode->process.processDetails->tempTolerance,gui.element.rollerPopup.tempToleranceOptions));
                           }  
-
+                          lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, ftoa(tempBuffer, gui.tempProcessNode->process.processDetails->tempTolerance, 1));
 
                   gui.tempProcessNode->process.processDetails->processTotalTimeContainer = lv_obj_create(gui.tempProcessNode->process.processDetails->processInfoContainer);
                   lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->processTotalTimeContainer, LV_OBJ_FLAG_SCROLLABLE); 

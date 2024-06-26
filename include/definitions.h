@@ -442,6 +442,7 @@ typedef struct sCheckup{
 	lv_obj_t			*checkupProcessCompleteLabel;
 
 	lv_obj_t			*checkupTargetTempValue;
+  lv_obj_t		  *checkupTargetToleranceTempValue;
 	lv_obj_t			*checkupTargetWaterTempValue;
 	lv_obj_t			*checkupTargetChemistryTempValue;
 	lv_obj_t			*checkupStepSourceValue;
@@ -987,6 +988,7 @@ LV_IMG_DECLARE(splash_img);
 /*********************
 * Icon chars
 *********************/
+#define plusplus_icon2     "\xC2\xB1"   
 #define oldCamera_icon      "\xEF\x82\x83" //never used, to add into font.c file in case need to be used
 #define plusplus_icon       "\xEF\x84\x81" //never used, to add into font.c file in case need to be used
 #define film_icon           "\xEF\x80\x88" //never used, to add into font.c file in case need to be used
@@ -1225,6 +1227,7 @@ char tempBuffer [10];
 #define checkupYes_text 				"Yes"
 #define checkupNo_text 					"No"
 #define checkupChecking_text 			"Checking..."
+#define checkupTargetToleranceTemp_text "tolerance"
 #define checkupProcessComplete_text 			"Process\nCOMPLETE!"
 #define checkupProcessStopped_text 			"Process\nSTOPPED!"
 
@@ -1442,6 +1445,7 @@ int caseInsensitiveStrstr(const char *haystack, const char *needle);
 void filterAndDisplayProcesses( void );
 void removeFiltersAndDisplayAllProcesses( void );
 void emptyList(void *list, NodeType_t type);
+char *ftoa(char *a, float f, uint8_t precisione);
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);

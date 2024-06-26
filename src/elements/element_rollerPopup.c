@@ -5,6 +5,7 @@
 
 
 //ESSENTIAL INCLUDES
+#include <stdlib.h>
 #include <lvgl.h>
 #include "../../include/definitions.h"
 
@@ -91,19 +92,13 @@ void event_Roller(lv_event_t * e)
             if((lv_obj_t *)data == gui.tempProcessNode->process.processDetails->processToleranceTextArea){
              lv_style_reset(&gui.element.rollerPopup.style_mBoxRollerTitleLine);
 
-              if(isScrolled == 0){
-                  itoa(lv_roller_get_selected(gui.element.rollerPopup.roller), tempBuffer, 10);
-                  LV_LOG_USER("SET BUTTON from processToleranceTextArea value %d:",lv_roller_get_selected(gui.element.rollerPopup.roller));
-                  gui.tempProcessNode->process.processDetails->tempTolerance = lv_roller_get_selected(gui.element.rollerPopup.roller);
-                  lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea,tempBuffer);
-                  }
-                else{
-                    itoa(rollerSelected, tempBuffer, 10);
-                    LV_LOG_USER("SET BUTTON from processToleranceTextArea value %d:",rollerSelected);
-                    gui.tempProcessNode->process.processDetails->tempTolerance = rollerSelected;
-                    lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(rollerSelected,gui.element.rollerPopup.tempToleranceOptions));
-                    isScrolled = false;
-                    }
+              if(isScrolled == 1){
+                gui.tempProcessNode->process.processDetails->tempTolerance = atof(tempBuffer);
+                LV_LOG_USER("SET BUTTON from processToleranceTextArea value: %s, test: %.1f, test2: %.1f",tempBuffer,atof(tempBuffer),gui.tempProcessNode->process.processDetails->tempTolerance);
+                
+                lv_textarea_set_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, getRollerStringIndex(rollerSelected,gui.element.rollerPopup.tempToleranceOptions));
+                isScrolled = false;
+              }
 
               gui.tempProcessNode->process.processDetails->somethingChanged = true;
               lv_obj_send_event(gui.tempProcessNode->process.processDetails->processSaveButton, LV_EVENT_REFRESH, NULL);
@@ -181,10 +176,11 @@ void event_Roller(lv_event_t * e)
           lv_obj_clear_state(gui.element.rollerPopup.mBoxRollerButton, LV_STATE_DISABLED);
           //if we want to want the index of the selected element
           rollerSelected = lv_roller_get_selected(obj) ;
-          LV_LOG_USER("ROLLER value: %d", rollerSelected );
+          lv_roller_get_selected_str(obj, tempBuffer, sizeof(tempBuffer));
+
+          LV_LOG_USER("ROLLER index: %d, value: %s", rollerSelected ,tempBuffer);
 
           
-          lv_roller_get_selected_str(obj, tempBuffer, sizeof(tempBuffer));
           //if gui.element.rollerPopup.roller has strings to be read
           //lv_roller_get_selected_str(obj, rollerElementSelected, sizeof(rollerElementSelected));
           //LV_LOG_USER("ROLLER value: %s", rollerElementSelected);

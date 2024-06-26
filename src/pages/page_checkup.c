@@ -1117,25 +1117,31 @@ void checkup(processNode *processToCheckup)
                                 gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer = lv_obj_create(gui.tempProcessNode->process.processDetails->checkup->checkupStepContainer);
                                 lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer, LV_OBJ_FLAG_SCROLLABLE); 
                                 lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer, LV_ALIGN_TOP_MID, 0, 0);
-                                lv_obj_set_size(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer, 200, 80); 
+                                lv_obj_set_size(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer, 200, 90); 
                                 //lv_obj_set_style_border_color(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer, lv_palette_main(LV_PALETTE_GREEN), 0);
                                 lv_obj_set_style_border_opa(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer, LV_OPA_TRANSP, 0);
 
                                         gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempLabel = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer);         
                                         lv_label_set_text(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempLabel, checkupTargetTemp_text); 
                                         lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempLabel, &lv_font_montserrat_20, 0);              
-                                        lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempLabel, LV_ALIGN_CENTER, 0, -15);
+                                        lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempLabel, LV_ALIGN_CENTER, 0, -30);
 
                                         gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer);
 
                                         if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
-                                            lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%.1f°C", 30.0); 
+                                            lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%f°C", gui.tempProcessNode->process.processDetails->temp); 
                                         } else{
-                                               lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%.2f°F", 20.4); 
+                                               lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%f°F", gui.tempProcessNode->process.processDetails->temp); 
                                               }
 
                                         lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, &lv_font_montserrat_28, 0);              
-                                        lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, LV_ALIGN_CENTER, 0, 20);
+                                        lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, LV_ALIGN_CENTER, 0, 5);
+
+
+                                        gui.tempProcessNode->process.processDetails->checkup->checkupTargetToleranceTempValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer);         
+                                        lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetToleranceTempValue, "%s ~%.1f",checkupTargetToleranceTemp_text, gui.tempProcessNode->process.processDetails->tempTolerance);
+                                        lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTargetToleranceTempValue, &lv_font_montserrat_20, 0);              
+                                        lv_obj_align(gui.tempProcessNode->process.processDetails->checkup->checkupTargetToleranceTempValue, LV_ALIGN_CENTER, 0, 30);
 
 
                                 gui.tempProcessNode->process.processDetails->checkup->checkupTargetWaterTempContainer = lv_obj_create(gui.tempProcessNode->process.processDetails->checkup->checkupStepContainer);
