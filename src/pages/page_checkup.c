@@ -1129,9 +1129,9 @@ void checkup(processNode *processToCheckup)
                                         gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue = lv_label_create(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempContainer);
 
                                         if(gui.page.settings.settingsParams.tempUnit == CELSIUS_TEMP){
-                                            lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%f°C", gui.tempProcessNode->process.processDetails->temp); 
+                                            lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%d°C", gui.tempProcessNode->process.processDetails->temp); 
                                         } else{
-                                               lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%f°F", gui.tempProcessNode->process.processDetails->temp); 
+                                               lv_label_set_text_fmt(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, "%d°F", convertCelsiusoToFahrenheit(gui.tempProcessNode->process.processDetails->temp)); 
                                               }
 
                                         lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->checkup->checkupTargetTempValue, &lv_font_montserrat_28, 0);              
