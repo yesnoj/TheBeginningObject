@@ -30,7 +30,8 @@ settingsParams = {
     "randomSetpoint": random.randint(0, 100),
     "isPersistentAlarm": random.randint(0, 1),
     "isProcessAutostart": random.randint(0, 1),
-    "drainFillOverlapSetpoint": random.randint(0, 100)
+    "drainFillOverlapSetpoint": random.randint(0, 100),
+    "multiRinseTime": random.randrange(60, 181, 30)
 }
 
 # Function to generate random strings for process and step names
@@ -89,6 +90,7 @@ def write_settings(file, settings):
     file.write(struct.pack('<B', settings["isPersistentAlarm"]))
     file.write(struct.pack('<B', settings["isProcessAutostart"]))
     file.write(struct.pack('<B', settings["drainFillOverlapSetpoint"]))
+    file.write(struct.pack('<B', settings["multiRinseTime"]))
 
 def write_process(file, process):
     file.write(process["processNameString"].encode('ASCII').ljust(21, b'\x00'))  #updated type to ASCII as UTF-8 can generate characters with more than 1 byte! Crash for us!

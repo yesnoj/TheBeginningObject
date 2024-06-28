@@ -1,9 +1,3 @@
-#include "misc/lv_event.h"
-#include "misc/lv_palette.h"
-#include <sys/_stdint.h>
-#include "core/lv_obj_pos.h"
-
-
 /**
  * @file element_step.c
  *

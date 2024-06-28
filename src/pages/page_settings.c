@@ -68,7 +68,7 @@ void event_settings_handler(lv_event_t * e)
 
     /*Do nothing if the container was clicked*/
 
-    if(act_cb == cont && cont != gui.page.settings.waterInletSwitch && cont != gui.page.settings.tempSensorTuneButton && cont != gui.page.settings.filmRotationSpeedSlider && cont != gui.page.settings.filmRotationInversionIntervalSlider && cont != gui.page.settings.filmRandomlSlider && cont != gui.page.settings.persistentAlarmSwitch && cont != gui.page.settings.autostartSwitch && cont != gui.page.settings.drainFillTimeSlider) 
+    if(act_cb == cont && cont != gui.page.settings.waterInletSwitch && cont != gui.page.settings.tempSensorTuneButton && cont != gui.page.settings.filmRotationSpeedSlider && cont != gui.page.settings.filmRotationInversionIntervalSlider && cont != gui.page.settings.filmRandomlSlider && cont != gui.page.settings.persistentAlarmSwitch && cont != gui.page.settings.autostartSwitch && cont != gui.page.settings.drainFillTimeSlider && cont != gui.page.settings.multiRinseTimeSlider) 
     //if(act_cb == cont) 
       return;
 
@@ -162,7 +162,32 @@ void event_settings_handler(lv_event_t * e)
           }
       if(code == LV_EVENT_RELEASED){
           qSysAction( SAVE_PROCESS_CONFIG );
-        }    }
+        }    
+    }
+
+    if(act_cb == gui.page.settings.multiRinseTimeSlider) {
+        if(code == LV_EVENT_RELEASED) {
+            uint8_t current_value = gui.page.settings.settingsParams.multiRinseTime;
+            uint8_t new_value = lv_slider_get_value(act_cb);
+
+            if(new_value > current_value) {
+                new_value = current_value + 30;
+            } else if(new_value < current_value) {
+                new_value = current_value - 30;
+            }
+
+            // Ensure new_value is within valid bounds (assuming 60 to 180 as mentioned)
+            if(new_value < 60) new_value = 60;
+            if(new_value > 180) new_value = 180;
+
+            lv_slider_set_value(act_cb, new_value, LV_ANIM_OFF);  // Update the slider value to the nearest 30
+            lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%ds", new_value);
+            LV_LOG_USER("Multi rinse cycle time (s): %d", new_value);
+            gui.page.settings.settingsParams.multiRinseTime = new_value;
+            qSysAction(SAVE_PROCESS_CONFIG);
+        }
+    }
+    
 }
 
 //TO TEST
@@ -470,6 +495,37 @@ void initSettings(void){
         lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_RELEASED, gui.page.settings.drainFillTimeValueLabel);
         lv_label_set_text_fmt(gui.page.settings.drainFillTimeValueLabel, "%d%%", gui.page.settings.settingsParams.drainFillOverlapSetpoint);
 
+
+gui.page.settings.multiRinseTimeContainer = lv_obj_create(gui.page.settings.settingsContainer);
+  lv_obj_align(gui.page.settings.multiRinseTimeContainer, LV_ALIGN_TOP_LEFT, -15, 561);                         
+  lv_obj_set_size(gui.page.settings.multiRinseTimeContainer, 330, 70); 
+  lv_obj_remove_flag(gui.page.settings.multiRinseTimeContainer, LV_OBJ_FLAG_SCROLLABLE);    
+  //lv_obj_set_style_border_color(gui.page.settings.drainFillTimeContainer, lv_color_hex(LV_PALETTE_GREEN), 0);
+  lv_obj_set_style_border_opa(gui.page.settings.multiRinseTimeContainer, LV_OPA_TRANSP, 0);
+ // lv_obj_add_flag(gui.page.settings.multiRinseTimeContainer, LV_OBJ_FLAG_PRESS_LOCK);
+ // lv_obj_add_flag(gui.page.settings.multiRinseTimeContainer, LV_OBJ_FLAG_CLICKABLE);
+
+        gui.page.settings.multiRinseTimeLabel = lv_label_create(gui.page.settings.multiRinseTimeContainer);         
+        lv_label_set_text(gui.page.settings.multiRinseTimeLabel, multiRinseTime_text); 
+        lv_obj_set_style_text_font(gui.page.settings.multiRinseTimeLabel, &lv_font_montserrat_20, 0);              
+        lv_obj_align(gui.page.settings.multiRinseTimeLabel, LV_ALIGN_TOP_LEFT, -5, -10);
+   
+        gui.page.settings.multiRinseTimeSlider = lv_slider_create(gui.page.settings.multiRinseTimeContainer);
+        lv_obj_align(gui.page.settings.multiRinseTimeSlider, LV_ALIGN_TOP_LEFT, 0, 23);
+        lv_obj_set_style_anim_duration(gui.page.settings.multiRinseTimeSlider, 2000, 0);
+        lv_obj_set_style_bg_color(gui.page.settings.multiRinseTimeSlider,lv_color_hex(ORANGE) , LV_PART_KNOB);
+        lv_obj_set_style_bg_color(gui.page.settings.multiRinseTimeSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
+        lv_obj_set_style_bg_color(gui.page.settings.multiRinseTimeSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
+        lv_slider_set_value(gui.page.settings.multiRinseTimeSlider, gui.page.settings.settingsParams.multiRinseTime, LV_ANIM_OFF);
+        lv_slider_set_range(gui.page.settings.multiRinseTimeSlider, 60, 180);
+        //lv_obj_add_flag(gui.page.settings.multiRinseTimeSlider, LV_OBJ_FLAG_PRESS_LOCK);
+
+        gui.page.settings.multiRinseTimeValueLabel = lv_label_create(gui.page.settings.multiRinseTimeContainer);
+        lv_obj_set_style_text_font(gui.page.settings.multiRinseTimeValueLabel, &lv_font_montserrat_22, 0);              
+        lv_obj_align(gui.page.settings.multiRinseTimeValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
+        lv_obj_add_event_cb(gui.page.settings.multiRinseTimeSlider, event_settings_handler, LV_EVENT_RELEASED, gui.page.settings.multiRinseTimeValueLabel);
+        lv_label_set_text_fmt(gui.page.settings.multiRinseTimeValueLabel, "%ds", gui.page.settings.settingsParams.multiRinseTime);
+      
 }
 
 void settings(void)

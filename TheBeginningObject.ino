@@ -116,13 +116,13 @@ void setup()
 
     initSD_I2C_MCP23017();
     homePage();
-
+            
     /* Create System message queue */
     gui.sysActionQ = xQueueCreate( 16, sizeof( uint16_t ) );
     /* Create task to process external functions which will slow the GUI response */							
     xTaskCreatePinnedToCore( sysMan, "sysMan", 4096, NULL, 8,  NULL, 0 ); 
  
-    readConfigFile(SD, FILENAME_SAVE, false);
+    readConfigFile(SD, FILENAME_SAVE, true);
     readMachineStats(&gui.page.tools.machineStats);
 }
 

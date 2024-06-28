@@ -22,12 +22,16 @@
 #define RELAY_NUMBER    8
 
 #define WATER_RLY       0
+
 #define DEV_RLY         1
 #define STOP_RLY        2
 #define FIX_RLY         3
+
 #define WASTE_RLY       4
+
 #define PUMP_IN_RLY     5
 #define PUMP_OUT_RLY    6
+
 #define HEATER_RLY      7
 
 
@@ -112,7 +116,7 @@
 #include <Preferences.h> 
 
 extern Preferences preferences;
-Adafruit_MCP23X17 mcp;
+Adafruit_MCP23X17 mcp; 
 Adafruit_SHT31 sensorTempBath     = Adafruit_SHT31();
 Adafruit_SHT31 sensorTempChemical = Adafruit_SHT31();
 
@@ -276,6 +280,7 @@ struct __attribute__ ((packed)) machineSettings {
   bool 	              isPersistentAlarm;
   bool      	        isProcessAutostart;
   uint8_t 	        	drainFillOverlapSetpoint;
+  uint8_t 	        	multiRinseTime;
 };
 
 typedef struct machineStatistics {
@@ -480,6 +485,7 @@ typedef struct sCheckup{
   bool    			stopNow;
 	bool    			stopAfter;
   bool          isFilling;
+  bool          isAlreadyPumping;
 	uint8_t 			stepFillWaterStatus;
 	uint8_t 			stepReachTempStatus;
 	uint8_t 			stepCheckFilmStatus;
@@ -754,8 +760,10 @@ struct sSettings {
 	lv_obj_t 	        	*persistentAlarmLabel;
 	lv_obj_t 	        	*autostartLabel;
 	lv_obj_t 	        	*drainFillTimeLabel;
+  lv_obj_t 	        	*multiRinseTimeLabel;
 
 	lv_obj_t 	        	*drainFillTimeValueLabel;
+  lv_obj_t 	        	*multiRinseTimeValueLabel;
 	lv_obj_t 	        	*filmRotationInverseIntervalValueLabel;
 	lv_obj_t 	        	*filmRotationRandomValueLabel;
 	lv_obj_t 	        	*filmRotationSpeedValueLabel;
@@ -770,6 +778,7 @@ struct sSettings {
 	lv_obj_t 	        	*persistentAlarmContainer;
 	lv_obj_t 	        	*autostartContainer;
 	lv_obj_t 	        	*drainFillTimeContainer;
+  lv_obj_t 	        	*multiRinseTimeContainer;
 
 	lv_obj_t 	        	*autostartSwitch;
 	lv_obj_t 	        	*persistentAlarmSwitch;
@@ -779,6 +788,7 @@ struct sSettings {
 	lv_obj_t 	        	*filmRotationInversionIntervalSlider;
 	lv_obj_t 	        	*filmRandomlSlider;
 	lv_obj_t 	        	*drainFillTimeSlider;
+  lv_obj_t 	        	*multiRinseTimeSlider;
 
 	lv_obj_t	        	*tempSensorTuneButton;
 	lv_obj_t 	        	*tempUnitCelsiusRadioButton;
@@ -928,7 +938,7 @@ LV_IMG_DECLARE(splash_img);
 #define TAB_TOOLS     5
 
 #define FILENAME_SAVE         "/FilMachine.cfg"
-#define FILENAME_BACKUP       "/FilMachineBackup.cfg"
+#define FILENAME_BACKUP       "/FilMachine_Backup.cfg"
 
 #define MAX_STEP_ELEMENTS		  30//30//10
 #define MAX_PROC_ELEMENTS		  50//100//30
@@ -1078,7 +1088,7 @@ LV_IMG_DECLARE(splash_img);
 #define persistentAlarm_text 						 "Persistent alarms"
 #define autostart_text 								 "Process autostart"
 #define drainFillTime_text 							 "Drain/fill time overlap"
-
+#define multiRinseTime_text 							 "Multi rinse cycle time"
 
 /*********************
 * Tools tab strings/vars
@@ -1413,7 +1423,7 @@ uint32_t loadSDCardProcesses();
 char * generateRandomCharArray(int length);
 
 void initializeRelayPins();
-void sendValueToRelay(uint16_t pumpFrom, uint16_t pumpDir); 
+void sendValueToRelay(uint8_t *pumpFrom, uint8_t *pumpDir, bool activePump);
 void initializeMotorPins();
 void stopMotor(uint8_t pin1, uint8_t pin2);
 void runMotorFW(uint8_t pin1, uint8_t pin2);

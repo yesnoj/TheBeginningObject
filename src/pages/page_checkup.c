@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <sys/_stdint.h>
 
 /**
@@ -40,6 +41,7 @@ static uint8_t tankFillTime = 0;
 static uint8_t tankTimeElapsed = 0;
 static uint8_t tankPercentage = 0;
 
+static bool isPumping = false;
 
 void resetStuffBeforeNextProcess(){
     isProcessingStatus0created = 0;
@@ -369,14 +371,27 @@ LV_LOG_USER("pumpTimer running :%d", tankPercentage);
 
 
 void handleFirstStep(sCheckup* checkup) {
+    uint8_t pumpFrom = gui.tempStepNode->step.stepDetails->source;
+    uint8_t pumpDir = PUMP_IN_RLY;
+
     LV_LOG_USER("First Step");
     if (tankPercentage < 100) {
         LV_LOG_USER("First step FILLING");
+
+        if (checkup->isAlreadyPumping == false) {
+            sendValueToRelay(&pumpFrom, &pumpDir, true);
+            checkup->isAlreadyPumping = true;
+        }
+
         lv_arc_set_value(checkup->pumpArc, tankPercentage);
         lv_obj_remove_flag(checkup->checkupStepKindValue, LV_OBJ_FLAG_HIDDEN);
         tankTimeElapsed++;
     } else {
         LV_LOG_USER("First step FILLING COMPLETE");
+
+        sendValueToRelay(&pumpFrom, &pumpDir, false);
+        checkup->isAlreadyPumping = false;
+
         lv_arc_set_value(checkup->pumpArc, tankPercentage);
         lv_label_set_text(checkup->checkupStepKindValue, checkupProcessing_text);
 
@@ -393,11 +408,25 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
         LV_LOG_USER("Last step");
         if (tankPercentage < 100) {
             LV_LOG_USER("Last step DRAINING");
+
+            uint8_t pumpFrom = WASTE_RLY;
+            uint8_t pumpDir = PUMP_OUT_RLY;
+            if (checkup->isAlreadyPumping == false) {
+                sendValueToRelay(&pumpFrom, &pumpDir, true);
+                checkup->isAlreadyPumping = true;
+            }
+
             lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
             lv_label_set_text(checkup->checkupStepKindValue, checkupDraining_text);
             tankTimeElapsed++;
         } else {
             LV_LOG_USER("Last step DRAINING COMPLETE");
+
+            uint8_t pumpFrom = WASTE_RLY;
+            uint8_t pumpDir = PUMP_OUT_RLY;
+            sendValueToRelay(&pumpFrom, &pumpDir, false);
+            checkup->isAlreadyPumping = false;
+
             lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
             lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
             lv_obj_clear_state(checkup->checkupCloseButton, LV_STATE_DISABLED);
@@ -408,11 +437,25 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
         if (checkup->isFilling) {
             if (tankPercentage < 100) {
                 LV_LOG_USER("Middle step FILLING");
+
+                if (checkup->isAlreadyPumping == false) {
+                    uint8_t pumpFrom = gui.tempStepNode->step.stepDetails->source;
+                    uint8_t pumpDir = PUMP_IN_RLY;
+                    sendValueToRelay(&pumpFrom, &pumpDir, true);
+                    checkup->isAlreadyPumping = true;
+                }
+
                 lv_arc_set_value(checkup->pumpArc, tankPercentage);
                 lv_label_set_text(checkup->checkupStepKindValue, checkupFilling_text);
                 tankTimeElapsed++;
             } else {
                 LV_LOG_USER("Middle step FILLING COMPLETE");
+
+                uint8_t pumpFrom = gui.tempStepNode->step.stepDetails->source;
+                uint8_t pumpDir = PUMP_IN_RLY;
+                sendValueToRelay(&pumpFrom, &pumpDir, false);
+                checkup->isAlreadyPumping = false;
+
                 lv_arc_set_value(checkup->pumpArc, tankPercentage);
                 lv_label_set_text(checkup->checkupStepKindValue, checkupProcessing_text);
 
@@ -425,11 +468,25 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
         } else {
             if (tankPercentage < 100) {
                 LV_LOG_USER("Middle step DRAINING");
+
+                uint8_t pumpFrom = WASTE_RLY;
+                uint8_t pumpDir = PUMP_OUT_RLY;
+                if (checkup->isAlreadyPumping == false) {
+                    sendValueToRelay(&pumpFrom, &pumpDir, true);
+                    checkup->isAlreadyPumping = true;
+                }
+
                 lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
                 lv_label_set_text(checkup->checkupStepKindValue, checkupDraining_text);
                 tankTimeElapsed++;
             } else {
                 LV_LOG_USER("Middle step DRAINING COMPLETE");
+
+                uint8_t pumpFrom = WASTE_RLY;
+                uint8_t pumpDir = PUMP_OUT_RLY;
+                sendValueToRelay(&pumpFrom, &pumpDir, false);
+                checkup->isAlreadyPumping = false;
+
                 lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
                 lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
 
@@ -442,18 +499,38 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
 }
 
 void handleStopNow(sCheckup* checkup) {
+    uint8_t pumpFrom = WASTE_RLY;
+    uint8_t pumpDir = PUMP_OUT_RLY;
+
     if (!checkup->isFilling && tankPercentage == 0) {
         tankPercentage = 100;
         tankTimeElapsed = tankFillTime;
         checkup->isFilling = true;
+
+        sendValueToRelay(NULL, NULL, false);
+        sendValueToRelay(&pumpFrom, &pumpDir, true);
+        checkup->isAlreadyPumping = false;
     }
     if (tankPercentage > 0) {
         LV_LOG_USER("STOP NOW DRAINING");
+
+        
+        if(checkup->isAlreadyPumping == true){
+            sendValueToRelay(NULL, NULL, false);
+            sendValueToRelay(&pumpFrom, &pumpDir, true);
+            checkup->isAlreadyPumping = false;
+        }
+      
+
         lv_arc_set_value(checkup->pumpArc, tankPercentage);
         lv_label_set_text(checkup->checkupStepKindValue, checkupDraining_text);
         tankTimeElapsed--;
     } else {
         LV_LOG_USER("STOP NOW DRAINING COMPLETE");
+
+       sendValueToRelay(&pumpFrom, &pumpDir, false);
+       checkup->isAlreadyPumping = false;
+
         lv_arc_set_value(checkup->pumpArc, tankPercentage);
         lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
         lv_obj_clear_state(checkup->checkupCloseButton, LV_STATE_DISABLED);
@@ -465,11 +542,26 @@ void handleStopAfter(sCheckup* checkup) {
     if (checkup->isFilling) {
         if (tankPercentage < 100) {
             LV_LOG_USER("STOP AFTER step FILLING");
+
+        uint8_t pumpFrom = gui.tempStepNode->step.stepDetails->source;
+        uint8_t pumpDir = PUMP_IN_RLY;
+        if (checkup->isAlreadyPumping == false) {
+            sendValueToRelay(&pumpFrom, &pumpDir, true);
+            checkup->isAlreadyPumping = true;
+        }
+
+
             lv_arc_set_value(checkup->pumpArc, tankPercentage);
             lv_label_set_text(checkup->checkupStepKindValue, checkupFilling_text);
             tankTimeElapsed++;
         } else {
             LV_LOG_USER("STOP AFTER step FILLING COMPLETE");
+
+            uint8_t pumpFrom = gui.tempStepNode->step.stepDetails->source;
+            uint8_t pumpDir = PUMP_IN_RLY;
+            sendValueToRelay(&pumpFrom, &pumpDir, false);
+            checkup->isAlreadyPumping = false;
+
             lv_arc_set_value(checkup->pumpArc, tankPercentage);
             lv_label_set_text(checkup->checkupStepKindValue, checkupProcessing_text);
 
@@ -482,11 +574,25 @@ void handleStopAfter(sCheckup* checkup) {
     } else {
         if (tankPercentage < 100) {
             LV_LOG_USER("STOP AFTER step DRAINING");
+
+            uint8_t pumpFrom = WASTE_RLY;
+            uint8_t pumpDir = PUMP_OUT_RLY;
+            if (checkup->isAlreadyPumping == false) {
+                sendValueToRelay(&pumpFrom, &pumpDir, true);
+                checkup->isAlreadyPumping = true;
+            }
+
             lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
             lv_label_set_text(checkup->checkupStepKindValue, checkupDraining_text);
             tankTimeElapsed++;
         } else {
             LV_LOG_USER("STOP AFTER step DRAINING COMPLETE");
+
+            uint8_t pumpFrom = WASTE_RLY;
+            uint8_t pumpDir = PUMP_OUT_RLY;
+            sendValueToRelay(&pumpFrom, &pumpDir, false);
+            checkup->isAlreadyPumping = false;
+
             lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
             lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
             lv_obj_clear_state(checkup->checkupCloseButton, LV_STATE_DISABLED);
@@ -496,18 +602,38 @@ void handleStopAfter(sCheckup* checkup) {
 }
 
 void handleStopNowAfterStopAfter(sCheckup* checkup) {
+    uint8_t pumpFrom = WASTE_RLY;
+    uint8_t pumpDir = PUMP_OUT_RLY;
+
     if (!checkup->isFilling && tankPercentage == 0) {
         tankPercentage = 100;
         tankTimeElapsed = tankFillTime;
         checkup->isFilling = true;
+
+        sendValueToRelay(NULL, NULL, false);
+        sendValueToRelay(&pumpFrom, &pumpDir, true);
+        checkup->isAlreadyPumping = false;
     }
     if (tankPercentage > 0) {
         LV_LOG_USER("STOP NOW after STOP AFTER step NOW DRAINING");
+
+        if(checkup->isAlreadyPumping == true){
+            sendValueToRelay(NULL, NULL, false);
+            sendValueToRelay(&pumpFrom, &pumpDir, true);
+            checkup->isAlreadyPumping = false;
+        }
+
         lv_arc_set_value(checkup->pumpArc, tankPercentage);
         lv_label_set_text(checkup->checkupStepKindValue, checkupDraining_text);
         tankTimeElapsed--;
     } else {
         LV_LOG_USER("STOP NOW after STOP AFTER DRAINING COMPLETE");
+
+        uint8_t pumpFrom = WASTE_RLY;
+        uint8_t pumpDir = PUMP_OUT_RLY;
+        sendValueToRelay(&pumpFrom, &pumpDir, false);
+        checkup->isAlreadyPumping = false;
+
         lv_arc_set_value(checkup->pumpArc, tankPercentage);
         lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
         lv_obj_clear_state(checkup->checkupCloseButton, LV_STATE_DISABLED);
@@ -772,6 +898,7 @@ void checkup(processNode *processToCheckup)
     gui.tempProcessNode->process.processDetails->checkup->activeVolume_index  = 0;
     gui.tempProcessNode->process.processDetails->checkup->stopAfter  = false;
     gui.tempProcessNode->process.processDetails->checkup->stopNow    = false;
+    gui.tempProcessNode->process.processDetails->checkup->isAlreadyPumping    = false;
 
     LV_LOG_USER("isProcessing %d", gui.tempProcessNode->process.processDetails->checkup->isProcessing);
     if(gui.tempProcessNode->process.processDetails->checkup->isProcessing == 0)

@@ -1,7 +1,6 @@
+#include <ctype.h>
 #include <sys/_stdint.h>
-#include "core/lv_obj.h"
-#include "misc/lv_event.h"
-#include "lv_api_map_v8.h"
+#include <stdbool.h>
 /**
  * @file accessory.c
  *
@@ -731,15 +730,15 @@ void initSD_I2C_MCP23017() {
     initErrors = INIT_ERROR_WIRE;
     LV_LOG_USER("Unknown error at address 0x%x ERROR:   TOUCH", I2C_ADR);
   }
-#if 0
+#if 1
   if (!mcp.begin_I2C()) {
     LV_LOG_USER("MCP23017 init ERROR!");
     initErrors = INIT_ERROR_I2C;
   } else {
       LV_LOG_USER("MCP23017 init OK!");
       initializeRelayPins();
-      initializeMotorPins();
-      initializeTemperatureSensor();
+      //initializeMotorPins();
+      //initializeTemperatureSensor();
   }
 #endif
   if (initErrors) {
@@ -785,6 +784,8 @@ void readConfigFile(fs::FS &fs, const char *path, bool enableLog) {
 //        LV_LOG_USER("size:%d",sizeof(gui.page.settings.settingsParams.isProcessAutostart));
         LV_LOG_USER("drainFillOverlapSetpoint:%d",gui.page.settings.settingsParams.drainFillOverlapSetpoint);
 //        LV_LOG_USER("size:%d",sizeof(gui.page.settings.settingsParams.drainFillOverlapSetpoint));
+        LV_LOG_USER("multiRinseTime:%d",gui.page.settings.settingsParams.multiRinseTime);
+//        LV_LOG_USER("size:%d",sizeof(gui.page.settings.settingsParams.multiRinseTime));
     }   
 
     // Load Processes
@@ -1140,23 +1141,26 @@ void initializeRelayPins(){
   }
 
 
-void sendValueToRelay(uint16_t pumpFrom, uint16_t pumpDir){
-  
-  uint16_t relayPump[] = {pumpFrom,pumpDir};
-
-  //SET TO ON SELECTED RELAYS
-  if(pumpFrom > 0 && pumpDir > 0)  {
-      for (uint8_t j = 0; j < 2; j++){
-          mcp.digitalWrite(relayPump[j], HIGH);
-          LV_LOG_USER("Relay %d on : %d",relayPump[j],mcp.digitalRead(relayPump[j]));
-          }
+void sendValueToRelay(uint8_t *pumpFrom, uint8_t *pumpDir, bool activePump) {
+    if (activePump) { // SET TO ON SELECTED RELAYS
+        mcp.digitalWrite(*pumpFrom, HIGH);
+        LV_LOG_USER("From %d on : %d", *pumpFrom, mcp.digitalRead(*pumpFrom));
+        mcp.digitalWrite(*pumpDir, HIGH);
+        LV_LOG_USER("Direction %d on : %d", *pumpDir, mcp.digitalRead(*pumpDir));
+        gui.tempProcessNode->process.processDetails->checkup->isAlreadyPumping = true;
+    } else { // SET TO OFF ALL THE RELAY
+        if (pumpFrom != NULL && pumpDir != NULL) {
+            mcp.digitalWrite(*pumpFrom, LOW);
+            LV_LOG_USER("From %d off : %d", *pumpFrom, mcp.digitalRead(*pumpFrom));
+            mcp.digitalWrite(*pumpDir, LOW);
+            LV_LOG_USER("Direction %d off : %d", *pumpDir, mcp.digitalRead(*pumpDir));
+        } else {
+            for (uint8_t i = 0; i < RELAY_NUMBER; i++) {
+                mcp.digitalWrite(developingRelays[i], LOW);
+                LV_LOG_USER("Relay %d off : %d", developingRelays[i], mcp.digitalRead(developingRelays[i]));
+            }
+        }
     }
-  else {//SET TO OFF ALL THE RELAY
-    for (uint8_t i = 0; i < RELAY_NUMBER; i++) {
-          mcp.digitalWrite(developingRelays[i] , LOW);
-          LV_LOG_USER("Relay %d off : %d",developingRelays[i],mcp.digitalRead(developingRelays[i]));
-    }
-  }
 }
 
 
