@@ -103,7 +103,8 @@ void event_messagePopup(lv_event_t *e)
                 lv_obj_add_flag(gui.tempProcessNode->process.processDetails->checkup->checkupProcessTimeLeftValue, LV_OBJ_FLAG_HIDDEN);
 
                 gui.page.tools.machineStats.stopped++;
-                lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->processTimer);
+                if(gui.tempProcessNode->process.processDetails->checkup->processTimer != NULL)
+                  lv_timer_delete(gui.tempProcessNode->process.processDetails->checkup->processTimer);
                 lv_timer_resume(gui.tempProcessNode->process.processDetails->checkup->pumpTimer);
                 qSysAction( SAVE_MACHINE_STATS );
             }
