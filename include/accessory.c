@@ -1723,6 +1723,21 @@ char *ftoa(char *a, float f, uint8_t precisione) {
    return ret;
 }
 
+uint8_t getValueForChemicalSource(chemicalSource_t source) {
+    switch (source) {
+        case C1:
+            return C1_RLY;
+        case C2:
+            return C2_RLY;
+        case C3:
+            return C3_RLY;
+        case WB:
+            return WASTE_RLY; // if is water, the drain is always on waste
+        default:
+            return 255;
+    }
+}
+
 
 /*
 void filterAndDisplayProcesses(void) {

@@ -21,18 +21,20 @@
 //Digital input for relays
 #define RELAY_NUMBER    8
 
-#define WATER_RLY       0
 
-#define DEV_RLY         1
-#define STOP_RLY        2
-#define FIX_RLY         3
+#define C1_RLY         1
+#define C2_RLY         2
+#define C3_RLY         3
+#define WB_RLY         4
 
-#define WASTE_RLY       4
+#define WASTE_RLY      5
 
-#define PUMP_IN_RLY     5
-#define PUMP_OUT_RLY    6
+#define PUMP_IN_RLY    6
+#define PUMP_OUT_RLY   7
 
-#define HEATER_RLY      7
+#define HEATER_RLY     0 //Be aware of this definition, this can be confused with NULL that is also "0"
+
+
 
 
 //MOTORS PIN
@@ -1278,7 +1280,9 @@ extern uint8_t initErrors;
 char formatted_string[20];
 
 //RELAY STUFF
-static const uint16_t developingRelays[RELAY_NUMBER] = {WATER_RLY,DEV_RLY,STOP_RLY,FIX_RLY,WASTE_RLY,PUMP_IN_RLY,PUMP_OUT_RLY,HEATER_RLY};
+
+
+static const uint16_t developingRelays[RELAY_NUMBER] = {WB_RLY,C1_RLY,C2_RLY,C3_RLY,WASTE_RLY,PUMP_IN_RLY,PUMP_OUT_RLY,HEATER_RLY};
 
 //MOTOR STUFF
 static const bool rotationFW = true;
@@ -1456,6 +1460,8 @@ void filterAndDisplayProcesses( void );
 void removeFiltersAndDisplayAllProcesses( void );
 void emptyList(void *list, NodeType_t type);
 char *ftoa(char *a, float f, uint8_t precisione);
+uint8_t getValueForChemicalSource(chemicalSource_t source);
+
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);

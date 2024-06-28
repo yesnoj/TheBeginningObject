@@ -42,6 +42,8 @@ static uint8_t tankTimeElapsed = 0;
 static uint8_t tankPercentage = 0;
 
 static bool isPumping = false;
+static uint8_t pumpFrom = 0;
+static uint8_t pumpDir = 0;
 
 void resetStuffBeforeNextProcess(){
     isProcessingStatus0created = 0;
@@ -371,8 +373,8 @@ LV_LOG_USER("pumpTimer running :%d", tankPercentage);
 
 
 void handleFirstStep(sCheckup* checkup) {
-    uint8_t pumpFrom = gui.tempStepNode->step.stepDetails->source;
-    uint8_t pumpDir = PUMP_IN_RLY;
+    pumpFrom = getValueForChemicalSource(gui.tempStepNode->step.stepDetails->source);
+    pumpDir = PUMP_IN_RLY;
 
     LV_LOG_USER("First Step");
     if (tankPercentage < 100) {
@@ -405,12 +407,12 @@ void handleFirstStep(sCheckup* checkup) {
 
 void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
     if (isLastStep) {
+        pumpFrom = getValueForChemicalSource(WB);//last step go into the waste
+        pumpDir = PUMP_OUT_RLY;
         LV_LOG_USER("Last step");
         if (tankPercentage < 100) {
             LV_LOG_USER("Last step DRAINING");
 
-            uint8_t pumpFrom = WASTE_RLY;
-            uint8_t pumpDir = PUMP_OUT_RLY;
             if (checkup->isAlreadyPumping == false) {
                 sendValueToRelay(&pumpFrom, &pumpDir, true);
                 checkup->isAlreadyPumping = true;
@@ -422,8 +424,6 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
         } else {
             LV_LOG_USER("Last step DRAINING COMPLETE");
 
-            uint8_t pumpFrom = WASTE_RLY;
-            uint8_t pumpDir = PUMP_OUT_RLY;
             sendValueToRelay(&pumpFrom, &pumpDir, false);
             checkup->isAlreadyPumping = false;
 
@@ -435,12 +435,13 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
     } else {
         LV_LOG_USER("Intermediate step");
         if (checkup->isFilling) {
+            pumpFrom = getValueForChemicalSource(gui.tempStepNode->step.stepDetails->source);
+            pumpDir = PUMP_IN_RLY;
             if (tankPercentage < 100) {
                 LV_LOG_USER("Middle step FILLING");
 
                 if (checkup->isAlreadyPumping == false) {
-                    uint8_t pumpFrom = gui.tempStepNode->step.stepDetails->source;
-                    uint8_t pumpDir = PUMP_IN_RLY;
+
                     sendValueToRelay(&pumpFrom, &pumpDir, true);
                     checkup->isAlreadyPumping = true;
                 }
@@ -451,8 +452,7 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
             } else {
                 LV_LOG_USER("Middle step FILLING COMPLETE");
 
-                uint8_t pumpFrom = gui.tempStepNode->step.stepDetails->source;
-                uint8_t pumpDir = PUMP_IN_RLY;
+
                 sendValueToRelay(&pumpFrom, &pumpDir, false);
                 checkup->isAlreadyPumping = false;
 
@@ -466,11 +466,11 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
                 lv_timer_resume(checkup->processTimer);
             }
         } else {
+            pumpFrom = (gui.tempStepNode->step.stepDetails->discardAfterProc == true) ? getValueForChemicalSource(WB) : getValueForChemicalSource(gui.tempStepNode->step.stepDetails->source);
+            pumpDir = PUMP_OUT_RLY;
             if (tankPercentage < 100) {
                 LV_LOG_USER("Middle step DRAINING");
 
-                uint8_t pumpFrom = WASTE_RLY;
-                uint8_t pumpDir = PUMP_OUT_RLY;
                 if (checkup->isAlreadyPumping == false) {
                     sendValueToRelay(&pumpFrom, &pumpDir, true);
                     checkup->isAlreadyPumping = true;
@@ -482,8 +482,6 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
             } else {
                 LV_LOG_USER("Middle step DRAINING COMPLETE");
 
-                uint8_t pumpFrom = WASTE_RLY;
-                uint8_t pumpDir = PUMP_OUT_RLY;
                 sendValueToRelay(&pumpFrom, &pumpDir, false);
                 checkup->isAlreadyPumping = false;
 
@@ -499,8 +497,8 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
 }
 
 void handleStopNow(sCheckup* checkup) {
-    uint8_t pumpFrom = WASTE_RLY;
-    uint8_t pumpDir = PUMP_OUT_RLY;
+    pumpFrom = getValueForChemicalSource(gui.tempStepNode->step.stepDetails->source);
+    pumpDir = PUMP_OUT_RLY;
 
     if (!checkup->isFilling && tankPercentage == 0) {
         tankPercentage = 100;
@@ -540,11 +538,11 @@ void handleStopNow(sCheckup* checkup) {
 
 void handleStopAfter(sCheckup* checkup) {
     if (checkup->isFilling) {
+        pumpFrom = getValueForChemicalSource(gui.tempStepNode->step.stepDetails->source);
+        pumpDir = PUMP_IN_RLY;
         if (tankPercentage < 100) {
             LV_LOG_USER("STOP AFTER step FILLING");
 
-        uint8_t pumpFrom = gui.tempStepNode->step.stepDetails->source;
-        uint8_t pumpDir = PUMP_IN_RLY;
         if (checkup->isAlreadyPumping == false) {
             sendValueToRelay(&pumpFrom, &pumpDir, true);
             checkup->isAlreadyPumping = true;
@@ -557,8 +555,7 @@ void handleStopAfter(sCheckup* checkup) {
         } else {
             LV_LOG_USER("STOP AFTER step FILLING COMPLETE");
 
-            uint8_t pumpFrom = gui.tempStepNode->step.stepDetails->source;
-            uint8_t pumpDir = PUMP_IN_RLY;
+
             sendValueToRelay(&pumpFrom, &pumpDir, false);
             checkup->isAlreadyPumping = false;
 
@@ -572,11 +569,12 @@ void handleStopAfter(sCheckup* checkup) {
             lv_timer_resume(checkup->processTimer);
         }
     } else {
+        pumpFrom = getValueForChemicalSource(gui.tempStepNode->step.stepDetails->source);
+        pumpDir = PUMP_OUT_RLY;
         if (tankPercentage < 100) {
             LV_LOG_USER("STOP AFTER step DRAINING");
 
-            uint8_t pumpFrom = WASTE_RLY;
-            uint8_t pumpDir = PUMP_OUT_RLY;
+
             if (checkup->isAlreadyPumping == false) {
                 sendValueToRelay(&pumpFrom, &pumpDir, true);
                 checkup->isAlreadyPumping = true;
@@ -588,8 +586,6 @@ void handleStopAfter(sCheckup* checkup) {
         } else {
             LV_LOG_USER("STOP AFTER step DRAINING COMPLETE");
 
-            uint8_t pumpFrom = WASTE_RLY;
-            uint8_t pumpDir = PUMP_OUT_RLY;
             sendValueToRelay(&pumpFrom, &pumpDir, false);
             checkup->isAlreadyPumping = false;
 
@@ -602,8 +598,8 @@ void handleStopAfter(sCheckup* checkup) {
 }
 
 void handleStopNowAfterStopAfter(sCheckup* checkup) {
-    uint8_t pumpFrom = WASTE_RLY;
-    uint8_t pumpDir = PUMP_OUT_RLY;
+    pumpFrom = getValueForChemicalSource(gui.tempStepNode->step.stepDetails->source);
+    pumpDir = PUMP_OUT_RLY;
 
     if (!checkup->isFilling && tankPercentage == 0) {
         tankPercentage = 100;
@@ -629,8 +625,6 @@ void handleStopNowAfterStopAfter(sCheckup* checkup) {
     } else {
         LV_LOG_USER("STOP NOW after STOP AFTER DRAINING COMPLETE");
 
-        uint8_t pumpFrom = WASTE_RLY;
-        uint8_t pumpDir = PUMP_OUT_RLY;
         sendValueToRelay(&pumpFrom, &pumpDir, false);
         checkup->isAlreadyPumping = false;
 
