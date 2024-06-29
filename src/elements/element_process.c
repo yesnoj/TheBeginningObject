@@ -442,13 +442,22 @@ void processElementCreate(processNode *newProcess, int32_t tempSize) {
         lv_obj_set_style_text_font(newProcess->process.processTime, &lv_font_montserrat_18, 0);              
         lv_obj_align(newProcess->process.processTime, LV_ALIGN_LEFT_MID, 87, 17);
 
-
         newProcess->process.processTypeIcon = lv_label_create(newProcess->process.processElementSummary);
         lv_label_set_text(newProcess->process.processTypeIcon, newProcess->process.processDetails->filmType == BLACK_AND_WHITE_FILM ? blackwhite_icon : colorpalette_icon);
         newProcess->process.processDetails->filmType = newProcess->process.processDetails->filmType;
         lv_obj_set_style_text_font(newProcess->process.processTypeIcon, &FilMachineFontIcons_30, 0);
         lv_obj_align(newProcess->process.processTypeIcon, LV_ALIGN_RIGHT_MID, 7, 0);
         
+
+        if(newProcess->process.processDetails->isTempControlled == false)
+          {
+            lv_obj_add_flag(newProcess->process.processTempIcon, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(newProcess->process.processTemp, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_align(newProcess->process.processTimeIcon, LV_ALIGN_LEFT_MID, -10, 17);
+            lv_obj_align(newProcess->process.processTime, LV_ALIGN_LEFT_MID, 12, 17);
+          }
+
+
         newProcess->process.preferredIcon = lv_label_create(newProcess->process.processElement);
         lv_label_set_text(newProcess->process.preferredIcon, preferred_icon);
         lv_obj_add_flag(newProcess->process.preferredIcon, LV_OBJ_FLAG_CLICKABLE);

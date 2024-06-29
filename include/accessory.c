@@ -1049,6 +1049,14 @@ void updateProcessElement(processNode *process){
       //Update temp
       lv_obj_send_event(existingProcess->process.processElement, LV_EVENT_REFRESH, NULL);
 
+      if(process->process.processDetails->isTempControlled == false)
+        {
+          lv_obj_add_flag(process->process.processTempIcon, LV_OBJ_FLAG_HIDDEN);
+          lv_obj_add_flag(process->process.processTemp, LV_OBJ_FLAG_HIDDEN);
+          lv_obj_align(process->process.processTimeIcon, LV_ALIGN_LEFT_MID, -10, 17);
+          lv_obj_align(process->process.processTime, LV_ALIGN_LEFT_MID, 7, 17);
+        }
+
  
       //Update preferred
       if(process->process.processDetails->isPreferred == 1){
@@ -1063,6 +1071,8 @@ void updateProcessElement(processNode *process){
 
       //Update film type
       lv_label_set_text(existingProcess->process.processTypeIcon, process->process.processDetails->filmType == BLACK_AND_WHITE_FILM ? blackwhite_icon : colorpalette_icon);
+
+
   } 
 }
 
