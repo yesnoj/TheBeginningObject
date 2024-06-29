@@ -122,7 +122,7 @@ void setup()
     /* Create task to process external functions which will slow the GUI response */							
     xTaskCreatePinnedToCore( sysMan, "sysMan", 4096, NULL, 8,  NULL, 0 ); 
  
-    readConfigFile(SD, FILENAME_SAVE, true);
+    readConfigFile(SD, FILENAME_SAVE, false);
     readMachineStats(&gui.page.tools.machineStats);
 }
 

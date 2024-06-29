@@ -663,6 +663,25 @@ struct sCleanPopup {
 	lv_obj_t	      		*cleanRunButtonLabel;
 
 	lv_obj_t	      		*cleanProcessContainer;
+	lv_obj_t	      		*cleanProcessArc;
+	lv_obj_t	      		*cleanContainerArc;
+
+    lv_timer_t              *processTimer;
+	lv_timer_t              *pumpTimer;
+
+	lv_obj_t	      		*cleanRemainingTimeValue;
+
+	lv_obj_t	      		*cleanNowCleaningLabel;
+	lv_obj_t	      		*cleanNowCleaningValue;
+
+	uint8_t 				cleanCycles;
+	bool                    cleanDrainWater;
+  bool                    containerToClean[3];
+  uint32_t					totalMins;
+  uint32_t					totalSecs;	
+
+	lv_obj_t	      		*cleanStopButton;
+	lv_obj_t	      		*cleanStopButtonLabel;
   /* Params objects */
 };
 
@@ -1213,11 +1232,17 @@ static const char* processTempControlList[3] = {"Off", "Run", "Susp."};
 * Clean Popup elements
 *********************/
 #define cleanPopupTitle_text    "Cleaning process setup"
+#define cleanCleanProcess_text    "Cleaning machine"
 #define cleanPopupSubTitle_text "Select containers to clean"
 #define cleanRoller_text        "Clean cycles"
 #define cleanDrainWater_text        "Drain water when finish"
 #define cleanCancelButton_text        "Cancel"
 #define cleanRunButton_text        "Run"
+#define cleanStopButton_text        "Stop"
+#define cleanCloseButton_text        "Close"
+#define cleanCurrentClean_text        "Cleaning"
+#define cleanCompleteClean_text        "COMPLETE"
+#define CONTAINER_FILLING_TIME 30
 
 /*********************
 * Popup elements
@@ -1314,6 +1339,8 @@ static const uint16_t tanksSizesAndTimes[2][3][2] = {
         {1000, 25}
     }
 };
+
+
 
 //lv_obj_t * checkupTankSizeTextArea;
 #define checkupTankSizePlaceHolder_text "Size"
@@ -1511,7 +1538,7 @@ void removeFiltersAndDisplayAllProcesses( void );
 void emptyList(void *list, NodeType_t type);
 char *ftoa(char *a, float f, uint8_t precisione);
 uint8_t getValueForChemicalSource(chemicalSource_t source);
-
+void getMinutesAndSeconds(uint8_t containerFillingTime, const bool containerToClean[3]);
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);

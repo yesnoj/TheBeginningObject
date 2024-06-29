@@ -1750,6 +1750,26 @@ uint8_t getValueForChemicalSource(chemicalSource_t source) {
 }
 
 
+void getMinutesAndSeconds(uint8_t containerFillingTime, const bool containerToClean[3]) {
+    // Moltiplica containerFillingTime per 2
+    uint32_t totalTime = (containerFillingTime * 2) * gui.element.cleanPopup.cleanCycles;
+
+    // Conta il numero di contenitori selezionati
+    uint8_t selectedContainersCount = 0;
+    for (uint8_t i = 0; i < 3; ++i) {
+        if (containerToClean[i]) {
+            selectedContainersCount++;
+        }
+    }
+
+    // Moltiplica il tempo totale per il numero di contenitori selezionati
+    totalTime *= selectedContainersCount;
+
+    // Calcola minuti e secondi
+    gui.element.cleanPopup.totalMins = totalTime / 60;
+    gui.element.cleanPopup.totalSecs = totalTime % 60;
+}
+
 /*
 void filterAndDisplayProcesses(void) {
     processNode *currentNode = gui.page.processes.processElementsList.start;
