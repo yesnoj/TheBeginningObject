@@ -623,6 +623,49 @@ struct sRollerPopup {
 	/* Params objects */
 };
 
+struct sCleanPopup {
+	/* LVGL objects */
+	lv_obj_t			      *cleanPopupParent;
+	lv_obj_t			      *cleanPopupTitleLine;
+	lv_style_t			    style_cleanTitleLine;
+	lv_point_precise_t	titleLinePoints[2];
+
+    
+	lv_obj_t	      		*cleanContainer;
+	lv_obj_t	      		*cleanTitle;
+	lv_obj_t	      		*cleanSubTitleLabel;
+
+	lv_obj_t	      		*cleanSettingsContainer;
+
+	lv_obj_t	      		*cleanChemicalTanksContainer;
+	lv_obj_t	      		*cleanSelectC1CheckBox;
+	lv_obj_t	      		*cleanSelectC2CheckBox;
+	lv_obj_t	      		*cleanSelectC3CheckBox;
+
+	lv_obj_t	      		*cleanC1CheckBoxLabel;
+	lv_obj_t	      		*cleanC2CheckBoxLabel;
+	lv_obj_t	      		*cleanC3CheckBoxLabel;
+
+	lv_obj_t	      		*cleanRepeatTimesLabel;
+	lv_obj_t	      		*cleanSpinBoxContainer;	
+	lv_obj_t	      		*cleanSpinBox;
+	lv_obj_t	      		*cleanSpinBoxPlusButton;
+	lv_obj_t	      		*cleanSpinBoxMinusButton;
+
+	lv_obj_t	      		*cleanDrainWaterLabelContainer;
+	lv_obj_t	      		*cleanDrainWaterLabel;
+	lv_obj_t	      		*cleanDrainWaterSwitch;
+	
+	lv_obj_t	      		*cleanCancelButton;
+	lv_obj_t	      		*cleanCancelButtonLabel;
+
+	lv_obj_t	      		*cleanRunButton;
+	lv_obj_t	      		*cleanRunButtonLabel;
+
+	lv_obj_t	      		*cleanProcessContainer;
+  /* Params objects */
+};
+
 
 struct sFilterPopup {
 	/* LVGL objects */
@@ -879,6 +922,7 @@ struct sKeyboardPopup {
 *********************/
 struct sElements {
 	struct sFilterPopup			filterPopup;
+  struct sCleanPopup      cleanPopup;
 	struct sMessagePopup 		messagePopup;
 	struct sRollerPopup			rollerPopup;
   struct sKeyboardPopup   keyboardPopup;
@@ -1165,8 +1209,15 @@ static const char* stepSourceList = "C1\n"
 static const char* processSourceList[4] = {"C1", "C2", "C3", "WB"};
 static const char* processTempControlList[3] = {"Off", "Run", "Susp."};
                         
-
-
+/*********************
+* Clean Popup elements
+*********************/
+#define cleanPopupTitle_text    "Cleaning process setup"
+#define cleanPopupSubTitle_text "Select containers to clean"
+#define cleanRoller_text        "Clean cycles"
+#define cleanDrainWater_text        "Drain water when finish"
+#define cleanCancelButton_text        "Cancel"
+#define cleanRunButton_text        "Run"
 
 /*********************
 * Popup elements
@@ -1192,7 +1243,6 @@ static const char* processTempControlList[3] = {"Off", "Run", "Susp."};
 #define stopAfterProcessPopupBody_text			   		"Do you want to stop the process after this step is completed?"
 #define maxNumberEntryProcessPopupBody_text			   		"Max number of PROCESS already reached!"
 #define maxNumberEntryStepsPopupBody_text			   		"Max number of STEP already reached!"
-
 
 #define checkupFilling_text          "Filling"
 #define checkupDraining_text         "Draining"

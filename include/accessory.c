@@ -560,6 +560,7 @@ void init_globals( void ) {
   //gui.page.processes.processElementsList.size  = 0;
 
   // We only need to initialise the non-zero values
+  gui.element.cleanPopup.titleLinePoints[1].x = 200;
   gui.element.filterPopup.titleLinePoints[1].x = 200;
   gui.element.rollerPopup.titleLinePoints[1].x = 200;
   gui.element.messagePopup.titleLinePoints[1].x = 200;
