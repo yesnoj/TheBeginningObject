@@ -109,7 +109,7 @@ void event_settings_handler(lv_event_t * e)
 
     if(act_cb == gui.page.settings.filmRotationSpeedSlider){
       if(code == LV_EVENT_VALUE_CHANGED) {
-          lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%d%%", lv_slider_get_value(act_cb));
+          lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%drpm", lv_slider_get_value(act_cb));
           LV_LOG_USER("Film Speed Rotation : %d",lv_slider_get_value(act_cb));
           gui.page.settings.settingsParams.filmRotationSpeedSetpoint = lv_slider_get_value(act_cb);
         }
@@ -153,17 +153,28 @@ void event_settings_handler(lv_event_t * e)
           qSysAction( SAVE_PROCESS_CONFIG );
         }
     }
-    
-    if(act_cb == gui.page.settings.drainFillTimeSlider){
-      if(code == LV_EVENT_VALUE_CHANGED) {
-          lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%d%%", lv_slider_get_value(act_cb));
-          LV_LOG_USER("Drain/fill time overlap percent : %d",lv_slider_get_value(act_cb));
-          gui.page.settings.settingsParams.drainFillOverlapSetpoint = lv_slider_get_value(act_cb);
-          }
-      if(code == LV_EVENT_RELEASED){
-          qSysAction( SAVE_PROCESS_CONFIG );
-        }    
+
+
+    if(act_cb == gui.page.settings.drainFillTimeSlider) {
+        if(code == LV_EVENT_RELEASED) {
+            uint8_t current_value = gui.page.settings.settingsParams.drainFillOverlapSetpoint;
+            uint8_t new_value = lv_slider_get_value(act_cb);
+
+            if(new_value > current_value) {
+                new_value = current_value + 50;
+            } else if(new_value < current_value) {
+                new_value = current_value - 50;
+            }
+
+
+            lv_slider_set_value(act_cb, new_value, LV_ANIM_OFF);  // Update the slider value to the nearest 30
+            lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%d%%", lv_slider_get_value(act_cb));
+            LV_LOG_USER("Drain/fill time overlap percent : %d",lv_slider_get_value(act_cb));
+            gui.page.settings.settingsParams.drainFillOverlapSetpoint = lv_slider_get_value(act_cb);
+            qSysAction(SAVE_PROCESS_CONFIG);
+        }
     }
+
 
     if(act_cb == gui.page.settings.multiRinseTimeSlider) {
         if(code == LV_EVENT_RELEASED) {
@@ -336,6 +347,8 @@ void initSettings(void){
         lv_obj_set_style_bg_color(gui.page.settings.filmRotationSpeedSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
         lv_obj_set_style_bg_color(gui.page.settings.filmRotationSpeedSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
         lv_slider_set_value(gui.page.settings.filmRotationSpeedSlider, gui.page.settings.settingsParams.filmRotationSpeedSetpoint, LV_ANIM_OFF);
+        lv_slider_set_range(gui.page.settings.filmRotationSpeedSlider, 20, 90);
+
   
         gui.page.settings.filmRotationSpeedValueLabel = lv_label_create(gui.page.settings.filmRotationSpeedContainer);
         lv_obj_set_style_text_font(gui.page.settings.filmRotationSpeedValueLabel, &lv_font_montserrat_22, 0);              
@@ -345,7 +358,7 @@ void initSettings(void){
         lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_SHORT_CLICKED, gui.page.settings.filmRotationSpeedValueLabel);
         lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_LONG_PRESSED_REPEAT, gui.page.settings.filmRotationSpeedValueLabel);
         lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_RELEASED, gui.page.settings.filmRotationSpeedValueLabel);
-        lv_label_set_text_fmt(gui.page.settings.filmRotationSpeedValueLabel, "%d%%", gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
+        lv_label_set_text_fmt(gui.page.settings.filmRotationSpeedValueLabel, "%drpm", gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
 
 
 
@@ -370,7 +383,7 @@ void initSettings(void){
         lv_obj_set_style_bg_color(gui.page.settings.filmRotationInversionIntervalSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
         lv_obj_set_style_bg_color(gui.page.settings.filmRotationInversionIntervalSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
         lv_slider_set_value(gui.page.settings.filmRotationInversionIntervalSlider, gui.page.settings.settingsParams.rotationIntervalSetpoint, LV_ANIM_OFF);
-  
+        lv_slider_set_range(gui.page.settings.filmRotationInversionIntervalSlider, 5, 60);
 
         gui.page.settings.filmRotationInverseIntervalValueLabel = lv_label_create(gui.page.settings.filmRotationInverseIntervallContainer);
         lv_obj_set_style_text_font(gui.page.settings.filmRotationInverseIntervalValueLabel, &lv_font_montserrat_22, 0);              
@@ -381,6 +394,7 @@ void initSettings(void){
         lv_obj_add_event_cb(gui.page.settings.filmRotationInversionIntervalSlider, event_settings_handler, LV_EVENT_LONG_PRESSED, gui.page.settings.filmRotationInverseIntervalValueLabel);
         lv_obj_add_event_cb(gui.page.settings.filmRotationInversionIntervalSlider, event_settings_handler, LV_EVENT_RELEASED, gui.page.settings.filmRotationInverseIntervalValueLabel);
         lv_label_set_text_fmt(gui.page.settings.filmRotationInverseIntervalValueLabel, "%dsec%", gui.page.settings.settingsParams.rotationIntervalSetpoint);
+        
 
   
   gui.page.settings.randomContainer = lv_obj_create(gui.page.settings.settingsContainer);

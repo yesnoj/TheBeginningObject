@@ -1081,7 +1081,7 @@ LV_IMG_DECLARE(splash_img);
 #define rotationInverseIntervalAlertMBox_text 		 "The duration, which may be adjusted between 5 and 60 seconds,during which the film will spin in one direction before moving to the other."
 #define filmRotationRandomAlertMBox_text 			 "Introduce random variation to inversion times for consistent development, e.g.,10% randomization on a 10-second inversion yields times between 8 and 10 seconds."
 #define drainFillTimeAlertMBox_text 				 "Adjust the overlap of tank filling and draining times with processing times to affect the total processing time, as these actions cannot be rushed."
-#define rotationSpeed_text 							 "Film rotation speed"
+#define rotationSpeed_text 							 "Rotation speed"
 #define rotationInversionInterval_text 				 "Rotation inv. interval"
 #define rotationRandom_text 						 "Randomness"
 #define celsius_text 								 "°C"

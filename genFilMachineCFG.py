@@ -25,12 +25,12 @@ settingsParams = {
     "tempUnit": random.randint(0, 1),
     "waterInlet": random.randint(0, 1),
     "calibratedTemp": random.randint(0, 40),
-    "filmRotationSpeedSetpoint": random.randint(0, 100),
-    "rotationIntervalSetpoint": random.randint(0, 100),
+    "filmRotationSpeedSetpoint": random.randint(20, 90),
+    "rotationIntervalSetpoint": random.randint(5, 60),
     "randomSetpoint": random.randint(0, 100),
     "isPersistentAlarm": random.randint(0, 1),
     "isProcessAutostart": random.randint(0, 1),
-    "drainFillOverlapSetpoint": random.randint(0, 100),
+    "drainFillOverlapSetpoint": random.randrange(0, 100, 50),
     "multiRinseTime": random.randrange(60, 181, 30)
 }
 
