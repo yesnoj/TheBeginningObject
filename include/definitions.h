@@ -664,21 +664,26 @@ struct sCleanPopup {
 
 	lv_obj_t	      		*cleanProcessContainer;
 	lv_obj_t	      		*cleanProcessArc;
-	lv_obj_t	      		*cleanContainerArc;
+	lv_obj_t	      		*cleanCycleArc;
+	lv_obj_t	      		*cleanPumpArc;
 
     lv_timer_t              *processTimer;
+    lv_timer_t              *cycleTimer;
 	lv_timer_t              *pumpTimer;
 
 	lv_obj_t	      		*cleanRemainingTimeValue;
 
+	lv_obj_t	      		*cleanNowStepLabelValue;
 	lv_obj_t	      		*cleanNowCleaningLabel;
 	lv_obj_t	      		*cleanNowCleaningValue;
 
 	uint8_t 				cleanCycles;
 	bool                    cleanDrainWater;
   bool                    containerToClean[3];
+  bool 						stopNowPressed;
   uint32_t					totalMins;
-  uint32_t					totalSecs;	
+  uint32_t					totalSecs;
+  uint8_t                   stepDirection;	
 
 	lv_obj_t	      		*cleanStopButton;
 	lv_obj_t	      		*cleanStopButtonLabel;
@@ -1237,12 +1242,13 @@ static const char* processTempControlList[3] = {"Off", "Run", "Susp."};
 #define cleanRoller_text        "Clean cycles"
 #define cleanDrainWater_text        "Drain water when finish"
 #define cleanCancelButton_text        "Cancel"
+#define cleanCanceled_text        "Canceled"
 #define cleanRunButton_text        "Run"
 #define cleanStopButton_text        "Stop"
 #define cleanCloseButton_text        "Close"
 #define cleanCurrentClean_text        "Cleaning"
 #define cleanCompleteClean_text        "COMPLETE"
-#define CONTAINER_FILLING_TIME 30
+#define CONTAINER_FILLING_TIME 10 //Need to be calibrated
 
 /*********************
 * Popup elements

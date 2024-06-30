@@ -45,7 +45,7 @@ static bool isPumping = false;
 static uint8_t pumpFrom = 0;
 static uint8_t pumpDir = 0;
 
-void resetStuffBeforeNextProcess(){
+static void resetStuffBeforeNextProcess(){
     isProcessingStatus0created = 0;
     isProcessingStatus1created = 0;
     isStepStatus0created = 0;

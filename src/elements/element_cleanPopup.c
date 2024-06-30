@@ -1,3 +1,4 @@
+#include "misc/lv_timer.h"
 #include <sys/_stdint.h>
 #include "misc/lv_palette.h"
 #include "misc/lv_area.h"
@@ -16,52 +17,311 @@
 extern struct gui_components gui;
 
 //ACCESSORY INCLUDES
-static uint8_t stepPercentage = 0;
+
 static uint8_t processPercentage = 0;
+static uint8_t cyclePercentage = 0;
+static uint8_t stepPercentage = 0;
 
 static uint32_t minutesProcessElapsed = 0;
 static uint8_t secondsProcessElapsed = 1;
 static uint8_t hoursProcessElapsed = 0;
+
+static uint32_t minutesCycleElapsed = 0;
+static uint8_t secondsCycleElapsed = 1;
 
 static uint32_t minutesStepElapsed = 0;
 static uint8_t secondsStepElapsed = 1;
 
 static uint32_t minutesProcessLeft = 0;
 static uint8_t secondsProcessLeft = 0;
+
+static uint32_t minutesCycleLeft = 0;
+static uint8_t secondsCycleLeft = 0;
+
 static uint32_t minutesStepLeft = 0;
 static uint8_t secondsStepLeft = 0;
 
 static uint8_t firstContainerIndex = 0;
 static bool containerSelected = false;
 
-void cleanProcessTimer(lv_timer_t * timer)
-{ 
-    LV_LOG_USER("processTimer running");
+static uint8_t containerIndex = 0;
 
-    if(secondsProcessElapsed >= 60) {
-        secondsProcessElapsed = 0;
-        minutesProcessElapsed++;
-        if(minutesProcessElapsed >= 60) {
-            minutesProcessElapsed = 0;
-            hoursProcessElapsed++;
-            if(hoursProcessElapsed >= 12) 
-                hoursProcessElapsed = 0;
+static uint8_t cycleMins = 0;
+static uint8_t cycleSecs = 0;
+
+static uint8_t stepMins = 0;
+static uint8_t stepSecs = 0;
+static uint8_t currentCycle = 1;
+
+
+static void resetStuffBeforeNextProcess(){
+    minutesProcessElapsed = 0;
+    secondsProcessElapsed = 1;
+    hoursProcessElapsed = 0;
+
+    minutesCycleElapsed = 0;
+    secondsCycleElapsed = 1;
+
+    minutesStepElapsed = 0;
+    secondsStepElapsed = 1;
+
+
+
+    minutesProcessLeft = 0;
+    secondsProcessLeft = 0;
+
+    minutesCycleLeft = 0;
+    secondsCycleLeft = 0;
+
+    minutesStepLeft = 0;
+    secondsStepLeft = 0;
+
+    stepPercentage = 0;
+    processPercentage = 0;
+    cyclePercentage = 0;
+
+    containerIndex = 0;
+    currentCycle = 1;
+
+    gui.element.cleanPopup.stepDirection = 1;
+    gui.element.cleanPopup.stopNowPressed = false;
+    
+    lv_obj_clear_state(gui.element.cleanPopup.cleanStopButton, LV_STATE_DISABLED);
+
+    lv_arc_set_value(gui.element.cleanPopup.cleanProcessArc, 0);
+    lv_arc_set_value(gui.element.cleanPopup.cleanCycleArc, 0);
+    lv_arc_set_value(gui.element.cleanPopup.cleanPumpArc, 0);
+}
+
+void cleanPumpTimer(lv_timer_t * timer) {
+    LV_LOG_USER("cleanPumpTimer running");
+
+    // Verifica se è stato premuto il bottone STOP
+    if (gui.element.cleanPopup.stopNowPressed) {
+        // Decrementa l'arco più interno (cleanPumpArc) fino a 0
+        secondsStepElapsed--;
+
+        if (stepPercentage > 0) {
+            stepPercentage = calculatePercentage(minutesStepElapsed, secondsStepElapsed, stepMins, stepSecs);
+            lv_arc_set_value(gui.element.cleanPopup.cleanPumpArc, 100 - stepPercentage);
+
+            lv_arc_set_value(gui.element.cleanPopup.cleanPumpArc, stepPercentage);
+            LV_LOG_USER("Decrementing Step Percentage: %d", stepPercentage);
+            
+            // Aggiorna la label per il passo
+            lv_label_set_text_fmt(gui.element.cleanPopup.cleanNowStepLabelValue, checkupDraining_text);
+        } else {
+            // Quando stepPercentage è 0, ferma il timer e aggiorna lo stato finale
+            lv_label_set_text_fmt(gui.element.cleanPopup.cleanRemainingTimeValue, "0m0s");
+            lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningValue, cleanCanceled_text);
+            lv_obj_clear_state(gui.element.cleanPopup.cleanStopButton, LV_STATE_DISABLED);
+            lv_obj_set_style_bg_color(gui.element.cleanPopup.cleanStopButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+            lv_label_set_text(gui.element.cleanPopup.cleanStopButtonLabel, cleanCloseButton_text);
+
+            // Interrompi il timer e salva lo stato
+            lv_timer_del(gui.element.cleanPopup.pumpTimer);
+
+            gui.page.tools.machineStats.clean++;
+            qSysAction(SAVE_MACHINE_STATS);
+            return;
         }
     }
 
-    if(secondsStepElapsed >= 60) {
+    // Se STOP non è stato premuto, continua con l'incremento normale
+    if (!gui.element.cleanPopup.stopNowPressed) {
+        // Incremento dei secondi per step, ciclo e processo
+        secondsStepElapsed++;
+        secondsCycleElapsed++;
+        secondsProcessElapsed++;
+
+        // Aggiornamento dei minuti e secondi
+        if (secondsStepElapsed >= 60) {
+            secondsStepElapsed = 0;
+            minutesStepElapsed++;
+            if (minutesStepElapsed >= 60) {
+                minutesStepElapsed = 0;
+            }
+        }
+
+        if (secondsCycleElapsed >= 60) {
+            secondsCycleElapsed = 0;
+            minutesCycleElapsed++;
+            if (minutesCycleElapsed >= 60) {
+                minutesCycleElapsed = 0;
+            }
+        }
+
+        if (secondsProcessElapsed >= 60) {
+            secondsProcessElapsed = 0;
+            minutesProcessElapsed++;
+            if (minutesProcessElapsed >= 60) {
+                minutesProcessElapsed = 0;
+                hoursProcessElapsed++;
+                if (hoursProcessElapsed >= 12) {
+                    hoursProcessElapsed = 0;
+                }
+            }
+        }
+
+        // Calcolo delle percentuali
+        stepMins = CONTAINER_FILLING_TIME / 60;
+        stepSecs = CONTAINER_FILLING_TIME % 60;
+        stepPercentage = calculatePercentage(minutesStepElapsed, secondsStepElapsed, stepMins, stepSecs);
+
+        cycleMins = ((CONTAINER_FILLING_TIME * 2) * gui.element.cleanPopup.cleanCycles) / 60;
+        cycleSecs = ((CONTAINER_FILLING_TIME * 2) * gui.element.cleanPopup.cleanCycles) % 60;
+        cyclePercentage = calculatePercentage(minutesCycleElapsed, secondsCycleElapsed, cycleMins, cycleSecs);
+
+        processPercentage = calculatePercentage(minutesProcessElapsed, secondsProcessElapsed, gui.element.cleanPopup.totalMins, gui.element.cleanPopup.totalSecs);
+
+        // Calcolo del tempo rimanente del processo
+        uint8_t totalProcessSecs = gui.element.cleanPopup.totalMins * 60 + gui.element.cleanPopup.totalSecs;
+        uint8_t elapsedProcessSecs = minutesProcessElapsed * 60 + secondsProcessElapsed;
+        uint8_t remainingProcessSecs = totalProcessSecs - elapsedProcessSecs;
+
+        uint8_t remainingProcessMins = remainingProcessSecs / 60;
+        uint8_t remainingProcessSecsOnly = remainingProcessSecs % 60;
+
+        // Aggiornamento degli archi
+        if (gui.element.cleanPopup.stepDirection == 1) {
+            lv_arc_set_value(gui.element.cleanPopup.cleanPumpArc, stepPercentage);
+        } else {
+            lv_arc_set_value(gui.element.cleanPopup.cleanPumpArc, 100 - stepPercentage);
+        }
+        lv_arc_set_value(gui.element.cleanPopup.cleanCycleArc, cyclePercentage);
+        lv_arc_set_value(gui.element.cleanPopup.cleanProcessArc, processPercentage);
+
+        // Log per il debug
+        LV_LOG_USER("Step Percentage: %d", stepPercentage);
+        LV_LOG_USER("Cycle Percentage: %d", cyclePercentage);
+        LV_LOG_USER("Process Percentage: %d", processPercentage);
+
+        lv_label_set_text_fmt(gui.element.cleanPopup.cleanNowCleaningValue, "%s cycle:%d", processSourceList[containerIndex], currentCycle);
+
+        // Controllo dei progressi
+        if (processPercentage < 100) {
+            // Tempo rimanente del processo
+            lv_label_set_text_fmt(gui.element.cleanPopup.cleanRemainingTimeValue, "%dm%ds", remainingProcessMins, remainingProcessSecsOnly);
+
+            if (stepPercentage >= 100) {
+                if (gui.element.cleanPopup.stepDirection == 1) {
+                    // Passa alla fase di svuotamento
+                    gui.element.cleanPopup.stepDirection = -1;
+                } else {
+                    // Completa il ciclo e passa al successivo
+                    gui.element.cleanPopup.stepDirection = 1; // Reimposta per il riempimento
+
+                    if (++currentCycle > gui.element.cleanPopup.cleanCycles) {
+                        currentCycle = 1;
+                        if (++containerIndex >= (sizeof(processSourceList) / sizeof(processSourceList[0]))) {
+                            containerIndex = 0;
+                            // Processo completato
+                            lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningValue, cleanCompleteClean_text);
+                            lv_obj_set_style_bg_color(gui.element.cleanPopup.cleanStopButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+                            lv_label_set_text(gui.element.cleanPopup.cleanStopButtonLabel, cleanCloseButton_text);
+
+                            // Interrompi il timer e salva lo stato
+                            lv_timer_del(gui.element.cleanPopup.pumpTimer);
+
+                            gui.page.tools.machineStats.clean++;
+                            qSysAction(SAVE_MACHINE_STATS);
+                            return;
+                        }
+                    }
+                }
+                // Riavvia il timer per il prossimo step
+                minutesStepElapsed = 0;
+                secondsStepElapsed = 0;
+            } else {
+                // Aggiorna il passo
+                stepPercentage += gui.element.cleanPopup.stepDirection;
+
+                if (stepPercentage < 0) {
+                    stepPercentage = 0;
+                    gui.element.cleanPopup.stepDirection = 1; // Passa alla fase di riempimento
+                } else if (stepPercentage > 100) {
+                    stepPercentage = 100;
+                    gui.element.cleanPopup.stepDirection = -1; // Passa alla fase di svuotamento
+                }
+            }
+
+            // Aggiorna il timer per il ciclo
+            if (cyclePercentage == 100) {
+                cyclePercentage = 0;
+                minutesCycleElapsed = 0;
+                secondsCycleElapsed = 0;
+            }
+
+            lv_label_set_text(gui.element.cleanPopup.cleanNowStepLabelValue, gui.element.cleanPopup.stepDirection == 1 ? checkupFilling_text : checkupDraining_text);
+
+        } else {
+            // Processo completato
+            lv_label_set_text_fmt(gui.element.cleanPopup.cleanRemainingTimeValue, "%dm%ds", remainingProcessMins, remainingProcessSecsOnly);
+            lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningValue, cleanCompleteClean_text);
+            lv_obj_set_style_bg_color(gui.element.cleanPopup.cleanStopButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+            lv_label_set_text(gui.element.cleanPopup.cleanStopButtonLabel, cleanCloseButton_text);
+
+            // Interrompi il timer e salva lo stato
+            lv_timer_del(gui.element.cleanPopup.pumpTimer);
+
+            gui.page.tools.machineStats.clean++;
+            qSysAction(SAVE_MACHINE_STATS);
+        }
+    }
+}
+
+/*
+void cleanPumpTimer(lv_timer_t * timer) {
+    LV_LOG_USER("cleanPumpTimer running");
+
+    // Incremento dei secondi per step, ciclo e processo
+    secondsStepElapsed++;
+    if (gui.element.cleanPopup.stopNowPressed == false) {
+        secondsCycleElapsed++;
+        secondsProcessElapsed++;
+    }
+
+    // Aggiornamento dei minuti e secondi
+    if (secondsStepElapsed >= 60) {
         secondsStepElapsed = 0;
         minutesStepElapsed++;
-        if(minutesStepElapsed >= 60) {
+        if (minutesStepElapsed >= 60) {
             minutesStepElapsed = 0;
         }
     }
-    
+
+    if (secondsCycleElapsed >= 60) {
+        secondsCycleElapsed = 0;
+        minutesCycleElapsed++;
+        if (minutesCycleElapsed >= 60) {
+            minutesCycleElapsed = 0;
+        }
+    }
+
+    if (secondsProcessElapsed >= 60) {
+        secondsProcessElapsed = 0;
+        minutesProcessElapsed++;
+        if (minutesProcessElapsed >= 60) {
+            minutesProcessElapsed = 0;
+            hoursProcessElapsed++;
+            if (hoursProcessElapsed >= 12) {
+                hoursProcessElapsed = 0;
+            }
+        }
+    }
+
+    // Calcolo delle percentuali
+    stepMins = CONTAINER_FILLING_TIME / 60;
+    stepSecs = CONTAINER_FILLING_TIME % 60;
+    stepPercentage = calculatePercentage(minutesStepElapsed, secondsStepElapsed, stepMins, stepSecs);
+
+    cycleMins = ((CONTAINER_FILLING_TIME * 2) * gui.element.cleanPopup.cleanCycles) / 60;
+    cycleSecs = ((CONTAINER_FILLING_TIME * 2) * gui.element.cleanPopup.cleanCycles) % 60;
+    cyclePercentage = calculatePercentage(minutesCycleElapsed, secondsCycleElapsed, cycleMins, cycleSecs);
 
     processPercentage = calculatePercentage(minutesProcessElapsed, secondsProcessElapsed, gui.element.cleanPopup.totalMins, gui.element.cleanPopup.totalSecs);
-    LV_LOG_USER("Elapsed Time %dh:%dm:%ds, processPercentage %d stepPercentage %d", hoursProcessElapsed, minutesProcessElapsed, secondsProcessElapsed, processPercentage, stepPercentage); 
 
-
+    // Calcolo del tempo rimanente del processo
     uint8_t totalProcessSecs = gui.element.cleanPopup.totalMins * 60 + gui.element.cleanPopup.totalSecs;
     uint8_t elapsedProcessSecs = minutesProcessElapsed * 60 + secondsProcessElapsed;
     uint8_t remainingProcessSecs = totalProcessSecs - elapsedProcessSecs;
@@ -69,26 +329,94 @@ void cleanProcessTimer(lv_timer_t * timer)
     uint8_t remainingProcessMins = remainingProcessSecs / 60;
     uint8_t remainingProcessSecsOnly = remainingProcessSecs % 60;
 
+    // Aggiornamento degli archi
+    if (gui.element.cleanPopup.stepDirection == 1) {
+        lv_arc_set_value(gui.element.cleanPopup.cleanPumpArc, stepPercentage);
+    } else {
+        lv_arc_set_value(gui.element.cleanPopup.cleanPumpArc, 100 - stepPercentage);
+    }
+    lv_arc_set_value(gui.element.cleanPopup.cleanCycleArc, cyclePercentage);
     lv_arc_set_value(gui.element.cleanPopup.cleanProcessArc, processPercentage);
 
-    if(processPercentage <= 100) {
-        secondsProcessElapsed++;
-        secondsStepElapsed++;
+    // Log per il debug
+    LV_LOG_USER("Step Percentage: %d", stepPercentage);
+    LV_LOG_USER("Cycle Percentage: %d", cyclePercentage);
+    LV_LOG_USER("Process Percentage: %d", processPercentage);
 
+    lv_label_set_text_fmt(gui.element.cleanPopup.cleanNowCleaningValue, "%s cycle:%d", processSourceList[containerIndex], currentCycle);
+
+    // Controllo dei progressi
+    if (processPercentage < 100) {
+        // Tempo rimanente del processo
         lv_label_set_text_fmt(gui.element.cleanPopup.cleanRemainingTimeValue, "%dm%ds", remainingProcessMins, remainingProcessSecsOnly);
 
-        if(processPercentage == 100) {
-        
-          gui.page.tools.machineStats.clean ++;
-          qSysAction( SAVE_MACHINE_STATS );
-          
-          lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningValue, cleanCompleteClean_text); 
-          lv_obj_set_style_bg_color(gui.element.cleanPopup.cleanStopButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
-          lv_label_set_text(gui.element.cleanPopup.cleanStopButtonLabel, cleanCloseButton_text);
-          lv_timer_delete(gui.element.cleanPopup.processTimer);
+        if (stepPercentage >= 100) {
+            if (gui.element.cleanPopup.stepDirection == 1) {
+                // Passa alla fase di svuotamento
+                gui.element.cleanPopup.stepDirection = -1;
+            } else {
+                // Completa il ciclo e passa al successivo
+                gui.element.cleanPopup.stepDirection = 1; // Reimposta per il riempimento
+
+                if (++currentCycle > gui.element.cleanPopup.cleanCycles) {
+                    currentCycle = 1;
+                    if (++containerIndex >= (sizeof(processSourceList) / sizeof(processSourceList[0]))) {
+                        containerIndex = 0;
+                        // Processo completato
+                        lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningValue, cleanCompleteClean_text);
+                        lv_obj_set_style_bg_color(gui.element.cleanPopup.cleanStopButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+                        lv_label_set_text(gui.element.cleanPopup.cleanStopButtonLabel, cleanCloseButton_text);
+
+                        // Interrompi il timer e salva lo stato
+                        lv_timer_del(gui.element.cleanPopup.pumpTimer);
+
+                        gui.page.tools.machineStats.clean++;
+                        qSysAction(SAVE_MACHINE_STATS);
+                        return;
+                    }
+                }
+            }
+            // Riavvia il timer per il prossimo step
+            minutesStepElapsed = 0;
+            secondsStepElapsed = 0;
+        } else {
+            // Aggiorna il passo
+            stepPercentage += gui.element.cleanPopup.stepDirection;
+
+            if (stepPercentage < 0) {
+                stepPercentage = 0;
+                gui.element.cleanPopup.stepDirection = 1; // Passa alla fase di riempimento
+            } else if (stepPercentage > 100) {
+                stepPercentage = 100;
+                gui.element.cleanPopup.stepDirection = -1; // Passa alla fase di svuotamento
+            }
         }
+
+        // Aggiorna il timer per il ciclo
+        if (cyclePercentage == 100) {
+            cyclePercentage = 0;
+            minutesCycleElapsed = 0;
+            secondsCycleElapsed = 0;
+        }
+
+        lv_label_set_text(gui.element.cleanPopup.cleanNowStepLabelValue, gui.element.cleanPopup.stepDirection == 1 ? checkupFilling_text : checkupDraining_text);
+
+    } else {
+        // Processo completato
+        lv_label_set_text_fmt(gui.element.cleanPopup.cleanRemainingTimeValue, "%dm%ds", remainingProcessMins, remainingProcessSecsOnly);
+        lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningValue, cleanCompleteClean_text);
+        lv_obj_set_style_bg_color(gui.element.cleanPopup.cleanStopButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+        lv_label_set_text(gui.element.cleanPopup.cleanStopButtonLabel, cleanCloseButton_text);
+
+        // Interrompi il timer e salva lo stato
+        lv_timer_del(gui.element.cleanPopup.pumpTimer);
+
+        gui.page.tools.machineStats.clean++;
+        qSysAction(SAVE_MACHINE_STATS);
     }
 }
+
+*/
 
 void event_cleanPopup(lv_event_t * e){
   lv_event_code_t code = lv_event_get_code(e);
@@ -110,12 +438,15 @@ void event_cleanPopup(lv_event_t * e){
       LV_LOG_USER("Cycles programmed :%d",gui.element.cleanPopup.cleanCycles);
     }
   }
-  if(code == LV_EVENT_CLICKED){
+  if(code == LV_EVENT_RELEASED){
     if(obj == gui.element.cleanPopup.cleanRunButton){
       if (containerSelected){
+            resetStuffBeforeNextProcess();
+
             lv_obj_add_flag(gui.element.cleanPopup.cleanSettingsContainer, LV_OBJ_FLAG_HIDDEN);
             lv_obj_remove_flag(gui.element.cleanPopup.cleanProcessContainer, LV_OBJ_FLAG_HIDDEN);
             lv_label_set_text(gui.element.cleanPopup.cleanTitle, cleanCleanProcess_text);
+            lv_obj_remove_flag(gui.element.cleanPopup.cleanRemainingTimeValue, LV_OBJ_FLAG_HIDDEN); 
 
             lv_obj_set_style_bg_color(gui.element.cleanPopup.cleanStopButton, lv_color_hex(RED_DARK), LV_PART_MAIN);
             lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningLabel, cleanCurrentClean_text);
@@ -123,11 +454,12 @@ void event_cleanPopup(lv_event_t * e){
             getMinutesAndSeconds(CONTAINER_FILLING_TIME, gui.element.cleanPopup.containerToClean);
             lv_label_set_text_fmt(gui.element.cleanPopup.cleanRemainingTimeValue, "%dm%ds",gui.element.cleanPopup.totalMins, gui.element.cleanPopup.totalSecs); 
             LV_LOG_USER("Process totalMin: %d totalSecs: %d",gui.element.cleanPopup.totalMins,gui.element.cleanPopup.totalSecs);
+            
+            lv_label_set_text_fmt(gui.element.cleanPopup.cleanNowCleaningValue, "%s cycle:%d",processSourceList[firstContainerIndex],currentCycle);
+            //lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningValue, processSourceList[gui.element.cleanPopup.containerToClean[firstContainerIndex]]); 
 
-            lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningValue, processSourceList[gui.element.cleanPopup.containerToClean[firstContainerIndex]]); 
-
-            gui.element.cleanPopup.processTimer = lv_timer_create(cleanProcessTimer, 1000,  NULL);
-            LV_LOG_USER("Started processTimer");
+            gui.element.cleanPopup.pumpTimer = lv_timer_create(cleanPumpTimer, 1000,  NULL);
+            LV_LOG_USER("Started pumpTimer");
 
       }
 
@@ -137,14 +469,32 @@ void event_cleanPopup(lv_event_t * e){
     }
 
     if(obj == gui.element.cleanPopup.cleanStopButton){
-      if(processPercentage != 100){
-          LV_LOG_USER("Stopped processTimer");
-          lv_timer_delete(gui.element.cleanPopup.processTimer);
-      }
+      if(gui.element.cleanPopup.stopNowPressed == false){
+          if(processPercentage != 100){
+              LV_LOG_USER("Stopped processTimer");
+              //lv_timer_delete(gui.element.cleanPopup.pumpTimer);
+              gui.element.cleanPopup.stopNowPressed = true;
+              lv_label_set_text(gui.element.cleanPopup.cleanTitle, cleanCanceled_text);
+              lv_obj_add_state(gui.element.cleanPopup.cleanStopButton, LV_STATE_DISABLED);
+              return;
+          }
+          else{
+              lv_obj_add_flag(gui.element.cleanPopup.cleanProcessContainer, LV_OBJ_FLAG_HIDDEN);
+              lv_obj_remove_flag(gui.element.cleanPopup.cleanSettingsContainer, LV_OBJ_FLAG_HIDDEN);
+              lv_label_set_text(gui.element.cleanPopup.cleanTitle, cleanPopupTitle_text);
+              }
+          }
+          else{
+          lv_obj_add_flag(gui.element.cleanPopup.cleanRemainingTimeValue, LV_OBJ_FLAG_HIDDEN);  
           lv_obj_add_flag(gui.element.cleanPopup.cleanProcessContainer, LV_OBJ_FLAG_HIDDEN);
           lv_obj_remove_flag(gui.element.cleanPopup.cleanSettingsContainer, LV_OBJ_FLAG_HIDDEN);
           lv_label_set_text(gui.element.cleanPopup.cleanTitle, cleanPopupTitle_text);
+          lv_obj_clear_state(gui.element.cleanPopup.cleanStopButton, LV_STATE_DISABLED);
+
+          lv_obj_set_style_bg_color(gui.element.cleanPopup.cleanStopButton, lv_color_hex(RED_DARK), LV_PART_MAIN);
+          lv_label_set_text(gui.element.cleanPopup.cleanStopButtonLabel, cleanStopButton_text);
       }
+    }    
   }
   
   if(obj == gui.element.cleanPopup.cleanDrainWaterSwitch){
@@ -170,11 +520,12 @@ void event_cleanPopup(lv_event_t * e){
           gui.element.cleanPopup.containerToClean[2] = lv_obj_has_state(obj, LV_STATE_CHECKED);
           }
 
-        for (uint8_t i = 0; i < 3; ++i) {
+        for (uint8_t i = 0; i < (sizeof(processSourceList) / sizeof(processSourceList[0]) - 1); ++i) {
           if (gui.element.cleanPopup.containerToClean[i]) {
               lv_obj_clear_state(gui.element.cleanPopup.cleanRunButton, LV_STATE_DISABLED);
               containerSelected = true;
               firstContainerIndex = i;
+              LV_LOG_USER("firstContainerIndex :%d",firstContainerIndex);
               break;
           }else {
             lv_obj_add_state(gui.element.cleanPopup.cleanRunButton, LV_STATE_DISABLED);
@@ -196,6 +547,7 @@ void cleanPopup (void){
       gui.element.cleanPopup.totalMins = 0;
       gui.element.cleanPopup.totalSecs = 0;
       gui.element.cleanPopup.cleanCycles = 1;
+      gui.element.cleanPopup.stopNowPressed = false;
       //gui.element.cleanPopup.processTimer = NULL;
       //gui.element.cleanPopup.pumpTimer = NULL;
 
@@ -359,7 +711,7 @@ void cleanPopup (void){
                       gui.element.cleanPopup.cleanRunButton = lv_button_create(gui.element.cleanPopup.cleanSettingsContainer);
                       lv_obj_set_size(gui.element.cleanPopup.cleanRunButton, BUTTON_MBOX_WIDTH, BUTTON_MBOX_HEIGHT);
                       lv_obj_align(gui.element.cleanPopup.cleanRunButton, LV_ALIGN_BOTTOM_LEFT, 10 , 10);
-                      lv_obj_add_event_cb(gui.element.cleanPopup.cleanRunButton, event_cleanPopup, LV_EVENT_CLICKED, NULL);
+                      lv_obj_add_event_cb(gui.element.cleanPopup.cleanRunButton, event_cleanPopup, LV_EVENT_RELEASED, NULL);
                       lv_obj_set_style_bg_color(gui.element.cleanPopup.cleanRunButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
                       lv_obj_add_state(gui.element.cleanPopup.cleanRunButton, LV_STATE_DISABLED);
 
@@ -373,7 +725,7 @@ void cleanPopup (void){
                       gui.element.cleanPopup.cleanCancelButton = lv_button_create(gui.element.cleanPopup.cleanSettingsContainer);
                       lv_obj_set_size(gui.element.cleanPopup.cleanCancelButton, BUTTON_MBOX_WIDTH, BUTTON_MBOX_HEIGHT);
                       lv_obj_align(gui.element.cleanPopup.cleanCancelButton, LV_ALIGN_BOTTOM_RIGHT, - 10 , 10);
-                      lv_obj_add_event_cb(gui.element.cleanPopup.cleanCancelButton, event_cleanPopup, LV_EVENT_CLICKED, NULL);
+                      lv_obj_add_event_cb(gui.element.cleanPopup.cleanCancelButton, event_cleanPopup, LV_EVENT_RELEASED, NULL);
                       lv_obj_set_style_bg_color(gui.element.cleanPopup.cleanCancelButton, lv_color_hex(RED_DARK), LV_PART_MAIN);
 
                           gui.element.cleanPopup.cleanCancelButtonLabel = lv_label_create(gui.element.cleanPopup.cleanCancelButton);
@@ -399,24 +751,37 @@ void cleanPopup (void){
               lv_arc_set_bg_angles(gui.element.cleanPopup.cleanProcessArc, 0, 260);
               lv_arc_set_value(gui.element.cleanPopup.cleanProcessArc, 0);
               lv_arc_set_range(gui.element.cleanPopup.cleanProcessArc, 0, 100);
-              lv_obj_align(gui.element.cleanPopup.cleanProcessArc, LV_ALIGN_CENTER, 0, 15);
+              lv_obj_align(gui.element.cleanPopup.cleanProcessArc, LV_ALIGN_CENTER, 0, 5);
               lv_obj_remove_style(gui.element.cleanPopup.cleanProcessArc, NULL, LV_PART_KNOB);
               lv_obj_remove_flag(gui.element.cleanPopup.cleanProcessArc, LV_OBJ_FLAG_CLICKABLE);
               lv_obj_set_style_arc_color(gui.element.cleanPopup.cleanProcessArc,lv_color_hex(LIGHT_BLUE) , LV_PART_INDICATOR);
               lv_obj_set_style_arc_color(gui.element.cleanPopup.cleanProcessArc, lv_color_hex(BLUE_DARK), LV_PART_MAIN);
 
 
-              gui.element.cleanPopup.cleanContainerArc = lv_arc_create(gui.element.cleanPopup.cleanProcessContainer);
-              lv_obj_set_size(gui.element.cleanPopup.cleanContainerArc, 200, 200);
-              lv_arc_set_rotation(gui.element.cleanPopup.cleanContainerArc, 140);
-              lv_arc_set_bg_angles(gui.element.cleanPopup.cleanContainerArc, 0, 260);
-              lv_arc_set_value(gui.element.cleanPopup.cleanContainerArc, 0);
-              lv_arc_set_range(gui.element.cleanPopup.cleanContainerArc, 0, 100);
-              lv_obj_align(gui.element.cleanPopup.cleanContainerArc, LV_ALIGN_CENTER, 0, 15);
-              lv_obj_remove_style(gui.element.cleanPopup.cleanContainerArc, NULL, LV_PART_KNOB);
-              lv_obj_remove_flag(gui.element.cleanPopup.cleanContainerArc, LV_OBJ_FLAG_CLICKABLE);
-              lv_obj_set_style_arc_color(gui.element.cleanPopup.cleanContainerArc,lv_color_hex(GREEN_LIGHT) , LV_PART_INDICATOR);
-              lv_obj_set_style_arc_color(gui.element.cleanPopup.cleanContainerArc, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+              gui.element.cleanPopup.cleanCycleArc = lv_arc_create(gui.element.cleanPopup.cleanProcessContainer);
+              lv_obj_set_size(gui.element.cleanPopup.cleanCycleArc, 200, 200);
+              lv_arc_set_rotation(gui.element.cleanPopup.cleanCycleArc, 140);
+              lv_arc_set_bg_angles(gui.element.cleanPopup.cleanCycleArc, 0, 260);
+              lv_arc_set_value(gui.element.cleanPopup.cleanCycleArc, 0);
+              lv_arc_set_range(gui.element.cleanPopup.cleanCycleArc, 0, 100);
+              lv_obj_align(gui.element.cleanPopup.cleanCycleArc, LV_ALIGN_CENTER, 0, 5);
+              lv_obj_remove_style(gui.element.cleanPopup.cleanCycleArc, NULL, LV_PART_KNOB);
+              lv_obj_remove_flag(gui.element.cleanPopup.cleanCycleArc, LV_OBJ_FLAG_CLICKABLE);
+              lv_obj_set_style_arc_color(gui.element.cleanPopup.cleanCycleArc,lv_color_hex(GREEN_LIGHT) , LV_PART_INDICATOR);
+              lv_obj_set_style_arc_color(gui.element.cleanPopup.cleanCycleArc, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+
+
+              gui.element.cleanPopup.cleanPumpArc = lv_arc_create(gui.element.cleanPopup.cleanProcessContainer);
+              lv_obj_set_size(gui.element.cleanPopup.cleanPumpArc, 170, 170);
+              lv_arc_set_rotation(gui.element.cleanPopup.cleanPumpArc, 140);
+              lv_arc_set_bg_angles(gui.element.cleanPopup.cleanPumpArc, 0, 260);
+              lv_arc_set_value(gui.element.cleanPopup.cleanPumpArc, 0);
+              lv_arc_set_range(gui.element.cleanPopup.cleanPumpArc, 0, 100);
+              lv_obj_align(gui.element.cleanPopup.cleanPumpArc, LV_ALIGN_CENTER, 0, 5);
+              lv_obj_remove_style(gui.element.cleanPopup.cleanPumpArc, NULL, LV_PART_KNOB);
+              lv_obj_remove_flag(gui.element.cleanPopup.cleanPumpArc, LV_OBJ_FLAG_CLICKABLE);
+              lv_obj_set_style_arc_color(gui.element.cleanPopup.cleanPumpArc,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
+              lv_obj_set_style_arc_color(gui.element.cleanPopup.cleanPumpArc, lv_color_hex(ORANGE_DARK), LV_PART_MAIN);
 
               gui.element.cleanPopup.cleanRemainingTimeValue = lv_label_create(gui.element.cleanPopup.cleanProcessContainer);         
               lv_obj_set_style_text_font(gui.element.cleanPopup.cleanRemainingTimeValue, &lv_font_montserrat_28, 0);              
@@ -429,12 +794,19 @@ void cleanPopup (void){
 
               gui.element.cleanPopup.cleanNowCleaningValue = lv_label_create(gui.element.cleanPopup.cleanProcessContainer);          
               lv_obj_set_style_text_font(gui.element.cleanPopup.cleanNowCleaningValue, &lv_font_montserrat_22, 0);              
-              lv_obj_align(gui.element.cleanPopup.cleanNowCleaningValue, LV_ALIGN_CENTER, 0, 22);
+              lv_obj_align(gui.element.cleanPopup.cleanNowCleaningValue, LV_ALIGN_CENTER, 0, 25);
+
+
+              gui.element.cleanPopup.cleanNowStepLabelValue = lv_label_create(gui.element.cleanPopup.cleanProcessContainer);          
+              lv_obj_set_style_text_font(gui.element.cleanPopup.cleanNowStepLabelValue, &lv_font_montserrat_18, 0); 
+              lv_label_set_text(gui.element.cleanPopup.cleanNowStepLabelValue,checkupFilling_text);             
+              lv_obj_align(gui.element.cleanPopup.cleanNowStepLabelValue, LV_ALIGN_CENTER, 0, 47);
+
 
               gui.element.cleanPopup.cleanStopButton = lv_button_create(gui.element.cleanPopup.cleanProcessContainer);
               lv_obj_set_size(gui.element.cleanPopup.cleanStopButton, BUTTON_MBOX_WIDTH, BUTTON_MBOX_HEIGHT);
-              lv_obj_align(gui.element.cleanPopup.cleanStopButton, LV_ALIGN_BOTTOM_MID, 0 , 0);
-              lv_obj_add_event_cb(gui.element.cleanPopup.cleanStopButton, event_cleanPopup, LV_EVENT_CLICKED, NULL);
+              lv_obj_align(gui.element.cleanPopup.cleanStopButton, LV_ALIGN_BOTTOM_MID, 0 , 10);
+              lv_obj_add_event_cb(gui.element.cleanPopup.cleanStopButton, event_cleanPopup, LV_EVENT_RELEASED, NULL);
               lv_obj_set_style_bg_color(gui.element.cleanPopup.cleanStopButton, lv_color_hex(RED_DARK), LV_PART_MAIN);
 
               gui.element.cleanPopup.cleanStopButtonLabel = lv_label_create(gui.element.cleanPopup.cleanStopButton);
