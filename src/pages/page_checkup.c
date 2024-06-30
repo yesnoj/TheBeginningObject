@@ -538,7 +538,7 @@ void handleFirstStep(sCheckup* checkup) {
 
 void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
     if (isLastStep) {
-        pumpFrom = getValueForChemicalSource(WB);//last step go into the waste
+        pumpFrom = getValueForChemicalSource(WASTE);//last step go into the waste
         pumpDir = PUMP_OUT_RLY;
         LV_LOG_USER("Last step");
         if (tankPercentage < 100) {
@@ -598,10 +598,10 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
                 lv_timer_resume(checkup->processTimer);
             }
         } else {
-            if(gui.tempStepNode->prev->step.stepDetails->discardAfterProc == false) //THERE IS AN ISSUE HERE!
+            if(gui.tempStepNode->prev->step.stepDetails->discardAfterProc == false)
                 pumpFrom = getValueForChemicalSource(gui.tempStepNode->prev->step.stepDetails->source);
              else
-                pumpFrom = getValueForChemicalSource(WB);
+                pumpFrom = getValueForChemicalSource(WASTE);
             //pumpFrom = (gui.tempStepNode->step.stepDetails->discardAfterProc == false) ? getValueForChemicalSource(gui.tempStepNode->step.stepDetails->source) : getValueForChemicalSource(WB);
             pumpDir = PUMP_OUT_RLY;
             if (tankPercentage < 100) {

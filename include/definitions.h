@@ -22,6 +22,8 @@
 #define RELAY_NUMBER    8
 
 
+
+
 #define C1_RLY         1
 #define C2_RLY         2
 #define C3_RLY         3
@@ -263,14 +265,6 @@ typedef enum {
     CHEMICAL_TYPE_NA
 } chemicalType_t;
 
-typedef enum {
-	  C1,
-    C2,
-    C3,
-    WB,
-    CHEMICAL_SOURCE_NA
-} chemicalSource_t;
-
 
 struct __attribute__ ((packed)) machineSettings {
   tempUnit_t 	        tempUnit; //0= C° 1= °F
@@ -353,7 +347,7 @@ typedef struct sStepDetail {
     uint8_t             timeMins;
     uint8_t             timeSecs;
     chemicalType_t      type;
-    chemicalSource_t    source;
+    uint8_t             source;
     uint8_t             discardAfterProc;
 } sStepDetail;
 
@@ -667,9 +661,8 @@ struct sCleanPopup {
 	lv_obj_t	      		*cleanCycleArc;
 	lv_obj_t	      		*cleanPumpArc;
 
-    lv_timer_t              *processTimer;
-    lv_timer_t              *cycleTimer;
 	lv_timer_t              *pumpTimer;
+	lv_timer_t              *wasteTimer;
 
 	lv_obj_t	      		*cleanRemainingTimeValue;
 
@@ -681,9 +674,11 @@ struct sCleanPopup {
 	bool                    cleanDrainWater;
   bool                    containerToClean[3];
   bool 						stopNowPressed;
+  bool 						isAlreadyPumping;
   uint32_t					totalMins;
   uint32_t					totalSecs;
-  uint8_t                   stepDirection;	
+  uint8_t                   stepDirection;
+  bool	 					isCleaning;
 
 	lv_obj_t	      		*cleanStopButton;
 	lv_obj_t	      		*cleanStopButtonLabel;
@@ -1230,6 +1225,12 @@ static const char* stepSourceList = "C1\n"
 		                            "C3\n"
 		                            "WB";
 
+#define C1    0
+#define C2    1
+#define C3    2
+#define WB    3
+#define WASTE 4		                            
+
 static const char* processSourceList[4] = {"C1", "C2", "C3", "WB"};
 static const char* processTempControlList[3] = {"Off", "Run", "Susp."};
                         
@@ -1248,7 +1249,12 @@ static const char* processTempControlList[3] = {"Off", "Run", "Susp."};
 #define cleanCloseButton_text        "Close"
 #define cleanCurrentClean_text        "Cleaning"
 #define cleanCompleteClean_text        "COMPLETE"
+#define cleanWaste_text        "Waste"
+#define cleanDraining_text	"Draining"
+#define cleanFilling_text	"Filling"
+
 #define CONTAINER_FILLING_TIME 10 //Need to be calibrated
+#define WB_FILLING_TIME        30 //Need to be calibrated
 
 /*********************
 * Popup elements
@@ -1543,8 +1549,9 @@ void filterAndDisplayProcesses( void );
 void removeFiltersAndDisplayAllProcesses( void );
 void emptyList(void *list, NodeType_t type);
 char *ftoa(char *a, float f, uint8_t precisione);
-uint8_t getValueForChemicalSource(chemicalSource_t source);
+uint8_t getValueForChemicalSource(uint8_t source);
 void getMinutesAndSeconds(uint8_t containerFillingTime, const bool containerToClean[3]);
+void cleanRelayManager(uint8_t pumpFrom, uint8_t pumpTo,uint8_t pumpDir,bool activePump);
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);

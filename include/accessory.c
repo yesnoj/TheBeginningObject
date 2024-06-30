@@ -1152,6 +1152,33 @@ void initializeRelayPins(){
   }
 
 
+void cleanRelayManager(uint8_t pumpFrom, uint8_t pumpTo,uint8_t pumpDir,bool activePump){
+    if (activePump) { // SET TO ON SELECTED RELAYS
+        mcp.digitalWrite(pumpFrom, HIGH);
+        LV_LOG_USER("From %d on : %d", pumpFrom, mcp.digitalRead(pumpFrom));
+        mcp.digitalWrite(pumpTo, HIGH);
+        LV_LOG_USER("To %d on : %d", pumpTo, mcp.digitalRead(pumpTo));
+        mcp.digitalWrite(pumpDir, HIGH);
+        LV_LOG_USER("Direction %d on : %d", pumpDir, mcp.digitalRead(pumpDir));
+    } else { // SET TO OFF ALL THE RELAY
+        if (pumpFrom != NULL && pumpTo != NULL && pumpDir != NULL) {
+            mcp.digitalWrite(pumpFrom, LOW);
+            LV_LOG_USER("From %d off : %d", pumpFrom, mcp.digitalRead(pumpFrom));
+            mcp.digitalWrite(pumpTo, LOW);
+            LV_LOG_USER("To %d off : %d", pumpTo, mcp.digitalRead(pumpTo));
+            mcp.digitalWrite(pumpDir, LOW);
+            LV_LOG_USER("Direction %d off : %d", pumpDir, mcp.digitalRead(pumpDir));
+        } else {
+            for (uint8_t i = 0; i < RELAY_NUMBER; i++) {
+                mcp.digitalWrite(developingRelays[i], LOW);
+                LV_LOG_USER("Relay %d off : %d", developingRelays[i], mcp.digitalRead(developingRelays[i]));
+            }
+        }
+    }
+
+}
+
+
 void sendValueToRelay(uint8_t *pumpFrom, uint8_t *pumpDir, bool activePump) {
     if (activePump) { // SET TO ON SELECTED RELAYS
         mcp.digitalWrite(*pumpFrom, HIGH);
@@ -1734,7 +1761,7 @@ char *ftoa(char *a, float f, uint8_t precisione) {
    return ret;
 }
 
-uint8_t getValueForChemicalSource(chemicalSource_t source) {
+uint8_t getValueForChemicalSource(uint8_t source) {
     switch (source) {
         case C1:
             return C1_RLY;
@@ -1742,8 +1769,10 @@ uint8_t getValueForChemicalSource(chemicalSource_t source) {
             return C2_RLY;
         case C3:
             return C3_RLY;
+        case WASTE:
+            return WASTE_RLY;
         case WB:
-            return WASTE_RLY; // if is water, the drain is always on waste
+            return WB_RLY; // if is water, the drain is always on waste
         default:
             return 255;
     }

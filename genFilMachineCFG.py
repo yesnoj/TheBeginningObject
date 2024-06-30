@@ -110,7 +110,7 @@ def write_step(file, step):
     file.write(struct.pack('<B', step["timeMins"]))
     file.write(struct.pack('<B', step["timeSecs"]))
     file.write(struct.pack('<L', step["type"]))
-    file.write(struct.pack('<L', step["source"]))
+    file.write(struct.pack('<B', step["source"]))
     file.write(struct.pack('<B', step["discardAfterProc"]))
 
 # Create the configuration file
