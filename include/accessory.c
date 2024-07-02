@@ -1050,12 +1050,19 @@ void updateProcessElement(processNode *process){
       //Update temp
       lv_obj_send_event(existingProcess->process.processElement, LV_EVENT_REFRESH, NULL);
 
+
       if(process->process.processDetails->isTempControlled == false)
         {
           lv_obj_add_flag(process->process.processTempIcon, LV_OBJ_FLAG_HIDDEN);
           lv_obj_add_flag(process->process.processTemp, LV_OBJ_FLAG_HIDDEN);
           lv_obj_align(process->process.processTimeIcon, LV_ALIGN_LEFT_MID, -10, 17);
-          lv_obj_align(process->process.processTime, LV_ALIGN_LEFT_MID, 7, 17);
+          lv_obj_align(process->process.processTime, LV_ALIGN_LEFT_MID, 12, 17);
+        }
+        else{
+            lv_obj_align(process->process.processTime, LV_ALIGN_LEFT_MID, 87, 17);
+            lv_obj_align(process->process.processTimeIcon, LV_ALIGN_LEFT_MID, 65, 17);
+            lv_obj_clear_flag(process->process.processTempIcon, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(process->process.processTemp, LV_OBJ_FLAG_HIDDEN);
         }
 
  
