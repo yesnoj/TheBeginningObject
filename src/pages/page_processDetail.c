@@ -234,7 +234,7 @@ if(existingProcess != NULL) {
             gui.tempProcessNode->process.processDetails->processDetailNameContainer = lv_obj_create(gui.tempProcessNode->process.processDetails->processDetailContainer);
             lv_obj_remove_flag(gui.tempProcessNode->process.processDetails->processDetailNameContainer, LV_OBJ_FLAG_SCROLLABLE); 
             lv_obj_align(gui.tempProcessNode->process.processDetails->processDetailNameContainer, LV_ALIGN_TOP_LEFT, -10, -15);
-            lv_obj_set_size(gui.tempProcessNode->process.processDetails->processDetailNameContainer, 420, 50); 
+            lv_obj_set_size(gui.tempProcessNode->process.processDetails->processDetailNameContainer, 415, 40); 
             //lv_obj_set_style_border_color(gui.tempProcessNode->process.processDetails->processDetailNameContainer, lv_color_hex(GREEN_DARK), 0);
             lv_obj_set_style_border_opa(gui.tempProcessNode->process.processDetails->processDetailNameContainer, LV_OPA_TRANSP, 0);
 
@@ -242,9 +242,9 @@ if(existingProcess != NULL) {
                   gui.tempProcessNode->process.processDetails->processDetailNameTextArea = lv_textarea_create(gui.tempProcessNode->process.processDetails->processDetailNameContainer); 
                   lv_textarea_set_one_line(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, true);
                   lv_textarea_set_placeholder_text(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, processDetailPlaceHolder_text);
-                  lv_obj_set_width(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, 420);
+                  lv_obj_set_width(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, 415);
                   lv_obj_set_style_text_font(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, &lv_font_montserrat_30, 0);              
-                  lv_obj_align(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, LV_ALIGN_TOP_LEFT, -20, -25);
+                  lv_obj_align(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, LV_ALIGN_TOP_LEFT, -20, -28);
                   lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, event_keyboard, LV_EVENT_CLICKED, NULL);
                   lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, event_keyboard, LV_EVENT_DEFOCUSED, NULL);
                   lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->processDetailNameTextArea, event_keyboard, LV_EVENT_CANCEL, NULL);
@@ -340,7 +340,7 @@ if(existingProcess != NULL) {
                           lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->processTempTextArea, event_processDetail, LV_EVENT_REFRESH, gui.tempProcessNode->process.processDetails->processTempTextArea);
                           lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->processTempTextArea, event_processDetail, LV_EVENT_VALUE_CHANGED, gui.tempProcessNode->process.processDetails->processTempTextArea);
                           lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->processTempTextArea, event_processDetail, LV_EVENT_FOCUSED, gui.tempProcessNode->process.processDetails->processTempTextArea);
-//                          lv_obj_add_state(gui.tempProcessNode->process.processDetails->processTempTextArea, LV_STATE_FOCUSED);
+                          lv_obj_set_style_border_opa(gui.tempProcessNode->process.processDetails->processTempTextArea, LV_OPA_TRANSP, LV_PART_CURSOR);   
                           lv_obj_set_style_bg_color(gui.tempProcessNode->process.processDetails->processTempTextArea, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
                           lv_obj_set_style_text_align(gui.tempProcessNode->process.processDetails->processTempTextArea , LV_TEXT_ALIGN_CENTER, 0);
                           lv_style_set_text_font(&gui.tempProcessNode->process.processDetails->textAreaStyle, &lv_font_montserrat_18);
@@ -380,6 +380,9 @@ if(existingProcess != NULL) {
                           lv_textarea_set_placeholder_text(gui.tempProcessNode->process.processDetails->processToleranceTextArea, processDetailTempPlaceHolder_text);
                           lv_obj_align(gui.tempProcessNode->process.processDetails->processToleranceTextArea, LV_ALIGN_LEFT_MID, 100, 0);
                           lv_obj_set_width(gui.tempProcessNode->process.processDetails->processToleranceTextArea, 60);
+                          lv_obj_set_style_border_opa(gui.tempProcessNode->process.processDetails->processToleranceTextArea, LV_OPA_TRANSP, LV_PART_CURSOR);   
+
+                          
 
                           lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->processToleranceTextArea, event_processDetail, LV_EVENT_CLICKED, gui.tempProcessNode->process.processDetails->processToleranceTextArea);
                           lv_obj_add_event_cb(gui.tempProcessNode->process.processDetails->processToleranceTextArea, event_processDetail, LV_EVENT_REFRESH, gui.tempProcessNode->process.processDetails->processToleranceTextArea);
