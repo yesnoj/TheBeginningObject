@@ -189,7 +189,7 @@ void event_messagePopup(lv_event_t *e)
                         if (duplicatedNode == NULL) {
                             fprintf(stderr, "Failed to allocate memory for duplicatedNode\n");
                             free(gui.element.messagePopup.whoCallMe);
-                            return 1;
+                            return;
                         }
 
                         strncpy(duplicatedNode->process.processDetails->processNameString, newProcessName, sizeof(duplicatedNode->process.processDetails->processNameString) - 1);

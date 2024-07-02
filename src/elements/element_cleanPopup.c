@@ -95,17 +95,23 @@ static void resetStuffBeforeNextProcess(){
     gui.element.cleanPopup.isCleaning = false;
     
     lv_obj_clear_state(gui.element.cleanPopup.cleanStopButton, LV_STATE_DISABLED);
-    lv_obj_clear_state(gui.element.cleanPopup.cleanRemainingTimeValue, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_clear_state(gui.element.cleanPopup.cleanNowCleaningValue, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(gui.element.cleanPopup.cleanNowStepLabelValue,cleanFilling_text);             
+
+    lv_obj_clear_flag(gui.element.cleanPopup.cleanRemainingTimeValue, LV_OBJ_FLAG_HIDDEN);
+    
+    lv_obj_clear_flag(gui.element.cleanPopup.cleanNowCleaningValue, LV_OBJ_FLAG_HIDDEN);
     lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningLabel, cleanCurrentClean_text);
+    
     lv_label_set_text(gui.element.cleanPopup.cleanStopButtonLabel, cleanStopButton_text);
-    lv_obj_clear_state(gui.element.cleanPopup.cleanNowStepLabelValue, LV_OBJ_FLAG_HIDDEN);
+    
+    lv_obj_clear_flag(gui.element.cleanPopup.cleanNowStepLabelValue, LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(gui.element.cleanPopup.cleanNowStepLabelValue,cleanFilling_text);             
 
     lv_arc_set_value(gui.element.cleanPopup.cleanProcessArc, 0);
     lv_arc_set_value(gui.element.cleanPopup.cleanCycleArc, 0);
     lv_arc_set_value(gui.element.cleanPopup.cleanPumpArc, 0);
 
-    cleanRelayManager(NULL, NULL, NULL, false);
+    cleanRelayManager(INVALID_RELAY, INVALID_RELAY, INVALID_RELAY, false);
 }
 
 void cleanWasteTimer(lv_timer_t * timer) {
@@ -137,7 +143,7 @@ void cleanWasteTimer(lv_timer_t * timer) {
     lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningLabel, cleanWaste_text);
     lv_obj_add_flag(gui.element.cleanPopup.cleanNowCleaningValue, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_state(gui.element.cleanPopup.cleanStopButton, LV_STATE_DISABLED);
-    lv_obj_clear_state(gui.element.cleanPopup.cleanNowStepLabelValue, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(gui.element.cleanPopup.cleanNowStepLabelValue, LV_OBJ_FLAG_HIDDEN);
     lv_arc_set_value(gui.element.cleanPopup.cleanPumpArc, stepPercentage);
 
     // Esegui cleanRelayManager solo una volta all'inizio
@@ -150,10 +156,15 @@ void cleanWasteTimer(lv_timer_t * timer) {
     // Controlla se il tempo è scaduto
     if (elapsedStepSecs >= WB_FILLING_TIME) {
         lv_arc_set_value(gui.element.cleanPopup.cleanPumpArc, stepPercentage);
-        lv_obj_clear_state(gui.element.cleanPopup.cleanStopButton, LV_STATE_DISABLED);
-        lv_label_set_text(gui.element.cleanPopup.cleanNowStepLabelValue, cleanCompleteClean_text);
 
-        cleanRelayManager(NULL, NULL, NULL, false);
+        lv_obj_set_style_bg_color(gui.element.cleanPopup.cleanStopButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
+        lv_label_set_text(gui.element.cleanPopup.cleanStopButtonLabel, cleanCloseButton_text);
+        lv_obj_clear_state(gui.element.cleanPopup.cleanStopButton, LV_STATE_DISABLED);
+        lv_obj_add_flag(gui.element.cleanPopup.cleanNowStepLabelValue, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_clear_flag(gui.element.cleanPopup.cleanNowCleaningValue, LV_OBJ_FLAG_HIDDEN);
+        lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningValue, cleanCompleteClean_text);
+
+        cleanRelayManager(INVALID_RELAY, INVALID_RELAY, INVALID_RELAY, false);
         LV_LOG_USER("Execution of cleanRelayManager after WB_FILLING_TIME done");
 
         // Cancella il timer
@@ -197,7 +208,7 @@ void cleanPumpTimer(lv_timer_t * timer) {
 
             // Interrompi il timer e salva lo stato
             lv_timer_del(gui.element.cleanPopup.pumpTimer);
-            cleanRelayManager(NULL, NULL, NULL, false);
+            cleanRelayManager(INVALID_RELAY, INVALID_RELAY, INVALID_RELAY, false);
             gui.page.tools.machineStats.clean++;
             qSysAction(SAVE_MACHINE_STATS);
             return;
@@ -324,11 +335,11 @@ void cleanPumpTimer(lv_timer_t * timer) {
                 if(gui.element.cleanPopup.isAlreadyPumping == false){
                   gui.element.cleanPopup.isAlreadyPumping = true;
                   if(gui.element.cleanPopup.stepDirection == 1 ){
-                      cleanRelayManager(NULL, NULL, NULL, false);
+                      cleanRelayManager(INVALID_RELAY, INVALID_RELAY, INVALID_RELAY, false);
                       cleanRelayManager(getValueForChemicalSource(WB), getValueForChemicalSource(containerIndex), PUMP_IN_RLY, true);
                       }
                       else{
-                      cleanRelayManager(NULL, NULL, NULL, false);
+                      cleanRelayManager(INVALID_RELAY, INVALID_RELAY, INVALID_RELAY, false);
                       cleanRelayManager(getValueForChemicalSource(containerIndex), getValueForChemicalSource(WB), PUMP_OUT_RLY, true);
                       }
                 }
@@ -340,12 +351,11 @@ void cleanPumpTimer(lv_timer_t * timer) {
         } else {
             // Processo completato
             lv_label_set_text_fmt(gui.element.cleanPopup.cleanRemainingTimeValue, "%dm%ds", 0, 0);
-            lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningValue, cleanCompleteClean_text);
-            lv_obj_add_state(gui.element.cleanPopup.cleanNowStepLabelValue, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(gui.element.cleanPopup.cleanNowStepLabelValue, LV_OBJ_FLAG_HIDDEN);
 
 
             
-            cleanRelayManager(NULL, NULL, NULL, false);
+            cleanRelayManager(INVALID_RELAY, INVALID_RELAY, INVALID_RELAY, false);
             // Interrompi il timer e salva lo stato
             lv_timer_del(gui.element.cleanPopup.pumpTimer);
             
@@ -358,6 +368,7 @@ void cleanPumpTimer(lv_timer_t * timer) {
               gui.element.cleanPopup.wasteTimer = lv_timer_create(cleanWasteTimer, 1000,  NULL);
             }
             else{
+                lv_label_set_text(gui.element.cleanPopup.cleanNowCleaningValue, cleanCompleteClean_text);
                 lv_obj_set_style_bg_color(gui.element.cleanPopup.cleanStopButton, lv_color_hex(GREEN_DARK), LV_PART_MAIN);
                 lv_label_set_text(gui.element.cleanPopup.cleanStopButtonLabel, cleanCloseButton_text);
             }
@@ -756,7 +767,7 @@ void cleanPopup (void){
 
               gui.element.cleanPopup.cleanNowStepLabelValue = lv_label_create(gui.element.cleanPopup.cleanProcessContainer);          
               lv_obj_set_style_text_font(gui.element.cleanPopup.cleanNowStepLabelValue, &lv_font_montserrat_18, 0); 
-              lv_label_set_text(gui.element.cleanPopup.cleanNowStepLabelValue,cleanFilling_text);             
+              //lv_label_set_text(gui.element.cleanPopup.cleanNowStepLabelValue,cleanFilling_text);             
               lv_obj_align(gui.element.cleanPopup.cleanNowStepLabelValue, LV_ALIGN_CENTER, 0, 47);
 
 

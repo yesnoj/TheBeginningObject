@@ -36,7 +36,7 @@
 
 #define HEATER_RLY     0 //Be aware of this definition, this can be confused with NULL that is also "0"
 
-
+#define INVALID_RELAY  255
 
 
 //MOTORS PIN

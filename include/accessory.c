@@ -116,9 +116,6 @@ void event_keyboard(lv_event_t* e)
  {
   lv_event_code_t code = lv_event_get_code(e);
   lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
-  lv_obj_t * objCont = (lv_obj_t *)lv_obj_get_parent(obj);
-  lv_obj_t * mboxCont = (lv_obj_t *)lv_obj_get_parent(objCont);
-  lv_obj_t * mboxParent = (lv_obj_t *)lv_obj_get_parent(mboxCont);
 
    if(code == LV_EVENT_CLICKED){ 
       if(obj == gui.element.filterPopup.mBoxNameTextArea){
@@ -751,9 +748,6 @@ void initSD_I2C_MCP23017() {
 }
 
 void readConfigFile(fs::FS &fs, const char *path, bool enableLog) {
-
-  uint32_t processCount = 0, stepCount;
-
   if(fs.exists(path)) {
 
     File file = fs.open(path, FILE_READ);
@@ -1168,7 +1162,7 @@ void cleanRelayManager(uint8_t pumpFrom, uint8_t pumpTo,uint8_t pumpDir,bool act
         mcp.digitalWrite(pumpDir, HIGH);
         LV_LOG_USER("Direction %d on : %d", pumpDir, mcp.digitalRead(pumpDir));
     } else { // SET TO OFF ALL THE RELAY
-        if (pumpFrom != NULL && pumpTo != NULL && pumpDir != NULL) {
+        if (pumpFrom != INVALID_RELAY && pumpTo != INVALID_RELAY && pumpDir != INVALID_RELAY) {
             mcp.digitalWrite(pumpFrom, LOW);
             LV_LOG_USER("From %d off : %d", pumpFrom, mcp.digitalRead(pumpFrom));
             mcp.digitalWrite(pumpTo, LOW);
