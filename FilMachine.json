@@ -2,156 +2,156 @@
     "settingsParams": {
         "tempUnit": 1,
         "waterInlet": 0,
-        "calibratedTemp": 4,
-        "filmRotationSpeedSetpoint": 41,
-        "rotationIntervalSetpoint": 35,
-        "randomSetpoint": 33,
-        "isPersistentAlarm": 0,
+        "calibratedTemp": 6,
+        "filmRotationSpeedSetpoint": 80,
+        "rotationIntervalSetpoint": 50,
+        "randomSetpoint": 80,
+        "isPersistentAlarm": 1,
         "isProcessAutostart": 1,
-        "drainFillOverlapSetpoint": 0,
-        "multiRinseTime": 180
+        "drainFillOverlapSetpoint": 50,
+        "multiRinseTime": 120
     },
     "processes": [
         {
-            "processNameString": "NjtDBDyjjY",
-            "temp": 25,
-            "tempTolerance": 0.5,
+            "processNameString": "uRwJhSoSxL",
+            "temp": 35,
+            "tempTolerance": 0.0,
             "isTempControlled": 0,
             "isPreferred": 0,
-            "filmType": 0,
-            "timeMins": 13,
-            "timeSecs": 29,
+            "filmType": 1,
+            "timeMins": 10,
+            "timeSecs": 23,
             "steps": [
                 {
-                    "stepNameString": "JiLfWTPnqh",
+                    "stepNameString": "HUEQgAlxVy",
                     "timeMins": 5,
-                    "timeSecs": 40,
+                    "timeSecs": 52,
                     "type": 1,
                     "source": 3,
-                    "discardAfterProc": 0
+                    "discardAfterProc": 1
                 },
                 {
-                    "stepNameString": "SAfOAssDDP",
+                    "stepNameString": "tVdXfWZtQO",
+                    "timeMins": 1,
+                    "timeSecs": 57,
+                    "type": 2,
+                    "source": 0,
+                    "discardAfterProc": 1
+                },
+                {
+                    "stepNameString": "MBfTzvfZvH",
                     "timeMins": 2,
-                    "timeSecs": 15,
-                    "type": 0,
-                    "source": 1,
-                    "discardAfterProc": 0
-                },
-                {
-                    "stepNameString": "AURXsxyDPQ",
-                    "timeMins": 5,
                     "timeSecs": 34,
-                    "type": 0,
-                    "source": 1,
+                    "type": 2,
+                    "source": 2,
                     "discardAfterProc": 1
                 }
             ]
         },
         {
-            "processNameString": "DCfbsvNice",
-            "temp": 38,
-            "tempTolerance": 0.0,
+            "processNameString": "mPYfEDHwSB",
+            "temp": 32,
+            "tempTolerance": 0.2,
             "isTempControlled": 0,
             "isPreferred": 1,
             "filmType": 1,
-            "timeMins": 9,
-            "timeSecs": 17,
+            "timeMins": 2,
+            "timeSecs": 46,
             "steps": [
                 {
-                    "stepNameString": "vKcIPirofO",
-                    "timeMins": 4,
-                    "timeSecs": 0,
-                    "type": 2,
-                    "source": 1,
-                    "discardAfterProc": 0
-                },
-                {
-                    "stepNameString": "eBuQGZYlwm",
-                    "timeMins": 0,
-                    "timeSecs": 46,
-                    "type": 2,
-                    "source": 2,
-                    "discardAfterProc": 0
-                },
-                {
-                    "stepNameString": "iseofyfAqZ",
-                    "timeMins": 4,
-                    "timeSecs": 31,
+                    "stepNameString": "uevzzHYPHk",
+                    "timeMins": 1,
+                    "timeSecs": 37,
                     "type": 0,
                     "source": 2,
                     "discardAfterProc": 0
+                },
+                {
+                    "stepNameString": "TpPtZHfUmk",
+                    "timeMins": 0,
+                    "timeSecs": 1,
+                    "type": 0,
+                    "source": 2,
+                    "discardAfterProc": 1
+                },
+                {
+                    "stepNameString": "vroePKxGvP",
+                    "timeMins": 1,
+                    "timeSecs": 8,
+                    "type": 1,
+                    "source": 0,
+                    "discardAfterProc": 1
                 }
             ]
         },
         {
-            "processNameString": "WrFktNpZec",
-            "temp": 33,
-            "tempTolerance": 0.0,
+            "processNameString": "TDGzfpltXU",
+            "temp": 25,
+            "tempTolerance": 0.3,
             "isTempControlled": 0,
-            "isPreferred": 1,
+            "isPreferred": 0,
+            "filmType": 1,
+            "timeMins": 7,
+            "timeSecs": 10,
+            "steps": [
+                {
+                    "stepNameString": "shfEltEHgC",
+                    "timeMins": 1,
+                    "timeSecs": 6,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 1
+                },
+                {
+                    "stepNameString": "YGJfBAClqu",
+                    "timeMins": 4,
+                    "timeSecs": 13,
+                    "type": 1,
+                    "source": 1,
+                    "discardAfterProc": 0
+                },
+                {
+                    "stepNameString": "oXjUIdxuuq",
+                    "timeMins": 1,
+                    "timeSecs": 51,
+                    "type": 2,
+                    "source": 3,
+                    "discardAfterProc": 1
+                }
+            ]
+        },
+        {
+            "processNameString": "HKLCwcDOum",
+            "temp": 35,
+            "tempTolerance": 0.1,
+            "isTempControlled": 1,
+            "isPreferred": 0,
             "filmType": 0,
-            "timeMins": 6,
+            "timeMins": 11,
             "timeSecs": 3,
             "steps": [
                 {
-                    "stepNameString": "sTzRBqeUVA",
-                    "timeMins": 0,
-                    "timeSecs": 21,
-                    "type": 1,
-                    "source": 0,
-                    "discardAfterProc": 1
-                },
-                {
-                    "stepNameString": "eZQGINIxDR",
-                    "timeMins": 4,
-                    "timeSecs": 2,
-                    "type": 2,
+                    "stepNameString": "zaKSLFxVXB",
+                    "timeMins": 5,
+                    "timeSecs": 17,
+                    "type": 0,
                     "source": 2,
-                    "discardAfterProc": 1
+                    "discardAfterProc": 0
                 },
                 {
-                    "stepNameString": "agdkKFZanR",
-                    "timeMins": 1,
-                    "timeSecs": 40,
-                    "type": 2,
-                    "source": 1,
-                    "discardAfterProc": 1
-                }
-            ]
-        },
-        {
-            "processNameString": "roRFdLiRYj",
-            "temp": 31,
-            "tempTolerance": 0.0,
-            "isTempControlled": 0,
-            "isPreferred": 1,
-            "filmType": 1,
-            "timeMins": 0,
-            "timeSecs": 45,
-            "steps": [
-                {
-                    "stepNameString": "hhkkVkanXF",
-                    "timeMins": 0,
-                    "timeSecs": 4,
-                    "type": 2,
-                    "source": 0,
-                    "discardAfterProc": 1
-                },
-                {
-                    "stepNameString": "nCxQByNYaW",
-                    "timeMins": 0,
-                    "timeSecs": 36,
-                    "type": 2,
+                    "stepNameString": "AJxxGvpyNG",
+                    "timeMins": 4,
+                    "timeSecs": 38,
+                    "type": 0,
                     "source": 1,
                     "discardAfterProc": 0
                 },
                 {
-                    "stepNameString": "UyCTncxFql",
-                    "timeMins": 0,
-                    "timeSecs": 5,
-                    "type": 0,
-                    "source": 2,
+                    "stepNameString": "NKSzHYPWmb",
+                    "timeMins": 1,
+                    "timeSecs": 8,
+                    "type": 1,
+                    "source": 0,
                     "discardAfterProc": 1
                 }
             ]

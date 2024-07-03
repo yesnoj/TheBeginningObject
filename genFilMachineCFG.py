@@ -6,27 +6,23 @@ import string
 import time
 
 # Definition of constants
-MAX_STEP_MIN = 5 
-MAX_PROC_NAME_LEN = 10  
-MAX_STEP_ELEMENTS = 3  #MAX 10 PROCESS / DEV.A 30
-MAX_PROC_ELEMENTS = 4  #MAX 30 PROCESS / DEV.A 100
+MAX_STEP_MIN = 5
+MAX_PROC_NAME_LEN = 10
+MAX_STEP_ELEMENTS = 3  # MAX 10 PROCESS / DEV.A 30
+MAX_PROC_ELEMENTS = 4  # MAX 30 PROCESS / DEV.A 100
 
 # Definition of output file names
 OUTPUT_FILE_CFG = 'FilMachine.cfg'
+OUTPUT_FILE_BACKUP_CFG = 'FilMachine_Backup.cfg'
 OUTPUT_FILE_JSON = 'FilMachine.JSON'
-
-import struct
-import random
-import string
-import json
 
 # Generate the settingsParams with specified limits
 settingsParams = {
     "tempUnit": random.randint(0, 1),
     "waterInlet": random.randint(0, 1),
     "calibratedTemp": random.randint(0, 40),
-    "filmRotationSpeedSetpoint": random.randint(20, 90),
-    "rotationIntervalSetpoint": random.randint(5, 60),
+    "filmRotationSpeedSetpoint": random.randrange(20, 90, 10),
+    "rotationIntervalSetpoint": random.randrange(10, 60, 10),
     "randomSetpoint": random.randrange(0, 101, 20),
     "isPersistentAlarm": random.randint(0, 1),
     "isProcessAutostart": random.randint(0, 1),
@@ -50,7 +46,7 @@ def generate_steps():
             "stepNameString": random_string(MAX_PROC_NAME_LEN),
             "timeMins": step_mins,
             "timeSecs": step_secs,
-            "type": random.randint(0, 2), # No icon for 3 ( CHEMICAL_TYPE_NA ) So limit to 2 for now as will crash
+            "type": random.randint(0, 2), # No icon for 3 (CHEMICAL_TYPE_NA) So limit to 2 for now as will crash
             "source": random.randint(0, 3), # gui can only have 0 to 3 or it will crash
             "discardAfterProc": random.randint(0, 1)
         })
@@ -93,9 +89,9 @@ def write_settings(file, settings):
     file.write(struct.pack('<B', settings["multiRinseTime"]))
 
 def write_process(file, process):
-    file.write(process["processNameString"].encode('ASCII').ljust(21, b'\x00'))  #updated type to ASCII as UTF-8 can generate characters with more than 1 byte! Crash for us!
+    file.write(process["processNameString"].encode('ASCII').ljust(21, b'\x00'))  # Updated type to ASCII as UTF-8 can generate characters with more than 1 byte! Crash for us!
     file.write(struct.pack('<L', process["temp"]))
-    file.write(struct.pack('<f', process["tempTolerance"])) # Updated for float 
+    file.write(struct.pack('<f', process["tempTolerance"])) # Updated for float
     file.write(struct.pack('<B', process["isTempControlled"]))
     file.write(struct.pack('<B', process["isPreferred"]))
     file.write(struct.pack('<L', process["filmType"]))
@@ -113,16 +109,24 @@ def write_step(file, step):
     file.write(struct.pack('<B', step["source"]))
     file.write(struct.pack('<B', step["discardAfterProc"]))
 
-# Create the configuration file
-with open(OUTPUT_FILE_CFG, "wb") as bin_file:
-    # Write settingsParams
-    write_settings(bin_file, settingsParams)
-    
-    # Write the number of processes
-    bin_file.write(struct.pack('<l', len(processes)))
-    # Write each process and its steps
-    for process in processes:
-        write_process(bin_file, process)
+# Function to write the configuration file
+def write_config(filename):
+    with open(filename, "wb") as bin_file:
+        # Write settingsParams
+        write_settings(bin_file, settingsParams)
+        
+        # Write the number of processes
+        bin_file.write(struct.pack('<l', len(processes)))
+        
+        # Write each process and its steps
+        for process in processes:
+            write_process(bin_file, process)
+
+# Write the main configuration file
+write_config(OUTPUT_FILE_CFG)
+
+# Write the backup configuration file
+write_config(OUTPUT_FILE_BACKUP_CFG)
 
 # Create the JSON file
 data = {
@@ -132,4 +136,3 @@ data = {
 
 with open(OUTPUT_FILE_JSON, "w") as json_file:
     json.dump(data, json_file, indent=4)
-
