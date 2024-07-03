@@ -376,6 +376,7 @@ LV_LOG_USER("pumpTimer running :%d", tankPercentage);
 void processTimer(lv_timer_t * timer)
 { 
     LV_LOG_USER("processTimer running");
+    gui.tempProcessNode->process.processDetails->checkup->isDeveloping = true;
 
     if(secondsProcessElapsed >= 60) {
         secondsProcessElapsed = 0;
@@ -481,6 +482,8 @@ void processTimer(lv_timer_t * timer)
         secondsProcessElapsed++;
         secondsStepElapsed++;
         if(processPercentage == 100) {
+          gui.tempProcessNode->process.processDetails->checkup->isDeveloping = false;
+          
           lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);
           lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);   
           //lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);  

@@ -129,14 +129,24 @@ void event_settings_handler(lv_event_t * e)
         }    }
 
     if(act_cb == gui.page.settings.filmRandomlSlider){
-      if(code == LV_EVENT_VALUE_CHANGED) {
-        lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%~%d%%", lv_slider_get_value(act_cb));
-        LV_LOG_USER("Film Randomness : %d",lv_slider_get_value(act_cb));
-        gui.page.settings.settingsParams.randomSetpoint = lv_slider_get_value(act_cb);
+        if(code == LV_EVENT_RELEASED) {
+            uint8_t current_value = gui.page.settings.settingsParams.randomSetpoint;
+            uint8_t new_value = lv_slider_get_value(act_cb);
+
+            if(new_value > current_value) {
+                new_value = current_value + 20;
+            } else if(new_value < current_value) {
+                new_value = current_value - 20;
+            }
+
+
+            lv_slider_set_value(act_cb, new_value, LV_ANIM_OFF);  // Update the slider value to the nearest 30
+            lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%d%%", lv_slider_get_value(act_cb));
+            gui.page.settings.settingsParams.randomSetpoint = lv_slider_get_value(act_cb);
+            LV_LOG_USER("Film Randomness : %d, for time: %dsec%, is %dsec%",lv_slider_get_value(act_cb),gui.page.settings.settingsParams.rotationIntervalSetpoint, getRandomRotationInterval());
+            qSysAction(SAVE_PROCESS_CONFIG);
         }
-      if(code == LV_EVENT_RELEASED){
-          qSysAction( SAVE_PROCESS_CONFIG );
-        }    }
+     }
 
     if(act_cb == gui.page.settings.persistentAlarmSwitch){
       if(code == LV_EVENT_VALUE_CHANGED) {
@@ -422,10 +432,6 @@ void initSettings(void){
         gui.page.settings.filmRotationRandomValueLabel = lv_label_create(gui.page.settings.randomContainer);
         lv_obj_set_style_text_font(gui.page.settings.filmRotationRandomValueLabel, &lv_font_montserrat_22, 0);              
         lv_obj_align(gui.page.settings.filmRotationRandomValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_CLICKED, gui.page.settings.filmRotationRandomValueLabel);
-        lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.filmRotationRandomValueLabel);
-        lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_SHORT_CLICKED, gui.page.settings.filmRotationRandomValueLabel);
-        lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_LONG_PRESSED_REPEAT, gui.page.settings.filmRotationRandomValueLabel);
         lv_obj_add_event_cb(gui.page.settings.filmRandomlSlider, event_settings_handler, LV_EVENT_RELEASED, gui.page.settings.filmRotationRandomValueLabel);
         lv_label_set_text_fmt(gui.page.settings.filmRotationRandomValueLabel, "~%d%", gui.page.settings.settingsParams.randomSetpoint);
 
@@ -502,10 +508,6 @@ void initSettings(void){
         gui.page.settings.drainFillTimeValueLabel = lv_label_create(gui.page.settings.drainFillTimeContainer);
         lv_obj_set_style_text_font(gui.page.settings.drainFillTimeValueLabel, &lv_font_montserrat_22, 0);              
         lv_obj_align(gui.page.settings.drainFillTimeValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
-        lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_CLICKED, gui.page.settings.drainFillTimeValueLabel);
-        lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_VALUE_CHANGED, gui.page.settings.drainFillTimeValueLabel);
-        lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_SHORT_CLICKED, gui.page.settings.drainFillTimeValueLabel);
-        lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_LONG_PRESSED_REPEAT, gui.page.settings.drainFillTimeValueLabel);
         lv_obj_add_event_cb(gui.page.settings.drainFillTimeSlider, event_settings_handler, LV_EVENT_RELEASED, gui.page.settings.drainFillTimeValueLabel);
         lv_label_set_text_fmt(gui.page.settings.drainFillTimeValueLabel, "%d%%", gui.page.settings.settingsParams.drainFillOverlapSetpoint);
 

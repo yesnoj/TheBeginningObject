@@ -482,6 +482,7 @@ typedef struct sCheckup{
 	bool    			stopAfter;
   bool          isFilling;
   bool          isAlreadyPumping;
+  bool    			isDeveloping;
 	uint8_t 			stepFillWaterStatus;
 	uint8_t 			stepReachTempStatus;
 	uint8_t 			stepCheckFilmStatus;
@@ -988,6 +989,7 @@ typedef struct {
 #define SAVE_PROCESS_CONFIG           0x0001
 #define SAVE_MACHINE_STATS            0x0002
 #define RELOAD_CFG                    0x0003
+#define TANK_ROTATION                 0x0004
 
 LV_FONT_DECLARE(FilMachineFontIcons_15);
 LV_FONT_DECLARE(FilMachineFontIcons_20);
@@ -1552,6 +1554,8 @@ char *ftoa(char *a, float f, uint8_t precisione);
 uint8_t getValueForChemicalSource(uint8_t source);
 void getMinutesAndSeconds(uint8_t containerFillingTime, const bool containerToClean[3]);
 void cleanRelayManager(uint8_t pumpFrom, uint8_t pumpTo,uint8_t pumpDir,bool activePump);
+uint8_t getRandomRotationInterval();
+void rotateMotor(uint8_t motorPin1, uint8_t motorPin2);
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);

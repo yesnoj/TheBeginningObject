@@ -27,7 +27,7 @@ settingsParams = {
     "calibratedTemp": random.randint(0, 40),
     "filmRotationSpeedSetpoint": random.randint(20, 90),
     "rotationIntervalSetpoint": random.randint(5, 60),
-    "randomSetpoint": random.randint(0, 100),
+    "randomSetpoint": random.randrange(0, 101, 20),
     "isPersistentAlarm": random.randint(0, 1),
     "isProcessAutostart": random.randint(0, 1),
     "drainFillOverlapSetpoint": random.randrange(0, 100, 50),

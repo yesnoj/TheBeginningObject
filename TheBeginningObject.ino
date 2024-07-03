@@ -40,6 +40,11 @@ void sysMan( void *arg ) {
 		
 	while(1) {  // This is a task which runs for ever
 		
+    if(gui.tempProcessNode->process.processDetails->checkup->isDeveloping){
+        rotateMotor(MOTOR_IN1_PIN, MOTOR_IN2_PIN);
+    }
+
+
     /* This will time out after MEM_MSG_DISPLAY_TIME and print memory then wait again */
 		if( xQueueReceive( gui.sysActionQ, &msg, pdMS_TO_TICKS(MEM_MSG_DISPLAY_TIME) ) ) { 
 			switch(msg) {
@@ -48,7 +53,6 @@ void sysMan( void *arg ) {
           writeConfigFile(SD, FILENAME_SAVE, false);
           break;
       // Add Further processor intensive tasks here to keep them out of the GUI execution path
-
 			case SAVE_MACHINE_STATS:
 	        LV_LOG_USER("Save On EEPROM!");
           writeMachineStats(&gui.page.tools.machineStats);

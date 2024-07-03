@@ -1802,6 +1802,60 @@ void getMinutesAndSeconds(uint8_t containerFillingTime, const bool containerToCl
     gui.element.cleanPopup.totalSecs = totalTime % 60;
 }
 
+
+uint8_t getRandomRotationInterval() {
+    uint8_t baseTime = gui.page.settings.settingsParams.rotationIntervalSetpoint;
+    uint8_t randomPercentage = gui.page.settings.settingsParams.randomSetpoint;
+
+    // Calculate percentage
+    uint8_t variation = (baseTime * randomPercentage) / 100;
+    
+    // Calculate the intervals
+    uint8_t minValue = baseTime - variation; // Minimo valore che può essere restituito
+    uint8_t maxValue = baseTime;             // Massimo valore che può essere restituito
+
+    // Calculate the offset between [-variation, variation]
+    int8_t randomOffset = (rand() % (2 * variation + 1)) - variation; // [ -variation, variation ]
+    
+    uint8_t result = minValue + randomOffset;
+    
+    // Limit values between 5 and 60 seconds, the min e max value for rotationIntervalSetpoint.
+    if (result > 60) {
+        result = 60;
+    }
+    if (result < 5) {
+        result = 5;
+    }
+
+    LV_LOG_USER("baseTime: %d, randomPercentage: %d, variation: %d, randomOffset: %d, result: %d",
+                baseTime, randomPercentage, variation, randomOffset, result);
+
+    return result;
+}
+
+
+
+void rotateMotor(uint8_t motorPin1, uint8_t motorPin2) {
+    uint8_t rotationTime = getRandomRotationInterval();
+
+    LV_LOG_USER("Rotate motor...with randomness:  %dsec%",getRandomRotationInterval());
+    // Rotazione in un verso
+    runMotorFW(motorPin1,motorPin2);
+    vTaskDelay(pdMS_TO_TICKS(rotationTime * 1000));  // Sospende il task per rotationTime secondi
+
+    rotationTime = getRandomRotationInterval();
+
+    // Rotazione in senso opposto
+    runMotorRV(motorPin1,motorPin2);
+    vTaskDelay(pdMS_TO_TICKS(rotationTime * 1000));  // Sospende il task per rotationTime secondi
+
+    // Spegnimento del motore
+    stopMotor(motorPin1, motorPin2);
+
+}
+
+
+
 /*
 void filterAndDisplayProcesses(void) {
     processNode *currentNode = gui.page.processes.processElementsList.start;
