@@ -1521,7 +1521,7 @@ uint32_t loadSDCardProcesses();
 char * generateRandomCharArray(int length);
 
 void initializeRelayPins();
-void sendValueToRelay(uint8_t *pumpFrom, uint8_t *pumpDir, bool activePump);
+void sendValueToRelay(uint8_t pumpFrom, uint8_t pumpDir, bool activePump);
 void initializeMotorPins();
 void stopMotor(uint8_t pin1, uint8_t pin2);
 void runMotorFW(uint8_t pin1, uint8_t pin2);

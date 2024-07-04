@@ -510,7 +510,7 @@ void handleFirstStep(sCheckup* checkup) {
         LV_LOG_USER("First step FILLING");
 
         if (checkup->isAlreadyPumping == false) {
-            sendValueToRelay(&pumpFrom, &pumpDir, true);
+            sendValueToRelay(pumpFrom, pumpDir, true);
             checkup->isAlreadyPumping = true;
         }
 
@@ -520,7 +520,7 @@ void handleFirstStep(sCheckup* checkup) {
     } else {
         LV_LOG_USER("First step FILLING COMPLETE");
 
-        sendValueToRelay(&pumpFrom, &pumpDir, false);
+        sendValueToRelay(pumpFrom, pumpDir, false);
         checkup->isAlreadyPumping = false;
 
         lv_arc_set_value(checkup->pumpArc, tankPercentage);
@@ -545,7 +545,7 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
             LV_LOG_USER("Last step DRAINING");
 
             if (checkup->isAlreadyPumping == false) {
-                sendValueToRelay(&pumpFrom, &pumpDir, true);
+                sendValueToRelay(pumpFrom, pumpDir, true);
                 checkup->isAlreadyPumping = true;
             }
 
@@ -555,7 +555,7 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
         } else {
             LV_LOG_USER("Last step DRAINING COMPLETE");
 
-            sendValueToRelay(&pumpFrom, &pumpDir, false);
+            sendValueToRelay(pumpFrom, pumpDir, false);
             checkup->isAlreadyPumping = false;
 
             lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
@@ -573,7 +573,7 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
 
                 if (checkup->isAlreadyPumping == false) {
 
-                    sendValueToRelay(&pumpFrom, &pumpDir, true);
+                    sendValueToRelay(pumpFrom, pumpDir, true);
                     checkup->isAlreadyPumping = true;
                 }
 
@@ -584,7 +584,7 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
                 LV_LOG_USER("Middle step FILLING COMPLETE");
 
 
-                sendValueToRelay(&pumpFrom, &pumpDir, false);
+                sendValueToRelay(pumpFrom, pumpDir, false);
                 checkup->isAlreadyPumping = false;
 
                 lv_arc_set_value(checkup->pumpArc, tankPercentage);
@@ -608,7 +608,7 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
                 LV_LOG_USER("Middle step DRAINING");
 
                 if (checkup->isAlreadyPumping == false) {
-                    sendValueToRelay(&pumpFrom, &pumpDir, true);
+                    sendValueToRelay(pumpFrom, pumpDir, true);
                     checkup->isAlreadyPumping = true;
                 }
 
@@ -618,7 +618,7 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
             } else {
                 LV_LOG_USER("Middle step DRAINING COMPLETE");
 
-                sendValueToRelay(&pumpFrom, &pumpDir, false);
+                sendValueToRelay(pumpFrom, pumpDir, false);
                 checkup->isAlreadyPumping = false;
 
                 lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
@@ -642,7 +642,7 @@ void handleStopNow(sCheckup* checkup) {
         checkup->isFilling = true;
 
         sendValueToRelay(NULL, NULL, false);
-        sendValueToRelay(&pumpFrom, &pumpDir, true);
+        sendValueToRelay(pumpFrom, pumpDir, true);
         checkup->isAlreadyPumping = false;
     }
     if (tankPercentage > 0) {
@@ -651,7 +651,7 @@ void handleStopNow(sCheckup* checkup) {
         
         if(checkup->isAlreadyPumping == true){
             sendValueToRelay(NULL, NULL, false);
-            sendValueToRelay(&pumpFrom, &pumpDir, true);
+            sendValueToRelay(pumpFrom, pumpDir, true);
             checkup->isAlreadyPumping = false;
         }
       
@@ -662,7 +662,7 @@ void handleStopNow(sCheckup* checkup) {
     } else {
         LV_LOG_USER("STOP NOW DRAINING COMPLETE");
 
-       sendValueToRelay(&pumpFrom, &pumpDir, false);
+       sendValueToRelay(pumpFrom, pumpDir, false);
        checkup->isAlreadyPumping = false;
 
         lv_arc_set_value(checkup->pumpArc, tankPercentage);
@@ -680,7 +680,7 @@ void handleStopAfter(sCheckup* checkup) {
             LV_LOG_USER("STOP AFTER step FILLING");
 
         if (checkup->isAlreadyPumping == false) {
-            sendValueToRelay(&pumpFrom, &pumpDir, true);
+            sendValueToRelay(pumpFrom, pumpDir, true);
             checkup->isAlreadyPumping = true;
         }
 
@@ -692,7 +692,7 @@ void handleStopAfter(sCheckup* checkup) {
             LV_LOG_USER("STOP AFTER step FILLING COMPLETE");
 
 
-            sendValueToRelay(&pumpFrom, &pumpDir, false);
+            sendValueToRelay(pumpFrom, pumpDir, false);
             checkup->isAlreadyPumping = false;
 
             lv_arc_set_value(checkup->pumpArc, tankPercentage);
@@ -721,7 +721,7 @@ void handleStopAfter(sCheckup* checkup) {
 
 
             if (checkup->isAlreadyPumping == false) {
-                sendValueToRelay(&pumpFrom, &pumpDir, true);
+                sendValueToRelay(pumpFrom, pumpDir, true);
                 checkup->isAlreadyPumping = true;
             }
 
@@ -731,7 +731,7 @@ void handleStopAfter(sCheckup* checkup) {
         } else {
             LV_LOG_USER("STOP AFTER step DRAINING COMPLETE");
 
-            sendValueToRelay(&pumpFrom, &pumpDir, false);
+            sendValueToRelay(pumpFrom, pumpDir, false);
             checkup->isAlreadyPumping = false;
 
             lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
@@ -752,7 +752,7 @@ void handleStopNowAfterStopAfter(sCheckup* checkup) {
         checkup->isFilling = true;
 
         sendValueToRelay(NULL, NULL, false);
-        sendValueToRelay(&pumpFrom, &pumpDir, true);
+        sendValueToRelay(pumpFrom, pumpDir, true);
         checkup->isAlreadyPumping = false;
     }
     if (tankPercentage > 0) {
@@ -760,7 +760,7 @@ void handleStopNowAfterStopAfter(sCheckup* checkup) {
 
         if(checkup->isAlreadyPumping == true){
             sendValueToRelay(NULL, NULL, false);
-            sendValueToRelay(&pumpFrom, &pumpDir, true);
+            sendValueToRelay(pumpFrom, pumpDir, true);
             checkup->isAlreadyPumping = false;
         }
 
@@ -770,7 +770,7 @@ void handleStopNowAfterStopAfter(sCheckup* checkup) {
     } else {
         LV_LOG_USER("STOP NOW after STOP AFTER DRAINING COMPLETE");
 
-        sendValueToRelay(&pumpFrom, &pumpDir, false);
+        sendValueToRelay(pumpFrom, pumpDir, false);
         checkup->isAlreadyPumping = false;
 
         lv_arc_set_value(checkup->pumpArc, tankPercentage);

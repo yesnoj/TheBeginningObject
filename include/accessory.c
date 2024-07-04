@@ -1184,19 +1184,19 @@ void cleanRelayManager(uint8_t pumpFrom, uint8_t pumpTo,uint8_t pumpDir,bool act
 }
 
 
-void sendValueToRelay(uint8_t *pumpFrom, uint8_t *pumpDir, bool activePump) {
+void sendValueToRelay(uint8_t pumpFrom, uint8_t pumpDir, bool activePump) {
     if (activePump) { // SET TO ON SELECTED RELAYS
-        mcp.digitalWrite(*pumpFrom, HIGH);
-        LV_LOG_USER("From %d on : %d", *pumpFrom, mcp.digitalRead(*pumpFrom));
-        mcp.digitalWrite(*pumpDir, HIGH);
-        LV_LOG_USER("Direction %d on : %d", *pumpDir, mcp.digitalRead(*pumpDir));
+        mcp.digitalWrite(pumpFrom, HIGH);
+        LV_LOG_USER("From %d on : %d", pumpFrom, mcp.digitalRead(pumpFrom));
+        mcp.digitalWrite(pumpDir, HIGH);
+        LV_LOG_USER("Direction %d on : %d", pumpDir, mcp.digitalRead(pumpDir));
         gui.tempProcessNode->process.processDetails->checkup->isAlreadyPumping = true;
     } else { // SET TO OFF ALL THE RELAY
         if (pumpFrom != NULL && pumpDir != NULL) {
-            mcp.digitalWrite(*pumpFrom, LOW);
-            LV_LOG_USER("From %d off : %d", *pumpFrom, mcp.digitalRead(*pumpFrom));
-            mcp.digitalWrite(*pumpDir, LOW);
-            LV_LOG_USER("Direction %d off : %d", *pumpDir, mcp.digitalRead(*pumpDir));
+            mcp.digitalWrite(pumpFrom, LOW);
+            LV_LOG_USER("From %d off : %d", pumpFrom, mcp.digitalRead(pumpFrom));
+            mcp.digitalWrite(pumpDir, LOW);
+            LV_LOG_USER("Direction %d off : %d", pumpDir, mcp.digitalRead(pumpDir));
         } else {
             for (uint8_t i = 0; i < RELAY_NUMBER; i++) {
                 mcp.digitalWrite(developingRelays[i], LOW);
