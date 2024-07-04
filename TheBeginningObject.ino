@@ -40,10 +40,12 @@ void sysMan( void *arg ) {
 		
 	while(1) {  // This is a task which runs for ever
 		
+    //PWM TEST
+    //pwmLedTest();
+
     if(gui.tempProcessNode->process.processDetails->checkup->isDeveloping){
         rotateMotor(MOTOR_IN1_PIN, MOTOR_IN2_PIN);
     }
-
 
     /* This will time out after MEM_MSG_DISPLAY_TIME and print memory then wait again */
 		if( xQueueReceive( gui.sysActionQ, &msg, pdMS_TO_TICKS(MEM_MSG_DISPLAY_TIME) ) ) { 
@@ -128,6 +130,10 @@ void setup()
  
     readConfigFile(SD, FILENAME_SAVE, false);
     readMachineStats(&gui.page.tools.machineStats);
+
+    //PWM TEST
+    //ledcSetup(0, 5000, 8);
+    //ledcAttachPin(I2C2_SDA, 0);
 }
 
 void loop()

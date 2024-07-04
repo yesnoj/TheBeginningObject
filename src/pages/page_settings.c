@@ -1,5 +1,3 @@
-#include <sys/_stdint.h>
-
 /**
  * @file page_settings.c
  *

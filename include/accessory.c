@@ -1,6 +1,3 @@
-#include <ctype.h>
-#include <sys/_stdint.h>
-#include <stdbool.h>
 /**
  * @file accessory.c
  *
@@ -719,23 +716,30 @@ void initSD_I2C_MCP23017() {
     }
 
   //I2C init
-  Wire.begin(I2C_SDA, I2C_SCL);
-  Wire.beginTransmission(I2C_ADR);
+  Wire.begin(I2C1_SDA, I2C1_SCL);
+  Wire.beginTransmission(I2C1_ADR);
 
   if (Wire.endTransmission() == 0) {
-    LV_LOG_USER("I2C device found at address 0x%x! TOUCH INIT OVER", I2C_ADR);
+    LV_LOG_USER("I2C device found at address 0x%x! TOUCH INIT OVER", I2C1_ADR);
   } else {
     initErrors = INIT_ERROR_WIRE;
-    LV_LOG_USER("Unknown error at address 0x%x ERROR:   TOUCH", I2C_ADR);
+    LV_LOG_USER("Unknown error at address 0x%x ERROR:   TOUCH", I2C1_ADR);
   }
-#if 1
   if (!mcp.begin_I2C()) {
     LV_LOG_USER("MCP23017 init ERROR!");
-    initErrors = INIT_ERROR_I2C;
+    initErrors = INIT_ERROR_I2C_MCP;
   } else {
       LV_LOG_USER("MCP23017 init OK!");
       initializeRelayPins();
       //initializeMotorPins();
+  }
+#if 1 
+
+  if (!ads.begin(I2C2_ADR)) {
+    LV_LOG_USER("ADS1115 init ERROR!");
+    initErrors = INIT_ERROR_I2C_ADS;
+  } else {
+      LV_LOG_USER("ADS1115 init OK!");
       //initializeTemperatureSensor();
   }
 #endif
@@ -1854,6 +1858,20 @@ void rotateMotor(uint8_t motorPin1, uint8_t motorPin2) {
 
 }
 
+
+void pwmLedTest(){
+   LV_LOG_USER("pwmLedTest");
+   for (int dutyCycle = 0; dutyCycle <= 255; dutyCycle++) {
+    ledcWrite(0, dutyCycle);
+    delay(10); // small delay to see the change in brightness
+  }
+
+  // Example: Decrease LED brightness
+  for (int dutyCycle = 255; dutyCycle >= 0; dutyCycle--) {
+    ledcWrite(0, dutyCycle);
+    delay(10); // small delay to see the change in brightness
+  }
+}
 
 
 /*

@@ -1,4 +1,3 @@
-#include <sys/_stdint.h>
 /**
  * @file definitions.h
  *
@@ -20,9 +19,6 @@
 
 //Digital input for relays
 #define RELAY_NUMBER    8
-
-
-
 
 #define C1_RLY         1
 #define C2_RLY         2
@@ -76,11 +72,15 @@
 #define SD_SCLK       GPIO_NUM_42
 #define SD_CS         GPIO_NUM_1
 
-
-#define I2C_SDA 38
-#define I2C_SCL 39
 #define I2C_INT 40
-#define I2C_ADR 0x38
+
+#define I2C1_SDA 38
+#define I2C1_SCL 39
+#define I2C1_ADR 0x38 //Adafruit ADS1115
+
+#define I2C2_SDA 17
+#define I2C2_SCL 18
+#define I2C2_ADR 0x49 //Adafruit ADS1115
 
 #define LCD_BLK 45
 
@@ -116,11 +116,15 @@
 #define LGFX_USE_V1
 #include <LovyanGFX.hpp>
 #include <Adafruit_MCP23X17.h>
+#include <Adafruit_ADS1X15.h>
 #include "Adafruit_SHT31.h"
 #include <Preferences.h> 
 
 extern Preferences preferences;
+
 Adafruit_MCP23X17 mcp; 
+Adafruit_ADS1115  ads;
+
 Adafruit_SHT31 sensorTempBath     = Adafruit_SHT31();
 Adafruit_SHT31 sensorTempChemical = Adafruit_SHT31();
 
@@ -128,8 +132,8 @@ Adafruit_SHT31 sensorTempChemical = Adafruit_SHT31();
 class LGFX : public lgfx::LGFX_Device
 {
     static constexpr int I2C_PORT_NUM = I2C_NUM_0;
-    static constexpr int I2C_PIN_SDA  = I2C_SDA;
-    static constexpr int I2C_PIN_SCL  = I2C_SCL;
+    static constexpr int I2C_PIN_SDA  = I2C1_SDA;
+    static constexpr int I2C_PIN_SCL  = I2C1_SCL;
     static constexpr int I2C_PIN_INT  = I2C_INT;
 
     lgfx::Panel_ILI9488     _panel_instance;
@@ -219,7 +223,7 @@ public:
       cfg.offset_rotation = 0;
 
       cfg.i2c_port = I2C_PORT_NUM;     
-      cfg.i2c_addr = I2C_ADR;  
+      cfg.i2c_addr = I2C1_ADR;  
       cfg.pin_sda  = I2C_PIN_SDA;   
       cfg.pin_scl  = I2C_PIN_SCL;   
       cfg.freq = 400000;  
@@ -292,8 +296,6 @@ typedef struct machineStatistics {
 *********************/
 #define MAX_PROC_NAME_LEN		  20
 typedef struct processNode processNode;  // Forward declaration
-//typedef struct sProcessDetail sProcessDetail;  // Forward declaration
-//typedef struct sCheckup sCheckup;  // Forward declaration
 
 
 typedef struct sStepDetail {
@@ -1107,9 +1109,10 @@ LV_IMG_DECLARE(splash_img);
 #define sdCard_icon         "\xEF\x9F\x82"
 #define discardAfter_icon   "\xEF\x8B\xB5"
 
-#define INIT_ERROR_SD   1
-#define INIT_ERROR_WIRE 2
-#define INIT_ERROR_I2C  3
+#define INIT_ERROR_SD       1
+#define INIT_ERROR_WIRE     2
+#define INIT_ERROR_I2C_MCP  3
+#define INIT_ERROR_I2C_ADS  4
 
 #define initSDError_text "INITIALIZATION ERROR!\nSD-CARD FAILURE!\nFIX SD-CARD!\nTHEN CLICK ON ICON TO REBOOT!"
 #define initI2CError_text "INITIALIZATION ERROR!\nI2C MODULE FAILURE\nFIX IT!\nTHEN CLICK ON ICON TO REBOOT!"
@@ -1556,6 +1559,7 @@ void getMinutesAndSeconds(uint8_t containerFillingTime, const bool containerToCl
 void cleanRelayManager(uint8_t pumpFrom, uint8_t pumpTo,uint8_t pumpDir,bool activePump);
 uint8_t getRandomRotationInterval();
 void rotateMotor(uint8_t motorPin1, uint8_t motorPin2);
+void pwmLedTest();
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);

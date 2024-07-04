@@ -1,6 +1,3 @@
-#include <stdbool.h>
-#include <sys/_stdint.h>
-
 /**
  * @file page_checkup.c
  *
@@ -483,7 +480,7 @@ void processTimer(lv_timer_t * timer)
         secondsStepElapsed++;
         if(processPercentage == 100) {
           gui.tempProcessNode->process.processDetails->checkup->isDeveloping = false;
-          
+
           lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopAfterButton, LV_STATE_DISABLED);
           lv_obj_add_state(gui.tempProcessNode->process.processDetails->checkup->checkupStopNowButton, LV_STATE_DISABLED);   
           //lv_obj_clear_state(gui.tempProcessNode->process.processDetails->checkup->checkupCloseButton, LV_STATE_DISABLED);  
