@@ -510,6 +510,7 @@ void handleFirstStep(sCheckup* checkup) {
         LV_LOG_USER("First step FILLING");
 
         if (checkup->isAlreadyPumping == false) {
+            runMotorTask();
             sendValueToRelay(pumpFrom, pumpDir, true);
             checkup->isAlreadyPumping = true;
         }
@@ -562,6 +563,7 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
             lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
             lv_obj_clear_state(checkup->checkupCloseButton, LV_STATE_DISABLED);
             lv_timer_delete(checkup->pumpTimer);
+            stopMotorTask();
         }
     } else {
         LV_LOG_USER("Intermediate step");

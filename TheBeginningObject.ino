@@ -21,6 +21,7 @@ lv_indev_t *lvInput;
 
 LGFX lcd;
 
+bool stopMotorManTask = false;
 uint8_t initErrors = 0;
 
 /*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/
@@ -39,14 +40,6 @@ void sysMan( void *arg ) {
   uint16_t  msg;
 		
 	while(1) {  // This is a task which runs for ever
-		
-    //PWM TEST
-    //pwmLedTest();
-
-    if(gui.tempProcessNode->process.processDetails->checkup->isDeveloping){
-        rotateMotor(MOTOR_IN1_PIN, MOTOR_IN2_PIN);
-    }
-
     /* This will time out after MEM_MSG_DISPLAY_TIME and print memory then wait again */
 		if( xQueueReceive( gui.sysActionQ, &msg, pdMS_TO_TICKS(MEM_MSG_DISPLAY_TIME) ) ) { 
 			switch(msg) {
@@ -67,7 +60,9 @@ void sysMan( void *arg ) {
           LV_LOG_USER( "Unknown System Manager Request!");
           break;
       }
-    } else {
+    } 
+    #if FILM_USE_LOG != 0
+    else {  
       LV_LOG_USER("\nFree Heap: %u bytes\n"
         "  MALLOC_CAP_SPIRAM    %7zu bytes\n"
         "  MALLOC_CAP_INTERNAL  %7zu bytes\n",
@@ -76,8 +71,70 @@ void sysMan( void *arg ) {
         heap_caps_get_free_size(MALLOC_CAP_INTERNAL)
       );
     }
+    #endif
 	}
 }
+
+
+void motorMan(void *arg) {
+    int8_t rotation = 1;
+    uint8_t prevRotation = rotation;
+    uint16_t msg;
+
+
+    while(!stopMotorManTask) {  // Questo è un task che gira per sempre
+        TickType_t interval = pdMS_TO_TICKS(1000); // Intervallo di default
+
+        if (xQueueReceive(gui.sysActionQ, &msg, interval)) {
+            // Aggiungi qui le cose da fare ogni intervallo
+        } else {
+            switch(rotation) {
+                case 1:
+                    runMotorFW(MOTOR_IN1_PIN, MOTOR_IN2_PIN);
+                    prevRotation = 1;
+                    rotation = 0;
+                    interval = pdMS_TO_TICKS(getRandomRotationInterval() * 1000); // Imposta l'intervallo per runMotorFW
+                    break;
+                case -1:
+                    runMotorRV(MOTOR_IN1_PIN, MOTOR_IN2_PIN);
+                    prevRotation = -1;
+                    rotation = 0;
+                    interval = pdMS_TO_TICKS(getRandomRotationInterval() * 1000); // Imposta l'intervallo per runMotorRV
+                    break;
+                case 0:
+                default:
+                    stopMotor(MOTOR_IN1_PIN, MOTOR_IN2_PIN);
+                    if (prevRotation == 1) {
+                        rotation = -1;
+                    } else if (prevRotation == -1) {
+                        rotation = 1;
+                    } else {
+                        rotation = 1; // Valore iniziale se prevRotation non è 1 o -1
+                    }
+                    prevRotation = 0;
+                    interval = pdMS_TO_TICKS(1000); // Intervallo per stopMotor
+                    break;
+            }
+        }
+
+        // Aggiungi un ritardo per rispettare l'intervallo calcolato
+        vTaskDelay(interval);
+    }
+
+    // Codice per pulire e fermare il task
+    stopMotor(MOTOR_IN1_PIN, MOTOR_IN2_PIN);
+    vTaskDelete(NULL); // Termina il task
+}
+
+void stopMotorTask() {
+    stopMotorManTask = true;
+}
+
+void runMotorTask() {
+    xTaskCreatePinnedToCore( motorMan, "motorMan", 4096, NULL, 8,  NULL, 0 ); 
+    stopMotorManTask = false;
+}
+
 
 void setup()
 {
@@ -127,13 +184,13 @@ void setup()
     gui.sysActionQ = xQueueCreate( 16, sizeof( uint16_t ) );
     /* Create task to process external functions which will slow the GUI response */							
     xTaskCreatePinnedToCore( sysMan, "sysMan", 4096, NULL, 8,  NULL, 0 ); 
- 
+
     readConfigFile(SD, FILENAME_SAVE, false);
     readMachineStats(&gui.page.tools.machineStats);
 
     //PWM TEST
     //ledcSetup(0, 5000, 8);
-    //ledcAttachPin(I2C2_SDA, 0);
+    //ledcAttachPin(SPARE_PIN2, 0);
 }
 
 void loop()

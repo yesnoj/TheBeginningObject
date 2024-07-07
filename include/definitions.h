@@ -12,6 +12,8 @@
 
 //#include <OneWire.h>
 
+#define FILM_USE_LOG 0
+
 //Set to 1 to enable all errors (SD/I2C)
 #define ENABLE_BOOT_ERRORS 0
 
@@ -39,9 +41,9 @@
 #define MOTOR_PIN_NUMBER 3
 #define MAX_MOTOR_SPD 200 //need to be tested, but is max 255
 
-#define MOTOR_ENA_PIN  8
-#define MOTOR_IN1_PIN  9
-#define MOTOR_IN2_PIN  10
+#define MOTOR_ENA_PIN  17
+#define MOTOR_IN1_PIN  8
+#define MOTOR_IN2_PIN  9
 
 
 //TEMPERATURE SENSOR PIN
@@ -76,11 +78,12 @@
 
 #define I2C1_SDA 38
 #define I2C1_SCL 39
-#define I2C1_ADR 0x38 //Adafruit ADS1115
-
-#define I2C2_SDA 17
-#define I2C2_SCL 18
+#define I2C1_ADR 0x38 //Adafruit MCP23X17
 #define I2C2_ADR 0x49 //Adafruit ADS1115
+
+#define SPARE_PIN1 18
+#define SPARE_PIN2 17
+
 
 #define LCD_BLK 45
 
@@ -122,7 +125,7 @@
 
 extern Preferences preferences;
 
-Adafruit_MCP23X17 mcp; 
+Adafruit_MCP23X17 mcp;
 Adafruit_ADS1115  ads;
 
 Adafruit_SHT31 sensorTempBath     = Adafruit_SHT31();
@@ -1291,6 +1294,7 @@ static const char* processTempControlList[3] = {"Off", "Run", "Susp."};
 #define checkupProcessing_text       "Processing"
 #define checkupDrainingComplete_text "Complete"
 
+extern bool stopMotorManTask;
 
 char rollerElementSelected [10];
 lv_obj_t * questionMark;
@@ -1559,7 +1563,10 @@ void getMinutesAndSeconds(uint8_t containerFillingTime, const bool containerToCl
 void cleanRelayManager(uint8_t pumpFrom, uint8_t pumpTo,uint8_t pumpDir,bool activePump);
 uint8_t getRandomRotationInterval();
 void rotateMotor(uint8_t motorPin1, uint8_t motorPin2);
+void stopMotorTask();
+void runMotorTask();
 void pwmLedTest();
+
 
 //@file initDisplay.c
 void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* data);

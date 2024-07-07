@@ -1,3 +1,4 @@
+#include "esp32-hal.h"
 /**
  * @file accessory.c
  *
@@ -715,25 +716,48 @@ void initSD_I2C_MCP23017() {
     LV_LOG_USER("SD INIT OVER initErrors %d", initErrors);
     }
 
-  //I2C init
+  //I2C1 init
+  
   Wire.begin(I2C1_SDA, I2C1_SCL);
   Wire.beginTransmission(I2C1_ADR);
 
   if (Wire.endTransmission() == 0) {
-    LV_LOG_USER("I2C device found at address 0x%x! TOUCH INIT OVER", I2C1_ADR);
+    LV_LOG_USER("I2C1 device found at address 0x%x! TOUCH INIT OVER", I2C1_ADR);
   } else {
     initErrors = INIT_ERROR_WIRE;
     LV_LOG_USER("Unknown error at address 0x%x ERROR:   TOUCH", I2C1_ADR);
   }
   if (!mcp.begin_I2C()) {
-    LV_LOG_USER("MCP23017 init ERROR!");
+    LV_LOG_USER("MCP23017_1 init ERROR!");
     initErrors = INIT_ERROR_I2C_MCP;
   } else {
-      LV_LOG_USER("MCP23017 init OK!");
+      LV_LOG_USER("MCP23017_1 init OK!");
+      initializeRelayPins();
+      initializeMotorPins();
+  }
+
+
+#if 0 //Maybe this will never work, appears that on this board there is 1*I2C and 1*GPIO, the 1*I2C is the one that has io38 and io39 as SCL/SDA...
+  Wire1.begin(I2C2_SDA, I2C2_SCL); 
+  Wire1.beginTransmission(I2C1_ADR);
+
+  if (Wire1.endTransmission() == 0) {
+    LV_LOG_USER("I2C2 device found at address 0x%x! TOUCH INIT OVER", I2C1_ADR);
+  } else {
+    initErrors = INIT_ERROR_WIRE;
+    LV_LOG_USER("Unknown error at address 0x%x ERROR:   TOUCH", I2C1_ADR);
+  }
+  if (!mcp.begin_I2C(I2C1_ADR,&Wire1)) {
+    LV_LOG_USER("MCP23017_2 init ERROR!");
+    initErrors = INIT_ERROR_I2C_MCP;
+  } else {
+      LV_LOG_USER("MCP23017_2 init OK!");
       initializeRelayPins();
       //initializeMotorPins();
   }
-#if 1 
+#endif
+
+#if 0 
 
   if (!ads.begin(I2C2_ADR)) {
     LV_LOG_USER("ADS1115 init ERROR!");
@@ -1208,42 +1232,52 @@ void sendValueToRelay(uint8_t pumpFrom, uint8_t pumpDir, bool activePump) {
 
 
 void initializeMotorPins(){
-  for (uint8_t i = 0; i < MOTOR_PIN_NUMBER; i++) {
-        mcp.pinMode(MotorPins[i] , OUTPUT);
-        mcp.digitalWrite(MotorPins[i] , LOW);
-        LV_LOG_USER("Motor Pin Initialization %d: %d",MotorPins[i],mcp.digitalRead(MotorPins[i]));
-        }
+    mcp.pinMode(MOTOR_IN1_PIN , OUTPUT);
+    mcp.digitalWrite(MOTOR_IN1_PIN , LOW);
+    LV_LOG_USER("Motor Pin Initialization %d: %d",MOTOR_IN1_PIN,mcp.digitalRead(MOTOR_IN1_PIN));
 
-  stopMotor(MOTOR_IN1_PIN,MOTOR_IN2_PIN);
-  enableMotor(MOTOR_ENA_PIN);
+    mcp.pinMode(MOTOR_IN2_PIN , OUTPUT);
+    mcp.digitalWrite(MOTOR_IN2_PIN , LOW);
+    LV_LOG_USER("Motor Pin Initialization %d: %d",MOTOR_IN2_PIN,mcp.digitalRead(MOTOR_IN2_PIN));
+
+    ledcSetup(0, 5000, 8);
+    ledcAttachPin(MOTOR_ENA_PIN, 0);
+    LV_LOG_USER("Motor Pin Initialization %d: %d",MOTOR_ENA_PIN,analogRead(MOTOR_ENA_PIN));
+
+    //stopMotor(MOTOR_IN1_PIN,MOTOR_IN2_PIN);
+    //enableMotor(MOTOR_ENA_PIN);
 }
 
 void stopMotor(uint8_t pin1, uint8_t pin2){
   mcp.digitalWrite(pin1, LOW);
   mcp.digitalWrite(pin2, LOW);
+  ledcWrite(0, 0);
   LV_LOG_USER("Run stopMotor");
 }
 
 void runMotorFW(uint8_t pin1, uint8_t pin2){
   mcp.digitalWrite(pin1, HIGH);
   mcp.digitalWrite(pin2, LOW);
+  ledcWrite(0, 255);
   LV_LOG_USER("Run runMotorFW");
 }
 
 void runMotorRV(uint8_t pin1, uint8_t pin2){
   mcp.digitalWrite(pin1, LOW);
   mcp.digitalWrite(pin2, HIGH);
+  ledcWrite(0, 255);
   LV_LOG_USER("Run runMotorRV");
 }
 
 void setMotorSpeedFast(uint8_t pin,uint8_t spd){//max 255
   //analogWrite(pin, spd);
+  ledcWrite(0, spd);
   LV_LOG_USER("Set motor speed: %d",spd);
 }
 
 void setMotorSpeedUp(uint8_t pin, uint8_t spd){//max 255
   for(int i = 0; i <= spd; i++){
-    //analogWrite(pin, i);
+    ledcWrite(0, i);
     delay(10);
   }
   LV_LOG_USER("Increase speed to: %d",spd);
@@ -1251,17 +1285,18 @@ void setMotorSpeedUp(uint8_t pin, uint8_t spd){//max 255
 
 void setMotorSpeedDown(uint8_t pin, uint8_t spd){
   for(int i = spd; i >= 0; --i){
-    //analogWrite(pin, i);
+    ledcWrite(0, i);
     delay(10);
   }
   LV_LOG_USER("Decrease speed to: %d",spd);
 }
 
+/*
 void enableMotor(uint8_t pin){
   mcp.digitalWrite(pin, HIGH);
   LV_LOG_USER("Run enableMotor");
 }
-
+*/
 
 
 //++++++++++++++++ READ TEMPERATURE SENSOR METHODS ++++++++++++++++
@@ -1855,7 +1890,6 @@ void rotateMotor(uint8_t motorPin1, uint8_t motorPin2) {
 
     // Spegnimento del motore
     stopMotor(motorPin1, motorPin2);
-
 }
 
 
@@ -1872,6 +1906,7 @@ void pwmLedTest(){
     delay(10); // small delay to see the change in brightness
   }
 }
+
 
 
 /*
