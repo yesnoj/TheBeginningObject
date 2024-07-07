@@ -38,7 +38,7 @@ static void increase_lvgl_tick( void *arg ) {
 void sysMan( void *arg ) {
 
   uint16_t  msg;
-		
+	
 	while(1) {  // This is a task which runs for ever
     /* This will time out after MEM_MSG_DISPLAY_TIME and print memory then wait again */
 		if( xQueueReceive( gui.sysActionQ, &msg, pdMS_TO_TICKS(MEM_MSG_DISPLAY_TIME) ) ) { 
@@ -189,8 +189,8 @@ void setup()
     readMachineStats(&gui.page.tools.machineStats);
 
     //PWM TEST
-    //ledcSetup(0, 5000, 8);
-    //ledcAttachPin(SPARE_PIN2, 0);
+    ledcSetup(0, 5000, 8);
+    ledcAttachPin(SPARE_PIN1, 0);
 }
 
 void loop()

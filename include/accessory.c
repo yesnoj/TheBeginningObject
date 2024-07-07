@@ -1249,6 +1249,10 @@ void initializeMotorPins(){
 }
 
 void stopMotor(uint8_t pin1, uint8_t pin2){
+  for (int dutyCycle = 255; dutyCycle >= 150; dutyCycle--) {
+    ledcWrite(0, dutyCycle);
+    delay(10); // small delay to see the change in brightness
+  }
   mcp.digitalWrite(pin1, LOW);
   mcp.digitalWrite(pin2, LOW);
   ledcWrite(0, 0);
@@ -1258,13 +1262,23 @@ void stopMotor(uint8_t pin1, uint8_t pin2){
 void runMotorFW(uint8_t pin1, uint8_t pin2){
   mcp.digitalWrite(pin1, HIGH);
   mcp.digitalWrite(pin2, LOW);
-  ledcWrite(0, 255);
+
+  for (int dutyCycle = 150; dutyCycle <= 255; dutyCycle++) {
+    ledcWrite(0, dutyCycle);
+    delay(10); // small delay to see the change in brightness
+  }
+
   LV_LOG_USER("Run runMotorFW");
 }
 
 void runMotorRV(uint8_t pin1, uint8_t pin2){
   mcp.digitalWrite(pin1, LOW);
   mcp.digitalWrite(pin2, HIGH);
+  
+  for (int dutyCycle = 150; dutyCycle <= 255; dutyCycle++) {
+    ledcWrite(0, dutyCycle);
+    delay(10); // small delay to see the change in brightness
+  }  
   ledcWrite(0, 255);
   LV_LOG_USER("Run runMotorRV");
 }
@@ -1895,14 +1909,20 @@ void rotateMotor(uint8_t motorPin1, uint8_t motorPin2) {
 
 void pwmLedTest(){
    LV_LOG_USER("pwmLedTest");
-   for (int dutyCycle = 0; dutyCycle <= 255; dutyCycle++) {
+   for (int dutyCycle = 150; dutyCycle <= 255; dutyCycle++) {
     ledcWrite(0, dutyCycle);
+    mcp.digitalWrite(MOTOR_IN1_PIN, LOW);
+    mcp.digitalWrite(MOTOR_IN2_PIN, HIGH);
+    LV_LOG_USER("dutyCycle %d",dutyCycle);
     delay(10); // small delay to see the change in brightness
   }
 
   // Example: Decrease LED brightness
-  for (int dutyCycle = 255; dutyCycle >= 0; dutyCycle--) {
+  for (int dutyCycle = 255; dutyCycle >= 150; dutyCycle--) {
     ledcWrite(0, dutyCycle);
+    mcp.digitalWrite(MOTOR_IN1_PIN, LOW);
+    mcp.digitalWrite(MOTOR_IN2_PIN, HIGH);
+    LV_LOG_USER("dutyCycle %d",dutyCycle);
     delay(10); // small delay to see the change in brightness
   }
 }
