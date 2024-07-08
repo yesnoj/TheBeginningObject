@@ -175,9 +175,9 @@ void setup()
     lv_indev_set_type(lvInput, LV_INDEV_TYPE_POINTER);
     lv_indev_set_read_cb(lvInput, my_touchpad_read);
     
-    init_globals();
+    initGlobals();
 
-    initSD_I2C_MCP23017();
+    initPinouts();
     homePage();
             
     /* Create System message queue */
@@ -187,10 +187,6 @@ void setup()
 
     readConfigFile(SD, FILENAME_SAVE, false);
     readMachineStats(&gui.page.tools.machineStats);
-
-    //PWM TEST
-    ledcSetup(0, 5000, 8);
-    ledcAttachPin(SPARE_PIN1, 0);
 }
 
 void loop()

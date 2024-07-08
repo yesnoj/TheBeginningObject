@@ -546,7 +546,7 @@ void* isNodeInList(void* list, void* node, NodeType_t type) {
 
 
 
-void init_globals( void ) {
+void initGlobals( void ) {
   // Initialise the main GUI structure to zero
   memset(&gui, 0, sizeof(gui));       
   
@@ -707,7 +707,7 @@ void createFile(fs::FS &fs, const char *path)
     }
 }
 
-void initSD_I2C_MCP23017() {
+void initPinouts() {
   if (SD_init()) {
     initErrors = INIT_ERROR_SD;
     LV_LOG_USER("ERROR:   SD initErrors %d", initErrors);
@@ -1240,12 +1240,11 @@ void initializeMotorPins(){
     mcp.digitalWrite(MOTOR_IN2_PIN , LOW);
     LV_LOG_USER("Motor Pin Initialization %d: %d",MOTOR_IN2_PIN,mcp.digitalRead(MOTOR_IN2_PIN));
 
+    //this to use the second "i2c" pins as analog
     ledcSetup(0, 5000, 8);
     ledcAttachPin(MOTOR_ENA_PIN, 0);
-    LV_LOG_USER("Motor Pin Initialization %d: %d",MOTOR_ENA_PIN,analogRead(MOTOR_ENA_PIN));
 
-    //stopMotor(MOTOR_IN1_PIN,MOTOR_IN2_PIN);
-    //enableMotor(MOTOR_ENA_PIN);
+    LV_LOG_USER("Motor Pin Initialization %d: %d",MOTOR_ENA_PIN,analogRead(MOTOR_ENA_PIN));
 }
 
 void stopMotor(uint8_t pin1, uint8_t pin2){
@@ -1305,12 +1304,7 @@ void setMotorSpeedDown(uint8_t pin, uint8_t spd){
   LV_LOG_USER("Decrease speed to: %d",spd);
 }
 
-/*
-void enableMotor(uint8_t pin){
-  mcp.digitalWrite(pin, HIGH);
-  LV_LOG_USER("Run enableMotor");
-}
-*/
+
 
 
 //++++++++++++++++ READ TEMPERATURE SENSOR METHODS ++++++++++++++++
@@ -1886,25 +1880,6 @@ uint8_t getRandomRotationInterval() {
     return result;
 }
 
-
-
-void rotateMotor(uint8_t motorPin1, uint8_t motorPin2) {
-    uint8_t rotationTime = getRandomRotationInterval();
-
-    LV_LOG_USER("Rotate motor...with randomness:  %dsec%",getRandomRotationInterval());
-    // Rotazione in un verso
-    runMotorFW(motorPin1,motorPin2);
-    vTaskDelay(pdMS_TO_TICKS(rotationTime * 1000));  // Sospende il task per rotationTime secondi
-
-    rotationTime = getRandomRotationInterval();
-
-    // Rotazione in senso opposto
-    runMotorRV(motorPin1,motorPin2);
-    vTaskDelay(pdMS_TO_TICKS(rotationTime * 1000));  // Sospende il task per rotationTime secondi
-
-    // Spegnimento del motore
-    stopMotor(motorPin1, motorPin2);
-}
 
 
 void pwmLedTest(){

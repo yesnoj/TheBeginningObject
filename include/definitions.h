@@ -41,7 +41,7 @@
 #define MOTOR_PIN_NUMBER 3
 #define MAX_MOTOR_SPD 200 //need to be tested, but is max 255
 
-#define MOTOR_ENA_PIN  17
+#define MOTOR_ENA_PIN  18
 #define MOTOR_IN1_PIN  8
 #define MOTOR_IN2_PIN  9
 
@@ -81,7 +81,6 @@
 #define I2C1_ADR 0x38 //Adafruit MCP23X17
 #define I2C2_ADR 0x49 //Adafruit ADS1115
 
-#define SPARE_PIN1 18
 #define SPARE_PIN2 17
 
 
@@ -1444,7 +1443,7 @@ stepNode *addStepElement(stepNode * stepToAdd, processNode * processReference);
 /*********************
 * PAGES Function Prototypes
 *********************/
-void init_globals( void );
+void initGlobals( void );
 
 
 // @file page_checkup.c
@@ -1513,7 +1512,7 @@ void showKeyboard(lv_obj_t * whoCallMe, lv_obj_t * textArea);
 void hideKeyboard(lv_obj_t * whoCallMe);
 char *createRollerValues( uint32_t maxVal, const char* extra_str, bool isFahrenheit );
 uint8_t SD_init();
-void initSD_I2C_MCP23017();
+void initPinouts();
 void initMCP23017Pins();
 
 void calculateTotalTime(processNode *processNode);
@@ -1562,7 +1561,6 @@ uint8_t getValueForChemicalSource(uint8_t source);
 void getMinutesAndSeconds(uint8_t containerFillingTime, const bool containerToClean[3]);
 void cleanRelayManager(uint8_t pumpFrom, uint8_t pumpTo,uint8_t pumpDir,bool activePump);
 uint8_t getRandomRotationInterval();
-void rotateMotor(uint8_t motorPin1, uint8_t motorPin2);
 void stopMotorTask();
 void runMotorTask();
 void pwmLedTest();
