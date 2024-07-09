@@ -83,7 +83,7 @@ void homePage(void)
             lv_label_set_text(gui.page.home.errorButtonLabel, alert_icon);
             lv_label_set_text(gui.page.home.errorLabel, initWIREError_text);
           }  
-          if(initErrors == INIT_ERROR_I2C_MCP && ENABLE_BOOT_ERRORS || initErrors == INIT_ERROR_I2C_ADS && ENABLE_BOOT_ERRORS)
+          if(initErrors == INIT_ERROR_I2C_MCP && ENABLE_BOOT_ERRORS && initErrors == INIT_ERROR_I2C_ADS && ENABLE_BOOT_ERRORS)
           {
             lv_label_set_text(gui.page.home.errorButtonLabel, chip_icon);
             lv_label_set_text(gui.page.home.errorLabel, initI2CError_text);

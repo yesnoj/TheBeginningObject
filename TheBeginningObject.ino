@@ -8,6 +8,10 @@
 #include "SD.h"
 #include "SPI.h"
 
+#include <WiFi.h>
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+#include <ElegantOTA.h>
 
 #include "include/definitions.h"
 #include "include/accessory.c"
@@ -15,6 +19,11 @@
 
 void lv_example_obj_2(void);
 static void drag_event_handler(lv_event_t * e);
+
+
+AsyncWebServer otaServer(80);
+unsigned long ota_progress_millis = 0;
+
 
 lv_display_t *lvDisplay;
 lv_indev_t *lvInput;
@@ -136,9 +145,86 @@ void runMotorTask() {
 }
 
 
+void onOTAStart() {
+  LV_LOG_USER("OTA update started!");
+}
+
+void onOTAProgress(size_t current, size_t final) {
+  // Log every 1 second
+  uint8_t percentage;
+  float_t cur,fin;
+/*
+  cur = (float_t)(current);
+  fin = (float_t)(final);
+  if (millis() - ota_progress_millis > 1000) {
+    ota_progress_millis = millis();
+    percentage = (uint8_t)((cur / fin) * 100);
+    LV_LOG_USER("OTA Progress Current: %u %%, %u bytes, Final: %u bytes\n", percentage, current, final);
+  }
+  */
+}
+
+void onOTAEnd(bool success) {
+  if (success) {
+    LV_LOG_USER("OTA update finished successfully!");
+  } else {
+    LV_LOG_USER("There was an error during OTA update!");
+  }
+}
+
+void connectOtaAP(){
+  if (!WiFi.softAP(WIFI_SSID, WIFI_PASS)) {
+    LV_LOG_USER("Soft AP creation failed.");
+    while(1);
+  }
+  IPAddress myIP = WiFi.softAPIP();
+  LV_LOG_USER("AP IP address: %s",myIP.toString());
+ 
+
+  ElegantOTA.setAutoReboot(false);
+  ElegantOTA.setAuth(USERNAME, PASSWORD);
+  ElegantOTA.begin(&otaServer);
+  otaServer.begin();
+  LV_LOG_USER("Server started");
+
+  // ElegantOTA callbacks
+  ElegantOTA.onStart(onOTAStart);
+  ElegantOTA.onProgress(onOTAProgress);
+  ElegantOTA.onEnd(onOTAEnd);
+}
+  
+
+void connectOtaSTA(){
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID_LOCAL, WIFI_PASS_LOCAL);
+
+  // Wait for connection
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    LV_LOG_USER(".");
+  }
+  Serial.println("");
+  LV_LOG_USER("Connected to %s, IP address: %s",WIFI_SSID_LOCAL,WiFi.localIP().toString());
+
+  otaServer.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(200, "text/plain", "Hi! This is ElegantOTA AsyncDemo.");
+  });
+
+  ElegantOTA.begin(&otaServer);    // Start ElegantOTA
+  // ElegantOTA callbacks
+  ElegantOTA.onStart(onOTAStart);
+  ElegantOTA.onProgress(onOTAProgress);
+  ElegantOTA.onEnd(onOTAEnd);
+
+  otaServer.begin();
+  LV_LOG_USER("HTTP server started");
+}
+
+
 void setup()
 {
     Serial.begin(115200);
+
 
     LV_LOG_USER("Hello FilMachine! - This software uses LVGL V%d.%d.%d",lv_version_major(),lv_version_minor(),lv_version_patch());
 
@@ -187,10 +273,14 @@ void setup()
 
     readConfigFile(SD, FILENAME_SAVE, false);
     readMachineStats(&gui.page.tools.machineStats);
+
+    //this create a bootloop...
+    //connectOtaAP(); 
 }
 
 void loop()
 {
+    ElegantOTA.loop();
     lv_task_handler(); /* let the GUI do its work */
     delay(5);
 }
