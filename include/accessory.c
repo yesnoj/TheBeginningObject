@@ -1504,11 +1504,13 @@ void readMachineStats(machineStatistics * machineStats) {
   machineStats->clean = preferences.getULong("clean", 0);
   machineStats->stopped = preferences.getULong("stopped", 0);
 
+#if FILM_USE_LOG != 0
   LV_LOG_USER("Get values: \ncompletedProcesses: %d \ntotalMins: %llu \ncompletedCleanCycle: %d \nstoppedProcesses: %d\n", 
                 machineStats->completed, 
                 machineStats->totalMins, 
                 machineStats->clean, 
                 machineStats->stopped);
+#endif
   // Chiudi il namespace
   preferences.end();
 }

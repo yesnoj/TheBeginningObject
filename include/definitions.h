@@ -14,16 +14,6 @@
 
 #define FILM_USE_LOG 0
 
-
-#define WIFI_SSID "FILMACHINE_WIFI"
-#define WIFI_PASS "pluto"
-#define USERNAME  "username"
-#define PASSWORD  "password"
-
-#define WIFI_SSID_LOCAL "TIM-02031983-2.4GHz"
-#define WIFI_PASS_LOCAL "euscimmoarimirarlestelle"
-
-
 //Set to 1 to enable all errors (SD/I2C)
 #define ENABLE_BOOT_ERRORS 0
 
