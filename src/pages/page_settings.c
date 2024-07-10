@@ -112,28 +112,40 @@ void event_settings_handler(lv_event_t * e)
         }
     }
 
-    if(act_cb == gui.page.settings.filmRotationSpeedSlider){
-        if(code == LV_EVENT_RELEASED) {
-            current_value = gui.page.settings.settingsParams.filmRotationSpeedSetpoint;
-            new_value = lv_slider_get_value(act_cb);
+if (act_cb == gui.page.settings.filmRotationSpeedSlider) {
+    if (code == LV_EVENT_RELEASED) {
+        current_value = gui.page.settings.settingsParams.filmRotationSpeedSetpoint;
+        new_value = lv_slider_get_value(act_cb);
 
-            if(new_value > current_value) {
-                new_value = current_value + 10;
-            } else if(new_value < current_value) {
-                new_value = current_value - 10;
+        // Aggiungi o sottrai 10 al valore corrente
+        if (new_value > current_value) {
+            new_value = current_value + 10;
+        } else if (new_value < current_value) {
+            new_value = current_value - 10;
+        }
+
+        // Arrotonda new_value agli step di 10
+        int remainder = new_value % 10;
+        if (remainder != 0) {
+            if (remainder > 5) {
+                new_value = ((new_value / 10) + 1) * 10;
+            } else {
+                new_value = (new_value / 10) * 10;
             }
-           
-            minVal_rotationSpeedPercent = lv_slider_get_min_value(gui.page.settings.filmRotationSpeedSlider);
-            maxVal_rotationSpeedPercent = lv_slider_get_max_value(gui.page.settings.filmRotationSpeedSlider);
-            analogVal_rotationSpeedPercent = mapPercentageToValue(gui.page.settings.settingsParams.filmRotationSpeedSetpoint, minVal_rotationSpeedPercent, maxVal_rotationSpeedPercent);
+        }
 
-            lv_slider_set_value(act_cb, new_value, LV_ANIM_OFF);  // Update the slider value to the nearest 30
-            lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%d%%", lv_slider_get_value(act_cb));
-            gui.page.settings.settingsParams.filmRotationSpeedSetpoint = lv_slider_get_value(act_cb);
-            LV_LOG_USER("Film Speed Rotation : %d, with analog value %d",lv_slider_get_value(act_cb),analogVal_rotationSpeedPercent);
-            qSysAction(SAVE_PROCESS_CONFIG);
-        }   
+        minVal_rotationSpeedPercent = lv_slider_get_min_value(gui.page.settings.filmRotationSpeedSlider);
+        maxVal_rotationSpeedPercent = lv_slider_get_max_value(gui.page.settings.filmRotationSpeedSlider);
+        analogVal_rotationSpeedPercent = mapPercentageToValue(new_value, minVal_rotationSpeedPercent, maxVal_rotationSpeedPercent);
+
+        lv_slider_set_value(act_cb, new_value, LV_ANIM_OFF);  // Update the slider value to the nearest 10
+        lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%d%%", new_value);
+        gui.page.settings.settingsParams.filmRotationSpeedSetpoint = new_value;
+        LV_LOG_USER("Film Speed Rotation : %d, with analog value %d", new_value, analogVal_rotationSpeedPercent);
+        qSysAction(SAVE_PROCESS_CONFIG);
     }
+}
+
 
     if(act_cb == gui.page.settings.filmRotationInversionIntervalSlider){
         if(code == LV_EVENT_RELEASED) {
