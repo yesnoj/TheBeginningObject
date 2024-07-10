@@ -21,7 +21,7 @@ settingsParams = {
     "tempUnit": random.randint(0, 1),
     "waterInlet": random.randint(0, 1),
     "calibratedTemp": random.randint(0, 40),
-    "filmRotationSpeedSetpoint": random.randrange(20, 90, 10),
+    "filmRotationSpeedSetpoint": random.randrange(10, 100, 10),
     "rotationIntervalSetpoint": random.randrange(10, 60, 10),
     "randomSetpoint": random.randrange(0, 101, 20),
     "isPersistentAlarm": random.randint(0, 1),

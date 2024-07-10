@@ -391,7 +391,7 @@ void initSettings(void){
         lv_obj_set_style_text_font(gui.page.settings.filmRotationSpeedValueLabel, &lv_font_montserrat_22, 0);              
         lv_obj_align(gui.page.settings.filmRotationSpeedValueLabel, LV_ALIGN_TOP_RIGHT, 5, -10);
         lv_obj_add_event_cb(gui.page.settings.filmRotationSpeedSlider, event_settings_handler, LV_EVENT_RELEASED, gui.page.settings.filmRotationSpeedValueLabel);
-        lv_label_set_text_fmt(gui.page.settings.filmRotationSpeedValueLabel, "%drpm", gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
+        lv_label_set_text_fmt(gui.page.settings.filmRotationSpeedValueLabel, "%d%%", gui.page.settings.settingsParams.filmRotationSpeedSetpoint);
 
 
 
