@@ -13,6 +13,11 @@ extern struct gui_components gui;
 static uint8_t current_value;
 static uint8_t new_value;
 
+
+uint8_t minVal_rotationSpeedPercent;
+uint8_t maxVal_rotationSpeedPercent;
+uint8_t analogVal_rotationSpeedPercent;
+
 //ACCESSORY INCLUDES
 
 
@@ -117,12 +122,15 @@ void event_settings_handler(lv_event_t * e)
             } else if(new_value < current_value) {
                 new_value = current_value - 10;
             }
-
+           
+            minVal_rotationSpeedPercent = lv_slider_get_min_value(gui.page.settings.filmRotationSpeedSlider);
+            maxVal_rotationSpeedPercent = lv_slider_get_max_value(gui.page.settings.filmRotationSpeedSlider);
+            analogVal_rotationSpeedPercent = mapPercentageToValue(gui.page.settings.settingsParams.filmRotationSpeedSetpoint, minVal_rotationSpeedPercent, maxVal_rotationSpeedPercent);
 
             lv_slider_set_value(act_cb, new_value, LV_ANIM_OFF);  // Update the slider value to the nearest 30
-            lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%drpm", lv_slider_get_value(act_cb));
+            lv_label_set_text_fmt((lv_obj_t*)lv_event_get_user_data(e), "%d%%", lv_slider_get_value(act_cb));
             gui.page.settings.settingsParams.filmRotationSpeedSetpoint = lv_slider_get_value(act_cb);
-            LV_LOG_USER("Film Speed Rotation : %d",lv_slider_get_value(act_cb));
+            LV_LOG_USER("Film Speed Rotation : %d, with analog value %d",lv_slider_get_value(act_cb),analogVal_rotationSpeedPercent);
             qSysAction(SAVE_PROCESS_CONFIG);
         }   
     }
@@ -376,7 +384,7 @@ void initSettings(void){
         lv_obj_set_style_bg_color(gui.page.settings.filmRotationSpeedSlider,lv_color_hex(ORANGE_LIGHT) , LV_PART_INDICATOR);
         lv_obj_set_style_bg_color(gui.page.settings.filmRotationSpeedSlider, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_PART_MAIN);
         lv_slider_set_value(gui.page.settings.filmRotationSpeedSlider, gui.page.settings.settingsParams.filmRotationSpeedSetpoint, LV_ANIM_OFF);
-        lv_slider_set_range(gui.page.settings.filmRotationSpeedSlider, 20, 90);
+        lv_slider_set_range(gui.page.settings.filmRotationSpeedSlider, 10, 100);
 
   
         gui.page.settings.filmRotationSpeedValueLabel = lv_label_create(gui.page.settings.filmRotationSpeedContainer);

@@ -45,6 +45,9 @@
 #define MOTOR_IN1_PIN  8
 #define MOTOR_IN2_PIN  9
 
+#define MOTOR_MIN_ANALOG_VAL 150
+#define MOTOR_MAX_ANALOG_VAL 255
+
 
 //TEMPERATURE SENSOR PIN
 #define TEMPERATURE_CHEMICAL_PIN 11
@@ -1162,6 +1165,11 @@ LV_IMG_DECLARE(splash_img);
 #define drainFillTime_text 							 "Drain/fill time overlap"
 #define multiRinseTime_text 							 "Multi rinse cycle time"
 
+
+extern uint8_t minVal_rotationSpeedPercent;
+extern uint8_t maxVal_rotationSpeedPercent;
+extern uint8_t analogVal_rotationSpeedPercent;
+
 /*********************
 * Tools tab strings/vars
 *********************/
@@ -1529,7 +1537,7 @@ void initializeMotorPins();
 void stopMotor(uint8_t pin1, uint8_t pin2);
 void runMotorFW(uint8_t pin1, uint8_t pin2);
 void runMotorRV(uint8_t pin1, uint8_t pin2);
-void setMotorSpeedFast(uint8_t pin,uint8_t spd);
+void setMotorSpeed(uint8_t pin,uint8_t spd);
 void setMotorSpeedUp(uint8_t pin, uint8_t spd);
 void setMotorSpeedDown(uint8_t pin, uint8_t spd);
 void enableMotor(uint8_t pin);
@@ -1563,6 +1571,7 @@ void cleanRelayManager(uint8_t pumpFrom, uint8_t pumpTo,uint8_t pumpDir,bool act
 uint8_t getRandomRotationInterval();
 void stopMotorTask();
 void runMotorTask();
+uint8_t mapPercentageToValue(uint8_t percentage, uint8_t minPercent, uint8_t maxPercent);
 void pwmLedTest();
 
 

@@ -1248,7 +1248,7 @@ void initializeMotorPins(){
 }
 
 void stopMotor(uint8_t pin1, uint8_t pin2){
-  for (int dutyCycle = 255; dutyCycle >= 150; dutyCycle--) {
+  for (int dutyCycle = analogVal_rotationSpeedPercent; dutyCycle >= MOTOR_MIN_ANALOG_VAL; dutyCycle--) {
     ledcWrite(0, dutyCycle);
     delay(10); // small delay to see the change in brightness
   }
@@ -1261,29 +1261,27 @@ void stopMotor(uint8_t pin1, uint8_t pin2){
 void runMotorFW(uint8_t pin1, uint8_t pin2){
   mcp.digitalWrite(pin1, HIGH);
   mcp.digitalWrite(pin2, LOW);
-
-  for (int dutyCycle = 150; dutyCycle <= 255; dutyCycle++) {
+  
+  for (int dutyCycle = MOTOR_MIN_ANALOG_VAL; dutyCycle <= analogVal_rotationSpeedPercent; dutyCycle++) {
     ledcWrite(0, dutyCycle);
     delay(10); // small delay to see the change in brightness
   }
 
-  LV_LOG_USER("Run runMotorFW");
+  LV_LOG_USER("Run runMotorFW at speed %d",analogVal_rotationSpeedPercent);
 }
 
 void runMotorRV(uint8_t pin1, uint8_t pin2){
   mcp.digitalWrite(pin1, LOW);
   mcp.digitalWrite(pin2, HIGH);
   
-  for (int dutyCycle = 150; dutyCycle <= 255; dutyCycle++) {
+  for (int dutyCycle = MOTOR_MIN_ANALOG_VAL; dutyCycle <= analogVal_rotationSpeedPercent; dutyCycle++) {
     ledcWrite(0, dutyCycle);
-    delay(10); // small delay to see the change in brightness
+    delay(10);
   }  
-  ledcWrite(0, 255);
-  LV_LOG_USER("Run runMotorRV");
+  LV_LOG_USER("Run runMotorRV at speed %d",analogVal_rotationSpeedPercent);
 }
 
-void setMotorSpeedFast(uint8_t pin,uint8_t spd){//max 255
-  //analogWrite(pin, spd);
+void setMotorSpeed(uint8_t pin,uint8_t spd){//max 255
   ledcWrite(0, spd);
   LV_LOG_USER("Set motor speed: %d",spd);
 }
@@ -1886,7 +1884,7 @@ uint8_t getRandomRotationInterval() {
 
 void pwmLedTest(){
    LV_LOG_USER("pwmLedTest");
-   for (int dutyCycle = 150; dutyCycle <= 255; dutyCycle++) {
+   for (int dutyCycle = MOTOR_MIN_ANALOG_VAL; dutyCycle <= MOTOR_MAX_ANALOG_VAL; dutyCycle++) {
     ledcWrite(0, dutyCycle);
     mcp.digitalWrite(MOTOR_IN1_PIN, LOW);
     mcp.digitalWrite(MOTOR_IN2_PIN, HIGH);
@@ -1895,7 +1893,7 @@ void pwmLedTest(){
   }
 
   // Example: Decrease LED brightness
-  for (int dutyCycle = 255; dutyCycle >= 150; dutyCycle--) {
+  for (int dutyCycle = MOTOR_MAX_ANALOG_VAL; dutyCycle >= MOTOR_MIN_ANALOG_VAL; dutyCycle--) {
     ledcWrite(0, dutyCycle);
     mcp.digitalWrite(MOTOR_IN1_PIN, LOW);
     mcp.digitalWrite(MOTOR_IN2_PIN, HIGH);
@@ -1904,6 +1902,10 @@ void pwmLedTest(){
   }
 }
 
+uint8_t mapPercentageToValue(uint8_t percentage, uint8_t minPercent, uint8_t maxPercent) {
+    uint8_t value = ((percentage - minPercent) * (MOTOR_MAX_ANALOG_VAL - MOTOR_MIN_ANALOG_VAL)) / (maxPercent - minPercent) + MOTOR_MIN_ANALOG_VAL;
+    return value;
+}
 
 
 /*
