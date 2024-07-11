@@ -1,3 +1,4 @@
+#include <sys/_stdint.h>
 /**
  * @file definitions.h
  *
@@ -1529,7 +1530,7 @@ uint32_t convertCelsiusoToFahrenheit(uint32_t tempC);
 void updateProcessElement(processNode *process);
 void updateStepElement(processNode *referenceProcess, stepNode *step);
 uint32_t loadSDCardProcesses();
-char * generateRandomCharArray(int length);
+char * generateRandomCharArray(uint8_t length);
 
 void initializeRelayPins();
 void sendValueToRelay(uint8_t pumpFrom, uint8_t pumpDir, bool activePump);
@@ -1560,7 +1561,7 @@ sProcessDetail *deepCopyProcessDetail(sProcessDetail *original);
 singleProcess *deepCopySingleProcess(singleProcess *original);
 struct processNode *deepCopyProcessNode(struct processNode *original);
 void toLowerCase(char *str);
-int caseInsensitiveStrstr(const char *haystack, const char *needle);
+uint8_t caseInsensitiveStrstr(const char *haystack, const char *needle);
 void filterAndDisplayProcesses( void );
 void removeFiltersAndDisplayAllProcesses( void );
 void emptyList(void *list, NodeType_t type);
@@ -1569,8 +1570,6 @@ uint8_t getValueForChemicalSource(uint8_t source);
 void getMinutesAndSeconds(uint8_t containerFillingTime, const bool containerToClean[3]);
 void cleanRelayManager(uint8_t pumpFrom, uint8_t pumpTo,uint8_t pumpDir,bool activePump);
 uint8_t getRandomRotationInterval();
-void stopMotorTask();
-void runMotorTask();
 uint8_t mapPercentageToValue(uint8_t percentage, uint8_t minPercent, uint8_t maxPercent);
 void pwmLedTest();
 
@@ -1580,7 +1579,8 @@ void my_disp_flush(lv_display_t* display, const lv_area_t* area, unsigned char* 
 void my_touchpad_read(lv_indev_t* dev, lv_indev_data_t* data);
 
 //@file THeBeginningObject.ino
-//void eventSave(lv_event_t * e);
+void stopMotorTask();
+void runMotorTask();
 
 extern void (*rebootBoard)(void);
 #ifdef __cplusplus

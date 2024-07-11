@@ -557,13 +557,14 @@ void handleIntermediateOrLastStep(sCheckup* checkup, bool isLastStep) {
             LV_LOG_USER("Last step DRAINING COMPLETE");
 
             sendValueToRelay(pumpFrom, pumpDir, false);
+            stopMotor(MOTOR_IN1_PIN, MOTOR_IN2_PIN);
+            stopMotorTask();
             checkup->isAlreadyPumping = false;
 
             lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
             lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
             lv_obj_clear_state(checkup->checkupCloseButton, LV_STATE_DISABLED);
             lv_timer_delete(checkup->pumpTimer);
-            stopMotorTask();
         }
     } else {
         LV_LOG_USER("Intermediate step");
@@ -664,13 +665,16 @@ void handleStopNow(sCheckup* checkup) {
     } else {
         LV_LOG_USER("STOP NOW DRAINING COMPLETE");
 
-       sendValueToRelay(pumpFrom, pumpDir, false);
-       checkup->isAlreadyPumping = false;
+        sendValueToRelay(pumpFrom, pumpDir, false);
+        stopMotor(MOTOR_IN1_PIN, MOTOR_IN2_PIN);
+        stopMotorTask();
+        checkup->isAlreadyPumping = false;
 
         lv_arc_set_value(checkup->pumpArc, tankPercentage);
         lv_label_set_text(checkup->checkupStepKindValue, checkupDrainingComplete_text);
         lv_obj_clear_state(checkup->checkupCloseButton, LV_STATE_DISABLED);
         lv_timer_delete(checkup->pumpTimer);
+
     }
 }
 
@@ -734,6 +738,8 @@ void handleStopAfter(sCheckup* checkup) {
             LV_LOG_USER("STOP AFTER step DRAINING COMPLETE");
 
             sendValueToRelay(pumpFrom, pumpDir, false);
+            stopMotor(MOTOR_IN1_PIN, MOTOR_IN2_PIN);
+            stopMotorTask();
             checkup->isAlreadyPumping = false;
 
             lv_arc_set_value(checkup->pumpArc, 100 - tankPercentage);
